@@ -4,11 +4,12 @@ import { message } from 'antd';
 const {
     GET_ITEMS_URL,
     UPDATE_ITEM_PARENT_URL,
-    UPDATE_ITEM_EMPLOYEE_ONLY_URL,
     UPDATE_ITEM_NAME_URL,
+    UPDATE_ITEM_PHONE_URL,
+    UPDATE_ITEM_PIN_URL,
+    UPDATE_ITEM_ADDRESS_URL,
     UPDATE_ITEM_THUMB_URL,
-    ADD_YOUTUBE_ITEM_URL,
-    ADD_PDF_ITEM_URL,
+    ADD_ITEM_URL,
     REMOVE_ITEM_URL,
     ADD_CATEGORY_URL,
 } = window.InfoDot || {};
@@ -53,11 +54,12 @@ export const updateItemParent = async (data) => {
     }
 };
 
-export const updateItemEmployeeOnly = async (data) => {
+export const updateItemName = async (data) => {
     try {
-        const response = await client.put(UPDATE_ITEM_EMPLOYEE_ONLY_URL, data);
+        const response = await client.put(UPDATE_ITEM_NAME_URL, data);
 
         const { data: itemFromServer } = response;
+
         if (! itemFromServer) {
             return null;
         }
@@ -70,9 +72,45 @@ export const updateItemEmployeeOnly = async (data) => {
     }
 };
 
-export const updateItemName = async (data) => {
+export const updateItemPhone = async (data) => {
     try {
-        const response = await client.put(UPDATE_ITEM_NAME_URL, data);
+        const response = await client.put(UPDATE_ITEM_PHONE_URL, data);
+
+        const { data: itemFromServer } = response;
+
+        if (! itemFromServer) {
+            return null;
+        }
+
+        return itemFromServer;
+    } catch (error) {
+        message.error(`Error occurred: ${error}`, 5);
+
+        return null;
+    }
+};
+
+export const updateItemPin = async (data) => {
+    try {
+        const response = await client.put(UPDATE_ITEM_PIN_URL, data);
+
+        const { data: itemFromServer } = response;
+
+        if (! itemFromServer) {
+            return null;
+        }
+
+        return itemFromServer;
+    } catch (error) {
+        message.error(`Error occurred: ${error}`, 5);
+
+        return null;
+    }
+};
+
+export const updateItemAddress = async (data) => {
+    try {
+        const response = await client.put(UPDATE_ITEM_ADDRESS_URL, data);
 
         const { data: itemFromServer } = response;
 
@@ -115,57 +153,7 @@ export const updateItemThumb = async (id, file) => {
     }
 };
 
-export const addYoutubeItem = async (url, parentId) => {
-    try {
-        const response = await client.post(ADD_YOUTUBE_ITEM_URL, {
-            url,
-            parentId: parentId || null
-        });
-
-        const { data: itemFromServer } = response;
-        if (! itemFromServer) {
-            return null;
-        }
-
-        return itemFromServer;
-    } catch (error) {
-        message.error(`Error occurred: ${error}`, 5);
-
-        return null;
-    }
-};
-
-export const addPdfItem = async (file, parentId, onUploadProgress) => {
-    try {
-        const formData = new FormData();
-
-        formData.append('file', file);
-
-        if (parentId) {
-            formData.append('parentId', parentId);
-        }
-
-        const response = await client.post(ADD_PDF_ITEM_URL, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-            onUploadProgress: onUploadProgress
-        });
-
-        const { data: itemFromServer } = response;
-        if (! itemFromServer) {
-            return null;
-        }
-
-        return itemFromServer;
-    } catch (error) {
-        message.error(`Error occurred: ${error}`, 5);
-
-        return null;
-    }
-};
-
-export const addCategory = async (file, name, parentId, employeeOnly) => {
+export const addItem = async (file, name, parentId) => {
     try {
         const formData = new FormData();
 
@@ -173,7 +161,36 @@ export const addCategory = async (file, name, parentId, employeeOnly) => {
 
         formData.append('name', name);
 
-        formData.append('employeeOnly', employeeOnly);
+        if (parentId) {
+            formData.append('parentId', parentId);
+        }
+
+        const response = await client.post(ADD_ITEM_URL, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        const { data: itemFromServer } = response;
+        if (! itemFromServer) {
+            return null;
+        }
+
+        return itemFromServer;
+    } catch (error) {
+        message.error(`Error occurred: ${error}`, 5);
+
+        return null;
+    }
+};
+
+export const addCategory = async (file, name, parentId) => {
+    try {
+        const formData = new FormData();
+
+        formData.append('image', file);
+
+        formData.append('name', name);
 
         if (parentId) {
             formData.append('parentId', parentId);

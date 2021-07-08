@@ -8,14 +8,10 @@
 
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="{{ route('items.index') }}" class="nav-tab {{ in_array($currentRouteName, ['items.index', 'items.show', 'items.favorites']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Dashboard</a>
+                        <a href="{{ route('items.index') }}" class="nav-tab {{ in_array($currentRouteName, ['items.index', 'items.show']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Структура</a>
 
                         @if (auth()->user()->canManageItems())
-                            <a href="{{ route('items-tree') }}" class="nav-tab {{ $currentRouteName === 'items-tree' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Manage</a>
-                        @endif
-
-                        @if (auth()->user()->canViewStatistics())
-                            <a href="{{ route('statistics.index') }}" class="nav-tab {{ $currentRouteName === 'statistics.index' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Statistics</a>
+                            <a href="{{ route('items-tree') }}" class="nav-tab {{ $currentRouteName === 'items-tree' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Управление</a>
                         @endif
                     </div>
                 </div>
@@ -56,12 +52,10 @@
     -->
     <div class="{{ $isMenuOpen ? 'block' : 'hidden' }} md:hidden">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href="{{ route('items.index') }}" class="nav-menu-link {{ in_array($currentRouteName, ['items.index', 'items.show', 'items.favorites']) ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Dashboard</a>
+            <a href="{{ route('items.index') }}" class="nav-menu-link {{ in_array($currentRouteName, ['items.index', 'items.show']) ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Dashboard</a>
 
             @if (auth()->user()->canManageItems())
                 <a href="{{ route('items-tree') }}" class="nav-menu-link {{ $currentRouteName === 'items-tree' ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Manage</a>
-
-                <a href="{{ route('statistics.index') }}" class="nav-menu-link {{ $currentRouteName === 'statistics.index' ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Statistics</a>
             @endif
         </div>
 

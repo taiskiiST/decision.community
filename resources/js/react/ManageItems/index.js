@@ -1,34 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { render } from 'react-dom';
 import {
-    addYoutubeItem,
     getItems,
     updateItemParent,
-    updateItemEmployeeOnly,
     removeItem,
     updateItemName,
+    updateItemPhone,
+    updateItemPin,
+    updateItemAddress,
 } from '../../shared/items-requests';
 import { message, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { truncateText } from '../../shared/helpers';
 import ItemsTableWrapper from './ItemsTableWrapper';
 import TreeWrapper from './TreeWrapper';
-import AddPdfComponent from './AddPdfComponent';
-import AddYoutubeVideoComponent from './AddYoutubeVideoComponent';
-import { BallTriangle } from '../../shared/components/spinners/BallTriangle';
-import CategoryModal from './CategoryModal';
 import UpdateThumbModal from './UpdateThumbModal';
+import AddCategoryModal from './AddCategoryModal';
+import AddItemModal from './AddItemModal';
 
 const { confirm } = Modal;
 
 const App = () => {
     const [treeLoading, setTreeLoading] = useState(true);
-    const [addingYoutubeItem, setAddingYoutubeItem] = useState(false);
-    const [youtubeUrl, setYoutubeUrl] = useState('');
     const [itemsByKeys, setItemsByKeys] = useState(new Map());
     const [selectedItemKey, setSelectedItemKey] = useState(null);
     const [tableInputsDisabled, setTableInputsDisabled] = useState(false);
     const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+    const [isItemModalOpen, setIsItemModalOpen] = useState(false);
     const [isUpdateThumbModalOpen, setIsUpdateThumbModalOpen] = useState(false);
     const [updateThumbModalItem, setUpdateThumbModalItem] = useState(null);
 
@@ -84,7 +82,7 @@ const App = () => {
     };
 
     const prepareItem = (item) => {
-        const { id, parent_id, name, is_category, isPdf, isYoutubeVideo, isEmployeeOnly, thumbUrl, prepared } = item;
+        const { id, parent_id, name, phone, pin, address, is_category, thumbUrl, prepared } = item;
 
         if (prepared) {
             return item;
@@ -100,10 +98,10 @@ const App = () => {
             shortTitle: shortName,
             isCategory: is_category,
             isLeaf: ! is_category,
-            isPdf: isPdf,
-            isYoutubeVideo: isYoutubeVideo,
-            isEmployeeOnly: isEmployeeOnly,
             thumbUrl: thumbUrl,
+            phone: phone,
+            pin: pin,
+            address: address,
             prepared: true,
             loadedChildren: false,
         };
@@ -203,16 +201,15 @@ const App = () => {
             const newItemsByKeys = new Map(itemsByKeys);
 
             // Change item's parent.
-            const { isEmployeeOnly, updatedChildren } = updatedItemFromServer;
+            const { updatedChildren } = updatedItemFromServer;
 
             newItemsByKeys.set(dragItem.key, {
                 ...dragItem,
                 parentId: parent ? parent.id : 0,
-                isEmployeeOnly: isEmployeeOnly
             });
 
             if (updatedChildren) {
-                updateChildrenAfterServerResponse(updatedChildren, newItemsByKeys, isEmployeeOnly);
+                updateChildrenAfterServerResponse(updatedChildren, newItemsByKeys);
             }
 
             setItemsByKeys(newItemsByKeys);
@@ -220,9 +217,9 @@ const App = () => {
 
         const proceedOnDropWithConfirm = (dragItem, parent) => {
             confirm({
-                title: 'Do you want to continue?',
+                title: 'Вы уверены?',
                 icon: <ExclamationCircleOutlined />,
-                content: `This will make all items inside '${dragItem.fullTitle}' employee-only.`,
+                content: `Это переместит все содержимое '${dragItem.fullTitle}'.`,
                 async onOk() {
                     await proceedOnDrop(dragItem, parent);
                 },
@@ -238,7 +235,7 @@ const App = () => {
         const parentId = info.dropToGap ? null : dropKey;
         const parent = parentId ? itemsByKeys.get(parentId) : null;
 
-        if (dragItem.isCategory && parent && parent.isEmployeeOnly) {
+        if (dragItem.isCategory && parent) {
             proceedOnDropWithConfirm(dragItem, parent);
         } else {
             await proceedOnDrop(dragItem, parent);
@@ -289,54 +286,6 @@ const App = () => {
         return selectedItem.parentId;
     }
 
-    const onYoutubeLinkPaste = async (e) => {
-        const url = e.clipboardData.getData('Text');
-
-        setYoutubeUrl(url);
-
-        await createYoutubeItem(url);
-    };
-
-    const onYoutubeLinkDrop = async (e) => {
-        e.preventDefault();
-
-        const url = e.dataTransfer.getData("Text");
-
-        setYoutubeUrl(url);
-
-        await createYoutubeItem(url);
-    }
-
-    const onAddYoutubeItemButtonClick = async (e) => {
-        if (! youtubeUrl) {
-            return;
-        }
-
-        await createYoutubeItem(youtubeUrl);
-    }
-
-    const createYoutubeItem = async (url) => {
-        if (! url) {
-            return;
-        }
-
-        setAddingYoutubeItem(true);
-
-        const newItem = await addYoutubeItem(url, chooseNewItemParentId());
-
-        setAddingYoutubeItem(false);
-
-        if (! newItem) {
-            return;
-        }
-
-        await addItemToTree(newItem);
-
-        message.success(`Video ${newItem.name} has been added!`);
-
-        setYoutubeUrl('');
-    }
-
     const onDragOver = ({ event, node }) => {
         const clientY = event.clientY;
         const pageY = event.pageY;
@@ -358,63 +307,7 @@ const App = () => {
         }
     };
 
-    const onEmployeeOnlyChange = async (itemId, isEmployeeOnly) => {
-        const proceedEmployeeOnlyChange = async (item, isEmployeeOnly) => {
-            const { id: itemId } = item;
-
-            const updatedItemFromServer = await updateItemEmployeeOnly({
-                id: itemId,
-                employeeOnly: isEmployeeOnly
-            });
-
-            if (! updatedItemFromServer) {
-                return;
-            }
-
-            const newItemsByKeys = new Map(itemsByKeys);
-
-            const { employee_only: newEmployeeOnly, updatedChildren } = updatedItemFromServer;
-
-            newItemsByKeys.set(itemId, {
-                ...item,
-                isEmployeeOnly: newEmployeeOnly
-            });
-
-            if (updatedChildren) {
-                updateChildrenAfterServerResponse(updatedChildren, newItemsByKeys, newEmployeeOnly);
-            }
-
-            setItemsByKeys(newItemsByKeys);
-        };
-
-        const proceedEmployeeOnlyChangeWithConfirm = (item, isEmployeeOnly) => {
-            confirm({
-                title: 'Do you want to continue?',
-                icon: <ExclamationCircleOutlined />,
-                content: `This will make all items inside '${item.fullTitle}' employee-only.`,
-                async onOk() {
-                    await proceedEmployeeOnlyChange(item, isEmployeeOnly);
-                },
-                onCancel() {
-                },
-            });
-        };
-
-        setTableInputsDisabled(true);
-
-        const item = itemsByKeys.get(itemId);
-
-        if (item.isCategory && isEmployeeOnly) {
-            await proceedEmployeeOnlyChangeWithConfirm(item, isEmployeeOnly);
-        } else {
-            await proceedEmployeeOnlyChange(item, isEmployeeOnly);
-        }
-
-        setTableInputsDisabled(false);
-    };
-
-    const updateChildrenAfterServerResponse = (updatedChildren, newItemsByKeys, newEmployeeOnly) => {
-        // Update all children's isEmployeeOnly.
+    const updateChildrenAfterServerResponse = (updatedChildren, newItemsByKeys) => {
         updatedChildren.forEach(child => {
             const { id: childId } = child;
 
@@ -425,15 +318,8 @@ const App = () => {
 
             newItemsByKeys.set(childId, {
                 ...loadedItem,
-                isEmployeeOnly: newEmployeeOnly
             });
         });
-    };
-
-    const onPdfAdded = async (newItem) => {
-        await addItemToTree(newItem);
-
-        message.success(`PDF ${newItem.name} has been added!`);
     };
 
     const onRemoveItemBtnClicked = async (itemId) => {
@@ -455,12 +341,28 @@ const App = () => {
         setIsCategoryModalOpen(true);
     };
 
+    const onNewItemBtnClick = async (e, parentId = null) => {
+        if (parentId) {
+            setSelectedItemKey(parentId);
+        }
+
+        setIsItemModalOpen(true);
+    };
+
     const onCategoryAdded = async (newCategory) => {
         await addItemToTree(newCategory);
 
-        message.success(`A new category '${newCategory.name}' has been added!`);
+        message.success(`Новая сущность '${newCategory.name}' добавлена!`);
 
         setIsCategoryModalOpen(false);
+    };
+
+    const onItemAdded = async (newItem) => {
+        await addItemToTree(newItem);
+
+        message.success(`Новая сущность '${newItem.name}' добавлена!`);
+
+        setIsItemModalOpen(false);
     };
 
     const onItemNameChange = async (item, e) => {
@@ -489,6 +391,99 @@ const App = () => {
                 ...item,
                 fullTitle: name,
                 shortTitle: truncateText(name),
+            });
+
+            return newItemsByKeys;
+        });
+    };
+
+    const onItemPhoneChange = async (item, e) => {
+        const newPhone = e.target.value;
+        if (! newPhone) {
+            return;
+        }
+
+        const { id } = item;
+
+        const updatedItemFromServer = await updateItemPhone({
+            id: id,
+            phone: newPhone
+        });
+
+        if (! updatedItemFromServer) {
+            return;
+        }
+
+        setItemsByKeys(currentItemsByKeys => {
+            const newItemsByKeys = new Map(currentItemsByKeys);
+
+            const { phone } = updatedItemFromServer;
+
+            newItemsByKeys.set(id, {
+                ...item,
+                phone: phone,
+            });
+
+            return newItemsByKeys;
+        });
+    };
+
+    const onItemPinChange = async (item, e) => {
+        const newPin = e.target.value;
+        if (! newPin) {
+            return;
+        }
+
+        const { id } = item;
+
+        const updatedItemFromServer = await updateItemPin({
+            id: id,
+            pin: newPin
+        });
+
+        if (! updatedItemFromServer) {
+            return;
+        }
+
+        setItemsByKeys(currentItemsByKeys => {
+            const newItemsByKeys = new Map(currentItemsByKeys);
+
+            const { pin } = updatedItemFromServer;
+
+            newItemsByKeys.set(id, {
+                ...item,
+                pin: pin,
+            });
+
+            return newItemsByKeys;
+        });
+    };
+
+    const onItemAddressChange = async (item, e) => {
+        const newAddress = e.target.value;
+        if (! newAddress) {
+            return;
+        }
+
+        const { id } = item;
+
+        const updatedItemFromServer = await updateItemAddress({
+            id: id,
+            address: newAddress
+        });
+
+        if (! updatedItemFromServer) {
+            return;
+        }
+
+        setItemsByKeys(currentItemsByKeys => {
+            const newItemsByKeys = new Map(currentItemsByKeys);
+
+            const { address } = updatedItemFromServer;
+
+            newItemsByKeys.set(id, {
+                ...item,
+                address: address,
             });
 
             return newItemsByKeys;
@@ -536,12 +531,18 @@ const App = () => {
 
     return (
         <div className="flex flex-col-reverse justify-end md:justify-between md:flex-row min-h-2xl p-2">
-            <CategoryModal
+            <AddCategoryModal
                 parentId={selectedItem ? selectedItem.id : null}
                 onCategoryAdded={onCategoryAdded}
                 onCancel={() => setIsCategoryModalOpen(false)}
                 visible={isCategoryModalOpen}
-                isEmployeeOnlyDisabled={selectedItem ? selectedItem.isCategory && selectedItem.isEmployeeOnly : false}
+            />
+
+            <AddItemModal
+                parentId={selectedItem ? selectedItem.id : null}
+                onItemAdded={onItemAdded}
+                onCancel={() => setIsItemModalOpen(false)}
+                visible={isItemModalOpen}
             />
 
             <UpdateThumbModal
@@ -570,7 +571,26 @@ const App = () => {
                                 clipRule="evenodd"
                             />
                         </svg>
-                        New Category
+                        Новая категория
+                    </button>
+
+                    <button
+                        type="button"
+                        className="mt-2 w-full inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        id="add-new-category-button"
+                        onClick={onNewItemBtnClick}
+                    >
+                        <svg
+                            className="block -ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                        Новая личность
                     </button>
                 </div>
 
@@ -588,38 +608,16 @@ const App = () => {
             </div>
 
             <div className="md:flex-grow p-1 min-h-full overflow-hidden">
-                <div className="flex flex-col md:flex-row justify-between items-start">
-                    <div className="w-full md:flex-1 mb-4 md:pr-2">
-                        <AddPdfComponent
-                            parentId={chooseNewItemParentId()}
-                            onPdfAdded={onPdfAdded}
-                        />
-                    </div>
-
-                    <div className="w-full md:flex-1 mb-2 md:pl-2 flex justify-center items-center">
-                        {
-                            addingYoutubeItem
-                                ? <BallTriangle className="h-24"/>
-                                : <AddYoutubeVideoComponent
-                                    loading={addingYoutubeItem}
-                                    onYoutubeLinkPaste={onYoutubeLinkPaste}
-                                    onYoutubeLinkDrop={onYoutubeLinkDrop}
-                                    onYoutubeLinkChange={(e) => setYoutubeUrl(e.target.value)}
-                                    onAddYoutubeItemButtonClick={onAddYoutubeItemButtonClick}
-                                    youtubeUrl={youtubeUrl}
-                                />
-                        }
-                    </div>
-                </div>
-
                 <div className="hidden md:block">
                     <ItemsTableWrapper
                         selectedItemKey={selectedItemKey}
                         itemsByKeys={itemsByKeys}
-                        onEmployeeOnlyChange={onEmployeeOnlyChange}
                         onRemoveBtnClicked={onRemoveItemBtnClicked}
                         tableInputsDisabled={tableInputsDisabled}
                         onItemNameChange={onItemNameChange}
+                        onItemPhoneChange={onItemPhoneChange}
+                        onItemPinChange={onItemPinChange}
+                        onItemAddressChange={onItemAddressChange}
                         onItemThumbClicked={onItemThumbClicked}
                     />
                 </div>

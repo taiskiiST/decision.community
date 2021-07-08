@@ -5,13 +5,14 @@
 <body class="antialiased">
     <div class="flex items-center justify-center h-screen">
         <div class="text-center">
-            Welcome to {{ config('app.name') }}!<br>
+            Добро пожаловать!<br>
             @auth
-                <a target="_blank" href="{{ route('items.index') }}" class="underline text-center">Dashboard</a>
+                <a target="_blank" href="{{ route('items.index') }}" class="underline text-center">Структура</a>
             @else
-                Please,
-                <a target="_blank" href="{{ route('login') }}" class="underline text-center">login</a>
-                with you DataOnTouch credentials.
+                Если вы Администратор, пожалуйста
+                <a target="_blank" href="{{ route('login') }}" class="underline text-center">пройдите</a>
+                аутентификацию или
+                <a target="_blank" href="{{ route('register') }}" class="underline text-center">зарегистрируйтесь</a>
             @endauth
         </div>
     </div>

@@ -18,8 +18,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(CompaniesSeeder::class);
-
         $this->call(ItemsSeeder::class);
     }
 }

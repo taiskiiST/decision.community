@@ -9,15 +9,13 @@ namespace App\Models;
  */
 class Permission
 {
-    const ACCESS              = 'information-app.access';
-    const ADMIN               = 'information-app.admin';
-    const MANAGE_ITEMS        = 'information-app.manage-items';
-    const VIEW_EMPLOYEE_ITEMS = 'information-app.view-employee-items';
+    const ACCESS              = 'access';
+    const ADMIN               = 'admin';
+    const MANAGE_ITEMS        = 'manage-items';
 
     const AVAILABLE_PERMISSIONS = [
         self::ACCESS,
         self::MANAGE_ITEMS,
-        self::VIEW_EMPLOYEE_ITEMS,
     ];
 
     /**

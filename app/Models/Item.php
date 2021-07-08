@@ -17,15 +17,15 @@ use Illuminate\Support\Str;
 /**
  * Class Item
  *
- * @property int company_id
  * @property int id
  * @property int parent_id
  * @property string name
  * @property bool is_category
  * @property string source
- * @property bool employee_only
- * @property \App\Models\Company company
  * @property string thumb
+ * @property mixed phone
+ * @property mixed address
+ * @property mixed pin
  * @package App\Models
  * @method static where(string $string, mixed $id)
  */
@@ -48,55 +48,6 @@ class Item extends Model
     public function path(): string
     {
         return "/items/{$this->id}";
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function visits(): HasMany
-    {
-        return $this->hasMany(ItemVisit::class);
-    }
-
-    /**
-     * @param \App\Models\User $user
-     */
-    public function addVisit(User $user): void
-    {
-        if ((int)$this->company_id !== (int)$user->company_id) {
-            return;
-        }
-
-        $this->visits()->create([
-            'user_id' => $user->id,
-            'time' => now(),
-        ]);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function favoredBy(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'users_favorites')->withTimestamps();
-    }
-
-    /**
-     * @param \App\Models\User $user
-     *
-     * @return bool
-     */
-    public function isFavoredBy(User $user): bool
-    {
-        return $this->favoredBy()->pluck('user_id')->contains($user->id);
     }
 
     /**
@@ -125,37 +76,11 @@ class Item extends Model
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Builder $builder
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeExcludeEmployeeOnlyItems(Builder $builder): Builder
-    {
-        return $builder->where('employee_only', false);
-    }
-
-    /**
      * @return bool
      */
     public function isCategory(): bool
     {
         return $this->is_category;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isYoutubeVideo(): bool
-    {
-        return ! $this->isCategory() && ! $this->isPdf();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPdf(): bool
-    {
-        return ! $this->isCategory() && Str::endsWith($this->source, '.pdf');
     }
 
     /**
@@ -186,38 +111,7 @@ class Item extends Model
         }
 
         return Item::where('parent_id', $this->id)
-                   ->when(! $user->canViewEmployeeItems(), function (Builder $builder) {
-                       return $builder->excludeEmployeeOnlyItems();
-                   })
                    ->count();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isEmployeeOnly(): bool
-    {
-        return $this->employee_only;
-    }
-
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function setEmployeeOnlyForChildrenIfItemIsEmployeeOnly()
-    {
-        if (! $this->isCategory() || ! $this->isEmployeeOnly()) {
-            return new Collection();
-        }
-
-        return $this->getAllChildren()->each(function (Item $item) {
-            $item->employee_only = true;
-
-            Item::where('id', $item->id)->update([
-                'employee_only' => true
-            ]);
-
-            $item->addProperties();
-        });
     }
 
     /**
@@ -225,7 +119,7 @@ class Item extends Model
      */
     public function thumbUrl(): string
     {
-        return Storage::url($this->company->itemsThumbsPath() . "/{$this->thumb}");
+        return Storage::url('public/images/items_thumbs' . "/{$this->thumb}");
     }
 
     /**
@@ -233,7 +127,7 @@ class Item extends Model
      */
     public function thumbPath(): string
     {
-        return $this->company->itemsThumbsPath() . "/{$this->thumb}";
+        return 'public/images/items_thumbs' . "/{$this->thumb}";
     }
 
     /**
@@ -241,10 +135,6 @@ class Item extends Model
      */
     public function pdfPath(): ?string
     {
-        if (! $this->isPdf()) {
-            return null;
-        }
-
         return $this->source;
     }
 
@@ -253,29 +143,7 @@ class Item extends Model
      */
     public function pdfUrl(): string
     {
-        if (! $this->isPdf()) {
-            return '#';
-        }
-
         return route('items.download', $this);
-    }
-
-    /**
-     * @return string
-     */
-    public function youtubeVideoEmbedUrl(): string
-    {
-        if (! $this->isYoutubeVideo() || ! $this->source) {
-            return '';
-        }
-
-        $videoId = app(Youtube::class)->extractIdFromUrl($this->source);
-
-        if (! $videoId) {
-            return '';
-        }
-
-        return config('services.youtube.embedUrl') . "/{$videoId}";
     }
 
     /**
@@ -311,34 +179,10 @@ class Item extends Model
     }
 
     /**
-     * @return bool
-     */
-    public function areAllAncestorsUnRestricted(): bool
-    {
-        $out = true;
-
-        $this->getAllParents()->each(function (Item $item) use (&$out) {
-            $out = $out && ! $item->isEmployeeOnly();
-
-            if (! $out) {
-                return false;
-            }
-        });
-
-        return $out;
-    }
-
-    /**
      * @return \App\Models\Item
      */
     public function addProperties(): Item
     {
-        $this->isPdf = $this->isPdf();
-
-        $this->isYoutubeVideo = $this->isYoutubeVideo();
-
-        $this->isEmployeeOnly = $this->isEmployeeOnly();
-
         $this->thumbUrl = $this->thumbUrl();
 
         if (empty($this->parent_id)) {

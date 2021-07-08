@@ -1,5 +1,4 @@
-<button
-    wire:click="itemClicked('{{ $item->id }}')"
+<div
     class="rounded-full focus:outline-none"
 >
     <div class="relative">
@@ -7,4 +6,4 @@
 
         <img class="object-cover shadow-xl rounded-full" src="{{ $item->thumbUrl() }}" alt="{{ $item->name }}" />
     </div>
-</button>
+</div>

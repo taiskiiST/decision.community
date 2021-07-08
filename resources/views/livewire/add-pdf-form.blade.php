@@ -41,17 +41,6 @@
 
                 <div class="mt-2 p-2">
                     <div class="flex items-start">
-                        <div class="flex items-center h-5">
-                            <input
-                                wire:model="employeeOnly"
-                                @if (! $employeeOnlyEditable)
-                                    disabled
-                                @endif
-                                id="employee-only-checkbox" name="employee-only" type="checkbox"
-                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded {{ ! $employeeOnlyEditable ? 'opacity-50' : '' }}"
-                            >
-                        </div>
-
                         <div class="ml-3 text-sm text-left">
                             <label for="employee-only-checkbox" class="font-medium text-gray-700">Employee only</label>
 
@@ -82,7 +71,7 @@
             type="submit"
             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
         >
-            Add
+            Добавить
         </button>
 
         <button
@@ -93,7 +82,7 @@
             type="button"
             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
         >
-            Cancel
+            Отмена
         </button>
     </div>
 </form>

@@ -4,10 +4,12 @@ import ItemsTable from './ItemsTable';
 const ItemsTableWrapper = ({
     selectedItemKey,
     itemsByKeys,
-    onEmployeeOnlyChange,
     onRemoveBtnClicked,
     tableInputsDisabled,
     onItemNameChange,
+    onItemPhoneChange,
+    onItemPinChange,
+    onItemAddressChange,
     onItemThumbClicked
 }) => {
     let items = [];
@@ -40,10 +42,12 @@ const ItemsTableWrapper = ({
     return (
         <ItemsTable
             items={items}
-            onEmployeeOnlyChange={onEmployeeOnlyChange}
             onRemoveBtnClicked={onRemoveBtnClicked}
             tableInputsDisabled={tableInputsDisabled}
             onItemNameChange={onItemNameChange}
+            onItemPhoneChange={onItemPhoneChange}
+            onItemPinChange={onItemPinChange}
+            onItemAddressChange={onItemAddressChange}
             onItemThumbClicked={onItemThumbClicked}
         />
     );

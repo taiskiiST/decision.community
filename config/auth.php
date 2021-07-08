@@ -113,15 +113,4 @@ return [
     */
 
     'password_timeout' => 10800,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Socialite Driver
-    |--------------------------------------------------------------------------
-    |
-    | Specify the socialite driver to use for the Oauth2 authentication.
-    |
-    */
-
-    'socialiteDriver' => 'laravelpassport'
 ];

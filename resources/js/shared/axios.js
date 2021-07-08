@@ -44,7 +44,7 @@ axios.interceptors.response.use((response) => {
         }
 
         if (typeof error.response !== 'undefined' && statusCodesTriggeringRedirectToLogin.includes(error.response.status)) {
-            window.location = window.GATE_URL;
+            window.location = '/login';
         }
 
         if (typeof error.response !== 'undefined' && statusCodesTriggeringPageReload.includes(error.response.status)) {

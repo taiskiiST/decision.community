@@ -3,11 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Item;
-use App\Models\ItemVisit;
 use App\Models\Permission;
 use App\Models\User;
 use App\Policies\ItemPolicy;
-use App\Policies\StatisticsPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -20,7 +18,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Item::class => ItemPolicy::class,
-        ItemVisit::class => StatisticsPolicy::class,
     ];
 
     /**
@@ -34,10 +31,6 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('access-app', function (User $user) {
             return in_array(Permission::ACCESS, explode(',', $user->permissions));
-        });
-
-        Gate::define('view-employee-only-items', function (User $user) {
-            return $user->canViewEmployeeItems();
         });
 
         Gate::define('manage-items', function (User $user) {

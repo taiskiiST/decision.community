@@ -5,57 +5,42 @@ import { DebounceInput } from 'react-debounce-input';
 
 const ItemsTable = ({
     items,
-    onEmployeeOnlyChange,
     onRemoveBtnClicked,
     tableInputsDisabled,
     onItemNameChange,
+    onItemPhoneChange,
+    onItemPinChange,
+    onItemAddressChange,
     onItemThumbClicked
 }) => {
     const getItemTypeIcon = (item) => {
-        const { isCategory, isPdf, isYoutubeVideo } = item;
+        const { isCategory } = item;
 
         if (isCategory) {
             return (
                 <svg
-                    className="w-5 h-5 ml-1"
-                    xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor"
+                    xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-1" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor"
                 >
                     <path
                         strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                     />
                 </svg>
             );
         }
 
-        if (isPdf) {
-            return (
-                <svg
-                    className="w-5 h-5 ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                    />
-                </svg>
-            );
-        }
-
-        if (isYoutubeVideo) {
-            return (
-                <svg
-                    className="w-5 h-5 ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                        d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                </svg>
-            );
-        }
+        return (
+            <svg
+                xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-1" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+            </svg>
+        );
     };
 
     return (
@@ -70,21 +55,35 @@ const ItemsTable = ({
                                     scope="col"
                                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Name
+                                    Имя
                                 </th>
 
                                 <th
                                     scope="col"
                                     className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Type
+                                    Тип
                                 </th>
 
                                 <th
                                     scope="col"
                                     className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Employee Only
+                                    Телефон
+                                </th>
+
+                                <th
+                                    scope="col"
+                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    Адрес
+                                </th>
+
+                                <th
+                                    scope="col"
+                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    Пин
                                 </th>
 
                                 <th scope="col" className="relative px-6 py-3">
@@ -144,35 +143,67 @@ const ItemsTable = ({
                                           </span>
                                         </td>
 
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                            <input
-                                                id="isEmployeeOnly" name="isEmployeeOnly" type="checkbox"
-                                                onChange={(e) => onEmployeeOnlyChange(item.id, e.target.checked)}
-                                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                                value={item.isEmployeeOnly}
-                                                checked={!! item.isEmployeeOnly}
-                                                disabled={tableInputsDisabled}
-                                            />
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="ml-4 w-full">
+                                                <div
+                                                    className="text-sm font-medium text-gray-900 w-full truncate"
+                                                >
+                                                    <DebounceInput
+                                                        className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
+                                                        type="text"
+                                                        debounceTimeout={1000}
+                                                        onChange={e => onItemPhoneChange(item, e)}
+                                                        value={item.phone}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
 
-                                            <label
-                                                htmlFor="isEmployeeOnly" className="font-medium text-gray-700 sr-only"
-                                            >Employee Only
-                                            </label>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="ml-4 w-full">
+                                                <div
+                                                    className="text-sm font-medium text-gray-900 w-full truncate"
+                                                >
+                                                    <DebounceInput
+                                                        className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
+                                                        type="text"
+                                                        debounceTimeout={1000}
+                                                        onChange={e => onItemPinChange(item, e)}
+                                                        value={item.pin}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="ml-4 w-full">
+                                                <div
+                                                    className="text-sm font-medium text-gray-900 w-full truncate"
+                                                >
+                                                    <DebounceInput
+                                                        className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
+                                                        type="text"
+                                                        debounceTimeout={1000}
+                                                        onChange={e => onItemAddressChange(item, e)}
+                                                        value={item.address}
+                                                    />
+                                                </div>
+                                            </div>
                                         </td>
 
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <Popconfirm
-                                                title={`Remove '${item.shortTitle}'?`}
+                                                title={`Удалить '${item.shortTitle}'?`}
                                                 onConfirm={() => onRemoveBtnClicked(item.id)}
-                                                okText="Yes"
-                                                cancelText="No"
+                                                okText="Да"
+                                                cancelText="Нет"
                                                 placement="topRight"
                                             >
                                                 <a
                                                     className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                                     href="#"
                                                 >
-                                                    Remove
+                                                    Удалить
                                                 </a>
                                             </Popconfirm>
                                         </td>

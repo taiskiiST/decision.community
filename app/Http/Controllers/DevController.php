@@ -20,6 +20,6 @@ class DevController extends Controller
      */
     public function index()
     {
-        $item = Item::find(16);
+        return 'a';
     }
 }

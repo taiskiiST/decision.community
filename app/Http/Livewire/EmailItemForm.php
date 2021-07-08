@@ -51,18 +51,6 @@ class EmailItemForm extends Component
 
             return;
         }
-
-        if (! $item->isPdf()) {
-            return;
-        }
-
-        $this->itemSizeInMegabytes = Storage::size($item->source) / 1024 / 1024;
-
-        $maxSizeBeforeWarningMb = self::MAX_ITEM_SIZE_BEFORE_WARNING_MB;
-
-        if ($this->itemSizeInMegabytes >= $maxSizeBeforeWarningMb) {
-            $this->sizeWarning = "Warning: this item is more than {$maxSizeBeforeWarningMb}Mb. Some mail clients might have a problem with receiving/displaying a file of this size.";
-        }
     }
 
     /**

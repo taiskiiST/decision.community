@@ -35,14 +35,6 @@ class ItemPolicy
      */
     public function view(User $user, Item $item): bool
     {
-        if ((int)$user->company_id !== (int)$item->company_id) {
-            return false;
-        }
-
-        if ($item->isEmployeeOnly()) {
-            return $user->canViewEmployeeItems();
-        }
-
         return true;
     }
 
@@ -55,14 +47,6 @@ class ItemPolicy
      */
     public function download(User $user, Item $item): bool
     {
-        if ((int)$user->company_id !== (int)$item->company_id) {
-            return false;
-        }
-
-        if ($item->isEmployeeOnly()) {
-            return $user->canViewEmployeeItems();
-        }
-
         return true;
     }
 
@@ -110,7 +94,7 @@ class ItemPolicy
      */
     public function email(User $user, Item $item): bool
     {
-        return (int)$user->company_id === (int)$item->company_id;
+        return true;
     }
 
     /**
@@ -121,7 +105,6 @@ class ItemPolicy
      */
     protected function canUserManageItem(User $user, Item $item): bool
     {
-        return (int)$user->company_id === (int)$item->company_id
-            && $user->canManageItems();
+        return $user->canManageItems();
     }
 }

@@ -44,10 +44,6 @@ class ItemOfInterest extends Mailable
         $markdown = $this->markdown('emails.item-of-interest')
             ->subject('On behalf of ' . $this->user->name . ': ' . $this->item->name);
 
-        if ($this->item->isPdf()) {
-            $markdown->attachFromStorage($this->item->pdfPath(), $this->item->name);
-        }
-
         return $markdown;
     }
 }

@@ -42,11 +42,6 @@ return [
     */
 
     'disks' => [
-        'statistics_emails' => [
-            'driver' => 'local',
-            'root' => storage_path('app/tmp/statistics_emails'),
-        ],
-
         'tmp' => [
             'driver' => 'local',
             'root' => storage_path('app/tmp'),

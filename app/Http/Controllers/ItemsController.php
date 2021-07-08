@@ -33,23 +33,6 @@ class ItemsController extends Controller
     {
         return view('items.index', [
             'category' => null,
-            'favoriteIdsToShow' => null,
-        ]);
-    }
-
-    /**
-     * Display a listing of favorite items.
-     *
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function favorites()
-    {
-        $this->authorize('viewAny', Item::class);
-
-        return view('items.index', [
-            'category' => null,
-            'favoriteIdsToShow' => auth()->user()->favorites->pluck('id')
         ]);
     }
 
@@ -88,11 +71,8 @@ class ItemsController extends Controller
             abort(403, "Item {$item->name} is not a category");
         }
 
-        $item->addVisit(auth()->user());
-
         return view('items.index', [
             'category' => $item,
-            'favoriteIdsToShow' => null,
         ]);
     }
 
@@ -143,15 +123,9 @@ class ItemsController extends Controller
     {
         $this->authorize('download', $item);
 
-        if (! $item->isPdf()) {
-            abort(404, 'Wrong item type.');
-        }
-
         if (! Storage::exists($item->pdfPath())) {
             abort(404, 'File not found.');
         }
-
-        $item->addVisit(auth()->user());
 
         return response(Storage::get($item->pdfPath()), 200, [
             'Content-Type' => 'application/pdf',

@@ -17,8 +17,8 @@ class ItemsList extends Component
 {
     use AuthorizesRequests;
 
-    const SORT_BY_LATEST      = 'By Latest';
-    const SORT_ALPHABETICALLY = 'Alphabetically';
+    const SORT_BY_LATEST      = 'По новизне';
+    const SORT_ALPHABETICALLY = 'По алфавиту';
 
     public $search = '';
 
@@ -32,10 +32,6 @@ class ItemsList extends Component
 
     public $isManageItemsModalOpen = false;
 
-    public $isYoutubeModalOpen = false;
-
-    public $currentVideoSource = null;
-
     public $successMessage = '';
 
     public $itemTypeBeingAdded = '';
@@ -46,20 +42,15 @@ class ItemsList extends Component
 
     public $isEmailItemModalOpen = false;
 
-    public $favoriteIdsToShow = null;
-
     protected $listeners = ['itemCreated', 'manageItemsModalCancelButtonClicked', 'emailItemModalCancelButtonClicked', 'itemEmailed'];
 
     /**
      * Triggered when the component is mounted.
      *
      * @param null $category
-     * @param array $favoriteIdsToShow
      */
-    public function mount($category = null, $favoriteIdsToShow = null)
+    public function mount($category = null)
     {
-        $this->favoriteIdsToShow = $favoriteIdsToShow;
-
         $this->currentCategory = $category;
 
         $this->parentCategories = new Collection();
@@ -97,25 +88,6 @@ class ItemsList extends Component
     public function emailItemModalCancelButtonClicked(): void
     {
         $this->isEmailItemModalOpen = false;
-    }
-
-    /**
-     * @param int $itemId
-     */
-    public function itemClicked(int $itemId)
-    {
-        /** @var Item $item */
-        $item = Item::find($itemId);
-
-        if (! $item || ! $item->isYoutubeVideo() || ! $item->source) {
-            return;
-        }
-
-        $item->addVisit(auth()->user());
-
-        $this->isYoutubeModalOpen = true;
-
-        $this->currentVideoSource = $item->youtubeVideoEmbedUrl();
     }
 
     /**
@@ -205,60 +177,16 @@ class ItemsList extends Component
     }
 
     /**
-     * @param $itemId
-     */
-    public function toggleFavorite($itemId)
-    {
-        $item = Item::find($itemId);
-
-        if (! $item) {
-            return;
-        }
-
-        auth()->user()->toggleFavorite($item);
-
-        $item->refresh();
-
-        if (is_null($this->favoriteIdsToShow)) {
-            return;
-        }
-
-        // If a user liked/unliked an item in the favorites view
-        // we need to refresh $this->favoriteIdsToShow.
-        $isFavorite = $item->isFavoredBy(auth()->user());
-
-        if ($isFavorite) {
-            $this->favoriteIdsToShow->push($item->id);
-
-            $this->fetchItems();
-
-            return;
-        }
-
-        $itemKeyToRemove = $this->favoriteIdsToShow->search($item->id);
-        if ($itemKeyToRemove === false) {
-            return;
-        }
-
-        $this->favoriteIdsToShow->forget($itemKeyToRemove);
-
-        $this->fetchItems();
-    }
-
-    /**
      * Fetch items from the db.
      */
     protected function fetchItems(): void
     {
-        $doNotSetParentId = $this->search || ! is_null($this->favoriteIdsToShow);
+        $doNotSetParentId = $this->search;
 
         $this->items = auth()->user()
                              ->availableItems($doNotSetParentId ? -1 : ($this->currentCategory ? $this->currentCategory->id : null))
                              ->where(function (Builder $builder) {
                                  $builder->where('name', 'LIKE', "%$this->search%");
-                             })
-                             ->when(! is_null($this->favoriteIdsToShow) && empty($this->search), function (Builder $builder) {
-                                 $builder->whereIn('id', $this->favoriteIdsToShow);
                              })
                              ->sortBy($this->sortBy)
                              ->get();

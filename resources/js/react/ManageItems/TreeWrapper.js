@@ -38,17 +38,17 @@ const TreeWrapper = ({
                                 }}
                             />
 
-                            <span className="ml-2">New Category</span>
+                            <span className="ml-2">Новая сущность</span>
                         </div>
                     </button>
                 </Menu.Item>
 
                 <Menu.Item key="removeItem">
                     <Popconfirm
-                        title={`Remove '${shortName}'?`}
+                        title={`Удалить '${shortName}'?`}
                         onConfirm={() => onRemoveItemBtnClicked(itemId)}
-                        okText="Yes"
-                        cancelText="No"
+                        okText="Да"
+                        cancelText="Нет"
                         placement="bottomRight"
                     >
                         <button
@@ -63,7 +63,7 @@ const TreeWrapper = ({
                                     }}
                                 />
 
-                                <span className="ml-2">Remove</span>
+                                <span className="ml-2">Удалить</span>
                             </div>
                         </button>
                     </Popconfirm>

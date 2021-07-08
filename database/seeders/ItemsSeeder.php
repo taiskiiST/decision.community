@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Company;
 use App\Models\Item;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
@@ -33,12 +32,10 @@ class ItemsSeeder extends Seeder
     {
         $out = new Collection();
 
-        $companies = Company::whereIn('id', [CompaniesSeeder::COALLIANCE_ID, CompaniesSeeder::UNITED_PRAIRIE_ID])->get();
-
         foreach (Storage::files('images_pool') as $file) {
             $fileName = Str::after($file, '/');
 
-            $destination = "public/images/companies/10/items_thumbs/$fileName";
+            $destination = "public/images/items_thumbs/$fileName";
 
             if (! Storage::exists($destination)) {
                 Storage::copy($file, $destination);
@@ -46,91 +43,66 @@ class ItemsSeeder extends Seeder
         }
 
         $out->push(Item::create([
-            'company_id' => $companies->random()->id,
-            'name' => 'Bayer Delaro',
+            'name' => 'Съезд',
             'thumb' => 'category1.jpg',
             'is_category' => true,
-            'employee_only' => rand(0, 100) > 50,
+            'phone' => '9887772211'
         ]));
 
         $out->push(Item::create([
-            'company_id' => $companies->random()->id,
-            'name' => 'CPP Videos',
+            'name' => 'Региональное собрание 61',
             'thumb' => 'category2.jpg',
             'is_category' => true,
-            'employee_only' => rand(0, 100) > 50,
+            'phone' => '9887772211'
         ]));
 
         $out->push(Item::create([
-            'company_id' => $companies->random()->id,
-            'name' => 'AMVAC',
+            'name' => 'Местное отделение Аксайского района',
             'thumb' => 'category3.jpg',
             'is_category' => true,
-            'employee_only' => rand(0, 100) > 50,
+            'phone' => '9887772211'
         ]));
 
         $out->push(Item::create([
-            'company_id' => $companies->random()->id,
-            'name' => 'Ag Teck (Co-Alliance)',
+            'name' => 'Орг комитет Атлант-сити',
             'thumb' => 'category4.jpg',
             'is_category' => true,
-            'employee_only' => rand(0, 100) > 50,
+            'phone' => '9887772211'
         ]));
 
         $out->push(Item::create([
-            'company_id' => $companies->random()->id,
-            'name' => 'BASF Advanced Plant',
+            'name' => 'Пупкин координатор рынка',
             'thumb' => 'category5.jpg',
             'is_category' => true,
-            'employee_only' => rand(0, 100) > 50,
+            'phone' => '9887772211'
         ]));
 
         $out->push(Item::create([
-            'company_id' => $companies->random()->id,
-            'name' => 'BASF Programs',
+            'name' => 'Координатор рынка №1',
             'thumb' => 'category6.jpg',
             'is_category' => true,
-            'employee_only' => rand(0, 100) > 50,
+            'phone' => '9887772211'
         ]));
 
         $out->push(Item::create([
-            'company_id' => $companies->random()->id,
-            'name' => 'Bayer Programs & Product',
+            'name' => 'Сегмент рынка А',
             'thumb' => 'category7.jpg',
             'is_category' => true,
-            'employee_only' => rand(0, 100) > 50,
+            'phone' => '9887772211'
         ]));
 
         $out->push(Item::create([
-            'company_id' => $companies->random()->id,
-            'name' => 'Bayer Stratego YLD',
+            'name' => 'Ячейка рынка сегмента А',
             'thumb' => 'category8.jpg',
             'is_category' => true,
-            'employee_only' => rand(0, 100) > 50,
+            'phone' => '9887772211'
         ]));
 
         $out->push(Item::create([
-            'company_id' => $companies->random()->id,
-            'name' => 'Biostimulant Products Showcase',
+            'name' => 'Иванов Иван Иванович',
             'thumb' => 'category9.jpg',
-            'is_category' => true,
-            'employee_only' => rand(0, 100) > 50,
-        ]));
-
-        $out->push(Item::create([
-            'company_id' => $companies->random()->id,
-            'name' => 'Corteva Programs And Products',
-            'thumb' => 'category10.jpg',
-            'is_category' => true,
-            'employee_only' => rand(0, 100) > 50,
-        ]));
-
-        $out->push(Item::create([
-            'company_id' => $companies->random()->id,
-            'name' => 'Credit',
-            'thumb' => 'category11.jpg',
-            'is_category' => true,
-            'employee_only' => rand(0, 100) > 50,
+            'is_category' => false,
+            'phone' => '9887772211'
         ]));
 
         return $out;

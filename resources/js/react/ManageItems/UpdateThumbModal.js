@@ -60,14 +60,14 @@ const UpdateThumbModal = ({
 
     return (
         <Modal
-            title="Change Item's Thumb"
+            title="Изменить картинку"
             width={300}
             onCancel={onCancel}
             visible={visible}
             footer={
                 <div className="flex justify-between items-center">
                     <Button key="cancel" onClick={onCancel}>
-                        Cancel
+                        Отмена
                     </Button>
 
                     <Button
@@ -77,7 +77,7 @@ const UpdateThumbModal = ({
                         onClick={onSubmit}
                         disabled={! itemId || fileList.length === 0}
                     >
-                        Update
+                        Обновить
                     </Button>
                 </div>
             }
@@ -86,7 +86,7 @@ const UpdateThumbModal = ({
                 <div className="w-32 px-2 flex flex-col justify-center items-center">
                     <img className="rounded-full" src={currentThumbUrl} alt="Current Thumb" />
 
-                    <span className="text-gray-500 leading-tight">Current</span>
+                    <span className="text-gray-500 leading-tight">Текущая</span>
                 </div>
 
                 <div>
@@ -98,7 +98,7 @@ const UpdateThumbModal = ({
                             onChange={onChange}
                             onPreview={onPreview}
                         >
-                            {fileList.length < 1 && 'Upload New'}
+                            {fileList.length < 1 && 'Загрузить новую'}
                         </Upload>
                     </ImgCrop>
                 </div>

@@ -1,10 +1,8 @@
 <?php
 
-use App\Http\Controllers\Auth\Oauth2LoginController;
 use App\Http\Controllers\DevController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ItemsTreeController;
-use App\Http\Controllers\StatisticsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,34 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-if (app()->isLocal()) {
-    Route::get('/dev', [DevController::class, 'index']);
-}
-
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['middleware' => ['guest']], function () {
-    // Redirect the user to the Provider authentication page.
-    Route::get('/login', [Oauth2LoginController::class, 'login'])->name('login');
-
-    // Provider calls this endpoint with the result of the user decision:
-    // whether to authorize our client or not. The input will contain
-    // either `code` (on success) or `error` on (failure).
-    Route::get('/login/callback', [Oauth2LoginController::class, 'login'])->name('login.callback');
-});
+if (app()->isLocal()) {
+    Route::get('/dev', [DevController::class, 'index']);
+}
 
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
-    Route::get('/items/favorites', [ItemsController::class, 'favorites'])->name('items.favorites');
-
     Route::resource('items', ItemsController::class);
 
     Route::get('/items/{item}/download', [ItemsController::class, 'download'])->name('items.download');
-
-    Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics.index');
-
-    Route::get('/statistics/download', [StatisticsController::class, 'download'])->name('statistics.download');
 
     Route::get('/items-tree', [ItemsTreeController::class, 'index'])->name('items-tree');
 
@@ -56,10 +38,13 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::put('/items-tree/updateItemEmployeeOnly', [ItemsTreeController::class, 'updateItemEmployeeOnly'])->name('items-tree.update-item-employee-only');
 
     Route::put('/items-tree/updateItemName', [ItemsTreeController::class, 'updateItemName'])->name('items-tree.update-item-name');
+    Route::put('/items-tree/updateItemPhone', [ItemsTreeController::class, 'updateItemPhone'])->name('items-tree.update-item-phone');
+    Route::put('/items-tree/updateItemPin', [ItemsTreeController::class, 'updateItemPin'])->name('items-tree.update-item-pin');
+    Route::put('/items-tree/updateItemAddress', [ItemsTreeController::class, 'updateItemAddress'])->name('items-tree.update-item-address');
 
     Route::post('/items-tree/updateItemThumb', [ItemsTreeController::class, 'updateItemThumb'])->name('items-tree.update-item-thumb');
 
-    Route::post('/items-tree/addYoutubeItem', [ItemsTreeController::class, 'addYoutubeItem'])->name('items-tree.add-youtube-item');
+    Route::post('/items-tree/addItem', [ItemsTreeController::class, 'addItem'])->name('items-tree.add-item');
 
     Route::post('/items-tree/addPdfItem', [ItemsTreeController::class, 'addPdfItem'])->name('items-tree.add-pdf-item');
 
@@ -67,3 +52,9 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
 
     Route::post('/items-tree/addCategory', [ItemsTreeController::class, 'addCategory'])->name('items-tree.add-category');
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';

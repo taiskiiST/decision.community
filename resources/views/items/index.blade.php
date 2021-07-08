@@ -3,5 +3,5 @@
 ])
 
 @section('content')
-    <livewire:items-list :category="$category" :favoriteIdsToShow="$favoriteIdsToShow" />
+    <livewire:items-list :category="$category" />
 @endsection

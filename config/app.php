@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ru',
 
     /*
     |--------------------------------------------------------------------------
@@ -179,15 +179,12 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // Other Service Providers
-        App\Providers\TokenFetcherServiceProvider::class,
         App\Providers\YoutubeServiceProvider::class,
         App\Providers\ThumbMakerServiceProvider::class,
         App\Providers\StringHelperServiceProvider::class,
         App\Providers\TreeServiceProvider::class,
         App\Providers\FileHelperServiceProvider::class,
         App\Providers\RequestHelperServiceProvider::class,
-        App\Providers\GateApiServiceProvider::class,
-        App\Providers\GateInternalApiServiceProvider::class,
     ],
 
     /*

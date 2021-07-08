@@ -26,10 +26,6 @@ class AddYoutubeVideoForm extends Component
 
     public $errorMessage = '';
 
-    public $employeeOnly = false;
-
-    public $employeeOnlyEditable = true;
-
     protected $rules = [
         'url' => 'required|url',
     ];
@@ -42,8 +38,6 @@ class AddYoutubeVideoForm extends Component
     public function mount($parentItemId = false)
     {
         $this->parentItemId = $parentItemId;
-
-        $this->setEmployeeOnlyIfParentIsEmployeeOnly();
     }
 
     /**
@@ -79,16 +73,12 @@ class AddYoutubeVideoForm extends Component
             return;
         }
 
-        $this->setEmployeeOnlyIfParentIsEmployeeOnly();
-
         /** @var Item $newItem */
         $newItem = Item::create([
-            'company_id' => auth()->user()->company_id,
             'name' => $info['title'],
             'thumb' => $thumbName,
             'parent_id' => ! empty($this->parentItemId) ? $this->parentItemId : null,
             'source' => $this->url,
-            'employee_only' => $this->employeeOnly,
         ]);
 
         Storage::move($tmpPath, $newItem->thumbPath());
@@ -104,33 +94,5 @@ class AddYoutubeVideoForm extends Component
     public function render()
     {
         return view('livewire.add-youtube-video-form');
-    }
-
-    /**
-     *
-     */
-    public function setEmployeeOnlyIfParentIsEmployeeOnly(): void
-    {
-        if (empty($this->parentItemId)) {
-            return;
-        }
-
-        /** @var Item $parentItem */
-        $parentItem = Item::find($this->parentItemId);
-
-        if (! $parentItem) {
-            $this->errorMessage = 'Parent category not found';
-
-            return;
-        }
-
-        $parentsEmployeeOnly = $parentItem->isEmployeeOnly();
-        if (! $parentsEmployeeOnly) {
-            return;
-        }
-
-        $this->employeeOnly = true;
-
-        $this->employeeOnlyEditable = false;
     }
 }

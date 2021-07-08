@@ -1,0 +1,23 @@
+.nav-tab {
+  @apply px-3 py-2 rounded-md text-sm font-medium;
+}
+
+.nav-tab:focus {
+  @apply outline-none text-white bg-gray-700;
+}
+
+.nav-tab-current {
+  @apply text-white bg-gray-900;
+}
+
+.nav-tab-not-current {
+  @apply text-gray-300;
+}
+
+.nav-tab-current:hover {
+  @apply text-white;
+}
+
+.nav-tab-not-current:hover {
+  @apply text-white bg-gray-700;
+}

@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+
+@import 'components/nav/nav-menu-link';
+@import 'components/nav/nav-tab';
+
+@tailwind utilities;
+
+@import 'diff/antd-overwrites';

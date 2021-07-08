@@ -1,0 +1,19 @@
+.nav-menu-link {
+  @apply block px-3 py-2 rounded-md text-base font-medium;
+}
+
+.nav-menu-link:focus {
+  @apply outline-none text-white bg-gray-700;
+}
+
+.nav-menu-link-current {
+  @apply text-white bg-gray-900;
+}
+
+.nav-menu-link-not-current {
+  @apply text-gray-300;
+}
+
+.nav-menu-link-not-current:hover {
+  @apply text-white bg-gray-700;
+}

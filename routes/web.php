@@ -3,6 +3,7 @@
 use App\Http\Controllers\DevController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ItemsTreeController;
+use App\Http\Controllers\PollsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,9 @@ Route::get('/', function () {
 if (app()->isLocal()) {
     Route::get('/dev', [DevController::class, 'index']);
 }
+
+Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
+Route::post('/polls/{poll}/submit', [PollsController::class, 'submit'])->name('poll.submit');
 
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::resource('items', ItemsController::class);
@@ -51,6 +55,8 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::delete('/items-tree/removeItem', [ItemsTreeController::class, 'removeItem'])->name('items-tree.remove-item');
 
     Route::post('/items-tree/addCategory', [ItemsTreeController::class, 'addCategory'])->name('items-tree.add-category');
+
+    Route::resource('polls', PollsController::class);
 });
 
 Route::get('/dashboard', function () {

@@ -225,4 +225,20 @@ class Item extends Model
 
         return $deletedIds;
     }
+
+    public function votes(): HasMany
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    public function vote(Question $question, Answer $answer): Model
+    {
+        return $this->votes()->updateOrCreate([
+            'question_id' => $question->id,
+            'answer_id' => $answer->id
+        ], [
+            'question_id' => $question->id,
+            'answer_id' => $answer->id
+        ]);
+    }
 }

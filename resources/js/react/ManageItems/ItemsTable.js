@@ -168,8 +168,8 @@ const ItemsTable = ({
                                                         className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
                                                         type="text"
                                                         debounceTimeout={1000}
-                                                        onChange={e => onItemPinChange(item, e)}
-                                                        value={item.pin}
+                                                        onChange={e => onItemAddressChange(item, e)}
+                                                        value={item.address}
                                                     />
                                                 </div>
                                             </div>
@@ -184,8 +184,8 @@ const ItemsTable = ({
                                                         className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
                                                         type="text"
                                                         debounceTimeout={1000}
-                                                        onChange={e => onItemAddressChange(item, e)}
-                                                        value={item.address}
+                                                        onChange={e => onItemPinChange(item, e)}
+                                                        value={item.pin}
                                                     />
                                                 </div>
                                             </div>

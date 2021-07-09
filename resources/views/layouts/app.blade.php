@@ -8,7 +8,9 @@
   Read the documentation to get started: https://tailwindui.com/documentation
 -->
 <div class="flex flex-col min-h-screen bg-gray-100">
-    <livewire:nav-component />
+    @auth
+        <livewire:nav-component />
+    @endauth
 
     <header class="z-0 shadow">
         <div class="relative overflow-hidden h-128 bg-indigo-800">

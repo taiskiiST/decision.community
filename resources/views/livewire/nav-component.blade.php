@@ -13,6 +13,10 @@
                         @if (auth()->user()->canManageItems())
                             <a href="{{ route('items-tree') }}" class="nav-tab {{ $currentRouteName === 'items-tree' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Управление</a>
                         @endif
+
+                        @if (auth()->user()->isAdmin())
+                            <a href="{{ route('polls.index') }}" class="nav-tab {{ $currentRouteName === 'polls.index' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Опросы</a>
+                        @endif
                     </div>
                 </div>
             </div>

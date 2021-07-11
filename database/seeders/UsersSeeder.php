@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class UsersSeeds extends Seeder
+class UsersSeeder extends Seeder
 {
     /**
      * Run the database seeds.

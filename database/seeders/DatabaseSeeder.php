@@ -21,5 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ItemsSeeder::class);
 
         $this->call(PollSeeder::class);
+
+        $this->call(UsersSeeder::class);
     }
 }

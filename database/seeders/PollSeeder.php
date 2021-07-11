@@ -16,11 +16,11 @@ class PollSeeder extends Seeder
     public function run()
     {
         $poll1 = Poll::create([
-            'name' => 'Дебильный опрос'
+            'name' => 'Основной вопрос'
         ]);
 
         $question1 = $poll1->questions()->create([
-            'text' => 'Серый Третьяков пёс?'
+            'text' => 'Собрания нужно проводить Zoom?'
         ]);
 
         $question1->answers()->create([
@@ -32,24 +32,21 @@ class PollSeeder extends Seeder
         ]);
 
         $question1->answers()->create([
-            'text' => 'Нет'
+            'text' => 'Нет, только в живую'
         ]);
 
         $question2 = $poll1->questions()->create([
-            'text' => 'Любимый цвет'
+            'text' => 'Знаете ли вы кто ваш координатор?'
         ]);
 
         $question2->answers()->create([
-            'text' => 'Красный'
+            'text' => 'Да'
         ]);
 
         $question2->answers()->create([
-            'text' => 'Зеленый'
+            'text' => 'Нет'
         ]);
 
-        $question2->answers()->create([
-            'text' => 'Синий'
-        ]);
 
         //////////////////////////////////////////////////////////////////////////
 

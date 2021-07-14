@@ -273,20 +273,26 @@ class ItemsTreeController extends Controller
         }
 
         $file = $params['image'];
+
         $fileNameNoExtension = app(FileHelper::class)->getFileNameWithoutExtension($file);
+
         $originalImagePath = $file->store(
             'tmp/',
             'local'
         );
+        //file_put_contents(__DIR__ . '/log.txt', $originalImagePath. PHP_EOL, FILE_APPEND);
 
         $thumbName = app(StringHelper::class)->clean($fileNameNoExtension) . '_' . Str::uuid()->toString() . '_thumb.jpg';
         $tmpPath = "tmp/$thumbName";
+
         $thumbCreatedSuccessfully = app(ThumbMaker::class)->makeFromFile($originalImagePath, $tmpPath, true);
 
+
+
         if (! $thumbCreatedSuccessfully) {
-            return [
-                'errorMessage' => 'Не удалось создать иконку',
-            ];
+           return [
+               'errorMessage' => 'Не удалось создать иконку',
+           ];
         }
 
         /** @var Item $newItem */

@@ -22,4 +22,16 @@ class Question extends Model
     {
         return $this->hasMany(Answer::class);
     }
+
+    public function countQuestionsAll(Question $question)
+    {
+        $summ = 0;
+        $answers = $question->answers;
+        foreach($answers as $answer){
+            $votes[$answer->id] = Vote::where('answer_id', '=', $answer->id)->count();
+            $summ += $votes[$answer->id];
+        }
+
+        return $summ;
+    }
 }

@@ -30,4 +30,6 @@ class Poll extends Model
     {
         return "/polls/{$this->id}";
     }
+
+
 }

@@ -84,6 +84,20 @@ class PollsController extends Controller
      * @param  \App\Models\Poll  $poll
      * @return \Illuminate\Http\Response
      */
+    public function results(Poll $poll)
+    {
+        return view('polls.results', [
+            'poll' => $poll
+        ]);
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Poll  $poll
+     * @return \Illuminate\Http\Response
+     */
     public function submit(Request $request, Poll $poll)
     {
         $rules = [
@@ -103,18 +117,34 @@ class PollsController extends Controller
         }
 
         foreach ($poll->questions as $question) {
-            $answerId = $parameters["question_{$question->id}"];
 
-            $answer = Answer::find($answerId);
+            if (! Vote::where('question_id','=',$question->id)
+                ->where('item_id','=',$item->id)->count() ) {
 
-            if (! $answer) {
-                continue;
+                $answerId = $parameters["question_{$question->id}"];
+
+                $answer = Answer::find($answerId);
+
+                if (!$answer) {
+                    continue;
+                }
+
+                $item->vote($question, $answer);
+            }else{
+                return "Вы уже проголосовали по данному вопросу!";
             }
-
-            $item->vote($question, $answer);
         }
 
-        return 'Спасибо!';
+        /*$questions = $poll->questions();
+        foreach ($questions as $question){
+            dd($question);
+        }*/
+
+        return view('polls.answer', [
+            'poll' => $poll,
+
+        ]);
+        //return 'Спасибо!';
     }
 
     /**

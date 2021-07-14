@@ -27,6 +27,7 @@ if (app()->isLocal()) {
 
 Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
 Route::post('/polls/{poll}/submit', [PollsController::class, 'submit'])->name('poll.submit');
+Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('poll.results');
 
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::resource('items', ItemsController::class);

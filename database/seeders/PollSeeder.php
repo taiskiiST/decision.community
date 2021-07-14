@@ -20,7 +20,7 @@ class PollSeeder extends Seeder
         ]);
 
         $question1 = $poll1->questions()->create([
-            'text' => 'Собрания нужно проводить Zoom?'
+            'text' => 'Проводить ли собрания в Zoom?'
         ]);
 
         $question1->answers()->create([
@@ -36,7 +36,7 @@ class PollSeeder extends Seeder
         ]);
 
         $question2 = $poll1->questions()->create([
-            'text' => 'Знаете ли вы кто ваш координатор?'
+            'text' => 'Знаете ли вы кто вашего координатора?'
         ]);
 
         $question2->answers()->create([

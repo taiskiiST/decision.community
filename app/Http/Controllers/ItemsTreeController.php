@@ -275,12 +275,12 @@ class ItemsTreeController extends Controller
         $file = $params['image'];
 
         $fileNameNoExtension = app(FileHelper::class)->getFileNameWithoutExtension($file);
-
-        $originalImagePath = $file->store(
+        $originalImagePath = 'tmp//i.png';
+        /*$originalImagePath = $file->store(
             'tmp/',
             'local'
-        );
-        //file_put_contents(__DIR__ . '/log.txt', $originalImagePath. PHP_EOL, FILE_APPEND);
+        );*/
+        file_put_contents(__DIR__ . '/log.txt', $originalImagePath. PHP_EOL, FILE_APPEND);
 
         $thumbName = app(StringHelper::class)->clean($fileNameNoExtension) . '_' . Str::uuid()->toString() . '_thumb.jpg';
         $tmpPath = "tmp/$thumbName";

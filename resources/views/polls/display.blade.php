@@ -20,7 +20,7 @@
                         <span>+7</span>
                     </div>
 
-                    <input min="0" step="1" type="number" name="phone" id="phone" class="ml-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="9007775511" style="padding-left:20%">
+                    <input min="0" step="1" type="number" name="phone" pattern1="^\d\d\d\d\d\d\d\d\d\d$" id="phone" class="ml-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="9007775511" style="padding-left:20%">
                 </div>
             </div>
 
@@ -37,7 +37,7 @@
                                   </span>
                         </div>
 
-                        <input type="text" name="pin" id="pin" class="ml-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="XXXX">
+                        <input type="text" name="pin" id="pin" pattern1="^\d\d\d\d$" class="ml-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="XXXX">
                     </div>
                 </div>
             </div>
@@ -80,4 +80,37 @@
         </button>
     </div>
     {!! Form::close() !!}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>
+        $(document).on('keydown', 'input[pattern1]', function(e){
+            var input = $(this);
+            var oldVal = input.val();
+
+            if ( (oldVal.length == 10) && ($(this).attr('name') == 'phone') ) {
+                var regex = new RegExp(input.attr('pattern1'), 'g');
+                setTimeout(function () {
+                    var newVal = input.val();
+                    if(newVal.length >= oldVal.length) {
+                        if (!regex.test(newVal)) {
+                            input.val(oldVal);
+                        }
+                    }
+                }, 1);
+
+            }
+            if ( (oldVal.length == 4) && ($(this).attr('name') == 'pin') ) {
+                var regex = new RegExp(input.attr('pattern1'), 'g');
+                setTimeout(function () {
+                    var newVal = input.val();
+                    if(newVal.length >= oldVal.length) {
+                        if (!regex.test(newVal)) {
+                            input.val(oldVal);
+                        }
+                    }
+                }, 1);
+
+            }
+        });
+    </script>
 @endsection

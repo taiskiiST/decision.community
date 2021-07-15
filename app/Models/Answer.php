@@ -21,6 +21,13 @@ class Answer extends Model
         $vote = Vote::where('answer_id', '=', $answer_id)->count();
         return $vote;
     }
+
+    public function listVotes($answer_id)
+    {
+        $votes = Vote::where('answer_id', '=', $answer_id)->get();
+        return $votes;
+    }
+
     public function persentOfQuestions($question_id,$answer_id)
     {
         $question = Question::find($question_id);

@@ -77,7 +77,22 @@ class PollsController extends Controller
             'poll' => $poll
         ]);
     }
-
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Poll  $poll
+     * @return \Illuminate\Http\Response
+     */
+    public function report(Poll $poll)
+    {
+        return view('polls.report', [
+            'poll' => $poll,
+            'itemsNameHash'   => Item::all()->pluck('name', 'id'),
+            'itemsPhoneHash'   => Item::all()->pluck('phone', 'id'),
+            'itemsAddressHash'   => Item::all()->pluck('address', 'id'),
+            'itemsParentIdHash'   => Item::all()->pluck('parent_id', 'id')
+        ]);
+    }
     /**
      * Display the specified resource.
      *
@@ -88,6 +103,22 @@ class PollsController extends Controller
     {
         return view('polls.results', [
             'poll' => $poll
+        ]);
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Poll  $poll
+     * @return \Illuminate\Http\Response
+     */
+    public function results_list(Poll $poll)
+    {
+        return view('polls.results_list', [
+            'poll' => $poll,
+            'itemsNameHash'   => Item::all()->pluck('name', 'id'),
+            'itemsPhoneHash'   => Item::all()->pluck('phone', 'id'),
+            'itemsAddressHash'   => Item::all()->pluck('address', 'id'),
+            'itemsParentIdHash'   => Item::all()->pluck('parent_id', 'id')
         ]);
     }
 

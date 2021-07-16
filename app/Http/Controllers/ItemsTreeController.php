@@ -260,7 +260,7 @@ class ItemsTreeController extends Controller
         $params = $this->validate(request(), [
             'name'         => 'required|string',
             'parentId'     => 'sometimes|nullable|exists:items,id',
-            'image'        => 'required|mimes:jpg,png|max:10240', // max 10MB
+            'image'        => 'sometimes|required|mimes:jpg,png|max:10240', // max 10MB
         ]);
 
         $parentId = $params['parentId'] ?? null;
@@ -272,22 +272,29 @@ class ItemsTreeController extends Controller
             ];
         }
 
-        $file = $params['image'];
+        $file = $params['image'] ?? null;
+        if ($file) {
+            $fileNameNoExtension = app(FileHelper::class)->getFileNameWithoutExtension($file);
 
-        $fileNameNoExtension = app(FileHelper::class)->getFileNameWithoutExtension($file);
-        $originalImagePath = 'tmp//i.png';
-        /*$originalImagePath = $file->store(
-            'tmp/',
-            'local'
-        );*/
-        file_put_contents(__DIR__ . '/log.txt', $originalImagePath. PHP_EOL, FILE_APPEND);
+            $originalImagePath = $file->store(
+                'tmp/',
+                'local'
+            );
+
+            $removeOriginalFile = true;
+
+        } else {
+            $fileNameNoExtension = 'default_user_image';
+
+            $originalImagePath = 'default_user_image.jpg';
+
+            $removeOriginalFile = false;
+        }
 
         $thumbName = app(StringHelper::class)->clean($fileNameNoExtension) . '_' . Str::uuid()->toString() . '_thumb.jpg';
         $tmpPath = "tmp/$thumbName";
 
-        $thumbCreatedSuccessfully = app(ThumbMaker::class)->makeFromFile($originalImagePath, $tmpPath, true);
-
-
+        $thumbCreatedSuccessfully = app(ThumbMaker::class)->makeFromFile($originalImagePath, $tmpPath, $removeOriginalFile);
 
         if (! $thumbCreatedSuccessfully) {
            return [
@@ -335,7 +342,7 @@ class ItemsTreeController extends Controller
         $params = $this->validate(request(), [
             'name'         => 'required|string',
             'parentId'     => 'sometimes|nullable|exists:items,id',
-            'image'        => 'required|mimes:jpg,png|max:10240', // max 10MB
+            'image'        => 'sometimes|required|mimes:jpg,png|max:10240', // max 10MB
         ]);
 
         $parentId = $params['parentId'] ?? null;
@@ -347,16 +354,28 @@ class ItemsTreeController extends Controller
             ];
         }
 
-        $file = $params['image'];
-        $fileNameNoExtension = app(FileHelper::class)->getFileNameWithoutExtension($file);
-        $originalImagePath = $file->store(
-            'tmp/',
-            'local'
-        );
+        $file = $params['image'] ?? null;
+        if ($file) {
+            $fileNameNoExtension = app(FileHelper::class)->getFileNameWithoutExtension($file);
+
+            $originalImagePath = $file->store(
+                'tmp/',
+                'local'
+            );
+
+            $removeOriginalFile = true;
+
+        }  else {
+            $fileNameNoExtension = 'default_category_image';
+
+            $originalImagePath = 'default_category_image.jpg';
+
+            $removeOriginalFile = false;
+        }
 
         $thumbName = app(StringHelper::class)->clean($fileNameNoExtension) . '_' . Str::uuid()->toString() . '_thumb.jpg';
         $tmpPath = "tmp/$thumbName";
-        $thumbCreatedSuccessfully = app(ThumbMaker::class)->makeFromFile($originalImagePath, $tmpPath, true);
+        $thumbCreatedSuccessfully = app(ThumbMaker::class)->makeFromFile($originalImagePath, $tmpPath, $removeOriginalFile);
 
         if (! $thumbCreatedSuccessfully) {
             return [

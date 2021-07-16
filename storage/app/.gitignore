@@ -1,3 +1,5 @@
 *
 !public/
 !.gitignore
+!default_user_image.jpg
+!default_category_image.jpg

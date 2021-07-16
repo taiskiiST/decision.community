@@ -14,16 +14,18 @@ const AddEntityModal = ({
     const [fileList, setFileList] = useState([]);
 
     const onSubmit = async () => {
-        if (fileList.length === 0 || ! fileList[0].originFileObj || ! name) {
+        if (! name) {
             return;
         }
 
         setIsLoading(true);
 
-        const newCategory = await addFunction(fileList[0].originFileObj, name, parentId);
+        const fileObj = typeof fileList[0] === 'undefined' ? null : fileList[0].originFileObj;
 
-        if (newCategory) {
-            onAdded(newCategory);
+        const newEntity = await addFunction(fileObj, name, parentId);
+
+        if (newEntity) {
+            onAdded(newEntity);
 
             setName('');
             setFileList([]);
@@ -42,6 +44,7 @@ const AddEntityModal = ({
                 reader.onload = () => resolve(reader.result);
             });
         }
+
         const image = new Image();
         image.src = src;
 
@@ -77,7 +80,7 @@ const AddEntityModal = ({
                     type="primary"
                     loading={isLoading}
                     onClick={onSubmit}
-                    disabled={! name || fileList.length === 0}
+                    disabled={! name}
                 >
                     ОК
                 </Button>,

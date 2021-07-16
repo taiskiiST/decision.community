@@ -157,7 +157,9 @@ export const addItem = async (file, name, parentId) => {
     try {
         const formData = new FormData();
 
-        formData.append('image', file);
+        if (file) {
+            formData.append('image', file);
+        }
 
         formData.append('name', name);
 
@@ -188,7 +190,9 @@ export const addCategory = async (file, name, parentId) => {
     try {
         const formData = new FormData();
 
-        formData.append('image', file);
+        if (file) {
+            formData.append('image', file);
+        }
 
         formData.append('name', name);
 

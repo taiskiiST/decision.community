@@ -77,6 +77,17 @@ class PollsController extends Controller
             'poll' => $poll
         ]);
     }
+    function recurs ($parent_id, $items_id){
+        $sons_id = DB::select("SELECT id FROM items where parent_id = ? AND id NOT IN (?)", [$parent_id, $items_id]);
+        foreach ($sons_id as $son_id)
+            if ($son_id) {
+                recurs($son_id, $items_id);
+            }else{
+                return ;
+            }
+    }
+
+
     /**
      * Display the specified resource.
      *
@@ -85,6 +96,24 @@ class PollsController extends Controller
      */
     public function report(Poll $poll)
     {
+        $items_id = $poll->notVote($poll->id);
+
+        foreach ($items_id as $id){
+            $items[] = Item::find ($id->id);
+        }
+/*
+        $item_super_father = Item::where('parent_id', '=', 'NULL')->get();
+        $item_super_father_id = $item_super_father->id;
+
+        foreach ($items as $item){
+            if ($item->parent_id == $item_super_father_id){
+                $tree_not_vote [$item->parent_id][] = $item;
+            }
+
+        }*/
+
+        //dd();
+
         return view('polls.report', [
             'poll' => $poll,
             'itemsNameHash'   => Item::all()->pluck('name', 'id'),

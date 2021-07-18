@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -31,15 +32,17 @@ class Poll extends Model
     {
         return "/polls/{$this->id}";
     }
-    public function notVote($poll_id)
-    {
-        $questions= DB::select("SELECT id FROM questions where poll_id = ?", [$poll_id]);
-        foreach ($questions as $question){
-                $questions_id[] = $question->id;
-        }
-        $items = DB::select("SELECT id FROM items where id NOT IN (SELECT item_id FROM votes where question_id IN (?) ) ", $questions_id);
 
-        return $items;
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function peopleThatDidNotVote(): Collection
+    {
+        $questions = $this->questions;
+
+        $itemsIdsThatVoted = Vote::whereIn('question_id', $questions)->select('item_id')->get();
+
+        return Item::whereNotIn('id', $itemsIdsThatVoted)->where('is_category', false)->get();
     }
 
 }

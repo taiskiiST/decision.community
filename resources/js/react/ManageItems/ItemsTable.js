@@ -11,7 +11,8 @@ const ItemsTable = ({
     onItemPhoneChange,
     onItemPinChange,
     onItemAddressChange,
-    onItemThumbClicked
+    onItemThumbClicked,
+    onElementaryChange
 }) => {
     const getItemTypeIcon = (item) => {
         const { isCategory } = item;
@@ -84,6 +85,13 @@ const ItemsTable = ({
                                     className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
                                     Пин
+                                </th>
+
+                                <th
+                                    scope="col"
+                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    Первичная Орг.
                                 </th>
 
                                 <th scope="col" className="relative px-6 py-3">
@@ -189,6 +197,23 @@ const ItemsTable = ({
                                                     />
                                                 </div>
                                             </div>
+                                        </td>
+
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                            <input
+                                                id="elementary" name="elementary" type="checkbox"
+                                                onChange={(e) => onElementaryChange(item.id, e.target.checked)}
+                                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                                value={item.elementary}
+                                                checked={!! item.elementary}
+                                                disabled={tableInputsDisabled}
+                                            />
+
+                                            <label
+                                                htmlFor="isEmployeeOnly" className="font-medium text-gray-700 sr-only"
+                                            >
+                                                Elementary
+                                            </label>
                                         </td>
 
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

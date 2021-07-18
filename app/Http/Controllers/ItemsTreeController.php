@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chairman;
+use App\Models\CommitteeMember;
 use App\Models\Item;
+use App\Models\PresidiumMember;
 use App\Services\FileHelper;
 use App\Services\StringHelper;
 use App\Services\ThumbMaker;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use JavaScript;
@@ -27,16 +31,20 @@ class ItemsTreeController extends Controller
         $this->authorize('create', Item::class);
 
         JavaScript::put([
-            'GET_ITEMS_URL'                 => route('items-tree.get-items'),
-            'UPDATE_ITEM_PARENT_URL'        => route('items-tree.update-item-parent'),
-            'UPDATE_ITEM_NAME_URL'          => route('items-tree.update-item-name'),
-            'UPDATE_ITEM_PHONE_URL'         => route('items-tree.update-item-phone'),
-            'UPDATE_ITEM_PIN_URL'           => route('items-tree.update-item-pin'),
-            'UPDATE_ITEM_ADDRESS_URL'       => route('items-tree.update-item-address'),
-            'UPDATE_ITEM_THUMB_URL'         => route('items-tree.update-item-thumb'),
-            'ADD_ITEM_URL'                  => route('items-tree.add-item'),
-            'REMOVE_ITEM_URL'               => route('items-tree.remove-item'),
-            'ADD_CATEGORY_URL'              => route('items-tree.add-category'),
+            'GET_ITEMS_URL'                     => route('items-tree.get-items'),
+            'UPDATE_ITEM_PARENT_URL'            => route('items-tree.update-item-parent'),
+            'UPDATE_ITEM_NAME_URL'              => route('items-tree.update-item-name'),
+            'UPDATE_ITEM_PHONE_URL'             => route('items-tree.update-item-phone'),
+            'UPDATE_ITEM_PIN_URL'               => route('items-tree.update-item-pin'),
+            'UPDATE_ITEM_ADDRESS_URL'           => route('items-tree.update-item-address'),
+            'UPDATE_ITEM_ELEMENTARY_URL'        => route('items-tree.update-item-elementary'),
+            'UPDATE_ITEM_THUMB_URL'             => route('items-tree.update-item-thumb'),
+            'ADD_ITEM_URL'                      => route('items-tree.add-item'),
+            'REMOVE_ITEM_URL'                   => route('items-tree.remove-item'),
+            'ADD_CATEGORY_URL'                  => route('items-tree.add-category'),
+            'UPDATE_ITEM_COMMITTEE_MEMBERS_URL' => route('items-tree.update-item-committee-members'),
+            'UPDATE_ITEM_PRESIDIUM_MEMBERS_URL' => route('items-tree.update-item-presidium-members'),
+            'UPDATE_ITEM_CHAIRMAN_URL'          => route('items-tree.update-item-chairman'),
         ]);
 
         return view('items-tree.index');
@@ -50,11 +58,30 @@ class ItemsTreeController extends Controller
     {
         $this->authorize('create', Item::class);
 
-        return auth()->user()->availableItems(request('parentId'))
-                     ->select('id', 'name', 'phone', 'pin', 'address', 'parent_id', 'is_category', 'thumb')
+        $committeeMembersByIds = CommitteeMember::get()->groupBy('committee_id');
+
+        $presidiumMembersByIds = PresidiumMember::get()->groupBy('presidium_id');
+
+        $chairmenByIds = Chairman::get()->keyBy('chair_id');
+
+        return Item::select('id', 'name', 'phone', 'pin', 'address', 'parent_id', 'is_category', 'thumb', 'elementary')
                      ->get()
-                     ->transform(function (Item $item) {
-                         return $item->addProperties();
+                     ->transform(function (Item $item) use ($committeeMembersByIds, $presidiumMembersByIds, $chairmenByIds) {
+                         $updatedItem = $item->addProperties();
+
+                         $updatedItem->currentCommitteeMembers = $committeeMembersByIds->has($item->id)
+                             ? $committeeMembersByIds->get($item->id)->pluck('member_id')->toArray()
+                             : [];
+
+                         $updatedItem->currentPresidiumMembers = $presidiumMembersByIds->has($item->id)
+                             ? $presidiumMembersByIds->get($item->id)->pluck('member_id')->toArray()
+                             : [];
+
+                         $updatedItem->currentChairman = $chairmenByIds->has($item->id)
+                             ? $chairmenByIds->get($item->id)->man_id
+                             : null;
+
+                         return $updatedItem;
                      });
     }
 
@@ -200,6 +227,253 @@ class ItemsTreeController extends Controller
         $item->save();
 
         $item->refresh();
+
+        $item->addProperties();
+
+        return $item;
+    }
+
+    /**
+     * @return \App\Models\Item|string[]|null
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function updateItemElementary()
+    {
+        /** @var Item $item */
+        $item = Item::findOrFail(request('id'));
+
+        $this->authorize('update', $item);
+
+        $params = $this->validate(request(), [
+            'elementary' => 'required|bool',
+        ]);
+
+        $newElementary = $params['elementary'];
+
+        DB::transaction(function () use ($item, $newElementary) {
+            $item->elementary = $newElementary;
+
+            $item->save();
+
+            $item->committeeMembers()->delete();
+
+            $item->presidiumMembers()->delete();
+
+            $item->chairman()->delete();
+        });
+
+        $item->refresh();
+
+        $committeeMembersByIds = CommitteeMember::get()->groupBy('committee_id');
+
+        $presidiumMembersByIds = PresidiumMember::get()->groupBy('presidium_id');
+
+        $chairmenByIds = Chairman::get()->keyBy('chair_id');
+
+        $item->currentCommitteeMembers = $committeeMembersByIds->has($item->id)
+            ? $committeeMembersByIds->get($item->id)->pluck('member_id')->toArray()
+            : [];
+
+        $item->currentPresidiumMembers = $presidiumMembersByIds->has($item->id)
+            ? $presidiumMembersByIds->get($item->id)->pluck('member_id')->toArray()
+            : [];
+
+        $item->currentChairman = $chairmenByIds->has($item->id)
+            ? $chairmenByIds->get($item->id)->man_id
+            : null;
+
+        $item->addProperties();
+
+        return $item;
+    }
+
+    /**
+     * @return \App\Models\Item|string[]|null
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function updateItemCommitteeMembers()
+    {
+        /** @var Item $item */
+        $item = Item::findOrFail(request('id'));
+
+        $this->authorize('update', $item);
+
+        $params = $this->validate(request(), [
+            'committeeMembers' => 'array',
+        ]);
+
+        $newCommitteeMembers = $params['committeeMembers'];
+
+        $dataToInsert = [];
+        foreach ($newCommitteeMembers as $committeeMemberId) {
+            $dataToInsert[] = [
+                'committee_id' => $item->id,
+                'member_id' => $committeeMemberId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        DB::transaction(function () use ($item, $dataToInsert, $newCommitteeMembers) {
+            $item->committeeMembers()->delete();
+
+            $item->committeeMembers()->insert($dataToInsert);
+
+            $currentPresidiumMembersIds = $item->presidiumMembers()->get()->pluck('member_id')->toArray();
+
+            // Deleting from presidium if needed.
+            $membersToDelete = array_diff($currentPresidiumMembersIds, $newCommitteeMembers);
+            $item->presidiumMembers()->whereIn('member_id', $membersToDelete)->delete();
+
+            // Deleting from chair if needed.
+            $item->chairman()->whereIn('man_id', $membersToDelete)->delete();
+        });
+
+        $item->refresh();
+
+        $committeeMembersByIds = CommitteeMember::get()->groupBy('committee_id');
+
+        $presidiumMembersByIds = PresidiumMember::get()->groupBy('presidium_id');
+
+        $chairmenByIds = Chairman::get()->keyBy('chair_id');
+
+        $item->currentCommitteeMembers = $committeeMembersByIds->has($item->id)
+            ? $committeeMembersByIds->get($item->id)->pluck('member_id')->toArray()
+            : [];
+
+        $item->currentPresidiumMembers = $presidiumMembersByIds->has($item->id)
+            ? $presidiumMembersByIds->get($item->id)->pluck('member_id')->toArray()
+            : [];
+
+        $item->currentChairman = $chairmenByIds->has($item->id)
+            ? $chairmenByIds->get($item->id)->man_id
+            : null;
+
+        $item->addProperties();
+
+        return $item;
+    }
+
+    /**
+     * @return \App\Models\Item|string[]|null
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function updateItemPresidiumMembers()
+    {
+        /** @var Item $item */
+        $item = Item::findOrFail(request('id'));
+
+        $this->authorize('update', $item);
+
+        $params = $this->validate(request(), [
+            'presidiumMembers' => 'array',
+        ]);
+
+        $newPresidiumMembers = $params['presidiumMembers'];
+
+        $dataToInsert = [];
+        foreach ($newPresidiumMembers as $presidiumMemberId) {
+            $dataToInsert[] = [
+                'presidium_id' => $item->id,
+                'member_id' => $presidiumMemberId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        DB::transaction(function () use ($item, $dataToInsert, $newPresidiumMembers) {
+            $item->presidiumMembers()->delete();
+
+            $item->presidiumMembers()->insert($dataToInsert);
+
+            $item->refresh();
+
+            $currentChairmanId = $item->chairman ? $item->chairman->man_id : null;
+            if (! $currentChairmanId) {
+                return;
+            }
+
+            if (in_array($currentChairmanId, $newPresidiumMembers)) {
+                return;
+            }
+
+            // Deleting from chair.
+            $item->chairman()->delete();
+        });
+
+        $item->refresh();
+
+        $committeeMembersByIds = CommitteeMember::get()->groupBy('committee_id');
+
+        $presidiumMembersByIds = PresidiumMember::get()->groupBy('presidium_id');
+
+        $chairmenByIds = Chairman::get()->keyBy('chair_id');
+
+        $item->currentCommitteeMembers = $committeeMembersByIds->has($item->id)
+            ? $committeeMembersByIds->get($item->id)->pluck('member_id')->toArray()
+            : [];
+
+        $item->currentPresidiumMembers = $presidiumMembersByIds->has($item->id)
+            ? $presidiumMembersByIds->get($item->id)->pluck('member_id')->toArray()
+            : [];
+
+        $item->currentChairman = $chairmenByIds->has($item->id)
+            ? $chairmenByIds->get($item->id)->man_id
+            : null;
+
+        $item->addProperties();
+
+        return $item;
+    }
+
+    /**
+     * @return \App\Models\Item|string[]|null
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function updateItemChairman()
+    {
+        /** @var Item $item */
+        $item = Item::findOrFail(request('id'));
+
+        $this->authorize('update', $item);
+
+        $params = $this->validate(request(), [
+            'chairman' => 'required|integer|exists:items,id',
+        ]);
+
+        $newChairmanId = $params['chairman'];
+
+        DB::transaction(function () use ($item, $newChairmanId) {
+            $item->chairman()->delete();
+
+            $item->chairman()->create([
+                'man_id' => $newChairmanId
+            ]);
+        });
+
+        $item->refresh();
+
+        $committeeMembersByIds = CommitteeMember::get()->groupBy('committee_id');
+
+        $presidiumMembersByIds = PresidiumMember::get()->groupBy('presidium_id');
+
+        $chairmenByIds = Chairman::get()->keyBy('chair_id');
+
+        $item->currentCommitteeMembers = $committeeMembersByIds->has($item->id)
+            ? $committeeMembersByIds->get($item->id)->pluck('member_id')->toArray()
+            : [];
+
+        $item->currentPresidiumMembers = $presidiumMembersByIds->has($item->id)
+            ? $presidiumMembersByIds->get($item->id)->pluck('member_id')->toArray()
+            : [];
+
+        $item->currentChairman = $chairmenByIds->has($item->id)
+            ? $chairmenByIds->get($item->id)->man_id
+            : null;
 
         $item->addProperties();
 

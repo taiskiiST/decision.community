@@ -8,6 +8,7 @@ import {
     updateItemPhone,
     updateItemPin,
     updateItemAddress,
+    updateItemElementary, updateItemCommitteeMembers, updateItemPresidiumMembers, updateItemChairman
 } from '../../shared/items-requests';
 import { message, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -17,6 +18,9 @@ import TreeWrapper from './TreeWrapper';
 import UpdateThumbModal from './UpdateThumbModal';
 import AddCategoryModal from './AddCategoryModal';
 import AddItemModal from './AddItemModal';
+import CommitteeList from './CommitteeList';
+import PresidiumList from './PresidiumList';
+import ChairmanPicker from './ChairmanPicker';
 
 const { confirm } = Modal;
 
@@ -81,8 +85,42 @@ const App = () => {
         return root;
     };
 
+    const getItemFirstChildren = (itemsByKeys, item) => {
+        if (! item) {
+            return [];
+        }
+
+        const { id } = item;
+
+        const out = [];
+
+        itemsByKeys.forEach((value, key) => {
+            const { parentId } = value;
+
+            if (parentId === id) {
+                out.push(value);
+            }
+        });
+
+        return out;
+    };
+
     const prepareItem = (item) => {
-        const { id, parent_id, name, phone, pin, address, is_category, thumbUrl, prepared } = item;
+        const {
+            id,
+            parent_id,
+            name,
+            phone,
+            pin,
+            address,
+            is_category,
+            thumbUrl,
+            prepared,
+            elementary,
+            currentCommitteeMembers,
+            currentPresidiumMembers,
+            currentChairman
+        } = item;
 
         if (prepared) {
             return item;
@@ -101,9 +139,13 @@ const App = () => {
             thumbUrl: thumbUrl,
             phone: phone,
             pin: pin,
+            elementary: elementary,
             address: address,
             prepared: true,
-            loadedChildren: false,
+            loadedChildren: true,
+            currentCommitteeMembers: currentCommitteeMembers,
+            currentPresidiumMembers: currentPresidiumMembers,
+            currentChairman: currentChairman ?? {},
         };
     };
 
@@ -459,6 +501,33 @@ const App = () => {
         });
     };
 
+    const onElementaryChange = async (itemId, isElementary) => {
+        const item = itemsByKeys.get(itemId);
+
+        const updatedItemFromServer = await updateItemElementary({
+            id: itemId,
+            elementary: isElementary
+        });
+
+        if (! updatedItemFromServer) {
+            return;
+        }
+
+        const newItemsByKeys = new Map(itemsByKeys);
+
+        const { elementary: newElementary, currentCommitteeMembers, currentPresidiumMembers, currentChairman } = updatedItemFromServer;
+
+        newItemsByKeys.set(itemId, {
+            ...item,
+            elementary: newElementary,
+            currentCommitteeMembers: currentCommitteeMembers,
+            currentPresidiumMembers: currentPresidiumMembers,
+            currentChairman: currentChairman
+        });
+
+        setItemsByKeys(newItemsByKeys);
+    };
+
     const onItemAddressChange = async (item, e) => {
         const newAddress = e.target.value;
         if (! newAddress) {
@@ -520,14 +589,164 @@ const App = () => {
         setIsUpdateThumbModalOpen(false);
     };
 
+    const onCommitteeListChange = async (item, selectedMembers) => {
+        const { id } = item;
+
+        const updatedItemFromServer = await updateItemCommitteeMembers({
+            id: id,
+            committeeMembers: selectedMembers.map(member => member.value)
+        });
+
+        if (! updatedItemFromServer) {
+            return;
+        }
+
+        setItemsByKeys(currentItemsByKeys => {
+            const newItemsByKeys = new Map(currentItemsByKeys);
+
+            const { currentCommitteeMembers, currentPresidiumMembers, currentChairman } = updatedItemFromServer;
+
+            newItemsByKeys.set(id, {
+                ...item,
+                currentCommitteeMembers: currentCommitteeMembers,
+                currentPresidiumMembers: currentPresidiumMembers,
+                currentChairman: currentChairman
+            });
+
+            return newItemsByKeys;
+        });
+    };
+
+    const onPresidiumListChange = async (item, selectedMembers) => {
+        const { id } = item;
+
+        const updatedItemFromServer = await updateItemPresidiumMembers({
+            id: id,
+            presidiumMembers: selectedMembers.map(member => member.value)
+        });
+
+        if (! updatedItemFromServer) {
+            return;
+        }
+
+        setItemsByKeys(currentItemsByKeys => {
+            const newItemsByKeys = new Map(currentItemsByKeys);
+
+            const { currentPresidiumMembers, currentChairman } = updatedItemFromServer;
+
+            newItemsByKeys.set(id, {
+                ...item,
+                currentPresidiumMembers: currentPresidiumMembers,
+                currentChairman: currentChairman
+            });
+
+            return newItemsByKeys;
+        });
+    };
+
+    const onChairmanChange = async (item, selectedChairman) => {
+        const { id } = item;
+
+        const updatedItemFromServer = await updateItemChairman({
+            id: id,
+            chairman: selectedChairman.value
+        });
+
+        if (! updatedItemFromServer) {
+            return;
+        }
+
+        setItemsByKeys(currentItemsByKeys => {
+            const newItemsByKeys = new Map(currentItemsByKeys);
+
+            const { currentChairman } = updatedItemFromServer;
+
+            newItemsByKeys.set(id, {
+                ...item,
+                currentChairman: currentChairman,
+            });
+
+            return newItemsByKeys;
+        });
+    };
+
     const onItemThumbClicked = (item) => {
         setUpdateThumbModalItem(item);
 
         setIsUpdateThumbModalOpen(true);
     };
 
+    const getItemChildren = (item, out) => {
+        if (! item) {
+            return [];
+        }
+
+        const children = getItemFirstChildren(itemsByKeys, item);
+
+        if (children.length === 0) {
+            const { id, fullTitle } = item;
+
+            out.push({
+                id: id,
+                name: fullTitle
+            });
+
+            return out;
+        }
+
+        children.forEach(child => {
+            return out.concat(getItemChildren(child, out));
+        });
+
+        return out;
+    };
+
+    const getPotentialCommitteeMembers = (item) => {
+        if (! item) {
+            return [];
+        }
+
+        const out = [];
+        getItemChildren(item, out);
+
+        return out;
+    };
+
+    const getPotentialChairmen = (item) => {
+        if (! item) {
+            return [];
+        }
+
+        const { elementary } = item;
+
+        if (elementary) {
+            return getItemFirstChildren(itemsByKeys, item).map(child => ({
+                id: child.id,
+                name: child.fullTitle
+            }));
+        }
+
+        // If not elementary - generate the list from the presidium.
+        return potentialPresidiumMembers.filter(member => {
+            const { id } = member;
+
+            return currentPresidiumMembers.find(currentPresidiumMemberId => currentPresidiumMemberId === id);
+        });
+    };
+
     const treeData = mapToTree(itemsByKeys).children;
+
     const selectedItem = selectedItemKey ? itemsByKeys.get(selectedItemKey) : null;
+    const { currentCommitteeMembers, currentPresidiumMembers, currentChairman } = selectedItem || {};
+    const potentialCommitteeMembers = getPotentialCommitteeMembers(selectedItem);
+
+    const potentialPresidiumMembers = potentialCommitteeMembers.filter(member => {
+        const { id } = member;
+
+        return currentCommitteeMembers.find(currentCommitteeMemberId => currentCommitteeMemberId === id);
+    });
+
+    const potentialChairmen = getPotentialChairmen(selectedItem);
 
     return (
         <div className="flex flex-col-reverse justify-end md:justify-between md:flex-row min-h-2xl p-2">
@@ -608,7 +827,45 @@ const App = () => {
             </div>
 
             <div className="md:flex-grow p-1 min-h-full overflow-hidden">
-                <div className="hidden md:block">
+                {
+                    selectedItem ?
+                    (
+                        <div className="flex justify-between items-center">
+                            {
+                                ! selectedItem.elementary ? (
+                                    <React.Fragment>
+                                        <div className="p-4 flex-1">
+                                            <CommitteeList
+                                                item={selectedItem}
+                                                onChange={onCommitteeListChange}
+                                                potentialMembers={potentialCommitteeMembers}
+                                            />
+                                        </div>
+
+                                        <div className="p-4 flex-1">
+                                            <PresidiumList
+                                                item={selectedItem}
+                                                onChange={onPresidiumListChange}
+                                                potentialMembers={potentialPresidiumMembers}
+                                            />
+                                        </div>
+                                    </React.Fragment>
+                                ) : null
+                            }
+
+                            <div className="p-4 flex-1">
+                                <ChairmanPicker
+                                    item={selectedItem}
+                                    onChange={onChairmanChange}
+                                    potentialChairmen={potentialChairmen}
+                                />
+                            </div>
+                        </div>
+                    )
+                    :  null
+                }
+
+                <div className="hidden md:block mt-2">
                     <ItemsTableWrapper
                         selectedItemKey={selectedItemKey}
                         itemsByKeys={itemsByKeys}
@@ -619,6 +876,7 @@ const App = () => {
                         onItemPinChange={onItemPinChange}
                         onItemAddressChange={onItemAddressChange}
                         onItemThumbClicked={onItemThumbClicked}
+                        onElementaryChange={onElementaryChange}
                     />
                 </div>
             </div>

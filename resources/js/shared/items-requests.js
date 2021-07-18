@@ -12,7 +12,11 @@ const {
     ADD_ITEM_URL,
     REMOVE_ITEM_URL,
     ADD_CATEGORY_URL,
-} = window.InfoDot || {};
+    UPDATE_ITEM_ELEMENTARY_URL,
+    UPDATE_ITEM_COMMITTEE_MEMBERS_URL,
+    UPDATE_ITEM_PRESIDIUM_MEMBERS_URL,
+    UPDATE_ITEM_CHAIRMAN_URL
+} = window.SouthUnion || {};
 
 export const getItems = async (parentId) => {
     try {
@@ -72,6 +76,60 @@ export const updateItemName = async (data) => {
     }
 };
 
+export const updateItemCommitteeMembers = async (data) => {
+    try {
+        const response = await client.put(UPDATE_ITEM_COMMITTEE_MEMBERS_URL, data);
+
+        const { data: itemFromServer } = response;
+
+        if (! itemFromServer) {
+            return null;
+        }
+
+        return itemFromServer;
+    } catch (error) {
+        message.error(`Error occurred: ${error}`, 5);
+
+        return null;
+    }
+};
+
+export const updateItemPresidiumMembers = async (data) => {
+    try {
+        const response = await client.put(UPDATE_ITEM_PRESIDIUM_MEMBERS_URL, data);
+
+        const { data: itemFromServer } = response;
+
+        if (! itemFromServer) {
+            return null;
+        }
+
+        return itemFromServer;
+    } catch (error) {
+        message.error(`Error occurred: ${error}`, 5);
+
+        return null;
+    }
+};
+
+export const updateItemChairman = async (data) => {
+    try {
+        const response = await client.put(UPDATE_ITEM_CHAIRMAN_URL, data);
+
+        const { data: itemFromServer } = response;
+
+        if (! itemFromServer) {
+            return null;
+        }
+
+        return itemFromServer;
+    } catch (error) {
+        message.error(`Error occurred: ${error}`, 5);
+
+        return null;
+    }
+};
+
 export const updateItemPhone = async (data) => {
     try {
         const response = await client.put(UPDATE_ITEM_PHONE_URL, data);
@@ -96,6 +154,23 @@ export const updateItemPin = async (data) => {
 
         const { data: itemFromServer } = response;
 
+        if (! itemFromServer) {
+            return null;
+        }
+
+        return itemFromServer;
+    } catch (error) {
+        message.error(`Error occurred: ${error}`, 5);
+
+        return null;
+    }
+};
+
+export const updateItemElementary = async (data) => {
+    try {
+        const response = await client.put(UPDATE_ITEM_ELEMENTARY_URL, data);
+
+        const { data: itemFromServer } = response;
         if (! itemFromServer) {
             return null;
         }

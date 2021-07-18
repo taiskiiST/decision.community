@@ -3,16 +3,13 @@
 namespace App\Models;
 
 use App\Http\Livewire\ItemsList;
-use App\Services\Youtube;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 /**
  * Class Item
@@ -26,6 +23,11 @@ use Illuminate\Support\Str;
  * @property mixed phone
  * @property mixed address
  * @property mixed pin
+ * @property mixed elementary
+ * @property array|mixed currentCommitteeMembers
+ * @property array|mixed currentPresidiumMembers
+ * @property mixed|null currentChairman
+ * @property mixed chairman
  * @package App\Models
  * @method static where(string $string, mixed $id)
  */
@@ -162,6 +164,29 @@ class Item extends Model
                     ->get();
     }
 
+    public function getDirectChildren(): Collection
+    {
+        return Item::where('parent_id', $this->id)->get();
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getAllNonCategoryChildren(): Collection
+    {
+        $query = Item::where('parent_id', $this->id)
+                     ->unionAll(
+                         Item::select('items.*')
+                             ->join('tree', 'tree.id', '=', 'items.parent_id')
+                     );
+
+        return Item::from('tree')
+                   ->withRecursiveExpression('tree', $query)
+                   ->get()->filter(function ($item) {
+                       return ! $item->is_category;
+            });
+    }
+
     /**
      * @return Collection
      */
@@ -226,11 +251,20 @@ class Item extends Model
         return $deletedIds;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function votes(): HasMany
     {
         return $this->hasMany(Vote::class);
     }
 
+    /**
+     * @param \App\Models\Question $question
+     * @param \App\Models\Answer $answer
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public function vote(Question $question, Answer $answer): Model
     {
         return $this->votes()->updateOrCreate([
@@ -240,5 +274,74 @@ class Item extends Model
             'question_id' => $question->id,
             'answer_id' => $answer->id
         ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isElementary(): bool
+    {
+        return $this->elementary;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function committeeMembers(): HasMany
+    {
+        return $this->hasMany(CommitteeMember::class, 'committee_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function presidiumMembers(): HasMany
+    {
+        return $this->hasMany(PresidiumMember::class, 'presidium_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function chairman(): HasOne
+    {
+        return $this->hasOne(Chairman::class, 'chair_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getTopHierarchy(): Collection
+    {
+        $out = new Collection();
+
+        $item = $this;
+
+        $level = 0;
+
+        while ($item->parent_id) {
+            $out->push([
+                'level' => $level++,
+                'item' => $item,
+                'chairman' => Item::find($item->chairman->man_id ?? null),
+            ]);
+
+            $item = Item::find($item->parent_id);
+        }
+
+        $out->push([
+            'level' => ++$level,
+            'item' => $item,
+            'chairman' => Item::find($item->chairman->man_id ?? null),
+        ]);
+
+        return $out;
+    }
+
+    public function getPeopleThatDidNotVote(Collection $peopleThatDidNotVote): Collection
+    {
+        return $this->getAllNonCategoryChildren()->filter(function ($child) use ($peopleThatDidNotVote) {
+            return in_array($child->id, $peopleThatDidNotVote->pluck('id')->toArray());
+        });
     }
 }

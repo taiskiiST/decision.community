@@ -1,10 +1,4 @@
 <div class="flex flex-col min-h-2xl">
-    @includeWhen(auth()->user()->canManageItems(), 'items.manage-items-modal', [
-        'isManageItemsModalOpen' => $isManageItemsModalOpen,
-        'itemType' => $itemTypeBeingAdded,
-        'parentItemId' => $currentCategory ? $currentCategory->id : null,
-    ])
-
     @include('items.email-item-modal', [
         'isEmailItemModalOpen' => $isEmailItemModalOpen,
     ])

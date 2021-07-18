@@ -10,7 +10,8 @@ const ItemsTableWrapper = ({
     onItemPhoneChange,
     onItemPinChange,
     onItemAddressChange,
-    onItemThumbClicked
+    onItemThumbClicked,
+    onElementaryChange
 }) => {
     let items = [];
 
@@ -49,6 +50,7 @@ const ItemsTableWrapper = ({
             onItemPinChange={onItemPinChange}
             onItemAddressChange={onItemAddressChange}
             onItemThumbClicked={onItemThumbClicked}
+            onElementaryChange={onElementaryChange}
         />
     );
 };

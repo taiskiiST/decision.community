@@ -8,6 +8,7 @@ use App\Models\Poll;
 use App\Models\Question;
 use App\Models\Vote;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class PollsController extends Controller
 {
@@ -77,6 +78,7 @@ class PollsController extends Controller
             'poll' => $poll
         ]);
     }
+
     function recurs ($parent_id, $items_id){
         $sons_id = DB::select("SELECT id FROM items where parent_id = ? AND id NOT IN (?)", [$parent_id, $items_id]);
         foreach ($sons_id as $son_id)
@@ -87,6 +89,20 @@ class PollsController extends Controller
             }
     }
 
+    protected function fillTree(Item $item, array &$out)
+    {
+        $directChildren = $item->getDirectChildren();
+
+        if ($directChildren->isNotEmpty()) {
+            foreach ($directChildren as $child) {
+                $this->fillTree($child, $out);
+            }
+        } else {
+            $out[$item->id][] = $item;
+        }
+
+        return $out;
+    }
 
     /**
      * Display the specified resource.
@@ -96,32 +112,56 @@ class PollsController extends Controller
      */
     public function report(Poll $poll)
     {
-        $items_id = $poll->notVote($poll->id);
+        $out = [];
 
-        foreach ($items_id as $id){
-            $items[] = Item::find ($id->id);
-        }
-/*
-        $item_super_father = Item::where('parent_id', '=', 'NULL')->get();
-        $item_super_father_id = $item_super_father->id;
+        $peopleThatDidNotVote = $poll->peopleThatDidNotVote();
 
-        foreach ($items as $item){
-            if ($item->parent_id == $item_super_father_id){
-                $tree_not_vote [$item->parent_id][] = $item;
+        $grandParents = Item::where('parent_id', null)->get()->each(function ($grandParent) use (&$out, $peopleThatDidNotVote) {
+            dump($grandParent->toArray());
+
+            /** @var Item $grandParent */
+            $notVoted = $grandParent->getPeopleThatDidNotVote($peopleThatDidNotVote);
+            dd($notVoted);
+
+            if ($notVoted->isEmpty()) {
+                return $out;
             }
 
-        }*/
+            $out = new Collection();
 
-        //dd();
+            $item = $grandParent;
+
+            $directChildren = $item->getDirectChildren();
+
+            while ($directChildren->isNotEmpty()) {
+                $out[$item->id] = $directChildren;
+            }
+
+
+            $out[$grandParent->id] = new Collection();
+        });
+
+        $poll->peopleThatDidNotVote()->groupBy('parent_id')->each(function ($group, $groupId) use (&$out) {
+            $parent = Item::find($groupId);
+
+            $hierarchy = $parent->getTopHierarchy();
+
+            $out[$groupId] = [
+                'group' => $group,
+                'hierarchy' => $hierarchy
+            ];
+        });
 
         return view('polls.report', [
             'poll' => $poll,
             'itemsNameHash'   => Item::all()->pluck('name', 'id'),
             'itemsPhoneHash'   => Item::all()->pluck('phone', 'id'),
             'itemsAddressHash'   => Item::all()->pluck('address', 'id'),
-            'itemsParentIdHash'   => Item::all()->pluck('parent_id', 'id')
+            'itemsParentIdHash'   => Item::all()->pluck('parent_id', 'id'),
+            'out' => $out
         ]);
     }
+
     /**
      * Display the specified resource.
      *

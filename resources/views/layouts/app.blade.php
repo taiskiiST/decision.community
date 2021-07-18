@@ -19,7 +19,7 @@
     </header>
 
     <main class="flex-1">
-        <div class="max-w-7xl mx-auto py-6 px-2 sm:px-6 lg:px-8">
+        <div class="max-w-9xl mx-auto py-6 px-2 sm:px-6 lg:px-8">
             <div class="relative -mt-118 h-auto bg-white px-0 shadow-xl">
                 @yield('content')
             </div>

@@ -179,7 +179,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // Other Service Providers
-        App\Providers\YoutubeServiceProvider::class,
         App\Providers\ThumbMakerServiceProvider::class,
         App\Providers\StringHelperServiceProvider::class,
         App\Providers\TreeServiceProvider::class,

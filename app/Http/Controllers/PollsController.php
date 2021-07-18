@@ -253,7 +253,9 @@ class PollsController extends Controller
 
         $item = Item::where('pin', $request['pin'])->where('phone', $request['phone'])->first();
         if (! $item) {
-            return "Участник с таким пином и телефоном не найден";
+            return redirect()->route('poll.display',[$poll->id])
+                ->withErrors("Участник с таким пином и телефоном не найден");
+
         }
 
         foreach ($poll->questions as $question) {
@@ -271,7 +273,8 @@ class PollsController extends Controller
 
                 $item->vote($question, $answer);
             }else{
-                return "Вы уже проголосовали по данному вопросу!";
+                return redirect()->route('poll.display',[$poll->id])
+                    ->withErrors("Вы уже проголосовали по данному вопросу!");
             }
         }
 

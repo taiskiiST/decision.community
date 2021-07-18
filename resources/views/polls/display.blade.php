@@ -3,6 +3,19 @@
 ])
 
 @section('content')
+    @if($errors->any())
+        <div class="alert-danger">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>
+                        <b><p style="color: red">{{$error}} </p></b>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+
     {!! Form::open(['route' => ['poll.submit', $poll], 'method' => 'POST', 'onsubmit' => "return confirm('Вы уверены? Ответы нельзя будет изменить впоследствии.');"]) !!}
     <!-- This example requires Tailwind CSS v2.0+ -->
     <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">

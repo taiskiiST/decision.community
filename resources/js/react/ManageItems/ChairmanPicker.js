@@ -17,7 +17,7 @@ const ChairmanPicker = ({ item, onChange, potentialChairmen }) => {
 
         return currentChairman === potentialChairmanId;
     });
-console.log('value,', value)
+
     const listId = `item_${itemId}_chairmen_list`;
 
     return (

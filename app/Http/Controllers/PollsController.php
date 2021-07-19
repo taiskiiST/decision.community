@@ -187,7 +187,7 @@ class PollsController extends Controller
                 if ($key == 'group') {
                     $hierarchy_str[$index] .= "<td style=\"border: 1px solid grey;\">";
                     foreach ($items as $item) {
-                        $hierarchy_str[$index] .= $item->name."<br />";
+                        $hierarchy_str[$index] .= $item->name.' - '.$item->phone."<br />";
                     }
                     $hierarchy_str[$index] .= "</td></tr></table>";
                     $index++;

@@ -50,7 +50,7 @@
                                   </span>
                         </div>
 
-                        <input type="text" name="pin" id="pin" pattern1="^\d\d\d\d$" class="ml-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="XXXX">
+                        <input type="number" name="pin" id="pin" pattern1="^\d\d\d\d$" class="ml-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="XXXX">
                     </div>
                 </div>
             </div>

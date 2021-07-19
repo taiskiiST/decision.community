@@ -581,6 +581,7 @@ class ItemsTreeController extends Controller
             'name'          => $params['name'],
             'thumb'         => $thumbName,
             'parent_id'     => $parentId,
+            'pin'           => rand(0000,9999),
             'is_category'   => false,
         ]);
 

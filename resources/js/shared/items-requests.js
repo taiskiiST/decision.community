@@ -15,7 +15,10 @@ const {
     UPDATE_ITEM_ELEMENTARY_URL,
     UPDATE_ITEM_COMMITTEE_MEMBERS_URL,
     UPDATE_ITEM_PRESIDIUM_MEMBERS_URL,
-    UPDATE_ITEM_CHAIRMAN_URL
+    UPDATE_ITEM_CHAIRMAN_URL,
+    UPDATE_ITEM_REV_COMMITTEE_MEMBERS_URL,
+    UPDATE_ITEM_REV_PRESIDIUM_MEMBERS_URL,
+    UPDATE_ITEM_REV_CHAIRMAN_URL,
 } = window.SouthUnion || {};
 
 export const getItems = async (parentId) => {
@@ -115,6 +118,60 @@ export const updateItemPresidiumMembers = async (data) => {
 export const updateItemChairman = async (data) => {
     try {
         const response = await client.put(UPDATE_ITEM_CHAIRMAN_URL, data);
+
+        const { data: itemFromServer } = response;
+
+        if (! itemFromServer) {
+            return null;
+        }
+
+        return itemFromServer;
+    } catch (error) {
+        message.error(`Error occurred: ${error}`, 5);
+
+        return null;
+    }
+};
+
+export const updateItemRevCommitteeMembers = async (data) => {
+    try {
+        const response = await client.put(UPDATE_ITEM_REV_COMMITTEE_MEMBERS_URL, data);
+
+        const { data: itemFromServer } = response;
+
+        if (! itemFromServer) {
+            return null;
+        }
+
+        return itemFromServer;
+    } catch (error) {
+        message.error(`Error occurred: ${error}`, 5);
+
+        return null;
+    }
+};
+
+export const updateItemRevPresidiumMembers = async (data) => {
+    try {
+        const response = await client.put(UPDATE_ITEM_REV_PRESIDIUM_MEMBERS_URL, data);
+
+        const { data: itemFromServer } = response;
+
+        if (! itemFromServer) {
+            return null;
+        }
+
+        return itemFromServer;
+    } catch (error) {
+        message.error(`Error occurred: ${error}`, 5);
+
+        return null;
+    }
+};
+
+export const updateItemRevChairman = async (data) => {
+    try {
+        const response = await client.put(UPDATE_ITEM_REV_CHAIRMAN_URL, data);
 
         const { data: itemFromServer } = response;
 

@@ -1,11 +1,16 @@
 import Select from 'react-select';
 
-const PresidiumList = ({ item, onChange, potentialMembers }) => {
+const PresidiumList = ({
+    item,
+    onChange,
+    potentialMembers,
+    currentMembers,
+    presidiumListId,
+    presidiumPickerLabel
+}) => {
     if (! item) {
         return null;
     }
-
-    const {id: itemId, currentPresidiumMembers } = item;
 
     const options = potentialMembers.map(member => ({
         value: member.id,
@@ -15,17 +20,15 @@ const PresidiumList = ({ item, onChange, potentialMembers }) => {
     const value = options.filter(option => {
         const { value: potentialMemberId } = option;
 
-        return currentPresidiumMembers.find(currentMemberId => currentMemberId === potentialMemberId);
+        return currentMembers.find(currentMemberId => currentMemberId === potentialMemberId);
     });
-
-    const listId = `item_${itemId}_presidium_list`;
 
     return (
         <div>
-            <label htmlFor={listId} className="block text-base font-medium text-gray-700">Президиум</label>
+            <label htmlFor={presidiumListId} className="block text-base font-medium text-gray-700">{presidiumPickerLabel}</label>
 
             <Select
-                id={listId}
+                id={presidiumListId}
                 hideSelectedOptions={false}
                 closeMenuOnSelect={false}
                 isMulti

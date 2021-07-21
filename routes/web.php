@@ -54,6 +54,9 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::put('/items-tree/updateItemCommitteeMembers', [ItemsTreeController::class, 'updateItemCommitteeMembers'])->name('items-tree.update-item-committee-members');
     Route::put('/items-tree/updateItemPresidiumMembers', [ItemsTreeController::class, 'updateItemPresidiumMembers'])->name('items-tree.update-item-presidium-members');
     Route::put('/items-tree/updateItemChairman', [ItemsTreeController::class, 'updateItemChairman'])->name('items-tree.update-item-chairman');
+    Route::put('/items-tree/updateItemRevCommitteeMembers', [ItemsTreeController::class, 'updateItemRevCommitteeMembers'])->name('items-tree.update-item-rev-committee-members');
+    Route::put('/items-tree/updateItemRevPresidiumMembers', [ItemsTreeController::class, 'updateItemRevPresidiumMembers'])->name('items-tree.update-item-rev-presidium-members');
+    Route::put('/items-tree/updateItemRevChairman', [ItemsTreeController::class, 'updateItemRevChairman'])->name('items-tree.update-item-rev-chairman');
 
     Route::post('/items-tree/updateItemThumb', [ItemsTreeController::class, 'updateItemThumb'])->name('items-tree.update-item-thumb');
 

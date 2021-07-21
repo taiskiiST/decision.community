@@ -1,11 +1,16 @@
 import Select from 'react-select';
 
-const ChairmanPicker = ({ item, onChange, potentialChairmen }) => {
+const ChairmanPicker = ({
+    item,
+    onChange,
+    potentialChairmen,
+    currentChairman,
+    chairmenListId,
+    chairmanPickerLabel
+}) => {
     if (! item) {
         return null;
     }
-
-    const {id: itemId, currentChairman } = item;
 
     const options = potentialChairmen.map(member => ({
         value: member.id,
@@ -18,14 +23,12 @@ const ChairmanPicker = ({ item, onChange, potentialChairmen }) => {
         return currentChairman === potentialChairmanId;
     });
 
-    const listId = `item_${itemId}_chairmen_list`;
-
     return (
         <div>
-            <label htmlFor={listId} className="block text-base font-medium text-gray-700">Председатель</label>
+            <label htmlFor={chairmenListId} className="block text-base font-medium text-gray-700">{chairmanPickerLabel}</label>
 
             <Select
-                id={listId}
+                id={chairmenListId}
                 hideSelectedOptions={false}
                 closeMenuOnSelect={false}
                 value={value ?? null}

@@ -19,7 +19,9 @@
     {!! Form::open(['route' => ['poll.submit', $poll], 'method' => 'POST', 'onsubmit' => "return confirm('Вы уверены? Ответы нельзя будет изменить впоследствии.');"]) !!}
     <!-- This example requires Tailwind CSS v2.0+ -->
     <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
+        <div class="text-center"><span style="font-size: x-large;"><b>{{$poll->name}}</b></span></div>
         <div class="flex justify-between items-center flex-flow" style="flex-flow: row wrap;">
+
             <div>
                 <label for="phone" class="block text-sm font-medium text-gray-700">Телефон</label>
 
@@ -57,12 +59,12 @@
         </div>
 
         <br/>
-
+        <div style="display: none">{{$cnt = 1}}</div>
         @foreach($poll->questions as $question)
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="px-4 py-5 sm:px-6">
                     <h3 class="text-lg leading-6 font-medium text-gray-900">
-                        {{ $question->text }}
+                        {{$cnt++}}) {!! $question->text !!}
                     </h3>
                 </div>
 
@@ -77,7 +79,7 @@
                                     <div class="ml-3 flex flex-col">
                                         <!-- Checked: "text-indigo-900", Not Checked: "text-gray-900" -->
                                         <span id="privacy-setting-0-label" class="text-gray-900 block text-sm font-medium">
-                                          {{ $answer->text }}
+                                            {{ $answer->text  }}
                                         </span>
                                     </div>
                                 </label>
@@ -86,6 +88,7 @@
                     </fieldset>
                 </div>
             </div>
+            <br />
         @endforeach
 
         <button type="submit" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

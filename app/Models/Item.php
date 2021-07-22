@@ -28,6 +28,10 @@ use Illuminate\Support\Facades\Storage;
  * @property array|mixed currentPresidiumMembers
  * @property mixed|null currentChairman
  * @property mixed chairman
+ * @property array|mixed currentRevCommitteeMembers
+ * @property array|mixed currentRevPresidiumMembers
+ * @property mixed|null currentRevChairman
+ * @property mixed revChairman
  * @package App\Models
  * @method static where(string $string, mixed $id)
  */
@@ -218,6 +222,58 @@ class Item extends Model
     }
 
     /**
+     * @return $this
+     */
+    public function addCurrentMembersProperties(): Item
+    {
+        $committeeMembersByIds = CommitteeMember::get()->groupBy('committee_id');
+
+        $presidiumMembersByIds = PresidiumMember::get()->groupBy('presidium_id');
+
+        $chairmenByIds = Chairman::get()->keyBy('chair_id');
+
+        $this->currentCommitteeMembers = $committeeMembersByIds->has($this->id)
+            ? $committeeMembersByIds->get($this->id)->pluck('member_id')->toArray()
+            : [];
+
+        $this->currentPresidiumMembers = $presidiumMembersByIds->has($this->id)
+            ? $presidiumMembersByIds->get($this->id)->pluck('member_id')->toArray()
+            : [];
+
+        $this->currentChairman = $chairmenByIds->has($this->id)
+            ? $chairmenByIds->get($this->id)->man_id
+            : null;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function addCurrentRevMembersProperties(): Item
+    {
+        $revCommitteeMembersByIds = RevCommitteeMember::get()->groupBy('rev_committee_id');
+
+        $revPresidiumMembersByIds = RevPresidiumMember::get()->groupBy('rev_presidium_id');
+
+        $revChairmenByIds = RevChairman::get()->keyBy('rev_chair_id');
+
+        $this->currentRevCommitteeMembers = $revCommitteeMembersByIds->has($this->id)
+            ? $revCommitteeMembersByIds->get($this->id)->pluck('member_id')->toArray()
+            : [];
+
+        $this->currentRevPresidiumMembers = $revPresidiumMembersByIds->has($this->id)
+            ? $revPresidiumMembersByIds->get($this->id)->pluck('member_id')->toArray()
+            : [];
+
+        $this->currentRevChairman = $revChairmenByIds->has($this->id)
+            ? $revChairmenByIds->get($this->id)->man_id
+            : null;
+
+        return $this;
+    }
+
+    /**
      * @param array $deletedIds
      *
      * @return array
@@ -306,6 +362,30 @@ class Item extends Model
     public function chairman(): HasOne
     {
         return $this->hasOne(Chairman::class, 'chair_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function revCommitteeMembers(): HasMany
+    {
+        return $this->hasMany(RevCommitteeMember::class, 'rev_committee_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function revPresidiumMembers(): HasMany
+    {
+        return $this->hasMany(RevPresidiumMember::class, 'rev_presidium_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function revChairman(): HasOne
+    {
+        return $this->hasOne(RevChairman::class, 'rev_chair_id', 'id');
     }
 
     /**

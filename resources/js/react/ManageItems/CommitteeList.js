@@ -1,11 +1,16 @@
 import Select from 'react-select';
 
-const CommitteeList = ({ item, onChange, potentialMembers }) => {
+const CommitteeList = ({
+    item,
+    onChange,
+    potentialMembers,
+    currentMembers,
+    committeeListId,
+    committeePickerLabel
+}) => {
     if (! item) {
         return null;
     }
-
-    const {id: itemId, currentCommitteeMembers } = item;
 
     const options = potentialMembers.map(member => ({
         value: member.id,
@@ -15,17 +20,15 @@ const CommitteeList = ({ item, onChange, potentialMembers }) => {
     const value = options.filter(option => {
         const { value: potentialMemberId } = option;
 
-        return currentCommitteeMembers.find(currentMemberId => currentMemberId === potentialMemberId);
+        return currentMembers.find(currentMemberId => currentMemberId === potentialMemberId);
     });
-
-    const listId = `item_${itemId}_committee_list`;
 
     return (
         <div>
-            <label htmlFor={listId} className="block text-base font-medium text-gray-700">Комитет</label>
+            <label htmlFor={committeeListId} className="block text-base font-medium text-gray-700">{committeePickerLabel}</label>
 
             <Select
-                id={listId}
+                id={committeeListId}
                 hideSelectedOptions={false}
                 closeMenuOnSelect={false}
                 isMulti

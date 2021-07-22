@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
 import {
     getItems,
@@ -8,7 +8,13 @@ import {
     updateItemPhone,
     updateItemPin,
     updateItemAddress,
-    updateItemElementary, updateItemCommitteeMembers, updateItemPresidiumMembers, updateItemChairman
+    updateItemElementary,
+    updateItemCommitteeMembers,
+    updateItemPresidiumMembers,
+    updateItemChairman,
+    updateItemRevCommitteeMembers,
+    updateItemRevPresidiumMembers,
+    updateItemRevChairman,
 } from '../../shared/items-requests';
 import { message, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -18,9 +24,7 @@ import TreeWrapper from './TreeWrapper';
 import UpdateThumbModal from './UpdateThumbModal';
 import AddCategoryModal from './AddCategoryModal';
 import AddItemModal from './AddItemModal';
-import CommitteeList from './CommitteeList';
-import PresidiumList from './PresidiumList';
-import ChairmanPicker from './ChairmanPicker';
+import MembersPicker from './MembersPicker';
 
 const { confirm } = Modal;
 
@@ -119,7 +123,10 @@ const App = () => {
             elementary,
             currentCommitteeMembers,
             currentPresidiumMembers,
-            currentChairman
+            currentChairman,
+            currentRevCommitteeMembers,
+            currentRevPresidiumMembers,
+            currentRevChairman,
         } = item;
 
         if (prepared) {
@@ -146,6 +153,9 @@ const App = () => {
             currentCommitteeMembers: currentCommitteeMembers,
             currentPresidiumMembers: currentPresidiumMembers,
             currentChairman: currentChairman ?? {},
+            currentRevCommitteeMembers: currentRevCommitteeMembers,
+            currentRevPresidiumMembers: currentRevPresidiumMembers,
+            currentRevChairman: currentRevChairman ?? {},
         };
     };
 
@@ -515,14 +525,25 @@ const App = () => {
 
         const newItemsByKeys = new Map(itemsByKeys);
 
-        const { elementary: newElementary, currentCommitteeMembers, currentPresidiumMembers, currentChairman } = updatedItemFromServer;
+        const {
+            elementary: newElementary,
+            currentCommitteeMembers,
+            currentPresidiumMembers,
+            currentChairman,
+            currentRevCommitteeMembers,
+            currentRevPresidiumMembers,
+            currentRevChairman,
+        } = updatedItemFromServer;
 
         newItemsByKeys.set(itemId, {
             ...item,
             elementary: newElementary,
             currentCommitteeMembers: currentCommitteeMembers,
             currentPresidiumMembers: currentPresidiumMembers,
-            currentChairman: currentChairman
+            currentChairman: currentChairman,
+            currentRevCommitteeMembers: currentRevCommitteeMembers,
+            currentRevPresidiumMembers: currentRevPresidiumMembers,
+            currentRevChairman: currentRevChairman,
         });
 
         setItemsByKeys(newItemsByKeys);
@@ -670,6 +691,91 @@ const App = () => {
         });
     };
 
+    const onRevCommitteeListChange = async (item, selectedMembers) => {
+        const { id } = item;
+
+        const updatedItemFromServer = await updateItemRevCommitteeMembers({
+            id: id,
+            revCommitteeMembers: selectedMembers.map(member => member.value)
+        });
+
+        if (! updatedItemFromServer) {
+            return;
+        }
+
+        setItemsByKeys(currentItemsByKeys => {
+            const newItemsByKeys = new Map(currentItemsByKeys);
+
+            const {
+                currentRevCommitteeMembers,
+                currentRevPresidiumMembers,
+                currentRevChairman,
+            } = updatedItemFromServer;
+
+            newItemsByKeys.set(id, {
+                ...item,
+                currentRevCommitteeMembers: currentRevCommitteeMembers,
+                currentRevPresidiumMembers: currentRevPresidiumMembers,
+                currentRevChairman: currentRevChairman,
+            });
+
+            return newItemsByKeys;
+        });
+    };
+
+    const onRevPresidiumListChange = async (item, selectedMembers) => {
+        const { id } = item;
+
+        const updatedItemFromServer = await updateItemRevPresidiumMembers({
+            id: id,
+            revPresidiumMembers: selectedMembers.map(member => member.value)
+        });
+
+        if (! updatedItemFromServer) {
+            return;
+        }
+
+        setItemsByKeys(currentItemsByKeys => {
+            const newItemsByKeys = new Map(currentItemsByKeys);
+
+            const { currentRevPresidiumMembers, currentRevChairman } = updatedItemFromServer;
+
+            newItemsByKeys.set(id, {
+                ...item,
+                currentRevPresidiumMembers: currentRevPresidiumMembers,
+                currentRevChairman: currentRevChairman
+            });
+
+            return newItemsByKeys;
+        });
+    };
+
+    const onRevChairmanChange = async (item, selectedRevChairman) => {
+        const { id } = item;
+
+        const updatedItemFromServer = await updateItemRevChairman({
+            id: id,
+            revChairman: selectedRevChairman.value
+        });
+
+        if (! updatedItemFromServer) {
+            return;
+        }
+
+        setItemsByKeys(currentItemsByKeys => {
+            const newItemsByKeys = new Map(currentItemsByKeys);
+
+            const { currentRevChairman } = updatedItemFromServer;
+
+            newItemsByKeys.set(id, {
+                ...item,
+                currentRevChairman: currentRevChairman,
+            });
+
+            return newItemsByKeys;
+        });
+    };
+
     const onItemThumbClicked = (item) => {
         setUpdateThumbModalItem(item);
 
@@ -734,11 +840,42 @@ const App = () => {
         });
     };
 
+    const getPotentialRevChairmen = (item) => {
+        if (! item) {
+            return [];
+        }
+
+        const { elementary } = item;
+
+        if (elementary) {
+            return getItemFirstChildren(itemsByKeys, item).map(child => ({
+                id: child.id,
+                name: child.fullTitle
+            }));
+        }
+
+        // If not elementary - generate the list from the presidium.
+        return potentialRevPresidiumMembers.filter(member => {
+            const { id } = member;
+
+            return currentRevPresidiumMembers.find(currentRevPresidiumMemberId => currentRevPresidiumMemberId === id);
+        });
+    };
+
     const treeData = mapToTree(itemsByKeys).children;
 
     const selectedItem = selectedItemKey ? itemsByKeys.get(selectedItemKey) : null;
-    const { currentCommitteeMembers, currentPresidiumMembers, currentChairman } = selectedItem || {};
+    const {
+        currentCommitteeMembers,
+        currentPresidiumMembers,
+        currentChairman,
+        currentRevCommitteeMembers,
+        currentRevPresidiumMembers,
+        currentRevChairman
+    } = selectedItem || {};
+
     const potentialCommitteeMembers = getPotentialCommitteeMembers(selectedItem);
+    const potentialRevCommitteeMembers = potentialCommitteeMembers;
 
     const potentialPresidiumMembers = potentialCommitteeMembers.filter(member => {
         const { id } = member;
@@ -746,7 +883,14 @@ const App = () => {
         return currentCommitteeMembers.find(currentCommitteeMemberId => currentCommitteeMemberId === id);
     });
 
+    const potentialRevPresidiumMembers = potentialRevCommitteeMembers.filter(member => {
+        const { id } = member;
+
+        return currentRevCommitteeMembers.find(currentRevCommitteeMemberId => currentRevCommitteeMemberId === id);
+    });
+
     const potentialChairmen = getPotentialChairmen(selectedItem);
+    const potentialRevChairmen = getPotentialRevChairmen(selectedItem);
 
     return (
         <div className="flex flex-col-reverse justify-end md:justify-between md:flex-row min-h-2xl p-2">
@@ -830,37 +974,53 @@ const App = () => {
                 {
                     selectedItem ?
                     (
-                        <div className="flex justify-between items-center">
-                            {
-                                ! selectedItem.elementary ? (
-                                    <React.Fragment>
-                                        <div className="p-4 flex-1">
-                                            <CommitteeList
-                                                item={selectedItem}
-                                                onChange={onCommitteeListChange}
-                                                potentialMembers={potentialCommitteeMembers}
-                                            />
-                                        </div>
+                        <React.Fragment>
+                            <MembersPicker
+                                id="committee_members_picker_id"
+                                item={selectedItem}
+                                onCommitteeListChange={onCommitteeListChange}
+                                onPresidiumListChange={onPresidiumListChange}
+                                onChairmanChange={onChairmanChange}
+                                potentialCommitteeMembers={potentialCommitteeMembers}
+                                potentialPresidiumMembers={potentialPresidiumMembers}
+                                potentialChairmen={potentialChairmen}
 
-                                        <div className="p-4 flex-1">
-                                            <PresidiumList
-                                                item={selectedItem}
-                                                onChange={onPresidiumListChange}
-                                                potentialMembers={potentialPresidiumMembers}
-                                            />
-                                        </div>
-                                    </React.Fragment>
-                                ) : null
-                            }
+                                currentCommitteeMembers={currentCommitteeMembers}
+                                committeeListId={`item_${selectedItem.id}_committee_list`}
+                                committeePickerLabel="Комитет"
 
-                            <div className="p-4 flex-1">
-                                <ChairmanPicker
-                                    item={selectedItem}
-                                    onChange={onChairmanChange}
-                                    potentialChairmen={potentialChairmen}
-                                />
-                            </div>
-                        </div>
+                                currentPresidiumMembers={currentPresidiumMembers}
+                                presidiumListId={`item_${selectedItem.id}_presidium_list`}
+                                presidiumPickerLabel="Президиум"
+
+                                currentChairman={currentChairman}
+                                chairmenListId={`item_${selectedItem.id}_chairmen_list`}
+                                chairmanPickerLabel="Председатель"
+                            />
+
+                            <MembersPicker
+                                id="rev_committee_members_picker_id"
+                                item={selectedItem}
+                                onCommitteeListChange={onRevCommitteeListChange}
+                                onPresidiumListChange={onRevPresidiumListChange}
+                                onChairmanChange={onRevChairmanChange}
+                                potentialCommitteeMembers={potentialRevCommitteeMembers}
+                                potentialPresidiumMembers={potentialRevPresidiumMembers}
+                                potentialChairmen={potentialRevChairmen}
+
+                                currentCommitteeMembers={currentRevCommitteeMembers}
+                                committeeListId={`item_${selectedItem.id}_rev_committee_list`}
+                                committeePickerLabel="Рев. Комитет"
+
+                                currentPresidiumMembers={currentRevPresidiumMembers}
+                                presidiumListId={`item_${selectedItem.id}_rev_presidium_list`}
+                                presidiumPickerLabel="Рев. Президиум"
+
+                                currentChairman={currentRevChairman}
+                                chairmenListId={`item_${selectedItem.id}_rev_chairmen_list`}
+                                chairmanPickerLabel="Рев. Председатель"
+                            />
+                        </React.Fragment>
                     )
                     :  null
                 }

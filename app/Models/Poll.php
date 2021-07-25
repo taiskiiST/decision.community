@@ -45,4 +45,12 @@ class Poll extends Model
         return Item::whereNotIn('id', $itemsIdsThatVoted)->where('is_category', false)->get();
     }
 
+    public function peopleThatVote(): Collection
+    {
+        $questions = $this->questions;
+        $questions = $questions->pluck('id')->toArray();
+        $itemsIdsThatVoted = Vote::whereIn('question_id', $questions)->select('item_id')->get();
+
+        return Item::whereIN('id', $itemsIdsThatVoted)->where('is_category', 0)->get();
+    }
 }

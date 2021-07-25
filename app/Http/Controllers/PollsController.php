@@ -110,37 +110,86 @@ class PollsController extends Controller
      * @param  \App\Models\Poll  $poll
      * @return \Illuminate\Http\Response
      */
+    public function report_voted(Poll $poll)
+    {
+        $out = [];
+
+        $poll->peopleThatVote()->groupBy('parent_id')->each(function ($group, $groupId) use (&$out) {
+            $parent = Item::find($groupId);
+
+            $hierarchy = $parent->getTopHierarchy();
+
+            $out[$groupId] = [
+                'group' => $group,
+                'hierarchy' => $hierarchy
+            ];
+        });
+        //dd($out);
+        $str = '';
+        $str1 = '';
+        $str2 = '';
+        $sting = '';
+        $index = 0;
+        foreach ($out as $group) {
+            foreach ($group as $key => $items) {
+                if ($key == 'hierarchy') {
+                    $str .= '<table style=\"border: 1px solid grey;\"><tr>';
+                    foreach ($items as $hierarchy) {
+                        $str1 = "<th style=\"border: 1px solid grey;\">".$hierarchy['item']->name."</th>".$str1;
+                    }
+                    $str .= $str1."<th style=\"border: 1px solid grey;\">Первичная ячейка</th></tr>";
+                    $str .= '<tr>';
+                    foreach ($items as $hierarchy) {
+                        $chairman_name = $hierarchy['chairman']?$hierarchy['chairman']->name:'';
+                        $chairman_phone = $hierarchy['chairman']?$hierarchy['chairman']->phone:'';
+                        $str2 = "<td style=\"border: 1px solid grey;\">".$chairman_name." <br /> ".$chairman_phone."</td>".$str2;
+                    }
+                    $str .= $str2;
+                    $string = $str;
+                    $str = '';
+                    $str1 = '';
+                    $str2 = '';
+                }
+            }
+            $hierarchy_str[$index] = $string;
+            $index++;
+            $string = '';
+        }
+        $index = 0;
+        foreach ($out as $group) {
+            foreach ($group as $key => $items) {
+                if ($key == 'group') {
+                    $hierarchy_str[$index] .= "<td style=\"border: 1px solid grey;\">";
+                    foreach ($items as $item) {
+                        $hierarchy_str[$index] .= $item->name.' - '.$item->phone."<br />";
+                    }
+                    $hierarchy_str[$index] .= "</td></tr></table>";
+                    $index++;
+                }
+            }
+        }
+        if ( isset($hierarchy_str) ) {
+            arsort($hierarchy_str);
+        }else{
+            $hierarchy_str = [];
+        }
+        return view('polls.report_voted', [
+            'poll' => $poll,
+            'out' => $out,
+            'arr_strings' => $hierarchy_str
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Poll  $poll
+     * @return \Illuminate\Http\Response
+     */
     public function report(Poll $poll)
     {
         $out = [];
 
-       // $peopleThatDidNotVote = $poll->peopleThatDidNotVote();
-
-  /*      $grandParents = Item::where('parent_id', null)->get()->each(function ($grandParent) use (&$out, $peopleThatDidNotVote) {
-            dump($grandParent->toArray());
-
-
-            $notVoted = $grandParent->getPeopleThatDidNotVote($peopleThatDidNotVote);
-            dd($notVoted);
-
-            if ($notVoted->isEmpty()) {
-                return $out;
-            }
-
-            $out = new Collection();
-
-            $item = $grandParent;
-
-            $directChildren = $item->getDirectChildren();
-
-            while ($directChildren->isNotEmpty()) {
-                $out[$item->id] = $directChildren;
-            }
-
-
-            $out[$grandParent->id] = new Collection();
-        });
-*/
         $poll->peopleThatDidNotVote()->groupBy('parent_id')->each(function ($group, $groupId) use (&$out) {
             $parent = Item::find($groupId);
 
@@ -201,6 +250,8 @@ class PollsController extends Controller
             'arr_strings' => $hierarchy_str
         ]);
     }
+
+
 
     /**
      * Display the specified resource.

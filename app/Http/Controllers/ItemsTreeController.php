@@ -104,6 +104,10 @@ class ItemsTreeController extends Controller
 
         $item->addProperties();
 
+        $item->addCurrentMembersProperties();
+
+        $item->addCurrentRevMembersProperties();
+
         $item['updatedChildren'] = new Collection();
 
         return $item;
@@ -445,7 +449,13 @@ class ItemsTreeController extends Controller
 
         Storage::move($tmpPath, $newCategory->thumbPath());
 
-        return $newCategory->addProperties();
+        $newCategory->addProperties();
+
+        $newCategory->addCurrentMembersProperties();
+
+        $newCategory->addCurrentRevMembersProperties();
+
+        return $newCategory;
     }
 
     /*

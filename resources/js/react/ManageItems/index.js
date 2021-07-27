@@ -150,11 +150,11 @@ const App = () => {
             address: address,
             prepared: true,
             loadedChildren: true,
-            currentCommitteeMembers: currentCommitteeMembers,
-            currentPresidiumMembers: currentPresidiumMembers,
+            currentCommitteeMembers: currentCommitteeMembers ?? [],
+            currentPresidiumMembers: currentPresidiumMembers ?? [],
             currentChairman: currentChairman ?? {},
-            currentRevCommitteeMembers: currentRevCommitteeMembers,
-            currentRevPresidiumMembers: currentRevPresidiumMembers,
+            currentRevCommitteeMembers: currentRevCommitteeMembers ?? [],
+            currentRevPresidiumMembers: currentRevPresidiumMembers ?? [],
             currentRevChairman: currentRevChairman ?? {},
         };
     };
@@ -789,7 +789,7 @@ const App = () => {
 
         const children = getItemFirstChildren(itemsByKeys, item);
 
-        if (children.length === 0) {
+        if (children.length === 0 && ! item.isCategory) {
             const { id, fullTitle } = item;
 
             out.push({
@@ -972,7 +972,7 @@ const App = () => {
 
             <div className="md:flex-grow p-1 min-h-full overflow-hidden">
                 {
-                    selectedItem ?
+                    selectedItem && selectedItem.isCategory ?
                     (
                         <React.Fragment>
                             <MembersPicker

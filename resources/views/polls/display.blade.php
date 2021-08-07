@@ -2,6 +2,36 @@
     'headerName' => "Опрос {$poll->name}",
 ])
 
+@section('styles')
+    @parent
+
+    <style>
+        a {
+            text-decoration: none;
+            color:blue
+        }
+        ul {
+            padding:0;
+            list-style: none;
+        }
+        ul li{
+            padding:6px;
+        }
+        ul li:before {
+            padding-right:10px;
+            font-weight: bold;
+            color: #C0C0C0;
+            content: "\2714";
+            transition-duration: 0.5s;
+        }
+        ul li:hover:before {
+            color: #337AB7;
+            content: "\2714";
+        }
+    </style>
+@endsection
+
+
 @section('content')
     @if($errors->any())
         <div class="alert-danger">

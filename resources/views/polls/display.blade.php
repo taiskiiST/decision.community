@@ -15,6 +15,7 @@
             list-style: none;
         }
         ul li{
+
             padding:6px;
         }
         ul li:before {

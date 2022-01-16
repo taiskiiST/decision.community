@@ -7,7 +7,7 @@
     <div>{{$poll->name}}</div>
     <br />
 @foreach($poll->questions as $question)
-    <b>{{$question->text}}</b>
+    <b>{!! $question->text!!}</b>
     <br />
     @foreach($question->answers as $answer)
         {{$answer->text}}    -        {{$answer->countVotes($answer->id)}} ({{ $answer->persentOfQuestions($question->id, $answer->id) }}%)<br/>

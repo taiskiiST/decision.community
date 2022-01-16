@@ -31,6 +31,19 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <a href="{{ $poll->path() }}" class="text-indigo-600 hover:text-indigo-900">Просмотр</a>
                                     </td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="{{ $poll->path() }}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
+                                    </td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="{{route('poll.results',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
+                                    </td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="{{ $poll->path() }}" class="text-indigo-600 hover:text-indigo-900">Удалить</a>
+                                    </td>
+
                                 </tr>
                             @endforeach
                         </tbody>

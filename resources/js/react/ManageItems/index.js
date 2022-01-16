@@ -956,7 +956,7 @@ const App = () => {
                         Новая личность
                     </button>
                 </div>
-
+                JOPA
                 <TreeWrapper
                     onDrop={onDrop}
                     treeData={treeData}

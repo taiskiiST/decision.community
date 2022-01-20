@@ -17,21 +17,30 @@
                         @if (auth()->user()->isAdmin())
                             <a href="{{ route('polls.index') }}" class="nav-tab {{ $currentRouteName === 'polls.index' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Опросы</a>
                         @endif
-                        @if (auth()->user()->canManageItems())
-                            <a href="{{ route('polls.index') }}" class="nav-tab {{ $currentRouteName === 'polls.index' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Опросы</a>
-                        @endif
                     </div>
                 </div>
             </div>
 
             <div class="hidden md:block">
                 <div class="ml-4 flex items-center md:ml-6">
-                    <div class="flex items-end flex-col">
+                    <div class="flex flex-col">
                         <div class="text-base font-medium leading-none text-white">{{ auth()->user()->name }}</div>
 
                         <div class="text-sm font-medium leading-none text-gray-400 mt-1">{{ auth()->user()->email }}</div>
                     </div>
+                    <div class="flex flex-col pl-5">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <input name="uri_poll" value="{{str_replace('display', 'results', url()->current()) }}" type="hidden"/>
+                            <a href="route('logout')"
+                               onclick="event.preventDefault();
+                                                    this.closest('form').submit();" class="text-base font-medium leading-none text-white">
+                                {{ __('Выйти') }}
+                            </a>
+                        </form>
+                    </div>
                 </div>
+
             </div>
 
             <div class="-mr-2 flex md:hidden">
@@ -59,10 +68,22 @@
     -->
     <div class="{{ $isMenuOpen ? 'block' : 'hidden' }} md:hidden">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href="{{ route('items.index') }}" class="nav-menu-link {{ in_array($currentRouteName, ['items.index', 'items.show']) ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Dashboard</a>
-
             @if (auth()->user()->canManageItems())
+                <a href="{{ route('items.index') }}" class="nav-menu-link {{ in_array($currentRouteName, ['items.index', 'items.show']) ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Dashboard</a>
                 <a href="{{ route('items-tree') }}" class="nav-menu-link {{ $currentRouteName === 'items-tree' ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Manage</a>
+            @endif
+            @if (auth() && auth()->user()->canVote())
+            <div class="flex flex-col pl-5">
+                <form id="logout" method="POST" action="{{ route('logout' ) }}">
+                    @csrf
+                    <input name="uri_poll" value="{{str_replace('display', 'results', url()->current()) }}" type="hidden"/>
+                    <a href="route('logout')"
+                       onclick="event.preventDefault();
+                                                    this.closest('form').submit();" class="text-base font-medium leading-none text-white">
+                        {{ __('Выйти') }}
+                    </a>
+                </form>
+            </div>
             @endif
         </div>
 

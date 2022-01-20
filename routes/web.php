@@ -33,6 +33,7 @@ Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::resource('items', ItemsController::class);
 
+    Route::get('/polls/create', [PollsController::class, 'create'])->name('poll.createPage');
     Route::get('/polls/{poll}/report_voted', [PollsController::class, 'report_voted'])->name('poll.report_voted');
     Route::get('/polls/{poll}/report', [PollsController::class, 'report'])->name('poll.report');
     Route::get('/polls/{poll}/results_list', [PollsController::class, 'results_list'])->name('poll.results_list');

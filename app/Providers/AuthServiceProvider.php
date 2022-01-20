@@ -36,6 +36,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage-items', function (User $user) {
             return $user->canManageItems();
         });
+
+        Gate::define('voter', function (User $user) {
+            return $user->canVote();
+        });
     }
 
     public function register()

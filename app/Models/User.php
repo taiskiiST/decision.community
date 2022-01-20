@@ -31,6 +31,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'phone',
         'email',
         'password',
         'permissions',
@@ -70,7 +71,13 @@ class User extends Authenticatable
     {
         return $this->isAdmin() || in_array(Permission::MANAGE_ITEMS, explode(',', $this->permissions));
     }
-
+    /**
+     * @return bool
+     */
+    public function canVote(): bool
+    {
+        return $this->isAdmin() || in_array(Permission::VOTE, explode(',', $this->permissions));
+    }
     /**
      * @param int|null $parentId
      * @param bool|null $includeParent

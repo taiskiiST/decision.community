@@ -12,6 +12,7 @@ class Permission
     const ACCESS              = 'access';
     const ADMIN               = 'admin';
     const MANAGE_ITEMS        = 'manage-items';
+    const VOTE                = 'voter';
 
     const AVAILABLE_PERMISSIONS = [
         self::ACCESS,

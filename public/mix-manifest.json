@@ -1,8 +1,8 @@
 {
-    "/js/app.js": "/js/app.js?id=718f86786db14541086e",
-    "/js/ManageItems.js": "/js/ManageItems.js?id=9d82863d7ee00c31dae2",
-    "/js/manifest.js": "/js/manifest.js?id=b264a6e7d3be4f44d458",
-    "/css/app.css": "/css/app.css?id=1e9ad64becafe64ef07e",
-    "/js/vendor.js": "/js/vendor.js?id=bf8edbdf141aa1c39a2e",
-    "/css/antd.css": "/css/antd.css?id=f4870f01bf3e38923b08"
+    "/js/app.js": "/js/app.js",
+    "/js/ManageItems.js": "/js/ManageItems.js",
+    "/js/manifest.js": "/js/manifest.js",
+    "/css/app.css": "/css/app.css",
+    "/js/vendor.js": "/js/vendor.js",
+    "/css/antd.css": "/css/antd.css"
 }

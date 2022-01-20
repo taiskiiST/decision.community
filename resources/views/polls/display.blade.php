@@ -46,7 +46,8 @@
         </div>
     @endif
 
-
+    @auth
+    @if (auth() && auth()->user()->canVote())
     {!! Form::open(['route' => ['poll.submit', $poll], 'method' => 'POST', 'onsubmit' => "return confirm('Вы уверены? Ответы нельзя будет изменить впоследствии.');"]) !!}
     <!-- This example requires Tailwind CSS v2.0+ -->
     <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
@@ -127,6 +128,13 @@
         </button>
     </div>
     {!! Form::close() !!}
+    @endif
+    @endauth
+
+    @guest
+        @include('auth.login')
+    @endguest
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script>

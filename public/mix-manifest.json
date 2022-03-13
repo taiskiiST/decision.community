@@ -1,6 +1,7 @@
 {
     "/js/app.js": "/js/app.js",
     "/js/ManageItems.js": "/js/ManageItems.js",
+    "/js/AddQuestionsToPoll.js": "/js/AddQuestionsToPoll.js",
     "/js/manifest.js": "/js/manifest.js",
     "/css/app.css": "/css/app.css",
     "/js/vendor.js": "/js/vendor.js",

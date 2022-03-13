@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class Answer extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     public function votes(): HasMany
     {
@@ -34,7 +35,11 @@ class Answer extends Model
         $answer = Answer::find($answer_id);
         $summ = $question->countQuestionsAll($question);
         $cnt = $answer->countVotes($answer_id);
-        $x = round((100*$cnt)/$summ,2);
+        if ($summ != 0) {
+            $x = round((100 * $cnt) / $summ, 2);
+        }else{
+            $x = 0;
+        }
         return $x;
     }
 }

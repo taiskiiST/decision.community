@@ -24,6 +24,11 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 
+    public function question_files(): HasMany
+    {
+        return $this->hasMany(QuestionFile::class);
+    }
+
     public function countQuestionsAll(Question $question)
     {
         $summ = 0;

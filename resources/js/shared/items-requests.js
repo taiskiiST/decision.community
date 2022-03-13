@@ -19,7 +19,7 @@ const {
     UPDATE_ITEM_REV_COMMITTEE_MEMBERS_URL,
     UPDATE_ITEM_REV_PRESIDIUM_MEMBERS_URL,
     UPDATE_ITEM_REV_CHAIRMAN_URL,
-} = window.SouthUnion || {};
+} = window.TSN || {};
 
 export const getItems = async (parentId) => {
     try {

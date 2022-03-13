@@ -4,6 +4,8 @@ use App\Http\Controllers\DevController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ItemsTreeController;
 use App\Http\Controllers\PollsController;
+use App\Http\Controllers\QuestionsController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,19 +27,32 @@ if (app()->isLocal()) {
     Route::get('/dev', [DevController::class, 'index']);
 }
 
-Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
-Route::post('/polls/{poll}/submit', [PollsController::class, 'submit'])->name('poll.submit');
-Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('poll.results');
-
 
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
-    Route::resource('items', ItemsController::class);
+    Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
+    Route::get('/polls/{poll_id?}/index/{id_question?}', [PollsController::class, 'index'])->name('polls.index');
+    Route::post('/polls/{poll}/submit', [PollsController::class, 'submit'])->name('poll.submit');
+    Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('poll.results');
+    Route::get('/polls/create', [PollsController::class, 'create'])->name('poll.create');
+    Route::get('/polls/{poll}/update', [PollsController::class, 'update'])->name('poll.update');
+    Route::post('/polls/delete/{poll}', [PollsController::class, 'delete'])->name('poll.delete');
+    Route::post('/polls/store', [PollsController::class, 'store'])->name('poll.store');
+    Route::post('/polls/{poll}/end', [PollsController::class, 'endVote'])->name('poll.endVote');
 
-    Route::get('/polls/create', [PollsController::class, 'create'])->name('poll.createPage');
     Route::get('/polls/{poll}/report_voted', [PollsController::class, 'report_voted'])->name('poll.report_voted');
     Route::get('/polls/{poll}/report', [PollsController::class, 'report'])->name('poll.report');
     Route::get('/polls/{poll}/results_list', [PollsController::class, 'results_list'])->name('poll.results_list');
 
+    Route::get('/polls/{poll}/questions/{id_question?}/{error?}', [QuestionsController::class, 'index'])->name('poll.questions.index');
+    Route::get('/polls/{poll}/questions/create', [QuestionsController::class, 'create'])->name('poll.questions.create');
+    Route::post('/polls/{poll}/question/{question}/delete/', [QuestionsController::class, 'destroy'])->name('question.delete');
+    Route::post('/polls/{poll}/questions/add', [PollsController::class, 'addQuestion'])->name('poll.addQuestion');
+    //Route::get('/polls/{poll}/questions/add', [QuestionsController::class, 'add'])->name('poll.questions.add');
+
+    Route::get('/manage/users', [UsersController::class, 'index'])->name('users.manage');
+    //Route::get('/governance', [PollsController::class, 'addQuestion'])->name('poll.addQuestion');
+
+    Route::resource('items', ItemsController::class);
     Route::get('/items/{item}/download', [ItemsController::class, 'download'])->name('items.download');
 
     Route::get('/items-tree', [ItemsTreeController::class, 'index'])->name('items-tree');

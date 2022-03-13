@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Symfony\Component\HttpFoundation\Response as SymphonyResponse;
@@ -74,6 +76,13 @@ class User extends Authenticatable
     /**
      * @return bool
      */
+    public function isGovernance(): bool
+    {
+        return $this->isAdmin() || in_array(Permission::GOVERNANCE, explode(',', $this->permissions));
+    }
+    /**
+     * @return bool
+     */
     public function canVote(): bool
     {
         return $this->isAdmin() || in_array(Permission::VOTE, explode(',', $this->permissions));
@@ -99,5 +108,28 @@ class User extends Authenticatable
                     }
                 });
             });
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function votes(): HasMany
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    public function vote(Question $question, Answer $answer): Model
+    {
+        return $this->votes()->updateOrCreate([
+            'question_id' => $question->id,
+            'answer_id' => $answer->id
+        ], [
+            'question_id' => $question->id,
+            'answer_id' => $answer->id
+        ]);
+    }
+
+    public function id(){
+        return $this->id();
     }
 }

@@ -12,6 +12,13 @@ module.exports = {
 
     theme: {
         extend: {
+            screens: {
+                sm: '640px',
+                md: '768px',
+                lg: '1130px',
+                xl: '1280px',
+                '2xl': '1536px',
+            },
             colors: {
                 'brand-blue': '#1992d4',
                 'brand-green': '#00A94E',

@@ -29,7 +29,7 @@ class Answer extends Model
         return $votes;
     }
 
-    public function persentOfQuestions($question_id,$answer_id)
+    public function percentOfQuestions($question_id,$answer_id)
     {
         $question = Question::find($question_id);
         $answer = Answer::find($answer_id);

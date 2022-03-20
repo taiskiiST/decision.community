@@ -3,7 +3,7 @@
 ])
 
 @section('content')
-    <p style="font-size: 25px">Результаты голосования</p>
+    <p style="font-size: 25px">Результаты голосованияdfdsfdsfsd</p>
     <div>{{$poll->name}}</div>
     <br />
 @foreach($poll->questions as $question)

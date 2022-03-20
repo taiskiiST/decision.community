@@ -20,6 +20,19 @@ class Permission
         self::MANAGE_ITEMS,
     ];
 
+    const ALL_PERMISSIONS = [
+        self::ACCESS,
+        self::MANAGE_ITEMS,
+        self::ADMIN,
+        self::VOTE,
+        self::GOVERNANCE,
+    ];
+
+    public static function allPermission()
+    {
+            return self::ALL_PERMISSIONS;
+    }
+
     /**
      * @param User $user
      * @param string $permission

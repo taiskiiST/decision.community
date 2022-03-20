@@ -1,4 +1,4 @@
-(self["webpackChunk"] = self["webpackChunk"] || []).push([["/js/AddQuestionsToPoll"],{
+(self["webpackChunk"] = self["webpackChunk"] || []).push([["/js/AddProtocolToPoll"],{
 
 /***/ "./node_modules/@heroicons/react/solid/esm/AcademicCapIcon.js":
 /*!********************************************************************!*\
@@ -7811,576 +7811,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/react/AddQuestionsToPoll/AddAnswerToQuestion.js":
-/*!**********************************************************************!*\
-  !*** ./resources/js/react/AddQuestionsToPoll/AddAnswerToQuestion.js ***!
-  \**********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-
-
-var AddAnswerToQuestion = /*#__PURE__*/function (_React$Component) {
-  _inherits(AddAnswerToQuestion, _React$Component);
-
-  var _super = _createSuper(AddAnswerToQuestion);
-
-  function AddAnswerToQuestion(props) {
-    _classCallCheck(this, AddAnswerToQuestion);
-
-    return _super.call(this, props);
-  }
-
-  _createClass(AddAnswerToQuestion, [{
-    key: "render",
-    value: function render() {
-      //const product = this.props.product;
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
-          type: "button",
-          className: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-2",
-          onClick: this.props.handleAddingAnswer,
-          children: "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u041E\u0442\u0432\u0435\u0442 \u043A \u0432\u043E\u043F\u0440\u043E\u0441\u0443"
-        })
-      });
-    }
-  }]);
-
-  return AddAnswerToQuestion;
-}(react__WEBPACK_IMPORTED_MODULE_1__.Component);
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddAnswerToQuestion);
-
-/***/ }),
-
-/***/ "./resources/js/react/AddQuestionsToPoll/AddFileToQuestion.js":
-/*!********************************************************************!*\
-  !*** ./resources/js/react/AddQuestionsToPoll/AddFileToQuestion.js ***!
-  \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-
-
-var AddFileToQuestion = /*#__PURE__*/function (_React$Component) {
-  _inherits(AddFileToQuestion, _React$Component);
-
-  var _super = _createSuper(AddFileToQuestion);
-
-  function AddFileToQuestion(props) {
-    _classCallCheck(this, AddFileToQuestion);
-
-    return _super.call(this, props);
-  }
-
-  _createClass(AddFileToQuestion, [{
-    key: "render",
-    value: function render() {
-      //const product = this.props.product;
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
-          type: "button",
-          className: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-2",
-          onClick: this.props.handleAddingFile,
-          children: "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0444\u0430\u0439\u043B \u043A \u0432\u043E\u043F\u0440\u043E\u0441\u0443"
-        })
-      });
-    }
-  }]);
-
-  return AddFileToQuestion;
-}(react__WEBPACK_IMPORTED_MODULE_1__.Component);
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddFileToQuestion);
-
-/***/ }),
-
-/***/ "./resources/js/react/AddQuestionsToPoll/AnswerPreview.js":
-/*!****************************************************************!*\
-  !*** ./resources/js/react/AddQuestionsToPoll/AnswerPreview.js ***!
-  \****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-
-
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-
-
-var AnswerPreview = /*#__PURE__*/function (_React$Component) {
-  _inherits(AnswerPreview, _React$Component);
-
-  var _super = _createSuper(AnswerPreview);
-
-  function AnswerPreview(props) {
-    _classCallCheck(this, AnswerPreview);
-
-    return _super.call(this, props);
-  }
-
-  _createClass(AnswerPreview, [{
-    key: "render",
-    value: function render() {
-      var _this = this;
-
-      var answer = this.props.answer;
-      var num_of_question = this.props.num_of_question;
-      var num_of_answer = this.props.num_of_answer;
-      var isUpdate = this.props.isUpdate;
-      var num_question = this.props.numQuestion;
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-          id: "answer_".concat(answer.answer_id),
-          className: "col-span-6 sm:col-span-3 mt-8 border-t-8 border-double border-gray-400",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-            className: "inline-flex flex-row w-full",
-            children: [!isUpdate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("label", {
-              htmlFor: "text_answer_".concat(answer.answer_id),
-              className: "mt-3 block text-sm font-medium text-gray-700",
-              children: ["\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043A\u0441\u0442 \u043E\u0442\u0432\u0435\u0442\u0430 \u043A \u0432\u043E\u043F\u0440\u043E\u0441\u0443 \u2116", num_of_question, ", \u043E\u0442\u0432\u0435\u0442 \u2116", num_of_answer + 1, " "]
-            }), isUpdate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("label", {
-              htmlFor: "text_answer_".concat(answer.answer_id),
-              className: "mt-3 block text-sm font-medium text-gray-700",
-              children: ["\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043A\u0441\u0442 \u043E\u0442\u0432\u0435\u0442\u0430 \u043A \u0432\u043E\u043F\u0440\u043E\u0441\u0443 \u2116", num_question, ", \u043E\u0442\u0432\u0435\u0442 \u2116", num_of_answer + 1, " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-              className: "flex-row-reverse contents",
-              children: num_of_answer != 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
-                id: "btn-del-answer-".concat(answer.answer_id),
-                className: "ml-auto text-red-800",
-                type: "button",
-                onClick: function onClick() {
-                  return _this.props.onDeleteAnswer(answer.answer_id);
-                },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("svg", {
-                  className: "h-8 w-8",
-                  xmlns: "http://www.w3.org/2000/svg",
-                  fill: "none",
-                  viewBox: "0 0 24 24",
-                  stroke: "currentColor",
-                  "aria-hidden": "true",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-                    strokeLinecap: "round",
-                    strokeLinejoin: "round",
-                    strokeWidth: "2",
-                    d: "M6 18L18 6M6 6l12 12"
-                  })
-                })
-              })
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-            type: "text",
-            name: "text_answer_".concat(answer.answer_id),
-            id: "text_answer_".concat(answer.answer_id),
-            className: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md",
-            value: answer.text,
-            onChange: this.props.onChangeTextInputAnswer
-          })]
-        })
-      });
-    }
-  }]);
-
-  return AnswerPreview;
-}(react__WEBPACK_IMPORTED_MODULE_1__.Component);
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AnswerPreview);
-
-/***/ }),
-
-/***/ "./resources/js/react/AddQuestionsToPoll/FileLoadedPreview.js":
-/*!********************************************************************!*\
-  !*** ./resources/js/react/AddQuestionsToPoll/FileLoadedPreview.js ***!
-  \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-
-
-
-var FileLoadedPreview = function FileLoadedPreview(_ref) {
-  var url = _ref.url,
-      _ref$alternativeText = _ref.alternativeText,
-      alternativeText = _ref$alternativeText === void 0 ? 'Просмотреть файл по ссылке' : _ref$alternativeText,
-      file_id = _ref.file_id;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
-      href: url,
-      target: "_blank",
-      className: "bg-violet-500 hover:bg-violet-400 active:bg-violet-600 focus:outline-none focus:ring focus:ring-violet-300",
-      children: alternativeText
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-      name: file_id,
-      defaultValue: url,
-      className: "hidden"
-    })]
-  });
-};
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FileLoadedPreview);
-
-/***/ }),
-
-/***/ "./resources/js/react/AddQuestionsToPoll/FilePreview.js":
-/*!**************************************************************!*\
-  !*** ./resources/js/react/AddQuestionsToPoll/FilePreview.js ***!
-  \**************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var pdfobject__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pdfobject */ "./node_modules/pdfobject/pdfobject.js");
-/* harmony import */ var pdfobject__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(pdfobject__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _PdfPreview__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PdfPreview */ "./resources/js/react/AddQuestionsToPoll/PdfPreview.js");
-/* harmony import */ var _FileLoadedPreview__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./FileLoadedPreview */ "./resources/js/react/AddQuestionsToPoll/FileLoadedPreview.js");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-
-
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-
-
-
-
-
-var FilePreview = /*#__PURE__*/function (_React$Component) {
-  _inherits(FilePreview, _React$Component);
-
-  var _super = _createSuper(FilePreview);
-
-  function FilePreview(props) {
-    _classCallCheck(this, FilePreview);
-
-    return _super.call(this, props);
-  }
-
-  _createClass(FilePreview, [{
-    key: "render",
-    value: function render() {
-      var _this = this;
-
-      //console.log(this.props.file);
-      var file = this.props.file;
-      var file_id = file.file_id;
-      var text = file.text;
-      var num_of_question = this.props.num_of_question;
-      var num_of_file = this.props.num_of_file;
-      var isUpdate = this.props.isUpdate;
-      var num_question = this.props.numQuestion;
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-        id: "data_".concat(file_id),
-        className: "col-span-6 sm:col-span-3 mt-8 border-t-8 border-double border-gray-400",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-            className: "inline-flex flex-row w-full",
-            children: [!isUpdate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("label", {
-              htmlFor: "file_text_for_".concat(file_id),
-              className: "mt-3 block text-sm font-medium text-gray-700",
-              children: ["\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0444\u0430\u0439\u043B\u0430 \u043A \u0432\u043E\u043F\u0440\u043E\u0441\u0443 \u2116", num_of_question, ", \u0444\u0430\u0439\u043B\u0443 \u2116", num_of_file + 1, " "]
-            }), isUpdate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("label", {
-              htmlFor: "file_text_for_".concat(file_id),
-              className: "mt-3 block text-sm font-medium text-gray-700",
-              children: ["\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0444\u0430\u0439\u043B\u0430 \u043A \u0432\u043E\u043F\u0440\u043E\u0441\u0443 \u2116", num_question, ", \u0444\u0430\u0439\u043B\u0443 \u2116", num_of_file + 1, " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-              className: "flex-row-reverse contents",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
-                id: "btn-del-data-".concat(file_id),
-                className: "ml-auto text-red-800",
-                type: "button",
-                onClick: function onClick() {
-                  return _this.props.onDeleteFile(file_id);
-                },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("svg", {
-                  className: "h-8 w-8",
-                  xmlns: "http://www.w3.org/2000/svg",
-                  fill: "none",
-                  viewBox: "0 0 24 24",
-                  stroke: "currentColor",
-                  "aria-hidden": "true",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-                    strokeLinecap: "round",
-                    strokeLinejoin: "round",
-                    strokeWidth: "2",
-                    d: "M6 18L18 6M6 6l12 12"
-                  })
-                })
-              })
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", {
-            type: "text",
-            name: "file_text_for_".concat(file_id),
-            id: "file_text_for_".concat(file_id),
-            className: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md",
-            onChange: this.props.onChangeTextInputFile,
-            value: this.props.value,
-            children: this.props.value
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-          className: "flex columns-2 mt-4",
-          children: [this.props.file.type == 'img' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-            id: "prev_".concat(file_id),
-            className: "w-1/2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("label", {
-              className: "block text-sm font-medium text-gray-700 mt-6",
-              children: ["\u041F\u0440\u0435\u0434\u0432\u0430\u0440\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0439 \u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440 \u043A \u0444\u0430\u0439\u043B\u0443 \u2116", num_of_file + 1, " \u0432\u043E\u043F\u0440\u043E\u0441\u0430 \u2116", num_of_question]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-              className: "mt-1 flex items-center",
-              children: [this.props.file.fileUpload && this.props.file.fileLoaded && _toConsumableArray(this.props.file.fileUpload).map(function (file, index) {
-                return _this.props.file.isValidFileName && _this.props.file.isValidFileSize && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("img", {
-                  id: URL.createObjectURL(file).split('/')['3'],
-                  src: URL.createObjectURL(file)
-                }, "index");
-              }), this.props.file.fileUpload && !this.props.file.fileLoaded && _toConsumableArray(this.props.file.fileUpload).map(function (file, index) {
-                return _this.props.file.isValidFileName && _this.props.file.isValidFileSize && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("img", {
-                    id: file.name,
-                    src: file.name
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-                    name: file_id,
-                    defaultValue: file.name,
-                    className: "hidden"
-                  })]
-                }, "index");
-              })]
-            })]
-          }), this.props.file.type == 'pdf' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-            id: "prev_".concat(file_id),
-            className: "w-1/2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("label", {
-              className: "block text-sm font-medium text-gray-700 mt-6",
-              children: ["\u041F\u0440\u0435\u0434\u0432\u0430\u0440\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0439 \u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440 \u043A \u0444\u0430\u0439\u043B\u0443 PDF \u2116", num_of_file + 1, " \u0432\u043E\u043F\u0440\u043E\u0441\u0430 \u2116", num_of_question]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-              className: "mt-1 h-96 w-full relative text-center",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                id: "pdf-viewer",
-                className: "absolute inset-y-0 left-0 w-full",
-                children: [this.props.file.fileUpload && this.props.file.fileLoaded && _toConsumableArray(this.props.file.fileUpload).map(function (file, index) {
-                  return _this.props.file.isValidFileName && _this.props.file.isValidFileSize && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_PdfPreview__WEBPACK_IMPORTED_MODULE_3__.default, {
-                    url: URL.createObjectURL(file),
-                    alternativeText: file.name
-                  }, index);
-                }), this.props.file.fileUpload && !this.props.file.fileLoaded && _toConsumableArray(this.props.file.fileUpload).map(function (file, index) {
-                  return _this.props.file.isValidFileName && _this.props.file.isValidFileSize && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_PdfPreview__WEBPACK_IMPORTED_MODULE_3__.default, {
-                    url: file.name,
-                    alternativeText: file.name,
-                    file_id: file_id
-                  }, index);
-                })]
-              })
-            })]
-          }), this.props.file.type == 'other' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-            id: "prev_".concat(file_id),
-            className: "w-1/2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("label", {
-              className: "block text-sm font-medium text-gray-700 mt-6",
-              children: ["\u041F\u0440\u0435\u0434\u0432\u0430\u0440\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0439 \u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440 \u043A \u0444\u0430\u0439\u043B\u0443 \u2116", num_of_file + 1, " \u0432\u043E\u043F\u0440\u043E\u0441\u0430 \u2116", num_of_question]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-              className: "mt-6 h-24 w-full text-center",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                id: "file-viewer",
-                className: "flex h-1/2 flex-col-reverse",
-                children: [this.props.file.fileUpload && this.props.file.fileLoaded && _toConsumableArray(this.props.file.fileUpload).map(function (file, index) {
-                  return _this.props.file.isValidFileName && _this.props.file.isValidFileSize && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_FileLoadedPreview__WEBPACK_IMPORTED_MODULE_4__.default, {
-                    url: URL.createObjectURL(file),
-                    alternativeText: file.name
-                  }, index);
-                }), this.props.file.fileUpload && !this.props.file.fileLoaded && _toConsumableArray(this.props.file.fileUpload).map(function (file, index) {
-                  return _this.props.file.isValidFileName && _this.props.file.isValidFileSize && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_FileLoadedPreview__WEBPACK_IMPORTED_MODULE_4__.default, {
-                    url: file.name,
-                    file_id: file_id
-                  }, index);
-                })]
-              })
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-            id: "drag_and_drop_aria_".concat(file_id),
-            className: "".concat(this.props.file.hideDragAndDrop ? 'w-1/2' : 'w-full', " place-self-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"),
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-              className: "mt-1 flex justify-center ",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                className: "space-y-1 text-center",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("svg", {
-                  className: "mx-auto h-12 w-12 text-gray-400",
-                  stroke: "currentColor",
-                  fill: "none",
-                  viewBox: "0 0 48 48",
-                  "aria-hidden": "true",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-                    d: "M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02",
-                    strokeWidth: "2",
-                    strokeLinecap: "round",
-                    strokeLinejoin: "round"
-                  })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-                  className: "flex text-sm text-gray-600 flex-col",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("label", {
-                    htmlFor: file_id,
-                    className: "relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-                      children: this.props.file.hideDragAndDrop ? 'Измените файл' : 'Загрузите файл'
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-                      id: file_id,
-                      name: file_id,
-                      type: "file",
-                      className: "sr-only",
-                      ref: this.props.fileInput,
-                      onChange: this.props.onChangeUploadInputFile
-                    })]
-                  })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", {
-                  className: "text-xs text-gray-500",
-                  children: "PDF, PNG, JPG, GIF \u043D\u0435 \u0431\u043E\u043B\u0435\u0435 10MB"
-                })]
-              })
-            })
-          })]
-        })]
-      });
-    }
-  }]);
-
-  return FilePreview;
-}(react__WEBPACK_IMPORTED_MODULE_1__.Component);
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FilePreview);
-
-/***/ }),
-
-/***/ "./resources/js/react/AddQuestionsToPoll/FormErrors.js":
-/*!*************************************************************!*\
-  !*** ./resources/js/react/AddQuestionsToPoll/FormErrors.js ***!
-  \*************************************************************/
+/***/ "./resources/js/react/AddProtocolToPoll/FormErrors.js":
+/*!************************************************************!*\
+  !*** ./resources/js/react/AddProtocolToPoll/FormErrors.js ***!
+  \************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -8400,7 +7834,7 @@ var FormErrors = function FormErrors(_ref) {
   var formErrors = _ref.formErrors;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
     className: "formErrors",
-    children: (formErrors.inputTextOfQuestion || formErrors.inputFilesText || formErrors.inputFilesUploadSize || formErrors.inputFilesUploadName || formErrors.inputAnswers) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+    children: (formErrors.inputFileUploadSize || formErrors.inputFileUploadName) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
       className: "rounded-md bg-red-50 p-4",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
         className: "flex",
@@ -8421,7 +7855,6 @@ var FormErrors = function FormErrors(_ref) {
               role: "list",
               className: "list-disc pl-5 space-y-1",
               children: Object.keys(formErrors).map(function (fieldName, i) {
-                //console.log(formErrors);
                 if (formErrors[fieldName].length > 0) {
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("li", {
                     children: formErrors[fieldName]
@@ -8442,10 +7875,10 @@ var FormErrors = function FormErrors(_ref) {
 
 /***/ }),
 
-/***/ "./resources/js/react/AddQuestionsToPoll/PdfPreview.js":
-/*!*************************************************************!*\
-  !*** ./resources/js/react/AddQuestionsToPoll/PdfPreview.js ***!
-  \*************************************************************/
+/***/ "./resources/js/react/AddProtocolToPoll/PdfPreview.js":
+/*!************************************************************!*\
+  !*** ./resources/js/react/AddProtocolToPoll/PdfPreview.js ***!
+  \************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -8460,11 +7893,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var PdfPreview = function PdfPreview(_ref) {
-  var url = _ref.url,
-      alternativeText = _ref.alternativeText,
-      file_id = _ref.file_id;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("object", {
+  var url = _ref.url;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("object", {
       data: url,
       type: "application/pdf",
       width: "100%",
@@ -8479,11 +7910,7 @@ var PdfPreview = function PdfPreview(_ref) {
           children: "\u0424\u0410\u0419\u041B\u0410"
         }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("br", {}), "PDF \u0444\u0430\u0439\u043B\u0430"]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-      name: file_id,
-      defaultValue: url,
-      className: "hidden"
-    })]
+    })
   });
 };
 
@@ -8491,10 +7918,10 @@ var PdfPreview = function PdfPreview(_ref) {
 
 /***/ }),
 
-/***/ "./resources/js/react/AddQuestionsToPoll/Question.js":
-/*!***********************************************************!*\
-  !*** ./resources/js/react/AddQuestionsToPoll/Question.js ***!
-  \***********************************************************/
+/***/ "./resources/js/react/AddProtocolToPoll/Protocol.js":
+/*!**********************************************************!*\
+  !*** ./resources/js/react/AddProtocolToPoll/Protocol.js ***!
+  \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -8504,36 +7931,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _AddFileToQuestion__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AddFileToQuestion */ "./resources/js/react/AddQuestionsToPoll/AddFileToQuestion.js");
-/* harmony import */ var _AddAnswerToQuestion__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./AddAnswerToQuestion */ "./resources/js/react/AddQuestionsToPoll/AddAnswerToQuestion.js");
-/* harmony import */ var _FilePreview__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./FilePreview */ "./resources/js/react/AddQuestionsToPoll/FilePreview.js");
-/* harmony import */ var _AnswerPreview__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./AnswerPreview */ "./resources/js/react/AddQuestionsToPoll/AnswerPreview.js");
-/* harmony import */ var _FormErrors__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./FormErrors */ "./resources/js/react/AddQuestionsToPoll/FormErrors.js");
+/* harmony import */ var _PdfPreview__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PdfPreview */ "./resources/js/react/AddProtocolToPoll/PdfPreview.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _FormErrors__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FormErrors */ "./resources/js/react/AddProtocolToPoll/FormErrors.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
 
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _wrapRegExp(re, groups) { _wrapRegExp = function _wrapRegExp(re, groups) { return new BabelRegExp(re, undefined, groups); }; var _RegExp = _wrapNativeSuper(RegExp); var _super = RegExp.prototype; var _groups = new WeakMap(); function BabelRegExp(re, flags, groups) { var _this = _RegExp.call(this, re, flags); _groups.set(_this, groups || _groups.get(re)); return _this; } _inherits(BabelRegExp, _RegExp); BabelRegExp.prototype.exec = function (str) { var result = _super.exec.call(this, str); if (result) result.groups = buildGroups(result, this); return result; }; BabelRegExp.prototype[Symbol.replace] = function (str, substitution) { if (typeof substitution === "string") { var groups = _groups.get(this); return _super[Symbol.replace].call(this, str, substitution.replace(/\$<([^>]+)>/g, function (_, name) { return "$" + groups[name]; })); } else if (typeof substitution === "function") { var _this = this; return _super[Symbol.replace].call(this, str, function () { var args = []; args.push.apply(args, arguments); if (_typeof(args[args.length - 1]) !== "object") { args.push(buildGroups(args, _this)); } return substitution.apply(this, args); }); } else { return _super[Symbol.replace].call(this, str, substitution); } }; function buildGroups(result, re) { var g = _groups.get(re); return Object.keys(g).reduce(function (groups, name) { groups[name] = result[g[name]]; return groups; }, Object.create(null)); } return _wrapRegExp.apply(this, arguments); }
-
-function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
-
-function _construct(Parent, args, Class) { if (_isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
-
-function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[native code]") !== -1; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -8565,76 +7969,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
-
-
 var _TSN = TSN,
     poll = _TSN.poll,
-    count_question = _TSN.count_question,
-    current_num_question = _TSN.current_num_question,
     csrf_token = _TSN.csrf_token,
-    question = _TSN.question,
-    files = _TSN.files,
-    answer = _TSN.answer,
+    file_protocol = _TSN.file_protocol,
     error = _TSN.error;
 
-var Question = /*#__PURE__*/function (_React$Component) {
-  _inherits(Question, _React$Component);
+var Protocol = /*#__PURE__*/function (_React$Component) {
+  _inherits(Protocol, _React$Component);
 
-  var _super = _createSuper(Question);
+  var _super = _createSuper(Protocol);
 
-  function Question(props) {
+  function Protocol(props) {
     var _this;
 
-    _classCallCheck(this, Question);
+    _classCallCheck(this, Protocol);
 
-    _this = _super.call(this, props); //this.props.clickTextForFile = false;
+    _this = _super.call(this, props);
 
-    _defineProperty(_assertThisInitialized(_this), "handleQuestionTextInput", function (e) {
-      var value = e.target.value;
-
-      _this.setState(function (oldState) {
-        return _objectSpread(_objectSpread({}, oldState), {}, {
-          inputTextOfQuestion: _objectSpread(_objectSpread({}, oldState.inputTextOfQuestion), {}, {
-            text: value
-          })
-        });
-      }, _this.validateFormTextQuestion(value));
-    });
-
-    _defineProperty(_assertThisInitialized(_this), "handleFileTextInput", function (e) {
-      var name = e.target.name;
-      var value = e.target.value; //file_text_for_
-
-      var id = _this.getId(2, name); //console.log(id['0']);
-
-
-      var newFile = _this.state.fileUploads.map(function (file) {
-        if (value.length > 0) {
-          return file.file_id == id['0'] ? _objectSpread(_objectSpread({}, file), {}, {
-            text: value,
-            isValidText: true
-          }) : file;
-        } else {
-          return file.file_id == id['0'] ? _objectSpread(_objectSpread({}, file), {}, {
-            text: value,
-            isValidText: false
-          }) : file;
-        }
-      }); //console.log(newFile);
-
-
-      _this.setState(function (oldState) {
-        return _objectSpread(_objectSpread({}, oldState), {}, {
-          fileUploads: newFile
-        });
-      }, _this.validateAllInputOfFile);
+    _defineProperty(_assertThisInitialized(_this), "handleProtocolDelete", function (event) {
+      event.preventDefault();
+      $('#form_del_protocol')[0].submit(); // this.closest('form').submit();
     });
 
     _defineProperty(_assertThisInitialized(_this), "handleFileUploadInput", function (event) {
-      //file_id
-      var id = event.target.name;
-      var newFile = [];
+      //console.log('id ', id);
       var type = '';
 
       if (!event.target.files[0]) {
@@ -8655,351 +8014,136 @@ var Question = /*#__PURE__*/function (_React$Component) {
           break;
       }
 
-      newFile = _this.checkFileTypeSizeName(type, event.target.files, id); //console.log('newFile ', newFile);
-
-      _this.setState({
-        fileUploads: newFile
-      });
-    });
-
-    _defineProperty(_assertThisInitialized(_this), "handleAnswerInput", function (e) {
-      var name = e.target.name;
-      var value = e.target.value; //text_answer_
-
-      var id = _this.getId(4, name);
-
-      var newAnswer = _this.state.answers.map(function (answer) {
-        if (value.length > 0) {
-          return answer.answer_id == id['0'] ? _objectSpread(_objectSpread({}, answer), {}, {
-            text: value,
-            isValidText: true
-          }) : answer;
-        } else {
-          return answer.answer_id == id['0'] ? _objectSpread(_objectSpread({}, answer), {}, {
-            text: value,
-            isValidText: false
-          }) : answer;
-        }
-      });
-
       _this.setState(function (oldState) {
         return _objectSpread(_objectSpread({}, oldState), {}, {
-          answers: newAnswer
-        });
-      }, _this.validateAllInputOfAnswer);
-    });
-
-    _this.handleAddingFile = _this.handleAddingFile.bind(_assertThisInitialized(_this));
-    _this.handleAddingAnswer = _this.handleAddingAnswer.bind(_assertThisInitialized(_this));
-    _this.handleDeletingFile = _this.handleDeletingFile.bind(_assertThisInitialized(_this));
-    _this.handleDeletingAnswer = _this.handleDeletingAnswer.bind(_assertThisInitialized(_this));
-    _this.handleQuestionTextInput = _this.handleQuestionTextInput.bind(_assertThisInitialized(_this));
-    _this.handleFileTextInput = _this.handleFileTextInput.bind(_assertThisInitialized(_this));
-    _this.handleAnswerInput = _this.handleAnswerInput.bind(_assertThisInitialized(_this));
-    _this.submitForm = _this.submitForm.bind(_assertThisInitialized(_this));
-    _this.handleFileUploadInput = _this.handleFileUploadInput.bind(_assertThisInitialized(_this));
-    _this.form = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createRef();
-
-    if (!question) {
-      _this.state = {
-        fileUploads: [// {guid: 'guid', text: 'File Name', fileUpload: '', isValidText: false, isValidFileSize: false, isValidFileName: false, hideDragAndDrop:'',fileInputRef:''},
-        ],
-        answers: [// {guid: 'guid', text: 'Answer', isValidText: false}
-        {
-          answer_id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__.default)(),
-          text: '',
-          isValidText: false
-        }],
-        inputTextOfQuestion: {
-          text: '',
-          isValid: false
-        },
-        formErrors: {
-          inputTextOfQuestion: '',
-          inputFilesText: '',
-          inputFilesUploadSize: '',
-          inputFilesUploadName: '',
-          inputAnswers: ''
-        },
-        inputFilesTextIsValid: false,
-        newFormErrors: [],
-        formValid: false,
-        isValidAllTextOfFiles: true,
-        isValidAllUploadFiles: true,
-        isValidAllAnswers: true
-      };
-    } else {
-      var files_whith_ref;
-      files_whith_ref = files.map(function (file) {
-        return _objectSpread(_objectSpread({}, file), {}, {
-          fileInputRef: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createRef()
+          fileUpload: _objectSpread(_objectSpread({}, oldState.fileUpload), {}, {
+            type: type,
+            hideDragAndDrop: true,
+            file: event.target.files,
+            afterDelete: false
+          })
         });
       });
-      _this.state = {
-        fileUploads: files_whith_ref,
-        answers: answer,
-        inputTextOfQuestion: {
-          text: question['text'],
-          isValid: true
-        },
-        formErrors: {
-          inputTextOfQuestion: '',
-          inputFilesText: '',
-          inputFilesUploadSize: !error ? '' : error,
-          inputFilesUploadName: '',
-          inputAnswers: ''
-        },
-        inputFilesTextIsValid: false,
-        newFormErrors: [],
-        formValid: false,
-        isValidAllTextOfFiles: true,
-        isValidAllUploadFiles: true,
-        isValidAllAnswers: true
-      };
-    }
 
+      _this.allFunctions(type, event);
+    });
+
+    _this.handleFileUploadInput = _this.handleFileUploadInput.bind(_assertThisInitialized(_this));
+    _this.handleDeletingFile = _this.handleDeletingFile.bind(_assertThisInitialized(_this));
+    _this.handleProtocolDelete = _this.handleProtocolDelete.bind(_assertThisInitialized(_this));
+    _this.form = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createRef();
+    _this.state = {
+      fileUpload: {
+        file_id: (0,uuid__WEBPACK_IMPORTED_MODULE_4__.default)(),
+        type: '',
+        hideDragAndDrop: false,
+        file: '',
+        fileInputRef: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createRef(),
+        isValidFileSize: false,
+        isValidFileName: false
+      },
+      formErrors: {
+        inputFileUploadSize: error ? error : '',
+        inputFileUploadName: ''
+      }
+    };
     return _this;
   }
 
-  _createClass(Question, [{
-    key: "submitForm",
-    value: function submitForm(e) {// const errors = this.validateFormNew();
-      //
-      // if (errors.length > 0) {
-      //     alert(`Form is not valid: ${errors.join()}`);
-      //
-      //     this.setState({ newFormErrors: errors});
-      //
-      //     e.preventDefault();
-      //
-      //     return;
-      // }
+  _createClass(Protocol, [{
+    key: "handleDeletingFile",
+    value: function handleDeletingFile() {
+      this.setState(function (oldState) {
+        return _objectSpread(_objectSpread({}, oldState), {}, {
+          fileUpload: _objectSpread(_objectSpread({}, oldState.fileUpload), {}, {
+            file_id: (0,uuid__WEBPACK_IMPORTED_MODULE_4__.default)(),
+            type: '',
+            hideDragAndDrop: false,
+            file: '',
+            fileInputRef: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createRef(),
+            isValidFileSize: false,
+            isValidFileName: false,
+            afterDelete: true
+          })
+        });
+      });
     }
   }, {
-    key: "validateFormTextQuestion",
-    value: function validateFormTextQuestion(value) {
-      if (value.length > 0) {
+    key: "allFunctions",
+    value: function allFunctions(type, event) {
+      this.checkFileSize(type, event.target.files);
+      this.checkFileName(type, event.target.files);
+    }
+  }, {
+    key: "checkFileSize",
+    value: function checkFileSize(type, uploadFile) {
+      if (uploadFile[0].size < 10485760) {
         this.setState(function (oldState) {
           return _objectSpread(_objectSpread({}, oldState), {}, {
-            inputTextOfQuestion: _objectSpread(_objectSpread({}, oldState.inputTextOfQuestion), {}, {
-              isValid: true
+            fileUpload: _objectSpread(_objectSpread({}, oldState.fileUpload), {}, {
+              isValidFileSize: true
             })
           });
-        }, this.validateForm);
+        });
         this.setState(function (oldState) {
           return _objectSpread(_objectSpread({}, oldState), {}, {
             formErrors: _objectSpread(_objectSpread({}, oldState.formErrors), {}, {
-              inputTextOfQuestion: ''
+              inputFileUploadSize: ''
             })
           });
-        }, this.validateForm);
+        });
       } else {
+        this.setState(function (oldState) {
+          return _objectSpread(_objectSpread({}, oldState), {}, {
+            fileUpload: _objectSpread(_objectSpread({}, oldState.fileUpload), {}, {
+              isValidFileSize: false
+            })
+          });
+        });
         this.setState(function (oldState) {
           return _objectSpread(_objectSpread({}, oldState), {}, {
             formErrors: _objectSpread(_objectSpread({}, oldState.formErrors), {}, {
-              inputTextOfQuestion: 'Поле текста вопроса обязательно для заполнения!'
+              inputFileUploadSize: 'Файл должен быть не больше 10Мб!'
             })
           });
-        }, this.validateForm);
-        this.setState(function (oldState) {
-          return _objectSpread(_objectSpread({}, oldState), {}, {
-            inputTextOfQuestion: _objectSpread(_objectSpread({}, oldState.inputTextOfQuestion), {}, {
-              isValid: false
-            })
-          });
-        }, this.validateForm);
-      } //console.log(this.state.formErrors);
-
+        });
+      }
     }
   }, {
-    key: "validateAllInputOfAnswer",
-    value: function validateAllInputOfAnswer() {
-      var isValid = [];
-      isValid = this.state.answers.map(function (answer) {
-        //console.log(file.isValidText);
-        return answer.isValidText;
-      });
-      var isValidAll = true;
-
-      for (var i = 0; i < isValid.length; i++) {
-        isValidAll = isValidAll && isValid[i];
-      }
-
-      if (isValidAll) {
+    key: "checkFileName",
+    value: function checkFileName(type, uploadFile) {
+      if (this.checkNameOfFile(uploadFile[0].name)) {
         this.setState(function (oldState) {
           return _objectSpread(_objectSpread({}, oldState), {}, {
-            isValidAllAnswers: true
+            fileUpload: _objectSpread(_objectSpread({}, oldState.fileUpload), {}, {
+              isValidFileName: true,
+              fileLoaded: true
+            })
           });
-        }, this.validateForm);
+        });
+        this.setState(function (oldState) {
+          return _objectSpread(_objectSpread({}, oldState), {}, {
+            formErrors: _objectSpread(_objectSpread({}, oldState.formErrors), {}, {
+              inputFileUploadName: ''
+            })
+          });
+        });
       } else {
         this.setState(function (oldState) {
           return _objectSpread(_objectSpread({}, oldState), {}, {
-            isValidAllAnswers: false
+            fileUpload: _objectSpread(_objectSpread({}, oldState.fileUpload), {}, {
+              isValidFileName: false
+            })
           });
-        }, this.validateForm);
-      }
-
-      this.setState(function (oldState) {
-        return _objectSpread(_objectSpread({}, oldState), {}, {
-          formErrors: _objectSpread(_objectSpread({}, oldState.formErrors), {}, {
-            inputAnswers: !isValidAll ? 'Описание ответа обязательно для заполенния!' : ''
-          })
         });
-      }, this.validateForm);
-    } //===================================================================
-
-  }, {
-    key: "validateAllOfFile",
-    value: function validateAllOfFile() {
-      var newFormError = this.state.formErrors;
-      this.checkAllUploadsFilesSize() ? newFormError.inputFilesUploadSize = '' : newFormError.inputFilesUploadSize = 'Файл должен быть не больше 10Мб!';
-      this.checkAllUploadsFilesName() ? newFormError.inputFilesUploadName = '' : newFormError.inputFilesUploadName = 'Недопустимое имя файла!';
-      this.validateAllInputOfFile() ? newFormError.inputFilesText = '' : newFormError.inputFilesText = 'Описание файла обязательно для заполенния!';
-      this.validateAllInputOfFile() ? this.setState({
-        isValidAllTextOfFiles: true
-      }) : this.setState({
-        isValidAllTextOfFiles: false
-      });
-      this.checkAllUploadsFilesSize() && this.checkAllUploadsFilesName() ? this.setState({
-        isValidAllUploadFiles: true
-      }) : this.setState({
-        isValidAllUploadFiles: false
-      });
-      this.setState({
-        formErrors: newFormError
-      }, this.validateForm);
-    } //===================================================================
-
-  }, {
-    key: "validateAllInputOfFile",
-    value: function validateAllInputOfFile() {
-      var isValid = [];
-      isValid = this.state.fileUploads.map(function (file) {
-        return file.isValidText;
-      });
-
-      if (isValid.length == 0) {
-        return true;
-      }
-
-      var isValidAll = true;
-
-      for (var i = 0; i < isValid.length; i++) {
-        isValidAll = isValidAll && isValid[i];
-      }
-
-      if (isValidAll) {
         this.setState(function (oldState) {
           return _objectSpread(_objectSpread({}, oldState), {}, {
-            isValidAllTextOfFiles: true
+            formErrors: _objectSpread(_objectSpread({}, oldState.formErrors), {}, {
+              inputFileUploadName: 'Недопустимое имя файла!'
+            })
           });
-        }, this.validateForm);
-      } else {
-        this.setState(function (oldState) {
-          return _objectSpread(_objectSpread({}, oldState), {}, {
-            isValidAllTextOfFiles: false
-          });
-        }, this.validateForm);
-      }
-
-      this.setState(function (oldState) {
-        return _objectSpread(_objectSpread({}, oldState), {}, {
-          formErrors: _objectSpread(_objectSpread({}, oldState.formErrors), {}, {
-            inputFilesText: !isValidAll ? 'Описание файла обязательно для заполенния!' : ''
-          })
         });
-      }, this.validateForm);
-      return isValidAll;
-    }
-  }, {
-    key: "isValidAllTextAndFileFalse",
-    value: function isValidAllTextAndFileFalse() {
-      this.setState(function (oldState) {
-        return _objectSpread(_objectSpread({}, oldState), {}, {
-          isValidAllTextOfFiles: false,
-          isValidAllUploadFiles: false
-        });
-      }, this.validateForm);
-      this.setState(function (oldState) {
-        return _objectSpread(_objectSpread({}, oldState), {}, {
-          formErrors: _objectSpread(_objectSpread({}, oldState.formErrors), {}, {
-            inputFilesText: 'Описание файла обязательно для заполенния!',
-            inputFilesUploadName: 'Выберете файл.'
-          })
-        });
-      }, this.validateForm);
-    }
-  }, {
-    key: "checkAllUploadsFilesName",
-    value: function checkAllUploadsFilesName() {
-      var isValidName = [];
-      isValidName = this.state.fileUploads.map(function (file) {
-        return file.isValidFileName;
-      });
-
-      if (isValidName.length == 0) {
-        return true;
       }
-
-      var isValidAll = true;
-
-      for (var i = 0; i < isValidName.length; i++) {
-        isValidAll = isValidAll && isValidName[i];
-      }
-
-      return isValidAll;
-    }
-  }, {
-    key: "checkUploadFileName",
-    value: function checkUploadFileName(newFile) {
-      var isValid = [];
-      isValid = newFile.map(function (file) {
-        return file.isValidFileName;
-      });
-      var isValidAll = true;
-
-      for (var i = 0; i < isValid.length; i++) {
-        isValidAll = isValidAll && isValid[i];
-      } //console.log(isValidAll);
-
-
-      return isValidAll;
-    }
-  }, {
-    key: "checkAllUploadsFilesSize",
-    value: function checkAllUploadsFilesSize() {
-      var isValidSize = [];
-      isValidSize = this.state.fileUploads.map(function (file) {
-        return file.isValidFileSize;
-      });
-
-      if (isValidSize.length == 0) {
-        return true;
-      }
-
-      var isValidAll = true;
-
-      for (var i = 0; i < isValidSize.length; i++) {
-        isValidAll = isValidAll && isValidSize[i];
-      }
-
-      return isValidAll;
-    }
-  }, {
-    key: "checkUploadFileSize",
-    value: function checkUploadFileSize(newFile) {
-      var isValid = [];
-      isValid = newFile.map(function (file) {
-        return file.isValidFileSize;
-      });
-      var isValidAll = true;
-
-      for (var i = 0; i < isValid.length; i++) {
-        isValidAll = isValidAll && isValid[i];
-      } //console.log(isValidAll);
-
-
-      return isValidAll;
     }
   }, {
     key: "checkNameOfFile",
@@ -9011,414 +8155,150 @@ var Question = /*#__PURE__*/function (_React$Component) {
       }
     }
   }, {
-    key: "checkFileTypeSizeName",
-    value: function checkFileTypeSizeName(type, uploadFile, id) {
-      var _this2 = this;
-
-      var newFile = []; //console.log(uploadFile[0].size);
-
-      newFile = this.state.fileUploads.map(function (file) {
-        if (uploadFile[0].size < 10485760) {
-          //check all   event.target.files[0].size   formErrors.inputFilesUpload
-          return file.file_id == id ? _objectSpread(_objectSpread({}, file), {}, {
-            type: type,
-            fileUpload: uploadFile,
-            hideDragAndDrop: true,
-            isValidFileSize: true
-          }) : file;
-        } else {
-          _this2.setState(function (oldState) {
-            return _objectSpread(_objectSpread({}, oldState), {}, {
-              formErrors: _objectSpread(_objectSpread({}, oldState.formErrors), {}, {
-                inputFilesUploadSize: 'Файл должен быть не больше 10Мб!'
-              })
-            });
-          }, _this2.validateForm);
-
-          return file.file_id !== id ? file : _objectSpread(_objectSpread({}, file), {}, {
-            type: type,
-            fileUpload: uploadFile,
-            hideDragAndDrop: true,
-            isValidFileSize: false
-          });
-        }
-      });
-      newFile = newFile.map(function (file) {
-        if (_this2.checkNameOfFile(uploadFile[0].name)) {
-          return file.file_id == id ? _objectSpread(_objectSpread({}, file), {}, {
-            type: type,
-            fileUpload: uploadFile,
-            hideDragAndDrop: true,
-            isValidFileName: true,
-            fileLoaded: true
-          }) : file;
-        } else {
-          _this2.setState(function (oldState) {
-            return _objectSpread(_objectSpread({}, oldState), {}, {
-              formErrors: _objectSpread(_objectSpread({}, oldState.formErrors), {}, {
-                inputFilesUploadName: 'Недопустимое имя файла!'
-              })
-            });
-          }, _this2.validateForm);
-
-          return file.file_id == id ? _objectSpread(_objectSpread({}, file), {}, {
-            type: type,
-            fileUpload: uploadFile,
-            hideDragAndDrop: true,
-            isValidFileName: false
-          }) : file;
-        }
-      });
-
-      if (this.checkAllUploadsFilesSize && this.checkUploadFileSize(newFile) && this.checkAllUploadsFilesName && this.checkUploadFileName(newFile)) {
-        this.setState({
-          isValidAllUploadFiles: true
-        });
-        this.setState(function (oldState) {
-          return _objectSpread(_objectSpread({}, oldState), {}, {
-            formErrors: _objectSpread(_objectSpread({}, oldState.formErrors), {}, {
-              inputFilesUploadSize: '',
-              inputFilesUploadName: ''
-            })
-          });
-        }, this.validateForm);
-      }
-
-      if ((!this.checkAllUploadsFilesSize || !this.checkUploadFileSize(newFile)) && this.checkAllUploadsFilesName && this.checkUploadFileName(newFile)) {
-        this.setState({
-          isValidAllUploadFiles: false
-        });
-        this.setState(function (oldState) {
-          return _objectSpread(_objectSpread({}, oldState), {}, {
-            formErrors: _objectSpread(_objectSpread({}, oldState.formErrors), {}, {
-              inputFilesUploadSize: 'Файл должен быть не больше 10Мб!',
-              inputFilesUploadName: ''
-            })
-          });
-        }, this.validateForm);
-      }
-
-      if (this.checkAllUploadsFilesSize && this.checkUploadFileSize(newFile) && (!this.checkAllUploadsFilesName || !this.checkUploadFileName(newFile))) {
-        this.setState({
-          isValidAllUploadFiles: false
-        });
-        this.setState(function (oldState) {
-          return _objectSpread(_objectSpread({}, oldState), {}, {
-            formErrors: _objectSpread(_objectSpread({}, oldState.formErrors), {}, {
-              inputFilesUploadSize: '',
-              inputFilesUploadName: 'Недопустимое имя файла!'
-            })
-          });
-        }, this.validateForm);
-      }
-
-      return newFile;
-    }
-  }, {
-    key: "getId",
-    //1 - inputQuestion
-    //2 - inputTextFile
-    //3 - inputUpload
-    //4 - inputAnswer
-    //question_text_
-    //file_text_for_
-    //file_id
-    //text_answer_
-    value: function getId(pattern, inputName) {
-      var pattern_test;
-
-      switch (pattern) {
-        case 1:
-          pattern_test = /*#__PURE__*/_wrapRegExp(/(question_text_)/, {
-            question_text: 1
-          });
-          break;
-
-        case 2:
-          pattern_test = /*#__PURE__*/_wrapRegExp(/(file_text_for_)/, {
-            file_text: 1
-          });
-          break;
-
-        case 4:
-          pattern_test = /*#__PURE__*/_wrapRegExp(/(text_answer_)/, {
-            answer_text: 1
-          });
-          break;
-
-        default:
-          break;
-      }
-
-      var result_of_match = pattern_test.exec(inputName);
-
-      if (result_of_match) {
-        switch (pattern) {
-          case 1:
-            pattern_test = /*#__PURE__*/_wrapRegExp(/((?:(?![_einoqs-ux])[\s\S])(?:[\0-\t\x0B\f\x0E-\u2027\u202A-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])*$)/, {
-              question_text: 1
-            });
-            break;
-
-          case 2:
-            pattern_test = /*#__PURE__*/_wrapRegExp(/((?:(?![_efilortx])[\s\S])(?:[\0-\t\x0B\f\x0E-\u2027\u202A-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])*$)/, {
-              file_text: 1
-            });
-            break;
-
-          case 4:
-            pattern_test = /*#__PURE__*/_wrapRegExp(/((?:(?![_aenr-twx])[\s\S])(?:[\0-\t\x0B\f\x0E-\u2027\u202A-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])*$)/, {
-              answer_text: 1
-            });
-            break;
-
-          default:
-            break;
-        }
-
-        return pattern_test.exec(inputName);
-      }
-
-      return false;
-    }
-  }, {
-    key: "validateForm",
-    value: function validateForm() {
-      // console.log('this.state.inputTextOfQuestion.isValid', this.state.inputTextOfQuestion.isValid);
-      //console.log('this.state.isValidAllUploadFiles: ', this.state.isValidAllUploadFiles);
-      this.setState({
-        formValid: this.state.inputTextOfQuestion.isValid && this.state.isValidAllTextOfFiles && this.state.isValidAllUploadFiles && this.state.isValidAllAnswers
-      });
-    }
-  }, {
-    key: "validateFormNew",
-    value: function validateFormNew() {
-      var errors = [];
-      this.state.fileUploads.forEach(function (fileUpload) {
-        // TODO: check fileUpload
-        var isFileUploadValid = false;
-
-        if (isFileUploadValid) {
-          return;
-        }
-
-        errors.push("File ".concat(fileUpload.text, " has an error."));
-      });
-      this.state.answers.forEach(function (fileUpload) {
-        // TODO: check answers
-        var isFileUploadValid = false;
-
-        if (isFileUploadValid) {
-          return;
-        }
-
-        errors.push("File ".concat(fileUpload.text, " has an error."));
-      }); // TODO: check questionText
-
-      return errors;
-    }
-  }, {
-    key: "handleAddingFile",
-    value: function handleAddingFile() {
-      var uuidv = (0,uuid__WEBPACK_IMPORTED_MODULE_7__.default)();
-      this.setState(function (oldState) {
-        return _objectSpread(_objectSpread({}, oldState), {}, {
-          fileUploads: [].concat(_toConsumableArray(oldState.fileUploads), [{
-            file_id: uuidv,
-            text: '',
-            fileUpload: '',
-            type: '',
-            hideDragAndDrop: false,
-            fileInputRef: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createRef(),
-            isValidFileSize: false,
-            isValidFileName: false,
-            isValidText: false
-          }])
-        });
-      }, this.isValidAllTextAndFileFalse);
-    }
-  }, {
-    key: "handleAddingAnswer",
-    value: function handleAddingAnswer() {
-      var uuidv = (0,uuid__WEBPACK_IMPORTED_MODULE_7__.default)();
-      this.setState(function (oldState) {
-        return _objectSpread(_objectSpread({}, oldState), {}, {
-          answers: [].concat(_toConsumableArray(oldState.answers), [{
-            answer_id: uuidv,
-            text: '',
-            isValidText: false
-          }])
-        });
-      }, this.validateAllInputOfAnswer);
-    }
-  }, {
-    key: "handleDeletingFile",
-    value: function handleDeletingFile(file_id) {
-      this.setState(function (oldState) {
-        return _objectSpread(_objectSpread({}, oldState), {}, {
-          fileUploads: oldState.fileUploads.filter(function (file) {
-            return file.file_id !== file_id;
-          })
-        });
-      }, this.validateAllOfFile);
-    }
-  }, {
-    key: "handleDeletingAnswer",
-    value: function handleDeletingAnswer(answer_id) {
-      this.setState(function (oldState) {
-        return _objectSpread(_objectSpread({}, oldState), {}, {
-          answers: oldState.answers.filter(function (answer) {
-            return answer.answer_id !== answer_id;
-          })
-        });
-      }, this.validateAllInputOfAnswer);
-    }
-  }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
+      //console.log(error);
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-        className: "shadow overflow-hidden sm:rounded-md",
+        id: "data_".concat(this.state.fileUpload.file_id),
+        className: "col-span-6 sm:col-span-3 mt-8 border-t-8 border-double border-gray-400",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
           className: "panel panel-default",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_FormErrors__WEBPACK_IMPORTED_MODULE_6__.default, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_FormErrors__WEBPACK_IMPORTED_MODULE_3__.default, {
             formErrors: this.state.formErrors
           })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
+          className: "block text-lg text-black font-semibold mt-6",
+          children: "\u0421\u043A\u0430\u043D \u043F\u043E\u0434\u043F\u0438\u0441\u0430\u043D\u043D\u043E\u0433\u043E \u043F\u0440\u043E\u0442\u043E\u043A\u043E\u043B\u0430:"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("form", {
-          ref: function ref(_ref) {
-            _this3.form = _ref;
+          ref: function ref(_ref2) {
+            _this2.form = _ref2;
           },
           onSubmit: this.submitForm,
           id: "form_id",
-          action: "/polls/".concat(poll['id'], "/questions/add"),
+          action: "/polls/".concat(poll, "/addProtocol"),
           encType: "multipart/form-data",
           method: "POST",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
             type: "hidden",
             name: "_token",
             value: csrf_token
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-            className: "px-4 py-5 bg-white sm:p-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-              className: "mt-10 sm:mt-0",
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+            className: "flex columns-2 mt-4",
+            children: [!this.state.fileUpload.file && file_protocol && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+              id: "prev_".concat(this.state.fileUpload.file_id),
+              className: "w-1/2",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
+                className: "block text-sm font-medium text-gray-700 mt-6",
+                children: "\u041F\u0440\u0435\u0434\u0432\u0430\u0440\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0439 \u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440 \u043A \u0444\u0430\u0439\u043B\u0430"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+                className: "mt-1 h-96 w-full relative text-center",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+                  id: "pdf-viewer",
+                  className: "absolute inset-y-0 left-0 w-full",
+                  children: !this.state.fileUpload.file && !this.state.fileUpload.isValidFileName && !this.state.fileUpload.isValidFileSize && file_protocol && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_PdfPreview__WEBPACK_IMPORTED_MODULE_2__.default, {
+                    url: "/storage/".concat(file_protocol)
+                  })
+                })
+              })]
+            }), this.state.fileUpload.type == 'pdf' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+              id: "prev_".concat(this.state.fileUpload.file_id),
+              className: "w-1/2",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
+                className: "block text-sm font-medium text-gray-700 mt-6",
+                children: "\u041F\u0440\u0435\u0434\u0432\u0430\u0440\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0439 \u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440 \u043A \u0444\u0430\u0439\u043B\u0430"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+                className: "mt-1 h-96 w-full relative text-center",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+                  id: "pdf-viewer",
+                  className: "absolute inset-y-0 left-0 w-full",
+                  children: this.state.fileUpload.file && this.state.fileUpload.isValidFileName && this.state.fileUpload.isValidFileSize && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_PdfPreview__WEBPACK_IMPORTED_MODULE_2__.default, {
+                    url: URL.createObjectURL(this.state.fileUpload.file[0])
+                  })
+                })
+              })]
+            }), this.state.fileUpload.type && this.state.fileUpload.type !== 'pdf' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+              id: "prev_".concat(this.state.fileUpload.file_id),
+              className: "w-1/2",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-                className: "grid",
+                className: "mt-1 h-96 relative text-center",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+                  id: "pdf-viewer",
+                  className: "py-20 ",
+                  children: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u0435 \u043F\u0440\u043E\u0442\u043E\u043A\u043E\u043B \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 PDF"
+                })
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+              id: "drag_and_drop_aria_".concat(this.state.fileUpload.file_id),
+              className: "".concat(this.state.fileUpload.hideDragAndDrop || file_protocol ? 'w-1/2' : 'w-full', " place-self-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"),
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+                className: "mt-1 flex justify-center ",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                  className: "mt-5 md:mt-0 md:col-span-2",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-                    className: "col-span-1",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                      className: "px-4 sm:px-0",
-                      children: [!question && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("h3", {
-                        className: "text-lg font-medium leading-6 text-gray-900 mt-6 ml-6",
-                        children: ["\u0414\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0432\u043E\u043F\u0440\u043E\u0441\u0430 \u043A \u043E\u043F\u0440\u043E\u0441\u0443: ", poll['name']]
-                      }), question && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("h3", {
-                        className: "text-lg font-medium leading-6 text-gray-900 mt-6 ml-6",
-                        children: ["\u0418\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u044F \u0432\u043E\u043F\u0440\u043E\u0441\u0430 ", current_num_question, " \u043A \u043E\u043F\u0440\u043E\u0441\u0443: ", poll['name'], " \u0441 id ", question['id']]
+                  className: "space-y-1 text-center",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("svg", {
+                    className: "mx-auto h-12 w-12 text-gray-400",
+                    stroke: "currentColor",
+                    fill: "none",
+                    viewBox: "0 0 48 48",
+                    "aria-hidden": "true",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
+                      d: "M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02",
+                      strokeWidth: "2",
+                      strokeLinecap: "round",
+                      strokeLinejoin: "round"
+                    })
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+                    className: "flex text-sm text-gray-600 flex-col",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("label", {
+                      htmlFor: this.state.fileUpload.file_id,
+                      className: "relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+                        children: this.state.fileUpload.hideDragAndDrop || file_protocol ? 'Измените файл' : 'Загрузите файл'
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
+                        id: this.state.fileUpload.file_id,
+                        name: this.state.fileUpload.file_id,
+                        type: "file",
+                        className: "sr-only",
+                        ref: this.state.fileUpload.fileInput,
+                        onChange: this.handleFileUploadInput
                       })]
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                    id: "question",
-                    className: "col-span-3 sm:col-span-3 mt-6 pt-6 border-t border-gray-400 ",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                      className: "inline-flex flex-row w-full",
-                      children: [!question && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("label", {
-                        htmlFor: "question_text_".concat(count_question + 1),
-                        className: "block text-sm font-medium text-gray-700",
-                        children: ["\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043A\u0441\u0442 \u0432\u043E\u043F\u0440\u043E\u0441\u0430 \u2116", count_question + 1, " (\u043F\u043E\u0434\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u0435\u0442\u0441\u044F HTML \u0444\u043E\u0440\u043C\u0430\u0442) "]
-                      }), question && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("label", {
-                        htmlFor: "question_text_".concat(current_num_question),
-                        className: "block text-sm font-medium text-gray-700",
-                        children: ["\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043A\u0441\u0442 \u0432\u043E\u043F\u0440\u043E\u0441\u0430 \u2116", current_num_question, " (\u043F\u043E\u0434\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u0435\u0442\u0441\u044F HTML \u0444\u043E\u0440\u043C\u0430\u0442) "]
-                      })]
-                    }), !question && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", {
-                      type: "text",
-                      name: "question_text_0",
-                      id: "question_text_0",
-                      autoComplete: "given-name",
-                      className: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md",
-                      value: this.state.inputTextOfQuestion.text,
-                      onChange: this.handleQuestionTextInput
-                    }), question && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", {
-                      type: "text",
-                      name: "question_text_".concat(question.id),
-                      id: "question_text_".concat(question.id),
-                      autoComplete: "given-name",
-                      className: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md",
-                      value: this.state.inputTextOfQuestion.text,
-                      onChange: this.handleQuestionTextInput
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-                    id: "files_container",
-                    children: this.state.fileUploads.map(function (file, index) {
-                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_FilePreview__WEBPACK_IMPORTED_MODULE_4__.default, {
-                        file: file,
-                        value: file.text,
-                        num_of_question: count_question + 1,
-                        num_of_file: index,
-                        onDeleteFile: _this3.handleDeletingFile,
-                        onChangeTextInputFile: _this3.handleFileTextInput,
-                        onChangeUploadInputFile: _this3.handleFileUploadInput,
-                        fileInputRef: file.fileInputRef,
-                        hideDragAndDrop: file.hideDragAndDrop,
-                        isUpdate: question,
-                        numQuestion: current_num_question
-                      }, index);
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_AddFileToQuestion__WEBPACK_IMPORTED_MODULE_2__.default, {
-                    handleAddingFile: this.handleAddingFile
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-                    id: "answer_container",
-                    children: this.state.answers.map(function (answer, index) {
-                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_AnswerPreview__WEBPACK_IMPORTED_MODULE_5__.default, {
-                        answer: answer,
-                        num_of_question: count_question + 1,
-                        num_of_answer: index,
-                        onDeleteAnswer: _this3.handleDeletingAnswer,
-                        onChangeTextInputAnswer: _this3.handleAnswerInput,
-                        isUpdate: question,
-                        numQuestion: current_num_question
-                      }, answer.answer_id);
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_AddAnswerToQuestion__WEBPACK_IMPORTED_MODULE_3__.default, {
-                    handleAddingAnswer: this.handleAddingAnswer
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", {
+                    className: "text-xs text-gray-500",
+                    children: "PDF, PNG, JPG, GIF \u043D\u0435 \u0431\u043E\u043B\u0435\u0435 10MB"
                   })]
                 })
               })
-            })
+            })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-            className: "inline-flex flex-row w-full place-content-between",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-              className: "px-4 py-3 bg-gray-50  sm:px-6",
-              children: [!question && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
-                type: "submit",
-                className: "".concat(this.state.formValid ? 'justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500' : 'justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'),
-                disabled: !this.state.formValid,
-                children: "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0412\u043E\u043F\u0440\u043E\u0441 \u043A \u043E\u043F\u0440\u043E\u0441\u0443"
-              }), question && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
-                type: "submit",
-                className: "".concat(this.state.formValid ? 'justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500' : 'justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'),
-                disabled: !this.state.formValid,
-                children: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u0412\u043E\u043F\u0440\u043E\u0441 \u043A \u043E\u043F\u0440\u043E\u0441\u0443"
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-              className: "px-4 py-3 bg-gray-50 sm:px-6 flex-row-reverse ",
-              children: [question && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
-                href: "/polls/".concat(poll['id'], "/edit"),
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
-                  type: "button",
-                  className: "justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500",
-                  children: "\u041E\u0442\u043C\u0435\u043D\u0430"
-                })
-              }), !question && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
-                href: "/polls/".concat(poll['id'], "/index/"),
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
-                  type: "button",
-                  className: "justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500",
-                  children: "\u041E\u0442\u043C\u0435\u043D\u0430"
-                })
-              })]
+            className: "inline-flex",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
+              type: "submit",
+              className: "".concat(this.state.fileUpload.isValidFileName && this.state.fileUpload.isValidFileSize && this.state.fileUpload.type == 'pdf' ? 'justify-center mt-6 ml-6 mr-6 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500' : 'justify-center mt-6 ml-6 mr-6 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'),
+              disabled: !this.state.fileUpload.isValidFileName || !this.state.fileUpload.isValidFileSize,
+              children: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u043F\u0440\u043E\u0442\u043E\u043A\u043E\u043B"
+            }), file_protocol && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
+              type: "submit",
+              className: "justify-center mt-6 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("form", {
+                ref: function ref(_ref) {
+                  _this2.form = _ref;
+                },
+                id: "form_del_protocol",
+                action: "/polls/".concat(poll, "/delProtocol"),
+                method: "get",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
+                  type: "hidden",
+                  name: "_token",
+                  value: csrf_token
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
+                  href: "/polls/".concat(poll, "/delProtocol"),
+                  onClick: this.handleProtocolDelete,
+                  className: "hover:text-white",
+                  children: "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0441\u043E\u0445\u0440\u0430\u043D\u0435\u043D\u043D\u044B\u0439 \u043F\u0440\u043E\u0442\u043E\u043A\u043E\u043B"
+                })]
+              })
             })]
           })]
         })]
@@ -9426,17 +8306,17 @@ var Question = /*#__PURE__*/function (_React$Component) {
     }
   }]);
 
-  return Question;
+  return Protocol;
 }(react__WEBPACK_IMPORTED_MODULE_1__.Component);
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Question);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Protocol);
 
 /***/ }),
 
-/***/ "./resources/js/react/AddQuestionsToPoll/index.js":
-/*!********************************************************!*\
-  !*** ./resources/js/react/AddQuestionsToPoll/index.js ***!
-  \********************************************************/
+/***/ "./resources/js/react/AddProtocolToPoll/index.js":
+/*!*******************************************************!*\
+  !*** ./resources/js/react/AddProtocolToPoll/index.js ***!
+  \*******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9444,17 +8324,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var _Question__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Question */ "./resources/js/react/AddQuestionsToPoll/Question.js");
+/* harmony import */ var _Protocol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Protocol */ "./resources/js/react/AddProtocolToPoll/Protocol.js");
 
 
 
 
 
 var App = function App() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Question__WEBPACK_IMPORTED_MODULE_3__.default, {});
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Protocol__WEBPACK_IMPORTED_MODULE_3__.default, {});
 };
 
-react_dom__WEBPACK_IMPORTED_MODULE_2__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(App, {}), document.getElementById('add-questions-to-poll'));
+react_dom__WEBPACK_IMPORTED_MODULE_2__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(App, {}), document.getElementById('add-protocol-to-poll'));
 
 /***/ }),
 
@@ -9555,365 +8435,6 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 	return to;
 };
-
-
-/***/ }),
-
-/***/ "./node_modules/pdfobject/pdfobject.js":
-/*!*********************************************!*\
-  !*** ./node_modules/pdfobject/pdfobject.js ***!
-  \*********************************************/
-/***/ (function(module, exports) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
- *  PDFObject v2.2.7
- *  https://github.com/pipwerks/PDFObject
- *  @license
- *  Copyright (c) 2008-2021 Philip Hutchison
- *  MIT-style license: http://pipwerks.mit-license.org/
- *  UMD module pattern from https://github.com/umdjs/umd/blob/master/templates/returnExports.js
- */
-
-(function (root, factory) {
-    if (true) {
-        // AMD. Register as an anonymous module.
-        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-		__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-		(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-    } else {}
-}(this, function () {
-
-    "use strict";
-
-    //PDFObject is designed for client-side (browsers), not server-side (node)
-    //Will choke on undefined navigator and window vars when run on server
-    //Return boolean false and exit function when running server-side
-
-    if( typeof window === "undefined" || 
-        window.navigator === undefined || 
-        window.navigator.userAgent === undefined || 
-        window.navigator.mimeTypes === undefined){ 
-            return false;
-    }
-
-    let pdfobjectversion = "2.2.7";
-    let nav = window.navigator;
-    let ua = window.navigator.userAgent;
-
-    //Time to jump through hoops -- browser vendors do not make it easy to detect PDF support.
-
-    /*
-        IE11 still uses ActiveX for Adobe Reader, but IE 11 doesn't expose window.ActiveXObject the same way 
-        previous versions of IE did. window.ActiveXObject will evaluate to false in IE 11, but "ActiveXObject" 
-        in window evaluates to true.
-
-        MS Edge does not support ActiveX so this test will evaluate false
-    */
-    let isIE = ("ActiveXObject" in window);
-
-    /*
-        There is a coincidental correlation between implementation of window.promises and native PDF support in desktop browsers
-        We use this to assume if the browser supports promises it supports embedded PDFs
-        Is this fragile? Sort of. But browser vendors removed mimetype detection, so we're left to improvise
-    */
-    let isModernBrowser = (window.Promise !== undefined);
-
-    //Older browsers still expose the mimeType
-    let supportsPdfMimeType = (nav.mimeTypes["application/pdf"] !== undefined);
-
-    //Safari on iPadOS doesn't report as 'mobile' when requesting desktop site, yet still fails to embed PDFs
-    let isSafariIOSDesktopMode = (  nav.platform !== undefined && 
-                                    nav.platform === "MacIntel" && 
-                                    nav.maxTouchPoints !== undefined && 
-                                    nav.maxTouchPoints > 1 );
-
-    //Quick test for mobile devices.
-    let isMobileDevice = (isSafariIOSDesktopMode || /Mobi|Tablet|Android|iPad|iPhone/.test(ua));
-
-    //Safari desktop requires special handling 
-    let isSafariDesktop = ( !isMobileDevice && 
-                            nav.vendor !== undefined && 
-                            /Apple/.test(nav.vendor) && 
-                            /Safari/.test(ua) );
-    
-    //Firefox started shipping PDF.js in Firefox 19. If this is Firefox 19 or greater, assume PDF.js is available
-    let isFirefoxWithPDFJS = (!isMobileDevice && /irefox/.test(ua) && ua.split("rv:").length > 1) ? (parseInt(ua.split("rv:")[1].split(".")[0], 10) > 18) : false;
-
-
-    /* ----------------------------------------------------
-       Supporting functions
-       ---------------------------------------------------- */
-
-    let createAXO = function (type){
-        var ax;
-        try {
-            ax = new ActiveXObject(type);
-        } catch (e) {
-            ax = null; //ensure ax remains null
-        }
-        return ax;
-    };
-
-    //If either ActiveX support for "AcroPDF.PDF" or "PDF.PdfCtrl" are found, return true
-    //Constructed as a method (not a prop) to avoid unneccesarry overhead -- will only be evaluated if needed
-    let supportsPdfActiveX = function (){ return !!(createAXO("AcroPDF.PDF") || createAXO("PDF.PdfCtrl")); };
-
-    //Determines whether PDF support is available
-    let supportsPDFs = (
-        //As of Sept 2020 no mobile browsers properly support PDF embeds
-        !isMobileDevice && (
-            //We're moving into the age of MIME-less browsers. They mostly all support PDF rendering without plugins.
-            isModernBrowser ||
-            //Modern versions of Firefox come bundled with PDFJS
-            isFirefoxWithPDFJS ||
-            //Browsers that still support the original MIME type check
-            supportsPdfMimeType ||
-            //Pity the poor souls still using IE
-            (isIE && supportsPdfActiveX())
-        )
-    );
-
-    //Create a fragment identifier for using PDF Open parameters when embedding PDF
-    let buildURLFragmentString = function(pdfParams){
-
-        let string = "";
-        let prop;
-
-        if(pdfParams){
-
-            for (prop in pdfParams) {
-                if (pdfParams.hasOwnProperty(prop)) {
-                    string += encodeURIComponent(prop) + "=" + encodeURIComponent(pdfParams[prop]) + "&";
-                }
-            }
-
-            //The string will be empty if no PDF Params found
-            if(string){
-
-                string = "#" + string;
-
-                //Remove last ampersand
-                string = string.slice(0, string.length - 1);
-
-            }
-
-        }
-
-        return string;
-
-    };
-
-    let embedError = function (msg, suppressConsole){
-        if(!suppressConsole){
-            console.log("[PDFObject] " + msg);
-        }
-        return false;
-    };
-
-    let emptyNodeContents = function (node){
-        while(node.firstChild){
-            node.removeChild(node.firstChild);
-        }
-    };
-
-    let getTargetElement = function (targetSelector){
-
-        //Default to body for full-browser PDF
-        let targetNode = document.body;
-
-        //If a targetSelector is specified, check to see whether
-        //it's passing a selector, jQuery object, or an HTML element
-
-        if(typeof targetSelector === "string"){
-
-            //Is CSS selector
-            targetNode = document.querySelector(targetSelector);
-
-        } else if (window.jQuery !== undefined && targetSelector instanceof jQuery && targetSelector.length) {
-
-            //Is jQuery element. Extract HTML node
-            targetNode = targetSelector.get(0);
-
-        } else if (targetSelector.nodeType !== undefined && targetSelector.nodeType === 1){
-
-            //Is HTML element
-            targetNode = targetSelector;
-
-        }
-
-        return targetNode;
-
-    };
-
-    let generatePDFJSMarkup = function (targetNode, url, pdfOpenFragment, PDFJS_URL, id, title, omitInlineStyles){
-
-        //Ensure target element is empty first
-        emptyNodeContents(targetNode);
-
-        let fullURL = PDFJS_URL + "?file=" + encodeURIComponent(url) + pdfOpenFragment;
-        let div = document.createElement("div");
-        let iframe = document.createElement("iframe");
-        
-        iframe.src = fullURL;
-        iframe.className = "pdfobject";
-        iframe.type = "application/pdf";
-        iframe.frameborder = "0";
-        iframe.allow = "fullscreen";
-        iframe.title = title;
-        
-        if(id){
-            iframe.id = id;
-        }
-
-        if(!omitInlineStyles){
-            div.style.cssText = "position: absolute; top: 0; right: 0; bottom: 0; left: 0;";
-            iframe.style.cssText = "border: none; width: 100%; height: 100%;";
-            targetNode.style.position = "relative";
-            targetNode.style.overflow = "auto";        
-        }
-
-        div.appendChild(iframe);
-        targetNode.appendChild(div);
-        targetNode.classList.add("pdfobject-container");
-        
-        return targetNode.getElementsByTagName("iframe")[0];
-
-    };
-
-    let generatePDFObjectMarkup = function (embedType, targetNode, targetSelector, url, pdfOpenFragment, width, height, id, title, omitInlineStyles){
-
-        //Ensure target element is empty first
-        emptyNodeContents(targetNode);
-
-        let embed = document.createElement(embedType);
-        embed.src = url + pdfOpenFragment;
-        embed.className = "pdfobject";
-        embed.type = "application/pdf";
-        embed.title = title;
-
-        if(id){
-            embed.id = id;
-        }
-
-        if(embedType === "iframe"){
-            embed.allow = "fullscreen";
-        }
-
-        if(!omitInlineStyles){
-
-            let style = (embedType === "embed") ? "overflow: auto;" : "border: none;";
-
-            if(targetSelector && targetSelector !== document.body){
-                style += "width: " + width + "; height: " + height + ";";
-            } else {
-                style += "position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%;";
-            }
-
-            embed.style.cssText = style; 
-
-        }
-
-        targetNode.classList.add("pdfobject-container");
-        targetNode.appendChild(embed);
-
-        return targetNode.getElementsByTagName(embedType)[0];
-
-    };
-
-    let embed = function(url, targetSelector, options){
-
-        //If targetSelector is not defined, convert to boolean
-        let selector = targetSelector || false;
-
-        //Ensure options object is not undefined -- enables easier error checking below
-        let opt = options || {};
-
-        //Get passed options, or set reasonable defaults
-        let id = (typeof opt.id === "string") ? opt.id : "";
-        let page = opt.page || false;
-        let pdfOpenParams = opt.pdfOpenParams || {};
-        let fallbackLink = opt.fallbackLink || true;
-        let width = opt.width || "100%";
-        let height = opt.height || "100%";
-        let title = opt.title || "Embedded PDF";
-        let assumptionMode = (typeof opt.assumptionMode === "boolean") ? opt.assumptionMode : true;
-        let forcePDFJS = (typeof opt.forcePDFJS === "boolean") ? opt.forcePDFJS : false;
-        let supportRedirect = (typeof opt.supportRedirect === "boolean") ? opt.supportRedirect : false;
-        let omitInlineStyles = (typeof opt.omitInlineStyles === "boolean") ? opt.omitInlineStyles : false;
-        let suppressConsole = (typeof opt.suppressConsole === "boolean") ? opt.suppressConsole : false;
-        let forceIframe = (typeof opt.forceIframe === "boolean") ? opt.forceIframe : false;
-        let PDFJS_URL = opt.PDFJS_URL || false;
-        let targetNode = getTargetElement(selector);
-        let fallbackHTML = "";
-        let pdfOpenFragment = "";
-        let fallbackHTML_default = "<p>This browser does not support inline PDFs. Please download the PDF to view it: <a href='[url]'>Download PDF</a></p>";
-
-        //Ensure URL is available. If not, exit now.
-        if(typeof url !== "string"){ return embedError("URL is not valid", suppressConsole); }
-
-        //If target element is specified but is not valid, exit without doing anything
-        if(!targetNode){ return embedError("Target element cannot be determined", suppressConsole); }
-
-        //page option overrides pdfOpenParams, if found
-        if(page){ pdfOpenParams.page = page; }
-
-        //Stringify optional Adobe params for opening document (as fragment identifier)
-        pdfOpenFragment = buildURLFragmentString(pdfOpenParams);
-
-
-        // --== Do the dance: Embed attempt #1 ==--
-
-        //If the forcePDFJS option is invoked, skip everything else and embed as directed
-        if(forcePDFJS && PDFJS_URL){
-            return generatePDFJSMarkup(targetNode, url, pdfOpenFragment, PDFJS_URL, id, title, omitInlineStyles);
-        }
- 
-        // --== Embed attempt #2 ==--
-
-        //Embed PDF if traditional support is provided, or if this developer is willing to roll with assumption
-        //that modern desktop (not mobile) browsers natively support PDFs 
-        if(supportsPDFs || (assumptionMode && !isMobileDevice)){
-            
-            //Should we use <embed> or <iframe>? In most cases <embed>. 
-            //Allow developer to force <iframe>, if desired
-            //There is an edge case where Safari does not respect 302 redirect requests for PDF files when using <embed> element.
-            //Redirect appears to work fine when using <iframe> instead of <embed> (Addresses issue #210)
-            //Forcing Safari desktop to use iframe due to freezing bug in macOS 11 (Big Sur)
-            let embedtype = (forceIframe || supportRedirect || isSafariDesktop) ? "iframe" : "embed";
-            
-            return generatePDFObjectMarkup(embedtype, targetNode, targetSelector, url, pdfOpenFragment, width, height, id, title, omitInlineStyles);
-
-        }
-        
-        // --== Embed attempt #3 ==--
-        
-        //If everything else has failed and a PDFJS fallback is provided, try to use it
-        if(PDFJS_URL){
-            return generatePDFJSMarkup(targetNode, url, pdfOpenFragment, PDFJS_URL, id, title, omitInlineStyles);
-        }
-        
-        // --== PDF embed not supported! Use fallback ==-- 
-
-        //Display the fallback link if available
-        if(fallbackLink){
-
-            fallbackHTML = (typeof fallbackLink === "string") ? fallbackLink : fallbackHTML_default;
-            targetNode.innerHTML = fallbackHTML.replace(/\[url\]/g, url);
-
-        }
-
-        return embedError("This browser does not support embedded PDFs", suppressConsole);
-
-    };
-
-    return {
-        embed: function (a,b,c){ return embed(a,b,c); },
-        pdfobjectversion: (function () { return pdfobjectversion; })(),
-        supportsPDFs: (function (){ return supportsPDFs; })()
-    };
-
-}));
 
 
 /***/ }),
@@ -11319,4 +9840,4 @@ function validate(uuid) {
 /***/ })
 
 },
-0,[["./resources/js/react/AddQuestionsToPoll/index.js","/js/manifest","/js/vendor"]]]);
+0,[["./resources/js/react/AddProtocolToPoll/index.js","/js/manifest","/js/vendor"]]]);

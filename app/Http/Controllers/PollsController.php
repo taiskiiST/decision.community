@@ -33,11 +33,69 @@ class PollsController extends Controller
     }
 
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('polls.create');
+        return view('polls.create',['is_governance' => $request->governance]);
     }
 
+    public function delProtocol(Request $request){
+        if (preg_match('/\/polls\/(\d+)\/delProtocol/', $request->getRequestUri(),$arr_index_poll_and_question)){
+            $poll = Poll::find($arr_index_poll_and_question[1]);
+            Storage::disk('public')->delete($poll->protocol);
+            $poll->update([
+                'protocol' => null
+            ]);
+            return redirect()->route('poll.edit', [
+                'poll' => $poll
+            ]);
+        }
+    }
+    public function addProtocol(Request $request, $poll_id){
+        $poll = Poll::find($poll_id);
+        $error = '';
+        if ($request->hasFile(key($request->file())) && $request->file(key($request->file()))->isValid()) {
+            $rules[key($request->file())] = 'file';
+        }else{
+            if($request->file(key($request->file()))) {
+                $error = 'Файл ' . $request->file(key($request->file()))->getClientOriginalName() . ' поврежден!';
+                return redirect()->route('poll.edit', [
+                    'poll' => $poll->id,
+                    'error' => $error
+                ]);
+            }else{
+                \JavaScript::put([
+                    'poll' => $poll,
+                    'csrf_token' =>  csrf_token(),
+                    'file_protocol' => '',
+                    'error' => ''
+                ]);
+
+                return redirect()->route('poll.edit', [
+                    'poll' => $poll,
+                    'error' => ''
+                ]);
+            }
+        }
+
+        $parameters = $this->validate($request, $rules);
+
+        $path_to_protocol = $poll->update([
+            'protocol' => $request->file(key($request->file()))->store('storage/' . $poll->id , 'public')
+        ]);
+
+
+        \JavaScript::put([
+            'poll' => $poll,
+            'csrf_token' =>  csrf_token(),
+            'file_protocol' => $poll->protocol,
+            'error' => $error
+        ]);
+
+        return redirect()->route('poll.edit', [
+            'poll' => $poll,
+            'error' => $error
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -61,15 +119,19 @@ class PollsController extends Controller
      */
     public function store(Request $request)
     {
+        $rules["is_governance"] = 'required';
         $rules["poll-name"] = 'required';
         $parameters = $this->validate($request, $rules);
 
-        $poll = Poll::create([
-            'name' => $parameters['poll-name']
-        ]);
+        if($parameters['is_governance'] == 0 ) {
+            $parameters['is_governance'] = false;
+        }else{
+            $parameters['is_governance'] = true;
+        }
 
-        \JavaScript::put([
-            'foo' => 'bar'
+        $poll = Poll::create([
+            'name' => $parameters['poll-name'],
+            'is_governance' => $parameters['is_governance']
         ]);
 
         return redirect()->route('poll.questions.create',['poll' => $poll->id]);
@@ -105,11 +167,18 @@ class PollsController extends Controller
             if (strpos($key, 'question_text_') === false) {
             } else {
                 $question_text_id = preg_replace('/question_text_/','',$key);
-                $question = $poll->questions()->updateOrInsert(
-                    ['id' => $question_text_id, 'poll_id' => $poll->id],
-                    ['text' => $value]
-                );
-                $question = Question::find($question_text_id);
+                if($question_text_id == '0'){
+                    $question = $poll->questions()->create([
+                        'poll_id' => $poll->id,
+                        'text' => $value
+                    ]);
+                }else {
+                    $question = $poll->questions()->updateOrInsert(
+                        ['id' => $question_text_id, 'poll_id' => $poll->id],
+                        ['text' => $value]
+                    );
+                    $question = Question::find($question_text_id);
+                }
             }
             if (strpos($key, 'text_for_') === false) {
             } else {
@@ -189,7 +258,7 @@ class PollsController extends Controller
                 $answer->delete();
             }
         }
-        return redirect()->route('poll.update', [
+        return redirect()->route('poll.edit', [
             'poll' => $poll
         ]);
     }
@@ -406,7 +475,7 @@ class PollsController extends Controller
             ]);
         }
 
-        return redirect()->route('poll.update', [
+        return redirect()->route('poll.edit', [
             'poll' => $poll
         ]);
 
@@ -473,7 +542,7 @@ class PollsController extends Controller
             }
         }
 
-        return view('polls.answer', [
+        return view('polls.results', [
             'poll' => $poll,
 
         ]);
@@ -485,9 +554,18 @@ class PollsController extends Controller
      * @param  \App\Models\Poll  $poll
      * @return \Illuminate\Http\Response
      */
-    public function edit(Poll $poll)
+    public function edit(Poll $poll, $error = '')
     {
-        //
+        \JavaScript::put([
+            'poll' => $poll->id,
+            'csrf_token' =>  csrf_token(),
+            'file_protocol' => $poll->protocol ? $poll->protocol : '',
+            'error' => $error
+        ]);
+
+        return view('polls.update', [
+            'poll' => $poll,
+        ]);
     }
 
     /**
@@ -499,9 +577,7 @@ class PollsController extends Controller
      */
     public function update(Poll $poll)
     {
-        return view('polls.update', [
-            'poll' => $poll,
-        ]);
+
     }
 
     /**

@@ -755,8 +755,8 @@ class Question extends React.Component {
                                             }
                                         </div>
                                         {!question && <textarea type="text"
-                                                                name={`question_text_${count_question + 1}`}
-                                                                id={`question_text_${count_question + 1}`}
+                                                                name="question_text_0"
+                                                                id="question_text_0"
                                                                 autoComplete="given-name"
                                                                 className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                                                 value={this.state.inputTextOfQuestion.text}
@@ -842,7 +842,7 @@ class Question extends React.Component {
                         }
                     </div>
                     <div className="px-4 py-3 bg-gray-50 sm:px-6 flex-row-reverse ">
-                        {question && <a href={`/polls/${poll['id']}/update`}>
+                        {question && <a href={`/polls/${poll['id']}/edit`}>
                                 <button type="button"
                                         className="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                     Отмена

@@ -17,7 +17,7 @@
                         @endif
 
                         @if (auth()->user()->isAdmin())
-                            <a href="{{ route('items-tree') }}" class="nav-tab {{ $currentRouteName === 'items-tree' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>
+                            <a href="{{ route('users.governance') }}" class="nav-tab {{ $currentRouteName === 'users.governance' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>
                             <a href="{{ route('users.manage') }}" class="nav-tab {{ $currentRouteName === 'users.manage' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Пользователи</a>
                         @endif
                     </div>
@@ -94,23 +94,28 @@
                 <a href="#" class="nav-menu-link {{ $currentRouteName === 'items-tree' ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Головование и документы</a>
             @endif
             @if (auth() && auth()->user()->canVote())
-            <div class="flex flex-col pl-5">
-                <a href="{{ route('items.index') }}" class="nav-tab {{ in_array($currentRouteName, ['items.index', 'items.show']) ? 'nav-tab-current' : 'nav-tab-not-current'}}" hidden>Каталог товаров и услуг ТСН "КП Березка"</a>
-            </div>
-            <div class="flex flex-col pl-5">
-                <a href="{{ route('polls.index') }}" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
-            </div>
-
-            <div class="flex flex-col pl-5 w-full">
-                {!! Form::open(['route' => ['logout'], 'method' => 'POST']) !!}
-                    <input name="uri_poll" value="/login" type="hidden"/>
-                    <a href="route('logout')"
-                       onclick="event.preventDefault();
-                        this.closest('form').submit();" class="nav-tab nav-tab-not-current">
-                        {{ __('Выйти') }}
-                    </a>
-                {!! Form::close() !!}
-            </div>
+                <div class="flex flex-col pl-5">
+                    <a href="{{ route('items.index') }}" class="nav-tab {{ in_array($currentRouteName, ['items.index', 'items.show']) ? 'nav-tab-current' : 'nav-tab-not-current'}}" hidden>Каталог товаров и услуг ТСН "КП Березка"</a>
+                </div>
+                <div class="flex flex-col pl-5">
+                    <a href="{{ route('polls.index') }}" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
+                </div>
+                <div class="flex flex-col pl-5">
+                    <a href="{{ route('users.governance') }}" class="nav-tab {{ $currentRouteName === 'users.governance' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>
+                </div>
+                <div class="flex flex-col pl-5">
+                    <a href="{{ route('users.manage') }}" class="nav-tab {{ $currentRouteName === 'users.manage' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Пользователи</a>
+                </div>
+                <div class="flex flex-col pl-5 w-full">
+                    {!! Form::open(['route' => ['logout'], 'method' => 'POST']) !!}
+                        <input name="uri_poll" value="/login" type="hidden"/>
+                        <a href="route('logout')"
+                           onclick="event.preventDefault();
+                            this.closest('form').submit();" class="nav-tab nav-tab-not-current">
+                            {{ __('Выйти') }}
+                        </a>
+                    {!! Form::close() !!}
+                </div>
             @endif
         </div>
 

@@ -26,6 +26,9 @@
                                                                         Электронный ящик
                                                                 </th>
                                                                 <th scope="col" class="relative px-6 py-3 text-center">
+                                                                        Должность
+                                                                </th>
+                                                                <th scope="col" class="relative px-6 py-3 text-center">
                                                                         Права
                                                                 </th>
                                                                 <th scope="col" class="relative px-6 py-3 text-center" colspan="2">
@@ -51,24 +54,38 @@
                                                                                 {{ $user->email }}
                                                                         </td>
                                                                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                                                                {{ $user->permissions }}
+                                                                                {{ $user->position() }}
                                                                         </td>
                                                                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                                                                <a href="#" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
+                                                                                {{ $user->isAdmin() ? 'Администратор': '' }} @if ($user->isAdmin()) <br /> @endif
+                                                                                {{ $user->isVote() ? 'Допущен к голосованию': '' }} @if ($user->isVote()) <br /> @endif
+                                                                                {{ $user->isGovernance() ? 'Член правления': '' }} @if ($user->isGovernance()) <br /> @endif
+                                                                                {{ $user->isManageItems() ? 'Модератор': '' }} @if ($user->isManageItems()) <br /> @endif
+                                                                                {{ $user->isAccess() ? 'Допущен к сайту': '' }} @if ($user->isAccess()) <br /> @endif
                                                                         </td>
-                                                                        @if (auth()->user()->canManageItems())
-                                                                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                                                                        <form method="POST" action="#">
-                                                                                                @csrf
-                                                                                                <input name="del_poll" value="#" type="hidden"/>
-                                                                                                <a href="#"
-                                                                                                   onclick="event.preventDefault();
-                                                    this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
-                                                                                                        {{ __('Удалить') }}
-                                                                                                </a>
-                                                                                        </form>
-                                                                                </td>
-                                                                        @endif
+                                                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                                                                <form method="POST" action="{{route('user.update')}}">
+                                                                                        @csrf
+                                                                                        <input name="user_update" value="{{$user->id}}" type="hidden"/>
+                                                                                        <a href="{{route('user.update')}}"
+                                                                                           onclick="event.preventDefault();
+                                                                                                this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
+                                                                                                {{ __('Редактировать') }}
+                                                                                        </a>
+                                                                                </form>
+                                                                        </td>
+
+                                                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                                                                <form method="POST" action="{{route('users.delete')}}">
+                                                                                        @csrf
+                                                                                        <input name="user_del" value="{{$user->id}}" type="hidden"/>
+                                                                                        <a href="{{route('users.delete', ['user' => $user])}}"
+                                                                                           onclick="event.preventDefault();
+                                            this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
+                                                                                                {{ __('Удалить') }}
+                                                                                        </a>
+                                                                                </form>
+                                                                        </td>
                                                                 </tr>
                                                         @endforeach
                                                         </tbody>
@@ -96,28 +113,43 @@
                                                         @foreach($users as $user)
                                                                 <tr class="bg-white bg-gray-100 border-b border-gray-400">
                                                                         <td>
-                                                                                <div class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-center">
+                                                                                <div class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-center bg-gray-200">
                                                                                         {{ $user->name }}
                                                                                 </div>
-                                                                                <div class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-center">
+                                                                                <div class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
                                                                                         {{ $user->phone }}
                                                                                 </div>
-                                                                                <div class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-center">
+                                                                                <div class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right bg-gray-200">
                                                                                         {{ $user->email }}
                                                                                 </div>
+                                                                                <div class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
+                                                                                        {{ $user->position() }}
+                                                                                </div>
                                                                                 <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
-                                                                                        {{ $user->permission }}
+                                                                                        {{ $user->isAdmin() ? 'Администратор': '' }} @if ($user->isAdmin()) <br /> @endif
+                                                                                        {{ $user->isVote() ? 'Допущен к голосованию': '' }} @if ($user->isVote()) <br /> @endif
+                                                                                        {{ $user->isGovernance() ? 'Член правления': '' }} @if ($user->isGovernance()) <br /> @endif
+                                                                                        {{ $user->isManageItems() ? 'Модератор': '' }} @if ($user->isManageItems()) <br /> @endif
+                                                                                        {{ $user->isAccess() ? 'Допущен к сайту': '' }} @if ($user->isAccess()) <br /> @endif
                                                                                 </div>
                                                                                 <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
-                                                                                </div>
-                                                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                                        <form method="POST" action="#">
+                                                                                        <form method="POST" action="{{route('user.update')}}">
                                                                                                 @csrf
-                                                                                                <input name="del_poll" value="#" type="hidden"/>
-                                                                                                <a href="#"
+                                                                                                <input name="user_update" value="{{$user->id}}" type="hidden"/>
+                                                                                                <a href="{{route('user.update')}}"
                                                                                                    onclick="event.preventDefault();
-                                                    this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
+                                                                                                this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
+                                                                                                        {{ __('Редактировать') }}
+                                                                                                </a>
+                                                                                        </form>
+                                                                                </div>
+                                                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium ">
+                                                                                        <form method="POST" action="{{route('users.delete')}}">
+                                                                                                @csrf
+                                                                                                <input name="user_del" value="{{$user->id}}" type="hidden"/>
+                                                                                                <a href="{{route('users.delete', ['user' => $user])}}"
+                                                                                                   onclick="event.preventDefault();
+                                            this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
                                                                                                         {{ __('Удалить') }}
                                                                                                 </a>
                                                                                         </form>
@@ -134,9 +166,9 @@
 
                 <div class="inline-flex flex-row w-full place-content-between">
                         <div class="px-4 py-3 bg-gray-50  sm:px-6">
-                                <button type="submit" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 submit-button">
+                                <a href="{{route('users.add')}}"><button type="submit" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 submit-button">
                                         Добавить нового пользователя
-                                </button>
+                                        </button></a>
                         </div>
                         <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
                                 <a href="/polls"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >

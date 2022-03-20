@@ -29,6 +29,28 @@ class Question extends Model
         return $this->hasMany(QuestionFile::class);
     }
 
+    public function countVotesByQuestion($question_id)
+    {
+        $vote = Vote::where('question_id', '=', $question_id)->count();
+        return $vote;
+    }
+
+    public function countVotesByQuestionPercent($question_id)
+    {
+        $question = Question::find($question_id);
+        $summ = $question->countQuestionsAll($question);
+        $x = 0;
+        foreach ($question->answers() as $answer){
+            $cnt = $answer->countVotes($answer->answer_id);
+            if ($summ != 0) {
+                $x = $x + round((100 * $cnt) / $summ, 2);
+            }else{
+                $x = 0;
+            }
+        }
+        return $x;
+    }
+
     public function countQuestionsAll(Question $question)
     {
         $summ = 0;

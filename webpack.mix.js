@@ -15,6 +15,7 @@ const tailwindcss = require('tailwindcss');
 mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/react/ManageItems/index.js', 'public/js/ManageItems.js')
     .js('resources/js/react/AddQuestionsToPoll/index.js', 'public/js/AddQuestionsToPoll.js')
+    .js('resources/js/react/AddProtocolToPoll/index.js', 'public/js/AddProtocolToPoll.js')
     .react()
     .sass('resources/sass/app.scss', 'public/css')
     .copy('node_modules/antd/dist/antd.css', 'public/css')

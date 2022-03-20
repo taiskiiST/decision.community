@@ -6,6 +6,7 @@ use App\Http\Controllers\ItemsTreeController;
 use App\Http\Controllers\PollsController;
 use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\PositionsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,8 +34,10 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::get('/polls/{poll_id?}/index/{id_question?}', [PollsController::class, 'index'])->name('polls.index');
     Route::post('/polls/{poll}/submit', [PollsController::class, 'submit'])->name('poll.submit');
     Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('poll.results');
-    Route::get('/polls/create', [PollsController::class, 'create'])->name('poll.create');
-    Route::get('/polls/{poll}/update', [PollsController::class, 'update'])->name('poll.update');
+    Route::get('/polls/create/{governance}', [PollsController::class, 'create'])->name('poll.create');
+    Route::get('/polls/{poll}/edit/{error?}', [PollsController::class, 'edit'])->name('poll.edit');
+    Route::post('/polls/{poll}/addProtocol', [PollsController::class, 'addProtocol'])->name('poll.addProtocol');
+    Route::get('/polls/{poll}/delProtocol', [PollsController::class, 'delProtocol'])->name('poll.delProtocol');
     Route::post('/polls/delete/{poll}', [PollsController::class, 'delete'])->name('poll.delete');
     Route::post('/polls/store', [PollsController::class, 'store'])->name('poll.store');
     Route::post('/polls/{poll}/end', [PollsController::class, 'endVote'])->name('poll.endVote');
@@ -50,7 +53,18 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     //Route::get('/polls/{poll}/questions/add', [QuestionsController::class, 'add'])->name('poll.questions.add');
 
     Route::get('/manage/users', [UsersController::class, 'index'])->name('users.manage');
-    //Route::get('/governance', [PollsController::class, 'addQuestion'])->name('poll.addQuestion');
+    Route::get('/manage/add', [UsersController::class, 'addOrUpdateForm'])->name('users.add');
+    Route::post('/manage/update', [UsersController::class, 'addOrUpdateForm'])->name('user.update');
+    Route::post('/manage/delete', [UsersController::class, 'delete'])->name('users.delete');
+    Route::post('/manage/addOrUpdate', [UsersController::class, 'addOrUpdate'])->name('users.addOrUpdate');
+    Route::get('/governance', [UsersController::class, 'governance'])->name('users.governance');
+    Route::get('/governance/manage', [UsersController::class, 'governanceManage'])->name('users.governance.manage');
+    Route::get('/position/manage', [PositionsController::class, 'positionManage'])->name('position.manage');
+    Route::post('/position/update', [PositionsController::class, 'positionUpdate'])->name('position.update');
+    Route::post('/position/update/submit', [PositionsController::class, 'positionUpdateSubmit'])->name('position.update.submit');
+    Route::post('/position/add', [PositionsController::class, 'positionAdd'])->name('position.add');
+    Route::post('/position/add/submit', [PositionsController::class, 'positionAddSubmit'])->name('position.add.submit');
+    Route::post('/position/delete', [PositionsController::class, 'positionDelete'])->name('position.delete');
 
     Route::resource('items', ItemsController::class);
     Route::get('/items/{item}/download', [ItemsController::class, 'download'])->name('items.download');

@@ -16,6 +16,10 @@ class Poll extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'is_governance'
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -81,6 +85,14 @@ class Poll extends Model
     public function voteFinished () : bool
     {
         if ($this->finished)
+            return true;
+        else
+            return false;
+    }
+
+    public function protocolDone () : bool
+    {
+        if ($this->protocol)
             return true;
         else
             return false;

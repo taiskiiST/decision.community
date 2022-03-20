@@ -200,7 +200,7 @@ class QuestionsController extends Controller
             Storage::disk('public')->delete($file->path_to_file);
         }
         $question->delete();
-        return redirect()->route('poll.update', [
+        return redirect()->route('poll.edit', [
             'poll' => $poll
         ]);
     }

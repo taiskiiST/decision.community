@@ -34,6 +34,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'phone',
+        'address',
+        'position_id',
         'email',
         'password',
         'permissions',
@@ -63,6 +65,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
+
         return in_array(Permission::ADMIN, explode(',', $this->permissions));
     }
 
@@ -73,10 +76,22 @@ class User extends Authenticatable
     {
         return $this->isAdmin() || in_array(Permission::MANAGE_ITEMS, explode(',', $this->permissions));
     }
+    public function isManageItems(): bool
+    {
+        return in_array(Permission::MANAGE_ITEMS, explode(',', $this->permissions));
+    }
+    public function isAccess(): bool
+    {
+        return in_array(Permission::ACCESS, explode(',', $this->permissions));
+    }
     /**
      * @return bool
      */
     public function isGovernance(): bool
+    {
+        return in_array(Permission::GOVERNANCE, explode(',', $this->permissions));
+    }
+    public function canGovernance(): bool
     {
         return $this->isAdmin() || in_array(Permission::GOVERNANCE, explode(',', $this->permissions));
     }
@@ -87,6 +102,31 @@ class User extends Authenticatable
     {
         return $this->isAdmin() || in_array(Permission::VOTE, explode(',', $this->permissions));
     }
+    public function isVote(): bool
+    {
+        return in_array(Permission::VOTE, explode(',', $this->permissions));
+    }
+    public function isHavePermission($permission): bool
+    {
+        return in_array($permission, explode(',', $this->permissions));
+    }
+
+    public function position()
+    {
+        if (isset($this->hasOne(Position::class, 'id', 'position_id')->get()[0])) {
+            return $this->hasOne(Position::class, 'id', 'position_id')->get()[0]->position;
+        }else{
+            return '';
+        }
+
+    }
+
+    public function positions()
+    {
+        return Position::all();
+    }
+
+
     /**
      * @param int|null $parentId
      * @param bool|null $includeParent

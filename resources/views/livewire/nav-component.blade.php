@@ -100,12 +100,14 @@
                 <div class="flex flex-col pl-5">
                     <a href="{{ route('polls.index') }}" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
                 </div>
-                <div class="flex flex-col pl-5">
-                    <a href="{{ route('users.governance') }}" class="nav-tab {{ $currentRouteName === 'users.governance' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>
-                </div>
-                <div class="flex flex-col pl-5">
-                    <a href="{{ route('users.manage') }}" class="nav-tab {{ $currentRouteName === 'users.manage' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Пользователи</a>
-                </div>
+                @if (auth()->user()->isAdmin())
+                    <div class="flex flex-col pl-5">
+                        <a href="{{ route('users.governance') }}" class="nav-tab {{ $currentRouteName === 'users.governance' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>
+                    </div>
+                    <div class="flex flex-col pl-5">
+                        <a href="{{ route('users.manage') }}" class="nav-tab {{ $currentRouteName === 'users.manage' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Пользователи</a>
+                    </div>
+                @endif
                 <div class="flex flex-col pl-5 w-full">
                     {!! Form::open(['route' => ['logout'], 'method' => 'POST']) !!}
                         <input name="uri_poll" value="/login" type="hidden"/>

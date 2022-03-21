@@ -26,7 +26,7 @@
                     </form>
                 </div>
             </div>
-            <form method="POST" action="{{route('users.governance.manage')}}">
+            <form method="GET" action="{{route('users.governance.manage')}}">
                 @csrf
                 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 p-5">
                     @foreach($positions as $position)

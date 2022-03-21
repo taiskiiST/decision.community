@@ -28,13 +28,16 @@ if (app()->isLocal()) {
     Route::get('/dev', [DevController::class, 'index']);
 }
 
+Route::get('/polls/{poll}/display/public', [PollsController::class, 'display'])->name('poll.display.public');
+Route::get('/polls/{poll}/results/public', [PollsController::class, 'results'])->name('poll.results.public');
+Route::post('/polls/{poll}/submit/public', [PollsController::class, 'submit'])->name('poll.submit.public');
 
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
     Route::get('/polls/{poll_id?}/index/{id_question?}', [PollsController::class, 'index'])->name('polls.index');
     Route::post('/polls/{poll}/submit', [PollsController::class, 'submit'])->name('poll.submit');
     Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('poll.results');
-    Route::get('/polls/create/{governance}', [PollsController::class, 'create'])->name('poll.create');
+    Route::post('/polls/create/{type_of_poll}', [PollsController::class, 'create'])->name('poll.create');
     Route::get('/polls/{poll}/edit/{error?}', [PollsController::class, 'edit'])->name('poll.edit');
     Route::post('/polls/{poll}/addProtocol', [PollsController::class, 'addProtocol'])->name('poll.addProtocol');
     Route::get('/polls/{poll}/delProtocol', [PollsController::class, 'delProtocol'])->name('poll.delProtocol');

@@ -8,7 +8,7 @@
         <div class="grid">
             <div class="mt-5 md:mt-0 md:col-span-2">
                 {!! Form::open(['route' => ['poll.store', 'method' => 'POST']]) !!}
-                <input type="text" name="is_governance" value={{$is_governance}} class="hidden">
+                <input type="text" name="type_of_poll" value={{$type_of_poll}} class="hidden">
                     <div class="col-span-1">
                         <div class="px-4 sm:px-0">
                             <h3 class="text-lg font-medium leading-6 text-gray-900 mt-6 ml-6">Создание нового опроса</h3>

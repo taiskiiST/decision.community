@@ -18,9 +18,34 @@ class Poll extends Model
     protected $guarded = [];
     protected $fillable = [
         'name',
-        'is_governance'
+        'finished',
+        'type_of_poll'
     ];
 
+    public function isPublicMeetingTSN(): bool
+    {
+        return ($this->getTypeOfPoll() == TypeOfPoll::PUBLIC_MEETING_TSN) ? true : false;
+    }
+
+    public function isGovernanceMeetingTSN(): bool
+    {
+        return ($this->getTypeOfPoll() == TypeOfPoll::GOVERNANCE_MEETING_TSN) ? true : false;
+    }
+
+    public function isVoteForTSN(): bool
+    {
+        return ($this->getTypeOfPoll() == TypeOfPoll::VOTE_FOR_TSN) ? true : false;
+    }
+
+    public function isPublicVote(): bool
+    {
+        return ($this->getTypeOfPoll() == TypeOfPoll::PUBLIC_VOTE) ? true : false;
+    }
+
+    public function getTypeOfPoll()
+    {
+        return $this->hasOne(TypeOfPoll::class, 'id', 'type_of_poll')->get()[0]->type_of_poll;
+    }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

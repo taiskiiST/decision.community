@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnonymousUser;
+use App\Models\AnonymousVote;
 use App\Models\Answer;
 use App\Models\Item;
 use App\Models\Poll;
 use App\Models\Question;
+use App\Models\TypeOfPoll;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -35,7 +38,25 @@ class PollsController extends Controller
 
     public function create(Request $request)
     {
-        return view('polls.create',['is_governance' => $request->governance]);
+        switch ($request->type_of_poll ){
+            case TypeOfPoll::PUBLIC_MEETING_TSN: {
+                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::PUBLIC_MEETING_TSN)->get();
+                break;
+            }
+            case TypeOfPoll::GOVERNANCE_MEETING_TSN: {
+                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::GOVERNANCE_MEETING_TSN)->get();
+                break;
+            }
+            case TypeOfPoll::VOTE_FOR_TSN: {
+                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::VOTE_FOR_TSN)->get();
+                break;
+            }
+            case TypeOfPoll::PUBLIC_VOTE: {
+                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::PUBLIC_VOTE)->get();
+                break;
+            }
+        }
+        return view('polls.create',['type_of_poll' => $type_of_poll[0]->id]);
     }
 
     public function delProtocol(Request $request){
@@ -119,19 +140,14 @@ class PollsController extends Controller
      */
     public function store(Request $request)
     {
-        $rules["is_governance"] = 'required';
+        $rules["type_of_poll"] = 'required';
         $rules["poll-name"] = 'required';
         $parameters = $this->validate($request, $rules);
 
-        if($parameters['is_governance'] == 0 ) {
-            $parameters['is_governance'] = false;
-        }else{
-            $parameters['is_governance'] = true;
-        }
 
         $poll = Poll::create([
             'name' => $parameters['poll-name'],
-            'is_governance' => $parameters['is_governance']
+            'type_of_poll' => $parameters['type_of_poll']
         ]);
 
         return redirect()->route('poll.questions.create',['poll' => $poll->id]);
@@ -520,32 +536,72 @@ class PollsController extends Controller
      */
     public function submit(Request $request, Poll $poll)
     {
+        $anonymous = false;
         $user = auth()->user();
+
+        if(!isset($user)){
+            $user = AnonymousUser::create();
+            $anonymous = true;
+        }
 
         foreach ($poll->questions as $question) {
             $rules["question_{$question->id}"] = 'required|exists:answers,id';
         }
         $parameters = $this->validate($request, $rules);
-
-        foreach ($poll->questions as $question) {
-            if (! Vote::where('question_id','=',$question->id)
-                ->where('user_id','=',$user->id)->count() ) {
-                $answerId = $parameters["question_{$question->id}"];
-                $answer = Answer::find($answerId);
-                if (!$answer) {
-                    continue;
+        if(!$anonymous && !$poll->isPublicVote()) {
+            foreach ($poll->questions as $question) {
+                if (!Vote::where('question_id', '=', $question->id)
+                    ->where('user_id', '=', $user->id)->count()) {
+                    $answerId = $parameters["question_{$question->id}"];
+                    $answer = Answer::find($answerId);
+                    if (!$answer) {
+                        continue;
+                    }
+                    $user->vote($question, $answer);
+                } else {
+                    return redirect()->route('poll.display', [$poll->id])
+                        ->withErrors("Вы уже проголосовали по данному вопросу!");
                 }
-                $user->vote($question, $answer);
-            }else{
-                return redirect()->route('poll.display',[$poll->id])
-                    ->withErrors("Вы уже проголосовали по данному вопросу!");
             }
+            return view('polls.results', [
+                'poll' => $poll,
+
+            ]);
+        }else{
+            if($anonymous) {
+                foreach ($poll->questions as $question) {
+                    $answerId = $parameters["question_{$question->id}"];
+                    $answer = Answer::find($answerId);
+                    if (!$answer) {
+                        continue;
+                    }
+                    $user->vote($question, $answer);
+                }
+            }else{
+                foreach ($poll->questions as $question) {
+                    if (!Vote::where('question_id', '=', $question->id)
+                        ->where('user_id', '=', $user->id)->count()) {
+                        $answerId = $parameters["question_{$question->id}"];
+                        $answer = Answer::find($answerId);
+                        if (!$answer) {
+                            continue;
+                        }
+                        $user->vote($question, $answer);
+                        $user_anonymous = AnonymousUser::create();
+                        $user_anonymous->vote($question, $answer);
+                    } else {
+                        return redirect()->route('poll.display', [$poll->id])
+                            ->withErrors("Вы уже проголосовали по данному вопросу!");
+                    }
+                }
+            }
+            return redirect()->route('poll.results.public', [
+                'poll' => $poll,
+
+            ]);
         }
 
-        return view('polls.results', [
-            'poll' => $poll,
 
-        ]);
     }
 
     /**

@@ -48,10 +48,18 @@
                                 </td>
 
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                    {{$answer->countVotes($answer->id)}}
+                                    @if(!$poll->isPublicVote())
+                                        {{$answer->countVotes($answer->id)}}
+                                    @else
+                                        {{$answer->countVotesAnonymous($answer->id)}}
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                   {{ $answer->percentOfQuestions($question->id, $answer->id) }}%
+                                    @if(!$poll->isPublicVote())
+                                        {{$answer->percentOfQuestions($question->id, $answer->id) }}
+                                    @else
+                                        {{$answer->percentOfQuestionsAnonymous($question->id, $answer->id) }}
+                                    @endif%
                                 </td>
                             </tr>
                         @endforeach
@@ -61,10 +69,18 @@
                             </td>
 
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold">
-                                {{$question->countVotesByQuestion($question->id)}}
+                                @if(!$poll->isPublicVote())
+                                    {{$question->countVotesByQuestion($question->id)}}
+                                @else
+                                    {{$question->countVotesByQuestionAnonymous($question->id)}}
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold">
-                                {{$question->countVotesByQuestion($question->id)? 100 : 0 }}%
+                                @if(!$poll->isPublicVote())
+                                    {{$question->countVotesByQuestion($question->id)? 100 : 0 }}%
+                                @else
+                                    {{$question->countVotesByQuestionAnonymous($question->id)? 100 : 0 }}%
+                                @endif
                             </td>
                         </tr>
                         </tbody>
@@ -106,12 +122,20 @@
                                 </td>
                                 <td>
                                     <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200">
-                                        {{$answer->countVotes($answer->id)}}
+                                        @if(!$poll->isPublicVote())
+                                            {{$answer->countVotes($answer->id)}}
+                                        @else
+                                            {{$answer->countVotesAnonymous($answer->id)}}
+                                        @endif
                                     </div>
                                 </td>
                                 <td>
                                     <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200">
-                                        {{ $answer->percentOfQuestions($question->id, $answer->id) }}%
+                                        @if(!$poll->isPublicVote())
+                                            {{$answer->percentOfQuestions($question->id, $answer->id) }}
+                                        @else
+                                            {{$answer->percentOfQuestionsAnonymous($question->id, $answer->id) }}
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -124,12 +148,20 @@
                                 </td>
                                 <td>
                                     <div class="px-1 py-4 whitespace-nowrap font-bold text-center text-sm font-medium bg-gray-200">
-                                        {{$question->countVotesByQuestion($question->id)}}
+                                        @if(!$poll->isPublicVote())
+                                            {{$question->countVotesByQuestion($question->id)}}
+                                        @else
+                                            {{$question->countVotesByQuestionAnonymous($question->id)}}
+                                        @endif
                                     </div>
                                 </td>
                                 <td>
                                     <div class="px-1 py-4 whitespace-nowrap font-bold text-center text-sm font-medium bg-gray-200">
-                                        {{$question->countVotesByQuestion($question->id)? 100 : 0 }}%
+                                        @if(!$poll->isPublicVote())
+                                            {{$question->countVotesByQuestion($question->id)? 100 : 0 }}%
+                                        @else
+                                            {{$question->countVotesByQuestionAnonymous($question->id)? 100 : 0 }}%
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

@@ -16,7 +16,8 @@ class PollSeeder extends Seeder
     public function run()
     {
         $poll1 = Poll::create([
-            'name' => 'Основной вопрос'
+            'name' => 'Основной вопрос',
+            'type_of_poll' => 1
         ]);
 
         $question1 = $poll1->questions()->create([
@@ -51,7 +52,8 @@ class PollSeeder extends Seeder
         //////////////////////////////////////////////////////////////////////////
 
         $poll2 = Poll::create([
-            'name' => 'Повестка дня 1 Съезда'
+            'name' => 'Повестка дня 1 Съезда',
+            'type_of_poll' => 1
         ]);
 //==============================================================
         $question3 = $poll2->questions()->create([

@@ -46,9 +46,13 @@
         </div>
     @endif
 
-    @if (auth() && auth()->user()->canVote())
-        @if ((!$poll->finished && !$poll->authUserVote() && !$poll->is_governance || $displayMode) || $poll->is_governance && auth()->user()->isGovernance() )
-            {!! Form::open(['route' => ['poll.submit', ['poll' => $poll] ], 'method' => 'POST', 'onsubmit' => "return confirm('Вы уверены? Ответы нельзя будет изменить впоследствии.');"]) !!}
+    @if (auth()->user() ? auth() && auth()->user()->canVote() : $poll->isPublicVote())
+        @if ($poll->isPublicVote() || (!$poll->finished && !$poll->authUserVote() && !$poll->isGovernanceMeetingTSN() || $displayMode) || $poll->isGovernanceMeetingTSN() && auth()->user()->isGovernance() )
+            @if (!$poll->isPublicVote())
+                {!! Form::open(['route' => ['poll.submit', ['poll' => $poll] ], 'method' => 'POST', 'onsubmit' => "return confirm('Вы уверены? Ответы нельзя будет изменить впоследствии.');"]) !!}
+            @else
+                {!! Form::open(['route' => ['poll.submit.public', ['poll' => $poll] ], 'method' => 'POST', 'onsubmit' => "return confirm('Вы уверены? Ответы нельзя будет изменить впоследствии.');"]) !!}
+            @endif
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
                 <div class="text-center"><span style="font-size: x-large;"><b>{{$poll->name}}</b></span></div>
@@ -155,7 +159,7 @@
             </div>
             {!! Form::close() !!}
         @else
-            @if ($poll->is_governance && !auth()->user()->isGovernance())
+            @if ($poll->isGovernanceMeetingTSN() && !auth()->user()->isGovernance())
                 <div class="bg-gray-50">
                     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
                         <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">

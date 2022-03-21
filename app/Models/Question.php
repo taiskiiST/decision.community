@@ -34,6 +34,11 @@ class Question extends Model
         $vote = Vote::where('question_id', '=', $question_id)->count();
         return $vote;
     }
+    public function countVotesByQuestionAnonymous($question_id)
+    {
+        $vote = AnonymousVote::where('question_id', '=', $question_id)->count();
+        return $vote;
+    }
 
     public function countVotesByQuestionPercent($question_id)
     {
@@ -62,4 +67,17 @@ class Question extends Model
 
         return $summ;
     }
+
+    public function countQuestionsAllAnonymous(Question $question)
+    {
+        $summ = 0;
+        $answers = $question->answers;
+        foreach($answers as $answer){
+            $votes[$answer->id] = AnonymousVote::where('answer_id', '=', $answer->id)->count();
+            $summ += $votes[$answer->id];
+        }
+
+        return $summ;
+    }
+
 }

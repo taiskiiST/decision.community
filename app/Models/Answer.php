@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property mixed id
@@ -17,9 +18,19 @@ class Answer extends Model
     {
         return $this->hasMany(Vote::class);
     }
+    public function votesAnonymous(): HasMany
+    {
+        return $this->hasMany(AnonymousVote::class);
+    }
+
     public function countVotes($answer_id)
     {
         $vote = Vote::where('answer_id', '=', $answer_id)->count();
+        return $vote;
+    }
+    public function countVotesAnonymous($answer_id)
+    {
+        $vote = AnonymousVote::where('answer_id', '=', $answer_id)->count();
         return $vote;
     }
 
@@ -35,6 +46,20 @@ class Answer extends Model
         $answer = Answer::find($answer_id);
         $summ = $question->countQuestionsAll($question);
         $cnt = $answer->countVotes($answer_id);
+        if ($summ != 0) {
+            $x = round((100 * $cnt) / $summ, 2);
+        }else{
+            $x = 0;
+        }
+        return $x;
+    }
+
+    public function percentOfQuestionsAnonymous($question_id,$answer_id)
+    {
+        $question = Question::find($question_id);
+        $answer = Answer::find($answer_id);
+        $summ = $question->countQuestionsAllAnonymous($question);
+        $cnt = $answer->countVotesAnonymous($answer_id);
         if ($summ != 0) {
             $x = round((100 * $cnt) / $summ, 2);
         }else{

@@ -40,7 +40,10 @@
                                             {{ $loop->index + 1 }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            <div class="text-xs font-thin font-bold">@if ($poll->is_governance) Протокол Правления ТСН  @else Протокол общего собрания членов ТСН @endif</div>
+                                            @if ($poll->isPublicMeetingTSN()) <div class="text-xs font-bold">Опрос для Общего Собрания ТСН</div>@endif
+                                            @if ($poll->isGovernanceMeetingTSN()) <div class="text-xs font-bold">Опрос для Правления ТСН</div>@endif
+                                            @if ($poll->isVoteForTSN()) <div class="text-xs font-bold">Опрос для Членов ТСН</div>@endif
+                                            @if ($poll->isPublicVote()) <div class="text-xs font-bold">Публичный опрос</div>@endif
                                             <div>{{ $poll->name }}</div>
                                         </td>
                                         @if (! $poll->voteFinished() )
@@ -53,13 +56,23 @@
                                             </td>
                                         @endif
                                         @if (! $poll->authUserVote() && auth()->user()->canVote())
-                                            @if ($poll->is_governance && !auth()->user()->isGovernance())
+                                            @if ($poll->isGovernanceMeetingTSN() && !auth()->user()->isGovernance())
                                                 <td class="px-6 py-4 whitespace-wrap text-right text-sm font-medium">
                                                     Доступно только для членов Правления
                                                 </td>
                                             @else
                                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <a href="{{$poll->voteFinished() ? '#' : route('poll.display',[$poll->id])  }}" class="@if ($poll->voteFinished() ) disabled @else text-indigo-600 hover:text-indigo-900 @endif">Голосовать</a>
+                                                    @if($poll->voteFinished())
+                                                        <a href="#" class="disabled">Голосовать</a>
+                                                    @else
+                                                        <a href="{{$poll->isPublicVote()
+                                                                ? route('poll.display.public',[$poll->id])
+                                                                : route('poll.display',[$poll->id])
+                                                           }}" class="text-indigo-600 hover:text-indigo-900">Голосовать</a>
+                                                    @endif
+
+
+
                                                 </td>
                                             @endif
                                         @else
@@ -85,7 +98,10 @@
                                         </td>
                                         @endif
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="{{route('poll.results',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
+                                            <a href="{{$poll->isPublicVote()
+                                                                ? route('poll.results.public',[$poll->id])
+                                                                : route('poll.results',[$poll->id])
+                                                           }}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
                                         </td>
                                         @if (auth()->user()->canManageItems())
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -132,8 +148,11 @@
                                             {{ $loop->index +1 }}
                                         </div>
                                         <div class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-center">
-                                            <div>@if ($poll->is_governance) Протокол Правления ТСН  @else Протокол общего собрания членов ТСН @endif</div>
-                                            <div>{{ $poll->name }}</div>
+                                            @if ($poll->isPublicMeetingTSN()) <div>Опрос для Общего Собрания ТСН</div>@endif
+                                            @if ($poll->isGovernanceMeetingTSN()) <div>Опрос для Правления ТСН</div>@endif
+                                            @if ($poll->isVoteForTSN()) <div>Опрос для Членов ТСН</div>@endif
+                                            @if ($poll->isPublicVote()) <div>Публичный опрос</div>@endif
+                                            <div>{{ $poll->name }} - {{ $poll->type_of_poll }}</div>
                                         </div>
                                         @if (! $poll->voteFinished() )
                                             <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-green-600 bg-gray-200">
@@ -147,7 +166,7 @@
 
 
                                         @if (! $poll->authUserVote() && auth()->user()->canVote())
-                                            @if ($poll->is_governance && !auth()->user()->isGovernance())
+                                            @if ($poll->isGovernanceMeetingTSN() && !auth()->user()->isGovernance())
                                                 <div class="px-6 py-4 whitespace-wrap text-right text-sm font-medium">
                                                     Доступно только для членов Правления
                                                 </div>
@@ -202,13 +221,23 @@
         @if (auth()->user()->canManageItems())
             <div class="xl:inline-flex">
                 <div>
-                    <a href="{{route('polls.create',['governance' => false])}}" class="w-80 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Создать новый Публичный опрос
+                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::PUBLIC_MEETING_TSN ])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Создать опрос для Общего Собрания ТСН
                     </a>
                 </div>
                 <div>
-                    <a href="{{route('polls.create',['governance' => true])}}" class="w-80 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Создать новый опрос Правления
+                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::GOVERNANCE_MEETING_TSN])}}" class="w-80 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Создать опрос для Правления ТСН
+                    </a>
+                </div>
+                <div>
+                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::VOTE_FOR_TSN])}}" class="w-80 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Создать опрос для Членов ТСН
+                    </a>
+                </div>
+                <div>
+                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::PUBLIC_VOTE])}}" class="w-80 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Создать Публичный опрос
                     </a>
                 </div>
             </div>

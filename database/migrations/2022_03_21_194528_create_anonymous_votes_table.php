@@ -20,7 +20,7 @@ class CreateAnonymousVotesTable extends Migration
             $table->foreignId('anonymous_user_id')->constrained('anonymous_users')->cascadeOnDelete();
             $table->timestamps();
 
-            $table->unique(['user_id', 'question_id']);
+            $table->unique(['anonymous_user_id', 'question_id']);
         });
     }
 

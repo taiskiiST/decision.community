@@ -192,21 +192,6 @@ class UsersController extends Controller
         $error = '';
         foreach ($array_count_values as $key => $count_value) {
             if ($count_value > 1){
-                /*$error = 'Пользователь ';
-                $user = User::find($key);
-                if (isset( $user ) ){
-                    $error .= $user->name;
-                }
-                $error .= ' не может занимать должность ';
-                $position = Position::find($count_value);
-                if (isset( $position ) ){
-                    $error .= $position->position;
-                }
-                $error .= ', т.к. он уже занимает должность ';
-                if (isset( $position ) && isset( $user ) && isset( $user->position_id ) ){
-                    $error .= Position::find(User::find($key)->position_id)->position;
-                }
-                $error .= '!';*/
                 $user = User::find($key);
                 if ( isset( $user->position_id ) ) {
                     $error = 'Пользователь ' . User::find($key)->name . ' не может занимать должность ' . Position::find($count_value)->position . ', т.к. он уже занимает должность ' . Position::find(User::find($key)->position_id)->position . '!';

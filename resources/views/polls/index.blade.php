@@ -144,15 +144,15 @@
                             @foreach($polls as $poll)
                                 <tr class="bg-white bg-gray-100 border-b border-gray-400">
                                     <td>
-                                        <div class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-center">
+                                        <div class="px-1 py-1whitespace-nowrap text-sm font-bold text-gray-900 text-center">
                                             {{ $loop->index +1 }}
                                         </div>
-                                        <div class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-center">
+                                        <div class="px-1 py-1 whitespace-wrap text-xs  font-bold text-gray-900 text-center">
                                             @if ($poll->isPublicMeetingTSN()) <div>Опрос для Общего Собрания ТСН</div>@endif
                                             @if ($poll->isGovernanceMeetingTSN()) <div>Опрос для Правления ТСН</div>@endif
                                             @if ($poll->isVoteForTSN()) <div>Опрос для Членов ТСН</div>@endif
                                             @if ($poll->isPublicVote()) <div>Публичный опрос</div>@endif
-                                            <div>{{ $poll->name }} - {{ $poll->type_of_poll }}</div>
+                                            <div class="text-sm font-medium ">{{ $poll->name }}</div>
                                         </div>
                                         @if (! $poll->voteFinished() )
                                             <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-green-600 bg-gray-200">
@@ -226,17 +226,17 @@
                     </a>
                 </div>
                 <div>
-                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::GOVERNANCE_MEETING_TSN])}}" class="w-80 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::GOVERNANCE_MEETING_TSN])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                         Создать опрос для Правления ТСН
                     </a>
                 </div>
                 <div>
-                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::VOTE_FOR_TSN])}}" class="w-80 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::VOTE_FOR_TSN])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                         Создать опрос для Членов ТСН
                     </a>
                 </div>
                 <div>
-                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::PUBLIC_VOTE])}}" class="w-80 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::PUBLIC_VOTE])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                         Создать Публичный опрос
                     </a>
                 </div>

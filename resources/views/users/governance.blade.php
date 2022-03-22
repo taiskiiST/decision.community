@@ -13,7 +13,7 @@
                 </div>
             @endif
             <div class="inline-flex flex-row w-full place-content-between">
-                <div class="lg:px-4 sm:px-0 py-3 bg-gray-50  sm:px-6">
+                <div class="lg:px-4 sm:px-0 py-3 sm:px-6">
                     <label class="px-12 py-4 block text-lg text-black font-semibold">Структура Правление ТСН</label>
                 </div>
                 <div class="lg:px-4 sm:px-0 py-7 sm:px-6 flex-row-reverse ">
@@ -35,13 +35,13 @@
                             @foreach($users as $user)
                                 @if ($user->position_id == $position->id) <label
                                         for={{$position->position}} class="block text-sm font-medium text-gray-700 text-wrap
-                                        text-center">{{$position->position}}</label>
+                                        text-center h-10">{{$position->position}}</label>
                                         <div class="hidden">{{$flag = true}}</div>
                                 @endif
                                 @if($loop->last && !$flag)
                                         <label
                                                 for="position" class="block text-sm font-medium text-gray-700 text-wrap
-                                        text-center">Должность {{$position->position}} не за кем ни закреплен</label>
+                                        text-center h-10">Должность {{$position->position}} не за кем ни закреплен</label>
                                 @endif
                             @endforeach
                             <select name="{{$position->id}}"

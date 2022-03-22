@@ -188,6 +188,7 @@ class PollsController extends Controller
                         'poll_id' => $poll->id,
                         'text' => $value
                     ]);
+                    $question_text_id = $question->id;
                 }else {
                     $question = $poll->questions()->updateOrInsert(
                         ['id' => $question_text_id, 'poll_id' => $poll->id],

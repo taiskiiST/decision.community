@@ -19,7 +19,8 @@ class Poll extends Model
     protected $fillable = [
         'name',
         'finished',
-        'type_of_poll'
+        'type_of_poll',
+        'protocol'
     ];
 
     public function isPublicMeetingTSN(): bool

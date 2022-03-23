@@ -24,7 +24,7 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     @foreach($poll->questions as $question)
-                    <label class="block text-lg text-black font-semibold mt-10 whitespace-wrap">{{$question->text}}</label>
+                    <label class="block text-lg text-black font-semibold mt-10 whitespace-wrap">{!!$question->text!!}</label>
                     <table class="min-w-full divide-y divide-gray-200 border-b-2 border-gray-400 ">
                         <thead class="bg-gray-50">
                         <tr>
@@ -96,7 +96,7 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     @foreach($poll->questions as $question)
-                    <label class="block text-lg text-black font-semibold mt-6 whitespace-wrap">{{$question->text}}</label>
+                    <label class="block text-lg text-black font-semibold mt-6 whitespace-wrap">{!!$question->text!!}</label>
                     <table class="min-w-full divide-y divide-gray-200 ">
                         <thead class="bg-gray-50">
                         <tr>

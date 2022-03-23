@@ -35,9 +35,19 @@ class Question extends React.Component {
                     // {guid: 'guid', text: 'Answer', isValidText: false}
                     {
                         answer_id: uuidv4(),
-                        text: '',
-                        isValidText: false
-                    }
+                        text: 'За',
+                        isValidText: true
+                    },
+                    {
+                        answer_id: uuidv4(),
+                        text: 'Против',
+                        isValidText: true
+                    },
+                    {
+                        answer_id: uuidv4(),
+                        text: 'Воздержался',
+                        isValidText: true
+                    },
                 ],
                 inputTextOfQuestion: {
                     text: '', isValid: false

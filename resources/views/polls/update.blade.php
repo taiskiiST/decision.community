@@ -62,7 +62,7 @@
                                         {{$loop->index + 1}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900">
-                                        {{ $question->text }}
+                                        {!! $question->text !!}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {{ $question->question_files()->count() }}
@@ -147,7 +147,7 @@
                                 <tr class="bg-white bg-gray-100 border-b border-gray-400">
                                     <td colspan=3>
                                         <div class="px-6 py-4 whitespace-wrap text-sm font-bold text-gray-900 text-center">
-                                            {{$loop->index + 1}}. {{ $question->text }}
+                                            {{$loop->index + 1}}. {!! $question->text !!}
                                         </div>
                                         <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-green-600 bg-gray-200">
                                             Количество файлов - {{ $question->question_files()->count() }}

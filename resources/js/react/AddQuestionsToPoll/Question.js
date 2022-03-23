@@ -532,8 +532,12 @@ class Question extends React.Component {
         if (!event.target.files[0]){
             return false
         }
+        console.log(event.target.files[0].type );
         switch (event.target.files[0].type) {
             case 'image/png':
+                type = 'img';
+                break;
+            case 'image/jpeg':
                 type = 'img';
                 break;
             case 'application/pdf':

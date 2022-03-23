@@ -177,6 +177,7 @@ class PollsController extends Controller
         }
         $parameters = $this->validate($request, $rules);
         $flag = false;
+        $is_update_file = false;
         $indexes_of_files = [];
         $indexes_of_answers = [];
         foreach ($parameters as $key => $value){
@@ -212,23 +213,27 @@ class PollsController extends Controller
 
                 if($request->hasFile($file_id) && $request->file($file_id)->isValid()) {
                     if($question->question_files()->where('id',$file_id)->count() > 0 ) {
-                        $question_new = $question->question_files()->updateOrInsert(
+                        Storage::disk('public')->delete($file->path_to_file);
+                        $file_new = $question->question_files()->updateOrInsert(
                             ['id' => $file_id, 'question_id' => $question->id],
                         [
                             'text_for_file' => $value,
                             'path_to_file' => $request->file($file_id)->store('storage/' . $poll->id . '/' . $question_text_id, 'public')
                         ])->get();
+                        $is_update_file = true;
                     }else{
-                        $question_new = $question->question_files()->create(
+                        $file_new = $question->question_files()->create(
                             [
                                 'text_for_file' => $value,
                                 'path_to_file' => $request->file($file_id)->store('storage/' . $poll->id . '/' . $question_text_id, 'public')
                             ]);
                     }
-                    if(isset($question_new[0])) {
-                        array_push($indexes_of_files, $question_new[0]->id);
-                    }else{
-                        array_push($indexes_of_files, $question_new->id);
+                    if(!$is_update_file) {
+                        if (isset($file_new[0])) {
+                            array_push($indexes_of_files, $file_new[0]->id);
+                        } else {
+                            array_push($indexes_of_files, $file_new->id);
+                        }
                     }
                 }
                 if($request->file($file_id)) {
@@ -257,6 +262,7 @@ class PollsController extends Controller
             }
 
         }
+        //dd($indexes_of_files);
         if(!$flag &&  $question->question_files()->count() > 0){
             foreach ($question->question_files()->get() as $file){
                 Storage::disk('public')->delete($file->path_to_file);
@@ -264,6 +270,7 @@ class PollsController extends Controller
             }
         }else {
             foreach ($question->question_files()->get() as $file) {
+                //dd($file->id);
                 if (!in_array($file->id, $indexes_of_files)) {
                     Storage::disk('public')->delete($file->path_to_file);
                     $file->delete();
@@ -618,6 +625,19 @@ class PollsController extends Controller
             'csrf_token' =>  csrf_token(),
             'file_protocol' => $poll->protocol ? $poll->protocol : '',
             'error' => $error
+        ]);
+
+        return view('polls.update', [
+            'poll' => $poll,
+        ]);
+    }
+
+    public function agenda(Poll $poll)
+    {
+        \JavaScript::put([
+            'poll' => $poll->id,
+            'csrf_token' =>  csrf_token(),
+            'file_protocol' => $poll->protocol ? $poll->protocol : '',
         ]);
 
         return view('polls.update', [

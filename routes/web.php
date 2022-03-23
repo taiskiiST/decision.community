@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('polls.index');
 });
 
 if (app()->isLocal()) {
@@ -31,6 +31,7 @@ if (app()->isLocal()) {
 Route::get('/polls/{poll}/display/public', [PollsController::class, 'display'])->name('poll.display.public');
 Route::get('/polls/{poll}/results/public', [PollsController::class, 'results'])->name('poll.results.public');
 Route::post('/polls/{poll}/submit/public', [PollsController::class, 'submit'])->name('poll.submit.public');
+Route::get('/polls/{poll}/agenda/public', [PollsController::class, 'edit'])->name('poll.agenda');
 
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');

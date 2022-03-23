@@ -93,9 +93,13 @@
                                         </td>
 
                                         @if (auth()->user()->canManageItems())
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="{{route('poll.edit',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
-                                        </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <a href="{{route('poll.edit',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
+                                            </td>
+                                        @else
+{{--                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">--}}
+{{--                                                <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Повестка дня</a>--}}
+{{--                                            </td>--}}
                                         @endif
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a href="{{$poll->isPublicVote()
@@ -186,10 +190,14 @@
                                             <a href="{{ $poll->path() }}" class="text-indigo-600 hover:text-indigo-900">Просмотр</a>
                                         </div>
 
-                                        @if (auth()->user()->canManageItems())
+                                        @if (auth()->user()->canManageItems() )
                                             <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <a href="{{route('poll.edit',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
                                             </div>
+                                        @else
+{{--                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">--}}
+{{--                                                <a href="{{route('poll.edit',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Повестка дня</a>--}}
+{{--                                            </div>--}}
                                         @endif
                                         <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium @if (auth()->user()->canManageItems()) bg-gray-200 @endif ">
                                             <a href="{{route('poll.results',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>

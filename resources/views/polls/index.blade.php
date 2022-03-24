@@ -39,7 +39,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                             {{ $loop->index + 1 }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900">
                                             @if ($poll->isPublicMeetingTSN()) <div class="text-xs font-bold">Опрос для Общего Собрания ТСН</div>@endif
                                             @if ($poll->isGovernanceMeetingTSN()) <div class="text-xs font-bold">Опрос для Правления ТСН</div>@endif
                                             @if ($poll->isVoteForTSN()) <div class="text-xs font-bold">Опрос для Членов ТСН</div>@endif

@@ -10,7 +10,7 @@
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a href="{{ route('items.index') }}" class="nav-tab {{ in_array($currentRouteName, ['items.index', 'items.show']) ? 'nav-tab-current' : 'nav-tab-not-current'}}" hidden>Каталог товаров и услуг ТСН "КП Березка"</a>
 
-                        <a href="{{ route('polls.index') }}" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
+                        <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
 
                         @if (auth()->user()->canManageItems())
                             <a href="{{ route('items-tree') }}" class="nav-tab {{ $currentRouteName === 'items-tree' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Управление</a>

@@ -70,9 +70,6 @@
                                                                 : route('poll.display',[$poll->id])
                                                            }}" class="text-indigo-600 hover:text-indigo-900">Голосовать</a>
                                                     @endif
-
-
-
                                                 </td>
                                             @endif
                                         @else
@@ -97,9 +94,9 @@
                                                 <a href="{{route('poll.edit',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
                                             </td>
                                         @else
-{{--                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">--}}
-{{--                                                <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Повестка дня</a>--}}
-{{--                                            </td>--}}
+                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Повестка собрания</a>
+                                            </td>
                                         @endif
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a href="{{$poll->isPublicVote()
@@ -195,11 +192,11 @@
                                                 <a href="{{route('poll.edit',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
                                             </div>
                                         @else
-{{--                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">--}}
-{{--                                                <a href="{{route('poll.edit',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Повестка дня</a>--}}
-{{--                                            </div>--}}
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Повестка собрания</a>
+                                            </div>
                                         @endif
-                                        <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium @if (auth()->user()->canManageItems()) bg-gray-200 @endif ">
+                                        <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
                                             <a href="{{route('poll.results',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
                                         </div>
                                         @if (auth()->user()->canManageItems())
@@ -245,7 +242,7 @@
                 </div>
                 <div>
                     <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::PUBLIC_VOTE])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Создать Публичный опрос
+                        Создать Тайное голосование
                     </a>
                 </div>
             </div>

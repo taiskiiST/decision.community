@@ -547,7 +547,7 @@ class PollsController extends Controller
         $anonymous = false;
         $user = auth()->user();
 
-        if(!isset($user)){
+        if($request->private_poll){
             $user = AnonymousUser::create();
             $anonymous = true;
         }
@@ -584,6 +584,7 @@ class PollsController extends Controller
                         continue;
                     }
                     $user->vote($question, $answer);
+                    auth()->user()->vote($question, $answer);
                 }
             }else{
                 foreach ($poll->questions as $question) {

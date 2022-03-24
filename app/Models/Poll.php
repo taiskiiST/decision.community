@@ -106,7 +106,6 @@ class Poll extends Model
             return true;
         else
             return false;
-
     }
     public function voteFinished () : bool
     {

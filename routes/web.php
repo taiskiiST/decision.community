@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/polls', function () {
     return redirect()->route('polls.index');
 });
 
@@ -28,10 +28,8 @@ if (app()->isLocal()) {
     Route::get('/dev', [DevController::class, 'index']);
 }
 
-Route::get('/polls/{poll}/display/public', [PollsController::class, 'display'])->name('poll.display.public');
-Route::get('/polls/{poll}/results/public', [PollsController::class, 'results'])->name('poll.results.public');
-Route::post('/polls/{poll}/submit/public', [PollsController::class, 'submit'])->name('poll.submit.public');
-Route::get('/polls/{poll}/agenda/public', [PollsController::class, 'edit'])->name('poll.agenda');
+
+
 
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
@@ -45,6 +43,11 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::post('/polls/delete/{poll}', [PollsController::class, 'delete'])->name('poll.delete');
     Route::post('/polls/store', [PollsController::class, 'store'])->name('poll.store');
     Route::post('/polls/{poll}/end', [PollsController::class, 'endVote'])->name('poll.endVote');
+    Route::get('/polls/{poll}/agenda/public', [PollsController::class, 'agenda'])->name('poll.agenda');
+
+    Route::get('/polls/{poll}/display/public', [PollsController::class, 'display'])->name('poll.display.public');
+    Route::get('/polls/{poll}/results/public', [PollsController::class, 'results'])->name('poll.results.public');
+    Route::post('/polls/{poll}/submit/public', [PollsController::class, 'submit'])->name('poll.submit.public');
 
     Route::get('/polls/{poll}/report_voted', [PollsController::class, 'report_voted'])->name('poll.report_voted');
     Route::get('/polls/{poll}/report', [PollsController::class, 'report'])->name('poll.report');

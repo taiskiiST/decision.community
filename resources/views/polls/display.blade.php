@@ -56,7 +56,9 @@
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
                 <div class="text-center"><span style="font-size: x-large;"><b>{{$poll->name}}</b></span></div>
-
+                @if ($poll->isPublicVote())
+                    <input name="private_poll" value="true" hidden/>
+                @endif
                 <br/>
 
                 <!-- This example requires Tailwind CSS v2.0+ -->

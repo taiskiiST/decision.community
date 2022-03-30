@@ -7894,23 +7894,68 @@ __webpack_require__.r(__webpack_exports__);
 
 var PdfPreview = function PdfPreview(_ref) {
   var url = _ref.url;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("object", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("object", {
       data: url,
       type: "application/pdf",
       width: "100%",
       height: "100%",
       className: "h-96",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("p", {
-        className: "py-20",
-        children: ["\u041F\u0435\u0440\u0435\u0439\u0434\u0438\u0442\u0435 \u043F\u043E \u0441\u0441\u044B\u043B\u043A\u0435 \u0434\u043B\u044F \u043F\u0440\u0435\u0434\u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440\u0430: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
-          href: url,
-          target: "_blank",
-          className: "bg-violet-500 hover:bg-violet-400 active:bg-violet-600 focus:outline-none focus:ring focus:ring-violet-300",
-          children: "\u0424\u0410\u0419\u041B\u0410"
-        }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("br", {}), "PDF \u0444\u0430\u0439\u043B\u0430"]
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+        id: "pdf-main-container",
+        className: "",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
+          id: "show-pdf-button",
+          value: url,
+          className: "hidden",
+          children: "Show PDF"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+          id: "pdf-loader",
+          children: "\u0417\u0430\u0433\u0440\u0443\u0436\u0430\u0435\u0442\u0441\u044F..."
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+          id: "pdf-contents",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+            id: "pdf-meta",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+              className: "inline-flex flex-row w-full place-content-between",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+                className: "py-3",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
+                  id: "pdf-prev",
+                  className: "mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+                  children: "\u041D\u0430\u0437\u0430\u0434"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
+                  id: "pdf-next",
+                  className: "mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+                  children: "\u0412\u043F\u0435\u0440\u0435\u0434"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+                className: "px-1 py-7 sm:px-6 flex-row-reverse ",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+                  id: "page-count-container",
+                  className: "inline-flex",
+                  children: ["\u0421\u0442\u0440\u0430\u043D\u0438\u0446\u0430\xA0", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+                    id: "pdf-current-page"
+                  }), "/", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+                    id: "pdf-total-pages"
+                  })]
+                })
+              })]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("canvas", {
+            id: "pdf-canvas",
+            className: "w-full"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+            id: "page-loader",
+            children: "\u0417\u0430\u0433\u0440\u0443\u0436\u0430\u0435\u0442\u0441\u044F \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0430..."
+          })]
+        })]
       })
-    })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("script", {
+      src: "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("script", {
+      src: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.228/pdf.min.js"
+    })]
   });
 };
 
@@ -7974,6 +8019,138 @@ var _TSN = TSN,
     csrf_token = _TSN.csrf_token,
     file_protocol = _TSN.file_protocol,
     error = _TSN.error;
+/*
+var _PDF_DOC,
+    _CURRENT_PAGE,
+    _TOTAL_PAGES,
+    _PAGE_RENDERING_IN_PROGRESS = 0,
+    _CANVAS = document.querySelector('#pdf-canvas');
+
+// initialize and load the PDF
+async function showPDF(pdf_url) {
+    if(document.querySelector("#pdf-loader")) {
+        document.querySelector("#pdf-loader").style.display = 'block';
+    }
+
+    // get handle of pdf document
+    try {
+        _PDF_DOC = await pdfjsLib.getDocument({ url: pdf_url });
+    }
+    catch(error) {
+        alert(error.message);
+    }
+
+    // total pages in pdf
+    _TOTAL_PAGES = _PDF_DOC.numPages;
+
+    // Hide the pdf loader and show pdf container
+    if(document.querySelector("#pdf-loader")) {
+        document.querySelector("#pdf-loader").style.display = 'none';
+    }
+    if(document.querySelector("#pdf-contents")) {
+        document.querySelector("#pdf-contents").style.display = 'block';
+    }
+    if(document.querySelector("#pdf-total-pages")) {
+        document.querySelector("#pdf-total-pages").innerHTML = _TOTAL_PAGES;
+    }
+
+    // show the first page
+    showPage(1);
+}
+
+// load and render specific page of the PDF
+async function showPage(page_no) {
+    _PAGE_RENDERING_IN_PROGRESS = 1;
+    _CURRENT_PAGE = page_no;
+
+    // disable Previous & Next buttons while page is being loaded
+    document.querySelector("#pdf-next").disabled = true;
+    document.querySelector("#pdf-prev").disabled = true;
+
+    // while page is being rendered hide the canvas and show a loading message
+    if(document.querySelector("#pdf-canvas")) {
+        document.querySelector("#pdf-canvas").style.display = 'none';
+    }
+    if(document.querySelector("#page-loader")) {
+        document.querySelector("#page-loader").style.display = 'block';
+    }
+
+    // update current page
+    document.querySelector("#pdf-current-page").innerHTML = page_no;
+
+    // get handle of page
+    try {
+        var page = await _PDF_DOC.getPage(page_no);
+    }
+    catch(error) {
+        alert(error.message);
+    }
+
+    // original width of the pdf page at scale 1
+    var pdf_original_width = page.getViewport(0.9).width;
+
+    // as the canvas is of a fixed width we need to adjust the scale of the viewport where page is rendered
+    var scale_required = _CANVAS.width / pdf_original_width;
+
+    // get viewport to render the page at required scale
+    var viewport = page.getViewport(scale_required);
+
+    // set canvas height same as viewport height
+    _CANVAS.height = viewport.height;
+
+    // setting page loader height for smooth experience
+    if(document.querySelector("#page-loader")) {
+        document.querySelector("#page-loader").style.height = _CANVAS.height + 'px';
+        document.querySelector("#page-loader").style.lineHeight = _CANVAS.height + 'px';
+    }
+
+    var render_context = {
+        canvasContext: _CANVAS.getContext('2d'),
+        viewport: viewport
+    };
+
+    // render the page contents in the canvas
+    try {
+        await page.render(render_context);
+    }
+    catch(error) {
+        alert(error.message);
+    }
+
+    _PAGE_RENDERING_IN_PROGRESS = 0;
+
+    // re-enable Previous & Next buttons
+    document.querySelector("#pdf-next").disabled = false;
+    document.querySelector("#pdf-prev").disabled = false;
+
+    // show the canvas and hide the page loader
+    document.querySelector("#pdf-canvas").style.display = 'block';
+    document.querySelector("#page-loader").style.display = 'none';
+}
+
+// click on the "Previous" page button
+if(document.querySelector("#pdf-prev")) {
+    document.querySelector("#pdf-prev").addEventListener('click', function () {
+        if (_CURRENT_PAGE != 1)
+            showPage(--_CURRENT_PAGE);
+    });
+}
+
+// click on the "Next" page button
+if(document.querySelector("#pdf-next")) {
+    document.querySelector("#pdf-next").addEventListener('click', function () {
+        if (_CURRENT_PAGE != _TOTAL_PAGES)
+            showPage(++_CURRENT_PAGE);
+    });
+}
+
+$( document ).ready(function() {
+    if(document.querySelector("#show-pdf-button")) {
+        document.querySelector("#show-pdf-button").style.display = 'none';
+        value = document.querySelector("#show-pdf-button").value;
+        showPDF(value);
+    }
+});*/
 
 var Protocol = /*#__PURE__*/function (_React$Component) {
   _inherits(Protocol, _React$Component);

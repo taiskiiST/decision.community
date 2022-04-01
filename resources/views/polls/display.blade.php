@@ -124,6 +124,7 @@
                                                     <canvas id="pdf-canvas" class="w-full"></canvas>
                                                     <div id="page-loader">Загружается страница...</div>
                                                 </div>
+                                                <button id="download"><a href="{{Storage::url($file->path_to_file)}}" target="_blank" class="mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Открыть в отдельном окне</a></button>
                                             </div>
                                         </object>
                                     @endif
@@ -298,7 +299,7 @@
             }
 
             // original width of the pdf page at scale 1
-            var pdf_original_width = page.getViewport(0.9).width;
+            var pdf_original_width = page.getViewport(1).width;
 
             // as the canvas is of a fixed width we need to adjust the scale of the viewport where page is rendered
             var scale_required = _CANVAS.width / pdf_original_width;

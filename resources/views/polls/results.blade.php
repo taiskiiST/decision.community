@@ -175,7 +175,7 @@
     @if ($poll->protocol)
     <label class="block text-lg py-8 text-black font-bold whitespace-wrap">Итоговый протокол:</label>
     <div>
-        <object data={{Storage::url($poll->protocol) }} type="application/pdf" width="100%" height="100%" class="h-96">
+        <object data={{Storage::url($poll->protocol) }} type="application/pdf" width="100%" >
             <div id="pdf-main-container" class="">
                 <button id="show-pdf-button" value="{{Storage::url($poll->protocol)}}" class="hidden">Show PDF</button>
                 <div id="pdf-loader">Загружается...</div>
@@ -194,6 +194,7 @@
                     <canvas id="pdf-canvas" class="w-full"></canvas>
                     <div id="page-loader">Загружается страница...</div>
                 </div>
+                <button id="download" ><a href="{{Storage::url($poll->protocol)}}" target="_blank" class="mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Открыть в отдельном окне</a></button>
             </div>
         </object>
     </div>

@@ -161,15 +161,14 @@
                                         <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-green-600 bg-gray-200">
                                             Количество файлов - {{ $question->question_files()->count() }}
                                         </div>
-
-                                        <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            @if (auth()->user()->canManageItems())
+                                        @if (auth()->user()->canManageItems())
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <a href="@if (!$poll->voteFinished() ){{route('poll.questions.index',[$poll->id, $question->id])}} @else # @endif" class=" @if ($poll->voteFinished() ) disabled @else text-indigo-600 hover:text-indigo-900 @endif ">Изменить вопрос</a>
-                                            @endif
-                                        </div>
+                                            </div>
+                                        @endif
 
-                                        <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
-                                            @if (auth()->user()->canManageItems())
+                                        @if (auth()->user()->canManageItems())
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
                                                 @if (!$poll->voteFinished() )
                                                 <form method="POST" action="{{route('question.delete',[$poll->id, $question->id])}}">
                                                     @csrf
@@ -185,8 +184,8 @@
                                                         {{ __('Удалить вопрос') }}
                                                     </a>
                                                 @endif
-                                            @endif
-                                        </div>
+                                            </div>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -199,7 +198,7 @@
         @if (isset($error))
             {{$error}}
         @endif
-        @if ($poll->voteFinished() )
+        @if ($poll->voteFinished() && auth()->user()->isAdmin())
             <div id="add-protocol-to-poll"></div>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         @endif

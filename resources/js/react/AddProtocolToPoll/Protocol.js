@@ -5,7 +5,7 @@ import FormErrors from "./FormErrors";
 
 const { poll, csrf_token, file_protocol, error, is_admin } = TSN;
 
-/*
+
 var _PDF_DOC,
     _CURRENT_PAGE,
     _TOTAL_PAGES,
@@ -136,7 +136,7 @@ $( document ).ready(function() {
         value = document.querySelector("#show-pdf-button").value;
         showPDF(value);
     }
-});*/
+});
 
 class Protocol extends React.Component {
     constructor(props) {
@@ -300,7 +300,7 @@ class Protocol extends React.Component {
     }
 
     render() {
-        console.log(this.state);
+        //console.log(this.state);
         return (
             <div id={`data_${this.state.fileUpload.file_id}`} className="col-span-6 sm:col-span-3 mt-8 border-t-8 border-double border-gray-400">
                 <div className="panel panel-default">

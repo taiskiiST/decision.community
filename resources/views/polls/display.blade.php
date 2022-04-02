@@ -106,7 +106,7 @@
                                     @else
 
                                         <object data="{{Storage::url($file->path_to_file) }}" type="application/pdf" width="100%" class="lg:h-96 xl:h-96 2xl:h-96">
-                                            <div id="pdf-main-container-{{$file->id}}" class="">
+                                            <div id="pdf-main-container-{{$file->id}}" >
                                                 <button id="show-pdf-button-{{$file->id}}" value="{{Storage::url($file->path_to_file)}}" lang="{{$file->id}}" class="hidden files_pdf">Show PDF</button>
                                                 <div id="pdf-loader-{{$file->id}}">Загружается...</div>
                                                 <div id="pdf-contents-{{$file->id}}">
@@ -121,7 +121,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div id="div_canvas-{{$file->id}}">
+                                                    <div id="div_canvas-{{$file->id}}" style="width:650px;height:600px;overflow-y:scroll;overflow-x:scroll;">
                                                         <canvas id="pdf-canvas-{{$file->id}}" class="w-full"></canvas>
                                                     </div>
                                                     <div id="page-loader-{{$file->id}}">Загружается страница...</div>
@@ -312,7 +312,7 @@
             }
 
             // original width of the pdf page at scale 1
-            var pdf_original_width = page.getViewport(1).width;
+            var pdf_original_width = page.getViewport(0.5).width;
 
             // as the canvas is of a fixed width we need to adjust the scale of the viewport where page is rendered
             var scale_required = _CANVAS[file_id].width / pdf_original_width;

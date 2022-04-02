@@ -174,7 +174,7 @@
     </div>
     @if ($poll->protocol)
     <label class="block text-lg py-8 text-black font-bold whitespace-wrap">Итоговый протокол:</label>
-    <div style="height:500px">
+    <div >
         <object data={{Storage::url($poll->protocol) }} type="application/pdf" width="100%" class="h-full">
             <div id="pdf-main-container" class="">
                 <button id="show-pdf-button" value="{{Storage::url($poll->protocol)}}" class="hidden">Show PDF</button>
@@ -301,7 +301,7 @@
 
         var render_context = {
             canvasContext: _CANVAS.getContext('2d'),
-            v-ewport: viewport
+            viewport: viewport
         };
 
         // render the page contents in the canvas

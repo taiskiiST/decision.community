@@ -8018,7 +8018,8 @@ var _TSN = TSN,
     poll = _TSN.poll,
     csrf_token = _TSN.csrf_token,
     file_protocol = _TSN.file_protocol,
-    error = _TSN.error;
+    error = _TSN.error,
+    is_admin = _TSN.is_admin;
 /*
 var _PDF_DOC,
     _CURRENT_PAGE,
@@ -8336,7 +8337,7 @@ var Protocol = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      //console.log(error);
+      console.log(this.state);
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
         id: "data_".concat(this.state.fileUpload.file_id),
         className: "col-span-6 sm:col-span-3 mt-8 border-t-8 border-double border-gray-400",
@@ -8406,7 +8407,7 @@ var Protocol = /*#__PURE__*/function (_React$Component) {
                   children: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u0435 \u043F\u0440\u043E\u0442\u043E\u043A\u043E\u043B \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 PDF"
                 })
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+            }), is_admin && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
               id: "drag_and_drop_aria_".concat(this.state.fileUpload.file_id),
               className: "".concat(this.state.fileUpload.hideDragAndDrop || file_protocol ? 'w-1/2' : 'w-full', " place-self-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"),
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
@@ -8448,7 +8449,7 @@ var Protocol = /*#__PURE__*/function (_React$Component) {
                 })
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+          }), is_admin && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
             className: "inline-flex",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
               type: "submit",

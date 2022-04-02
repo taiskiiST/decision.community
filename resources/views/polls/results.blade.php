@@ -24,7 +24,7 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     @foreach($poll->questions as $question)
-                    <label class="block text-lg text-black font-semibold mt-10 whitespace-wrap">{!!$question->text!!}</label>
+                    <label class="block text-lg text-black font-semibold mt-10 whitespace-wrap">{{$loop->index + 1}}. {!!$question->text!!}</label>
                     <table class="min-w-full divide-y divide-gray-200 border-b-2 border-gray-400 ">
                         <thead class="bg-gray-50">
                         <tr>
@@ -96,7 +96,7 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     @foreach($poll->questions as $question)
-                    <label class="block text-lg text-black font-semibold mt-6 whitespace-wrap">{!!$question->text!!}</label>
+                    <label class="block text-lg text-black font-semibold mt-6 whitespace-wrap">{{$loop->index + 1}}. {!!$question->text!!}</label>
                     <table class="min-w-full divide-y divide-gray-200 ">
                         <thead class="bg-gray-50">
                         <tr>
@@ -174,8 +174,8 @@
     </div>
     @if ($poll->protocol)
     <label class="block text-lg py-8 text-black font-bold whitespace-wrap">Итоговый протокол:</label>
-    <div>
-        <object data={{Storage::url($poll->protocol) }} type="application/pdf" width="100%" >
+    <div style="height:500px">
+        <object data={{Storage::url($poll->protocol) }} type="application/pdf" width="100%" class="h-full">
             <div id="pdf-main-container" class="">
                 <button id="show-pdf-button" value="{{Storage::url($poll->protocol)}}" class="hidden">Show PDF</button>
                 <div id="pdf-loader">Загружается...</div>
@@ -301,7 +301,7 @@
 
         var render_context = {
             canvasContext: _CANVAS.getContext('2d'),
-            viewport: viewport
+            v-ewport: viewport
         };
 
         // render the page contents in the canvas

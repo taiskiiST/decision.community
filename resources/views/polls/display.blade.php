@@ -106,25 +106,27 @@
                                     @else
 
                                         <object data="{{Storage::url($file->path_to_file) }}" type="application/pdf" width="100%" class="lg:h-96 xl:h-96 2xl:h-96">
-                                            <div id="pdf-main-container" class="">
-                                                <button id="show-pdf-button" value="{{Storage::url($file->path_to_file)}}" class="hidden">Show PDF</button>
-                                                <div id="pdf-loader">Загружается...</div>
-                                                <div id="pdf-contents">
-                                                    <div id="pdf-meta">
+                                            <div id="pdf-main-container-{{$file->id}}" class="">
+                                                <button id="show-pdf-button-{{$file->id}}" value="{{Storage::url($file->path_to_file)}}" lang="{{$file->id}}" class="hidden files_pdf">Show PDF</button>
+                                                <div id="pdf-loader-{{$file->id}}">Загружается...</div>
+                                                <div id="pdf-contents-{{$file->id}}">
+                                                    <div id="pdf-meta-{{$file->id}}">
                                                         <div class="inline-flex flex-row w-full place-content-between">
                                                             <div class="py-3">
-                                                                <button id="pdf-prev" class="mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Назад</button>
-                                                                <button id="pdf-next" class="mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Вперед</button>
+                                                                <button id="pdf-prev-{{$file->id}}" lang="{{$file->id}}" value="{{Storage::url($file->path_to_file)}}" onclick="clickPrev({{$file->id}})" class="pdf-prev mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Назад</button>
+                                                                <button id="pdf-next-{{$file->id}}" lang="{{$file->id}}" value="{{Storage::url($file->path_to_file)}}" onclick="clickNext({{$file->id}})" class="pdf-next mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Вперед</button>
                                                             </div>
                                                             <div class="px-1 py-7 sm:px-6 flex-row-reverse ">
-                                                                <div id="page-count-container" class="inline-flex">Страница&nbsp;<div id="pdf-current-page"></div>/<div id="pdf-total-pages"></div></div>
+                                                                <div id="page-count-container-{{$file->id}}" class="inline-flex">Страница&nbsp;<div id="pdf-current-page-{{$file->id}}"></div>/<div id="pdf-total-pages-{{$file->id}}"></div></div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <canvas id="pdf-canvas" class="w-full"></canvas>
-                                                    <div id="page-loader">Загружается страница...</div>
+                                                    <div id="div_canvas-{{$file->id}}">
+                                                        <canvas id="pdf-canvas-{{$file->id}}" class="w-full"></canvas>
+                                                    </div>
+                                                    <div id="page-loader-{{$file->id}}">Загружается страница...</div>
                                                 </div>
-                                                <button id="download"><a href="{{Storage::url($file->path_to_file)}}" target="_blank" class="mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Открыть в отдельном окне</a></button>
+                                                <button id="download_file_{{$file->id}}"><a href="{{Storage::url($file->path_to_file)}}" target="_blank" class="mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Открыть в отдельном окне</a></button>
                                             </div>
                                         </object>
                                     @endif
@@ -226,11 +228,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.228/pdf.min.js"></script>
     <script>
-        var _PDF_DOC,
-            _CURRENT_PAGE,
-            _TOTAL_PAGES,
-            _PAGE_RENDERING_IN_PROGRESS = 0,
-            _CANVAS = document.querySelector('#pdf-canvas');
+        var _PDF_DOC = [],
+            _CURRENT_PAGE = [],
+            _TOTAL_PAGES = [],
+            _PAGE_RENDERING_IN_PROGRESS = [],
+            _CANVAS = []
 
         $("#button_submit").click(
             function () {
@@ -238,86 +240,97 @@
             }
         );
 
+        function clickNext(file_id){
+            if(_CURRENT_PAGE[file_id] != _TOTAL_PAGES[file_id]) {
+                showPage(++_CURRENT_PAGE[file_id], file_id);
+            }
+        }
+        function clickPrev(file_id){
+            if(_CURRENT_PAGE[file_id] != 1)
+                showPage(--_CURRENT_PAGE[file_id], file_id);
+        }
+
         // initialize and load the PDF
-        async function showPDF(pdf_url) {
-            if(document.querySelector("#pdf-loader")) {
-                document.querySelector("#pdf-loader").style.display = 'block';
+        async function showPDF(pdf_url, file_id) {
+            if(document.querySelector("#pdf-loader-" + file_id)) {
+                document.querySelector("#pdf-loader-" + file_id).style.display = 'block';
             }
 
             // get handle of pdf document
             try {
-                _PDF_DOC = await pdfjsLib.getDocument({ url: pdf_url });
+                _PDF_DOC[file_id] = await pdfjsLib.getDocument({ url: pdf_url });
             }
             catch(error) {
-                alert(error.message);
+                console.log('getDocument = ', error.message);
             }
 
             // total pages in pdf
-            _TOTAL_PAGES = _PDF_DOC.numPages;
-
+            _TOTAL_PAGES [file_id] = _PDF_DOC[file_id].numPages;
+            _CURRENT_PAGE[file_id] = 1;
             // Hide the pdf loader and show pdf container
-            if(document.querySelector("#pdf-loader")) {
-                document.querySelector("#pdf-loader").style.display = 'none';
+            if(document.querySelector("#pdf-loader-" + file_id)) {
+                document.querySelector("#pdf-loader-" + file_id).style.display = 'none';
             }
-            if(document.querySelector("#pdf-contents")) {
-                document.querySelector("#pdf-contents").style.display = 'block';
+            if(document.querySelector("#pdf-contents-" + file_id)) {
+                document.querySelector("#pdf-contents-" + file_id).style.display = 'block';
             }
-            if(document.querySelector("#pdf-total-pages")) {
-                document.querySelector("#pdf-total-pages").innerHTML = _TOTAL_PAGES;
+            if(document.querySelector("#pdf-total-pages-" + file_id)) {
+                document.querySelector("#pdf-total-pages-" + file_id).innerHTML = _TOTAL_PAGES[file_id];
             }
 
             // show the first page
-            showPage(1);
+            showPage(1, file_id);
         }
 
         // load and render specific page of the PDF
-        async function showPage(page_no) {
-            _PAGE_RENDERING_IN_PROGRESS = 1;
-            _CURRENT_PAGE = page_no;
+        async function showPage(page_no, file_id) {
+            //console.log(page_no, file_id, pdf_url);
+            _PAGE_RENDERING_IN_PROGRESS[file_id] = 1;
+            _CANVAS[file_id] = document.querySelector('#pdf-canvas-' + file_id);
 
             // disable Previous & Next buttons while page is being loaded
-            document.querySelector("#pdf-next").disabled = true;
-            document.querySelector("#pdf-prev").disabled = true;
+            document.querySelector("#pdf-next-" + file_id).disabled = true;
+            document.querySelector("#pdf-prev-" + file_id).disabled = true;
 
             // while page is being rendered hide the canvas and show a loading message
-            if(document.querySelector("#pdf-canvas")) {
-                document.querySelector("#pdf-canvas").style.display = 'none';
+            if(document.querySelector("#pdf-canvas-" + file_id)) {
+                document.querySelector("#pdf-canvas-" + file_id).style.display = 'none';
             }
-            if(document.querySelector("#page-loader")) {
-                document.querySelector("#page-loader").style.display = 'block';
+            if(document.querySelector("#page-loader-" + file_id)) {
+                document.querySelector("#page-loader-" + file_id).style.display = 'block';
             }
 
             // update current page
-            document.querySelector("#pdf-current-page").innerHTML = page_no;
+            document.querySelector("#pdf-current-page-" + file_id).innerHTML = page_no;
 
             // get handle of page
             try {
-                var page = await _PDF_DOC.getPage(page_no);
+                var page = await _PDF_DOC[file_id].getPage(page_no);
             }
             catch(error) {
-                alert(error.message);
+                console.log('getPage - ', error.message);
             }
 
             // original width of the pdf page at scale 1
             var pdf_original_width = page.getViewport(1).width;
 
             // as the canvas is of a fixed width we need to adjust the scale of the viewport where page is rendered
-            var scale_required = _CANVAS.width / pdf_original_width;
+            var scale_required = _CANVAS[file_id].width / pdf_original_width;
 
             // get viewport to render the page at required scale
             var viewport = page.getViewport(scale_required);
 
             // set canvas height same as viewport height
-            _CANVAS.height = viewport.height;
+            _CANVAS[file_id].height = viewport.height;
 
             // setting page loader height for smooth experience
-            if(document.querySelector("#page-loader")) {
-                document.querySelector("#page-loader").style.height = _CANVAS.height + 'px';
-                document.querySelector("#page-loader").style.lineHeight = _CANVAS.height + 'px';
+            if(document.querySelector("#page-loader-" + file_id)) {
+                document.querySelector("#page-loader-" + file_id).style.height = _CANVAS[file_id].height + 'px';
+                document.querySelector("#page-loader-" + file_id).style.lineHeight = _CANVAS[file_id].height + 'px';
             }
 
             var render_context = {
-                canvasContext: _CANVAS.getContext('2d'),
+                canvasContext: _CANVAS[file_id].getContext('2d'),
                 viewport: viewport
             };
 
@@ -326,43 +339,28 @@
                 await page.render(render_context);
             }
             catch(error) {
-                alert(error.message);
+                console.log('render - ', error.message);
             }
 
-            _PAGE_RENDERING_IN_PROGRESS = 0;
+            _PAGE_RENDERING_IN_PROGRESS[file_id] = 0;
 
             // re-enable Previous & Next buttons
-            document.querySelector("#pdf-next").disabled = false;
-            document.querySelector("#pdf-prev").disabled = false;
+            document.querySelector("#pdf-next-" + file_id).disabled = false;
+            document.querySelector("#pdf-prev-" + file_id).disabled = false;
 
             // show the canvas and hide the page loader
-            document.querySelector("#pdf-canvas").style.display = 'block';
-            document.querySelector("#page-loader").style.display = 'none';
-        }
-
-        // click on the "Previous" page button
-        if(document.querySelector("#pdf-prev")) {
-            document.querySelector("#pdf-prev").addEventListener('click', function () {
-                if (_CURRENT_PAGE != 1)
-                    showPage(--_CURRENT_PAGE);
-            });
-        }
-
-        // click on the "Next" page button
-        if(document.querySelector("#pdf-next")) {
-            document.querySelector("#pdf-next").addEventListener('click', function () {
-                if (_CURRENT_PAGE != _TOTAL_PAGES)
-                    showPage(++_CURRENT_PAGE);
-            });
+            document.querySelector("#pdf-canvas-" + file_id).style.display = 'block';
+            document.querySelector("#page-loader-" + file_id).style.display = 'none';
         }
 
         $( document ).ready(function() {
-            if(document.querySelector("#show-pdf-button")) {
-                document.querySelector("#show-pdf-button").style.display = 'none';
-                value = document.querySelector("#show-pdf-button").value;
-                showPDF(value);
+            if(document.querySelector(".files_pdf")) {
+                //console.log($(".files_pdf").length);
+                $(".files_pdf").each(function (index, el){
+                    el.style.display = 'none';
+                    showPDF(el.value, el.lang);
+                });
             }
-            //showPDF('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf');
         });
 
         //====================================================================================

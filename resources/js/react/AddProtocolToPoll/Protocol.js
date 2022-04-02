@@ -3,7 +3,7 @@ import PdfPreview from './PdfPreview';
 import {v4 as uuidv4} from "uuid";
 import FormErrors from "./FormErrors";
 
-const { poll, csrf_token, file_protocol, error } = TSN;
+const { poll, csrf_token, file_protocol, error, is_admin } = TSN;
 
 /*
 var _PDF_DOC,
@@ -300,7 +300,7 @@ class Protocol extends React.Component {
     }
 
     render() {
-        //console.log(error);
+        console.log(this.state);
         return (
             <div id={`data_${this.state.fileUpload.file_id}`} className="col-span-6 sm:col-span-3 mt-8 border-t-8 border-double border-gray-400">
                 <div className="panel panel-default">
@@ -343,7 +343,7 @@ class Protocol extends React.Component {
                         </div>
                     </div>
                     }
-                    <div id={`drag_and_drop_aria_${this.state.fileUpload.file_id}`} className={`${ (this.state.fileUpload.hideDragAndDrop  || file_protocol) ? 'w-1/2' : 'w-full'} place-self-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md`} >
+                    {is_admin && <div id={`drag_and_drop_aria_${this.state.fileUpload.file_id}`} className={`${ (this.state.fileUpload.hideDragAndDrop  || file_protocol) ? 'w-1/2' : 'w-full'} place-self-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md`} >
                         <div className="mt-1 flex justify-center ">
                             <div className="space-y-1 text-center">
                                 <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
@@ -365,9 +365,9 @@ class Protocol extends React.Component {
                                 </p>
                             </div>
                         </div>
-                    </div>
+                    </div>}
                 </div>
-                    <div className="inline-flex">
+                    {is_admin && <div className="inline-flex">
                         <button type="submit" className={`${this.state.fileUpload.isValidFileName && this.state.fileUpload.isValidFileSize && this.state.fileUpload.type=='pdf'
                             ? 'justify-center mt-6 ml-6 mr-6 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                             : 'justify-center mt-6 ml-6 mr-6 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
@@ -388,7 +388,7 @@ class Protocol extends React.Component {
                                     </a>
                             </form>
                         </button>}
-                    </div>
+                    </div>}
                 </form>
             </div>
         );

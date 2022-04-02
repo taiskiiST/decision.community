@@ -88,7 +88,8 @@ class PollsController extends Controller
                     'poll' => $poll,
                     'csrf_token' =>  csrf_token(),
                     'file_protocol' => '',
-                    'error' => ''
+                    'error' => '',
+                    'is_admin'=> auth()->user()->isAdmin()
                 ]);
 
                 return redirect()->route('poll.edit', [

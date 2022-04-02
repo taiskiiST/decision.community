@@ -128,13 +128,13 @@
 
 
         <div class="flex flex-col xl:hidden ">
-            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
-                <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <div class="-my-2 overflow-x-auto sm:-mx-1 lg:-mx-8 ">
+                <div class="py-2 align-middle inline-block min-w-full sm:px-1 lg:px-8">
                     <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200 ">
                             <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-1 py-3 text-left whitespace-wrap text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Название проводимого голосования
                                 </th>
 
@@ -145,7 +145,7 @@
                             @foreach($polls as $poll)
                                 <tr class="bg-white bg-gray-100 border-b border-gray-400">
                                     <td>
-                                        <div class="px-1 py-1whitespace-nowrap text-sm font-bold text-gray-900 text-center">
+                                        <div class="px-1 py-1 whitespace-nowrap text-sm font-bold text-gray-900 text-center">
                                             {{ $loop->index +1 }}
                                         </div>
                                         <div class="px-1 py-1 whitespace-wrap text-xs  font-bold text-gray-900 text-center">
@@ -160,7 +160,7 @@
                                                 Голосование активно
                                             </div>
                                         @else
-                                            <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-red-600 bg-gray-200">
+                                            <div class="px-6 py-4 whitespace-wrap text-left text-sm font-medium text-red-600 bg-gray-200">
                                                 Голосование окончено {{date_create($poll->finished)->format('d-m-Y H:i:s')}}
                                             </div>
                                         @endif

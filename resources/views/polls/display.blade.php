@@ -46,9 +46,9 @@
         </div>
     @endif
 
-    @if (auth()->user() ? auth() && auth()->user()->canVote() : $poll->isPublicVote())
-        @if ($poll->isPublicVote() || (!$poll->finished && !$poll->authUserVote() && !$poll->isGovernanceMeetingTSN() || $displayMode) || $poll->isGovernanceMeetingTSN() && auth()->user()->isGovernance() )
-            @if (!$poll->isPublicVote())
+    @if (auth()->user() ? auth() && auth()->user()->canVote()|| auth()->user()->isAccess() : $poll->isPublicVote() )
+        @if ($poll->isPublicVote() || auth()->user()->isAccess() || (!$poll->finished && !$poll->authUserVote() && !$poll->isGovernanceMeetingTSN() || $displayMode) || $poll->isGovernanceMeetingTSN() && auth()->user()->isGovernance() )
+            @if (!$poll->isPublicVote() || !auth()->user()->isAccess())
                 {!! Form::open(['route' => ['poll.submit', ['poll' => $poll] ], 'method' => 'POST']) !!}
             @else
                 {!! Form::open(['route' => ['poll.submit.public', ['poll' => $poll] ], 'method' => 'POST']) !!}
@@ -56,7 +56,7 @@
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
                 <div class="text-center"><span style="font-size: x-large;"><b>{{$poll->name}}</b></span></div>
-                @if ($poll->isPublicVote())
+                @if ($poll->isPublicVote() || !auth()->user()->isAccess())
                     <input name="private_poll" value="true" hidden/>
                 @endif
                 <br/>
@@ -140,7 +140,7 @@
                                 @endforeach
                             </h3>
                         </div>
-                        @if (!$displayMode)
+                        @if (!$displayMode && !auth()->user()->isAccess())
                         <div>
                             <fieldset>
                                 <div class="bg-white rounded-md -space-y-px">
@@ -173,7 +173,7 @@
                     </div>
                     <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
                         <a href="/polls"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
-                               @if ($displayMode) Назад @else Отмена @endif
+                               @if ($displayMode || !auth()->user()->isAccess()) Назад @else Отмена @endif
                             </button></a>
                     </div>
                 </div>

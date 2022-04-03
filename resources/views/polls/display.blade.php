@@ -121,8 +121,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div id="div_canvas-{{$file->id}}" style="width:650px;height:600px;overflow-y:scroll;overflow-x:scroll;">
-                                                        <canvas id="pdf-canvas-{{$file->id}}" class="w-full"></canvas>
+                                                    <div id="div_canvas-{{$file->id}}" style="width:100%;height:500px;overflow-x:scroll;overflow-y:scroll;">
+                                                        <canvas id="pdf-canvas-{{$file->id}}" class="w-full" style="min-width:500px;"></canvas>
                                                     </div>
                                                     <div id="page-loader-{{$file->id}}">Загружается страница...</div>
                                                 </div>
@@ -312,7 +312,7 @@
             }
 
             // original width of the pdf page at scale 1
-            var pdf_original_width = page.getViewport(0.5).width;
+            var pdf_original_width = page.getViewport(1).width;
 
             // as the canvas is of a fixed width we need to adjust the scale of the viewport where page is rendered
             var scale_required = _CANVAS[file_id].width / pdf_original_width;
@@ -322,11 +322,15 @@
 
             // set canvas height same as viewport height
             _CANVAS[file_id].height = viewport.height;
+            //_CANVAS[file_id].width = viewport.width;
 
             // setting page loader height for smooth experience
             if(document.querySelector("#page-loader-" + file_id)) {
                 document.querySelector("#page-loader-" + file_id).style.height = _CANVAS[file_id].height + 'px';
                 document.querySelector("#page-loader-" + file_id).style.lineHeight = _CANVAS[file_id].height + 'px';
+
+                // document.querySelector("#page-loader-" + file_id).style.width = _CANVAS[file_id].width + 'px';
+                // document.querySelector("#page-loader-" + file_id).style.lineWidth = _CANVAS[file_id].width + 'px';
             }
 
             var render_context = {

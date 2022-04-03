@@ -113,26 +113,26 @@
                                                         @foreach($users as $user)
                                                                 <tr class="bg-white bg-gray-100 border-b border-gray-400">
                                                                         <td>
-                                                                                <div class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-center bg-gray-200">
+                                                                                <div class="px-6 py-4 whitespace-wrap text-sm font-bold text-gray-900 text-center bg-gray-200">
                                                                                         {{ $user->name }}
                                                                                 </div>
-                                                                                <div class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
+                                                                                <div class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-right">
                                                                                         {{ $user->phone }}
                                                                                 </div>
-                                                                                <div class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right bg-gray-200">
+                                                                                <div class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-right bg-gray-200">
                                                                                         {{ $user->email }}
                                                                                 </div>
-                                                                                <div class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
+                                                                                <div class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-right">
                                                                                         {{ $user->position() }}
                                                                                 </div>
-                                                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
+                                                                                <div class="px-6 py-4 whitespace-wrap text-right text-sm font-medium bg-gray-200">
                                                                                         {{ $user->isAdmin() ? 'Администратор': '' }} @if ($user->isAdmin()) <br /> @endif
                                                                                         {{ $user->isVote() ? 'Допущен к голосованию': '' }} @if ($user->isVote()) <br /> @endif
                                                                                         {{ $user->isGovernance() ? 'Член правления': '' }} @if ($user->isGovernance()) <br /> @endif
                                                                                         {{ $user->isManageItems() ? 'Модератор': '' }} @if ($user->isManageItems()) <br /> @endif
                                                                                         {{ $user->isAccess() ? 'Допущен к сайту': '' }} @if ($user->isAccess()) <br /> @endif
                                                                                 </div>
-                                                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                                                <div class="px-6 py-4 whitespace-wrap text-right text-sm font-medium">
                                                                                         <form method="POST" action="{{route('user.update')}}">
                                                                                                 @csrf
                                                                                                 <input name="user_update" value="{{$user->id}}" type="hidden"/>
@@ -143,7 +143,7 @@
                                                                                                 </a>
                                                                                         </form>
                                                                                 </div>
-                                                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium ">
+                                                                                <div class="px-6 py-4 whitespace-wrap text-right text-sm font-medium ">
                                                                                         <form method="POST" action="{{route('users.delete')}}">
                                                                                                 @csrf
                                                                                                 <input name="user_del" value="{{$user->id}}" type="hidden"/>

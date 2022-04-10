@@ -60,22 +60,22 @@
                             <tbody>
                             @foreach($poll->questions as $question)
                                 <tr class="bg-white @if ($loop->odd) bg-gray-200 @endif">
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <td class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium">
                                         {{$loop->index + 1}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900">
                                         {!! $question->text !!}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <td class="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
                                         {{ $question->question_files()->count() }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium ">
+                                    <td class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium ">
                                         @if (auth()->user()->canManageItems() )
                                             <a href="@if (!$poll->voteFinished() ){{route('poll.questions.index',[$poll->id, $question->id])}} @else # @endif" class=" @if ($poll->voteFinished() ) disabled @else text-indigo-600 hover:text-indigo-900 @endif ">Изменить вопрос</a>
                                         @endif
                                     </td>
 
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <td class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium">
                                         @if (auth()->user()->canManageItems() )
                                             @if (!$poll->voteFinished() )
                                             <form method="POST" action="{{route('question.delete',[$poll->id, $question->id])}}">
@@ -106,7 +106,7 @@
 
         <div class="flex flex-col xl:hidden">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
-                <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                <div class="py-2 align-middle inline-block min-w-full sm:px-2 lg:px-8">
                     <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200 ">
                             <thead class="bg-gray-50">
@@ -158,17 +158,17 @@
                                         <div class="px-6 py-4 whitespace-wrap text-sm text-gray-900 text-center text-wrap">
                                             {{$loop->index + 1}}. {!! $question->text !!}
                                         </div>
-                                        <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-green-600 bg-gray-200">
+                                        <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600 bg-gray-200">
                                             Количество файлов - {{ $question->question_files()->count() }}
                                         </div>
                                         @if (auth()->user()->canManageItems())
-                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <div class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium">
                                                 <a href="@if (!$poll->voteFinished() ){{route('poll.questions.index',[$poll->id, $question->id])}} @else # @endif" class=" @if ($poll->voteFinished() ) disabled @else text-indigo-600 hover:text-indigo-900 @endif ">Изменить вопрос</a>
                                             </div>
                                         @endif
 
                                         @if (auth()->user()->canManageItems())
-                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
+                                            <div class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium bg-gray-200">
                                                 @if (!$poll->voteFinished() )
                                                 <form method="POST" action="{{route('question.delete',[$poll->id, $question->id])}}">
                                                     @csrf

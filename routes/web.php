@@ -36,6 +36,7 @@ if (app()->isLocal()) {
 
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
+    Route::get('/polls/{poll}/start', [PollsController::class, 'start'])->name('poll.start');
     Route::get('/polls/{poll_id?}/index/{id_question?}', [PollsController::class, 'index'])->name('polls.index');
     Route::post('/polls/{poll}/submit', [PollsController::class, 'submit'])->name('poll.submit');
     Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('poll.results');
@@ -47,6 +48,10 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::post('/polls/store', [PollsController::class, 'store'])->name('poll.store');
     Route::post('/polls/{poll}/end', [PollsController::class, 'endVote'])->name('poll.endVote');
     Route::get('/polls/{poll}/agenda/public', [PollsController::class, 'agenda'])->name('poll.agenda');
+
+    Route::get('/polls/{poll}/requisites/', [PollsController::class, 'requisites'])->name('poll.requisites');
+    Route::get('/polls/{poll}/requisites/submitName', [PollsController::class, 'requisitesSubmitName'])->name('poll.requisites.submitName');
+    Route::get('/polls/{poll}/requisites/submitOrganizers', [PollsController::class, 'requisitesSubmitOrganizers'])->name('poll.requisites.submitOrganizers');
 
     Route::get('/polls/{poll}/display/public', [PollsController::class, 'display'])->name('poll.display.public');
     Route::get('/polls/{poll}/results/public', [PollsController::class, 'results'])->name('poll.results.public');

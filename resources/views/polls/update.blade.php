@@ -15,7 +15,7 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     №
                                 </th>
-                                <th scope="col" class="relative px-6 py-3">
+                                <th scope="col" class="relative px-6 py-3 whitespace-wrap">
                                     {{$poll->name}}
                                 </th>
                                 <th scope="col" class="relative px-6 py-3">
@@ -111,12 +111,12 @@
                         <table class="min-w-full divide-y divide-gray-200 ">
                             <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-1 py-3 text-left text-xs whitespace-wrap font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-1 py-3 text-left text-xs whitespace-wrap text-wrap font-medium text-gray-500 uppercase tracking-wider">
                                     {{$poll->name}}
                                 </th>
                                 <th scope="col" class="relative px-1 py-3">
                                     @if ($poll->voteFinished() )
-                                        <span class="text-green-600 whitespace-wrap">Голосование окончено {{date_create($poll->finished)->format('d-m-Y H:i:s')}}</span>
+                                        <span class="text-green-600 whitespace-wrap text-wrap">Голосование окончено {{date_create($poll->finished)->format('d-m-Y H:i:s')}}</span>
                                     @endif
 
                                 </th>
@@ -127,7 +127,7 @@
                                                 @csrf
                                                 <a href="{{route('poll.endVote',[$poll->id])}}"
                                                    onclick="event.preventDefault();
-                                                    this.closest('form').submit();" class="text-green-600 whitespace-wrap hover:text-green-900">
+                                                    this.closest('form').submit();" class="text-green-600 whitespace-wrap text-wrap hover:text-green-900">
                                                     {{ __('Окончить голосование') }}
                                                 </a>
                                             </form>
@@ -139,7 +139,7 @@
                                                 @csrf
                                                 <a href="{{route('poll.endVote',[$poll->id])}}"
                                                    onclick="event.preventDefault();
-                                                    this.closest('form').submit();" class="text-red-600 whitespace-wrap hover:text-red-900">
+                                                    this.closest('form').submit();" class="text-red-600 whitespace-wrap text-wrap hover:text-red-900">
                                                     {{ __('Возобновить голосование') }}
                                                 </a>
                                             </form>
@@ -155,7 +155,7 @@
                             @foreach($poll->questions as $question)
                                 <tr class="bg-white bg-gray-100 border-b border-gray-400">
                                     <td colspan=3>
-                                        <div class="px-6 py-4 whitespace-wrap text-sm text-gray-900 text-center">
+                                        <div class="px-6 py-4 whitespace-wrap text-sm text-gray-900 text-center text-wrap">
                                             {{$loop->index + 1}}. {!! $question->text !!}
                                         </div>
                                         <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-green-600 bg-gray-200">

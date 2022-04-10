@@ -44,11 +44,11 @@
                                             @if ($poll->isGovernanceMeetingTSN()) <div class="text-xs font-bold">Опрос для Правления ТСН</div>@endif
                                             @if ($poll->isVoteForTSN()) <div class="text-xs font-bold">Опрос для Членов ТСН</div>@endif
                                             @if ($poll->isPublicVote()) <div class="text-xs font-bold">Публичный опрос</div>@endif
-                                            <div>{{ $poll->name }}</div>
+                                                <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
                                         </td>
                                         @if (! $poll->voteFinished() )
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <span class="text-green-600">Голосование активно</span>
+                                                <span class="text-green-600">@if (! $poll->voteStart() )Голосование еще не началось@elseГолосование активно@endif</span>
                                             </td>
                                         @else
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -62,7 +62,7 @@
                                                 </td>
                                             @else
                                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    @if($poll->voteFinished())
+                                                    @if($poll->voteFinished() || !$poll->voteStart() )
                                                         <a href="#" class="disabled">Голосовать</a>
                                                     @else
                                                         <a href="{{$poll->isPublicVote()
@@ -153,11 +153,11 @@
                                             @if ($poll->isGovernanceMeetingTSN()) <div>Опрос для Правления ТСН</div>@endif
                                             @if ($poll->isVoteForTSN()) <div>Опрос для Членов ТСН</div>@endif
                                             @if ($poll->isPublicVote()) <div>Публичный опрос</div>@endif
-                                            <div class="text-sm font-medium ">{{ $poll->name }}</div>
+                                                <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
                                         </div>
                                         @if (! $poll->voteFinished() )
                                             <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-green-600 bg-gray-200">
-                                                Голосование активно
+                                                <span class="text-green-600">@if (! $poll->voteStart() )Голосование еще не началось@elseГолосование активно@endif</span>
                                             </div>
                                         @else
                                             <div class="px-6 py-4 whitespace-wrap text-left text-sm font-medium text-red-600 bg-gray-200">
@@ -173,7 +173,7 @@
                                                 </div>
                                             @else
                                                 <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <a href="{{$poll->voteFinished() ? '#' : route('poll.display',[$poll->id])  }}" class="@if ($poll->voteFinished() ) disabled @else text-indigo-600 hover:text-indigo-900 @endif">Голосовать</a>
+                                                    <a href="{{$poll->voteFinished()|| ! $poll->voteStart() ? '#' : route('poll.display',[$poll->id])  }}" class="@if ($poll->voteFinished() || ! $poll->voteStart()) disabled @else text-indigo-600 hover:text-indigo-900 @endif">Голосовать</a>
                                                 </div>
                                             @endif
                                         @else

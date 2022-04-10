@@ -18,6 +18,7 @@ class Poll extends Model
     protected $guarded = [];
     protected $fillable = [
         'name',
+        'start',
         'finished',
         'type_of_poll',
         'protocol'
@@ -110,6 +111,14 @@ class Poll extends Model
     public function voteFinished () : bool
     {
         if ($this->finished)
+            return true;
+        else
+            return false;
+    }
+
+    public function voteStart () : bool
+    {
+        if ($this->start)
             return true;
         else
             return false;

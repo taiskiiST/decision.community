@@ -54,6 +54,20 @@
                 {!! Form::open(['route' => ['poll.submit.public', ['poll' => $poll] ], 'method' => 'POST']) !!}
             @endif
             <!-- This example requires Tailwind CSS v2.0+ -->
+            @if ($quorum)
+                <div class="inline-flex flex-row w-full place-content-between">
+                    <div class="px-1 py-3 sm:px-6">
+                        <label class="px-1 py-4 block text-lg text-black text-wrap">Зарегистрировано {{$quorum->count_of_voting_current}} из {{$quorum->all_users_that_can_vote}} членов ТСН <p class="font-semibold"> @if( ( round($quorum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP) ) <= $quorum->count_of_voting_current)Кворум есть! @else Кворума нет! @endif </p></label>
+                    </div>
+                    <div class="px-1 py-7 sm:px-6 flex-row-reverse ">
+                        @if( ( round($quorum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP) ) > $quorum->count_of_voting_current)
+                        <a href="/polls/{{$poll->id}}/display"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
+                                Обновить
+                            </button></a>
+                            @endif
+                    </div>
+                </div>
+            @endif
             <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
                 <div class="text-center"><span style="font-size: x-large;"><b>{{$poll->name}}</b></span></div>
                 @if ($poll->isPublicVote() || !auth()->user()->isAccess())
@@ -140,7 +154,7 @@
                                 @endforeach
                             </h3>
                         </div>
-                        @if (!$displayMode && !auth()->user()->isAccess())
+                        @if (!$displayMode && auth()->user()->canVote() && ( round($quorum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP)  <= $quorum->count_of_voting_current ) )
                         <div>
                             <fieldset>
                                 <div class="bg-white rounded-md -space-y-px">

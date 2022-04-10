@@ -6,9 +6,13 @@ use App\Models\AnonymousUser;
 use App\Models\AnonymousVote;
 use App\Models\Answer;
 use App\Models\Item;
+use App\Models\Organizer;
+use App\Models\Permission;
 use App\Models\Poll;
 use App\Models\Question;
+use App\Models\Quorum;
 use App\Models\TypeOfPoll;
+use App\Models\User;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -311,9 +315,24 @@ class PollsController extends Controller
      */
     public function display(Poll $poll)
     {
+        $this->updateQuorumInfo($poll);
+        $quorum = Quorum::where('poll_id', $poll->id)->count() > 0 ? Quorum::where('poll_id', $poll->id)->get()[0]:'';
         return view('polls.display', [
             'poll' => $poll,
+            'quorum' => $quorum,
             'displayMode' => false
+        ]);
+    }
+
+    public function start(Poll $poll)
+    {
+        if($poll->id) {
+            $poll->update([
+                'start' => date('Y-m-d H:i:s'),
+            ]);
+        }
+        return redirect()->route('poll.requisites', [
+            'poll' => $poll
         ]);
     }
 
@@ -645,6 +664,109 @@ class PollsController extends Controller
         return view('polls.update', [
             'poll' => $poll,
         ]);
+    }
+
+    public function requisites(Poll $poll)
+    {
+        //dd(Organizer::all());
+        return view('polls.requisites', [
+            'poll' => $poll,
+            'error' => '',
+            'users' => User::all(),
+            'organizers' => Organizer::where('poll_id', $poll->id)->count()>0 ? Organizer::where('poll_id', $poll->id)->get()[0]:'',
+            'quorum' => Quorum::where('poll_id', $poll->id)->count() > 0 ? Quorum::where('poll_id', $poll->id)->get()[0]:''
+        ]);
+    }
+
+    public function requisitesSubmitName(Poll $poll, Request $request)
+    {
+        if($poll->id && isset($request->poll_name)) {
+            $poll->update([
+                'name' => $request->poll_name,
+            ]);
+        }
+
+        return redirect()->route('poll.requisites', [
+            'poll' => $poll
+        ]);
+    }
+
+    public function updateQuorumInfo(Poll $poll)
+    {
+        $current_user_id = auth()->user()->id;
+        if ($this->inQuorum($current_user_id, $poll->id) ){
+            return;
+        }else{
+            $this->addToQuorum($current_user_id, $poll->id);
+        }
+
+    }
+    public function inQuorum($user_id, $poll_id): bool
+    {
+        if( empty(Quorum::where('poll_id', $poll_id)->first()) ){
+            Quorum::create([
+                'poll_id' => $poll_id,
+                'all_users_that_can_vote' => $this->countCanVote(),
+                'list_of_all_current_users' => '',
+                'count_of_voting_current' => 0
+            ]);
+            return false;
+        }else {
+            return in_array($user_id, explode(',', Quorum::where('poll_id', $poll_id)->first()->list_of_all_current_users));
+        }
+    }
+    public function addToQuorum($user_id, $poll_id)
+    {
+        $quorum = Quorum::where('poll_id', $poll_id)->first();
+        //dd($quorum->count_of_voting_current);
+        if ($quorum->count_of_voting_current !== 0) {
+            $list_of_all_current_users = explode(',', $quorum->list_of_all_current_users);
+        }else{
+            $list_of_all_current_users = [];
+        }
+        array_push($list_of_all_current_users, $user_id);
+        $list_of_all_current_users = implode(',', $list_of_all_current_users);
+
+        $count_of_voting_current = ++$quorum->count_of_voting_current;
+
+        $quorum->update([
+            'list_of_all_current_users' => $list_of_all_current_users,
+            'count_of_voting_current' => $count_of_voting_current
+        ]);
+    }
+    public function countCanVote()
+    {
+        $count = 0;
+        $users = User::all();
+        foreach ($users as $user){
+            if( in_array(Permission::VOTE, explode(',', $user->permissions )) ){
+                ++$count;
+            }
+        }
+        return $count;
+    }
+    public function requisitesSubmitOrganizers(Poll $poll, Request $request)
+    {
+        $error = '';
+
+        if($poll->id) {
+            if( ($request->chairman !== $request->secretary) && ($request->chairman !== $request->counter_votes) && ($request->secretary !== $request->counter_votes)) {
+                Organizer::updateOrCreate([
+                    'poll_id' => $poll->id,
+                ],
+                    [
+                        'user_chairman_id' => $request->chairman,
+                        'user_secretary_id' => $request->secretary,
+                        'user_counter_votes_id' => $request->counter_votes,
+                    ]
+                );
+            }else{
+                $error = 'Один и тот же человек не может занимать больше одной должности!';
+            }
+        }
+        return redirect()->route('poll.requisites', [
+            'poll'  => $poll,
+        ])->withErrors($error);
     }
 
     /**

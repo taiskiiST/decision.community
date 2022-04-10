@@ -22,9 +22,6 @@ class CreateOrganizersTable extends Migration
             $table->timestamps();
 
             $table->unique(['poll_id', 'user_chairman_id', 'user_secretary_id','user_counter_votes_id'], 'unique_organizers');
-            $table->unique(['user_chairman_id', 'user_secretary_id']);
-            $table->unique(['user_chairman_id', 'user_counter_votes_id']);
-            $table->unique(['user_secretary_id', 'user_counter_votes_id']);
         });
     }
 

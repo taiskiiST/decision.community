@@ -44,7 +44,11 @@
                                             @if ($poll->isGovernanceMeetingTSN()) <div class="text-xs font-bold">Опрос для Правления ТСН</div>@endif
                                             @if ($poll->isVoteForTSN()) <div class="text-xs font-bold">Опрос для Членов ТСН</div>@endif
                                             @if ($poll->isPublicVote()) <div class="text-xs font-bold">Публичный опрос</div>@endif
-                                                <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
+                                                @if (auth()->user()->isAdmin())
+                                                    <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
+                                                @else
+                                                    <div>{{ $poll->name }}</div>
+                                                @endif
                                         </td>
                                         @if (! $poll->voteFinished() )
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -153,7 +157,11 @@
                                             @if ($poll->isGovernanceMeetingTSN()) <div>Опрос для Правления ТСН</div>@endif
                                             @if ($poll->isVoteForTSN()) <div>Опрос для Членов ТСН</div>@endif
                                             @if ($poll->isPublicVote()) <div>Публичный опрос</div>@endif
-                                                <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
+                                                @if (auth()->user()->isAdmin())
+                                                    <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
+                                                @else
+                                                    <div>{{ $poll->name }}</div>
+                                                @endif
                                         </div>
                                         @if (! $poll->voteFinished() )
                                             <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-green-600 bg-gray-200">

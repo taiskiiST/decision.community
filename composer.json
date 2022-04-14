@@ -23,6 +23,7 @@
         "laravelcollective/html": "^6.2",
         "livewire/livewire": "^2.3",
         "maatwebsite/excel": "^3.1",
+        "phpoffice/phpword": "^0.18.3",
         "socialiteproviders/laravelpassport": "^4.1",
         "staudenmeir/laravel-cte": "^1.0"
     },

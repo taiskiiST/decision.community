@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property mixed id
@@ -22,6 +23,10 @@ class Question extends Model
     public function answers(): HasMany
     {
         return $this->hasMany(Answer::class);
+    }
+    public function speakers(): HasOne
+    {
+        return $this->HasOne(Speaker::class);
     }
 
     public function question_files(): HasMany

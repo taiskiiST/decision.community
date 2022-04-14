@@ -42,6 +42,8 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('poll.results');
     Route::post('/polls/create/{type_of_poll}', [PollsController::class, 'create'])->name('poll.create');
     Route::get('/polls/{poll}/edit/{error?}', [PollsController::class, 'edit'])->name('poll.edit');
+    Route::post('/polls/{poll}/generateProtocol', [PollsController::class, 'generateProtocol'])->name('poll.generateProtocol');
+    Route::post('/polls/{poll}/generateBlank', [PollsController::class, 'generateBlank'])->name('poll.generateBlank');
     Route::post('/polls/{poll}/addProtocol', [PollsController::class, 'addProtocol'])->name('poll.addProtocol');
     Route::get('/polls/{poll}/delProtocol', [PollsController::class, 'delProtocol'])->name('poll.delProtocol');
     Route::post('/polls/delete/{poll}', [PollsController::class, 'delete'])->name('poll.delete');
@@ -52,6 +54,7 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::get('/polls/{poll}/requisites/', [PollsController::class, 'requisites'])->name('poll.requisites');
     Route::get('/polls/{poll}/requisites/submitName', [PollsController::class, 'requisitesSubmitName'])->name('poll.requisites.submitName');
     Route::get('/polls/{poll}/requisites/submitOrganizers', [PollsController::class, 'requisitesSubmitOrganizers'])->name('poll.requisites.submitOrganizers');
+    Route::get('/polls/{poll}/requisites/submitInvited', [PollsController::class, 'requisitesSubmitInvited'])->name('poll.requisites.SubmitInvited');
 
     Route::get('/polls/{poll}/display/public', [PollsController::class, 'display'])->name('poll.display.public');
     Route::get('/polls/{poll}/results/public', [PollsController::class, 'results'])->name('poll.results.public');

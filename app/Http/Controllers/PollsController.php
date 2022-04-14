@@ -11,11 +11,13 @@ use App\Models\Permission;
 use App\Models\Poll;
 use App\Models\Question;
 use App\Models\Quorum;
+use App\Models\Speaker;
 use App\Models\TypeOfPoll;
 use App\Models\User;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+
 
 class PollsController extends Controller
 {
@@ -35,7 +37,8 @@ class PollsController extends Controller
     public function index()
     {
         return view('polls.index', [
-            'polls' => Poll::all()
+            'polls' => Poll::all(),
+            'users' => User::all()
         ]);
     }
 
@@ -75,6 +78,205 @@ class PollsController extends Controller
             ]);
         }
     }
+
+    public function generateBlank(Poll $poll, Request $request){
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(base_path('storage/app/public/storage/TemplateBlank.docx'));
+
+        $templateProcessor->setValue('name', $poll->name);
+//**************************************************************
+        $count_blank = 1;
+        $replacements_blank = [];
+        foreach ($poll->questions()->get() as $question){
+            $new_array = array(
+                'count_question_blank' => $count_blank,
+                'question_text_blank' => $question->text
+            );
+            ++$count_blank;
+            array_push($replacements_blank, $new_array);
+        }
+        $templateProcessor->cloneBlock('block_blank', 0, true, false, $replacements_blank);
+
+        foreach ($poll->questions()->get() as $question){
+            $replacements_answer_blank = [];
+            $count_answer_blank = 1;
+            foreach($question->answers()->get() as $answer){
+                $new_array_answer = array(
+                    'count_answer_blank' => $count_answer_blank,
+                    'answer_text_blank' => $answer->text
+                );
+                ++$count_answer_blank;
+                array_push($replacements_answer_blank, $new_array_answer);
+            }
+            $templateProcessor->cloneRowAndSetValues('count_answer_blank', $replacements_answer_blank);
+        }
+//**************************************************************
+        if(!file_exists(base_path('storage/app/public/storage/'.$poll->id))){
+            mkdir(base_path('storage/app/public/storage/'.$poll->id));
+        }
+
+        $str_path = 'storage/app/public/storage/'.$poll->id.'/Blank.docx';
+        $templateProcessor->saveAs(base_path($str_path));
+        $poll->update([
+            'blank_doc' =>  '/storage/storage/'.$poll->id.'/Blank.docx'
+        ]);
+
+        return redirect()->route('poll.requisites', [
+            'poll' => $poll,
+        ]);
+    }
+
+    public function generateProtocol(Poll $poll, Request $request){
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(base_path('storage/app/public/storage/TemplateProtocol.docx'));
+        $num_protocol = Poll::all()->count();
+        if(Quorum::where('poll_id',$poll->id)->get()->isNotEmpty()){
+            $qourum = Quorum::where('poll_id',$poll->id)->get()[0];
+        }else{
+            return redirect()->route('poll.results', [
+                'poll' => $poll,
+            ])->withErrors("Кворум пуст!");;
+        }
+        if(Organizer::where('poll_id',$poll->id)->get()->isNotEmpty()){
+            $organizers = Organizer::where('poll_id',$poll->id)->get()[0];
+        }else{
+            return redirect()->route('poll.results', [
+                'poll' => $poll,
+            ])->withErrors("Не назначены организаторы мероприятия!");;
+        }
+
+        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(false);
+        if(round($qourum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP) > $qourum->count_of_voting_current ){
+            $form_protocol = 'заочная';
+            $is_forum = 'не имеется';
+            $yes_no = 'не';
+        }else{
+            $form_protocol = 'очная';
+            $is_forum = 'имеется';
+            $yes_no = '';
+        }
+        $count = 1;
+        $replacements_agenda = [];
+        foreach ($poll->questions()->get() as $question){
+            $new_array_agenda = array(
+                'count_agenda' => $count,
+                'agenda_text' => $question->text
+            );
+            ++$count;
+            array_push($replacements_agenda, $new_array_agenda);
+        }
+        $templateProcessor->cloneBlock('block_agenda', 0, true, false, $replacements_agenda);
+
+//**************************************************************
+        $count = 1;
+        $replacements = [];
+        foreach ($poll->questions()->get() as $question){
+
+            $new_array = array(
+                'count_question' => $count,
+                'question_text' => $question->text,
+                'qourum_count_of_voting_current' => $qourum->count_of_voting_current,
+            );
+
+            ++$count;
+            array_push($replacements, $new_array);
+        }
+        $templateProcessor->cloneBlock('block_question', 0, true, false, $replacements);
+
+
+        foreach ($poll->questions()->get() as $question) {
+            $replacements_answer = [];
+            $count_answer = 1;
+            foreach ($question->answers()->get() as $answer) {
+                $new_array_answer = array(
+                    'num_answer' => $count_answer,
+                    'answer_text' => $answer->text,
+                    'answer_countVotes' => $answer->countVotes($answer->id),
+                    'answer_percentOfQuestions' => $answer->percentOfQuestions($question->id, $answer->id)
+                );
+                ++$count_answer;
+                array_push($replacements_answer, $new_array_answer);
+            }
+            $templateProcessor->cloneRowAndSetValues('num_answer', $replacements_answer);
+        }
+//**************************************************************
+
+
+//**************************************************************
+        $users_all = User::all();
+        $count = 1;
+        $replacements_users = [];
+        foreach ($users_all as $user){
+            if(in_array($user->id, explode(',', $qourum->list_of_all_current_users))){
+                $new_array = array( 'num_users'=> $count , 'user_name' => $user->name );
+                ++$count;
+                array_push($replacements_users, $new_array);
+            }
+        }
+        $templateProcessor->cloneRowAndSetValues('num_users', $replacements_users);
+//**************************************************************
+
+
+        $dt_start = new \DateTime();
+        $dt_start->setTimestamp(strtotime($poll->start));
+
+        $invited = explode(',', $organizers->users_invited_id);
+        $srt_name_invited = '';
+        foreach ($invited as $key => $invite){
+            $srt_name_invited .= User::find($invite)->name.', ';
+        }
+        $srt_name_invited = substr($srt_name_invited,0,-2);
+
+
+        foreach ($poll->questions()->get() as $question) {
+            foreach ($question->speakers()->get() as $speaker) {
+                $speakers = explode(',', $speaker->users_speaker_id);
+                $srt_name_speakers = '';
+                foreach ($speakers as $key => $speaker_id){
+                    $srt_name_speakers .= User::find($speaker_id)->name.', ';
+                }
+            }
+        }
+        $srt_name_speakers = substr($srt_name_invited,0,-2);
+
+
+        $templateProcessor->setValue('num_protocol', $num_protocol);
+        $templateProcessor->setValue('name', $poll->name);
+        $templateProcessor->setValue('invited', $srt_name_invited);
+        $templateProcessor->setValue('speakers', $srt_name_speakers);
+        $templateProcessor->setValue('date', date_format($dt_start,"d.m.Y") );
+        $templateProcessor->setValue('form', $form_protocol);
+        //$templateProcessor->setValue('agenda', htmlspecialchars($text_agenda));
+        $templateProcessor->setValue('all_users', $qourum->all_users_that_can_vote);
+        $templateProcessor->setValue('current_sum_users', $qourum->count_of_voting_current);
+        $templateProcessor->setValue('is_quorum', $is_forum);
+        $templateProcessor->setValue('yes_no', $yes_no);
+        $templateProcessor->setValue('chairman', User::find($organizers->user_chairman_id)->name );
+        $templateProcessor->setValue('secretary', User::find($organizers->user_secretary_id)->name );
+        $templateProcessor->setValue('counter_vote', User::find($organizers->user_counter_votes_id)->name );
+        $templateProcessor->setValue('current_sum_users_yes', $qourum->count_of_voting_current );
+        $templateProcessor->setValue('current_sum_users_no', 0 );
+        $templateProcessor->setValue('current_sum_users_nothing', 0 );
+        $templateProcessor->setValue('start', date_format($dt_start,"d.m.Y, H:i:s") );
+        //$templateProcessor->setValue('text_question_answer', htmlspecialchars($text_question_answer));
+
+        $dt_end = new \DateTime();
+        $dt_end->setTimestamp(strtotime($poll->finished));
+
+        $templateProcessor->setValue('close', date_format($dt_end,"d.m.Y, H:i:s"));
+        if(!file_exists(base_path('storage/app/public/storage/'.$poll->id))){
+            mkdir(base_path('storage/app/public/storage/'.$poll->id));
+        }
+
+        $str_path = 'storage/app/public/storage/'.$poll->id.'/Protocol.docx';
+        $templateProcessor->saveAs(base_path($str_path));
+        $poll->update([
+            'protocol_doc' =>  '/storage/storage/'.$poll->id.'/Protocol.docx'
+        ]);
+
+        return redirect()->route('poll.results', [
+            'poll' => $poll,
+        ]);
+    }
+
     public function addProtocol(Request $request, $poll_id){
         $poll = Poll::find($poll_id);
         $error = '';
@@ -303,7 +505,9 @@ class PollsController extends Controller
     {
         return view('polls.display', [
             'poll' => $poll,
-            'displayMode' => true
+            'displayMode' => true,
+            'quorum' => '',
+            'users' => User::all()
         ]);
     }
 
@@ -320,7 +524,8 @@ class PollsController extends Controller
         return view('polls.display', [
             'poll' => $poll,
             'quorum' => $quorum,
-            'displayMode' => false
+            'displayMode' => false,
+            'users' => User::all()
         ]);
     }
 
@@ -574,6 +779,16 @@ class PollsController extends Controller
 
         foreach ($poll->questions as $question) {
             $rules["question_{$question->id}"] = 'required|exists:answers,id';
+            if(!empty($request->input('speakers'.$question->id))){
+                $list = implode(',',$request->input('speakers'.$question->id));
+                Speaker::updateOrCreate([
+                    'question_id' => $question->id,
+                ],
+                    [
+                        'users_speaker_id' => $list
+                    ]
+                );
+            }
         }
         $parameters = $this->validate($request, $rules);
         if(!$anonymous && !$poll->isPublicVote()) {
@@ -764,6 +979,22 @@ class PollsController extends Controller
                 $error = 'Один и тот же человек не может занимать больше одной должности!';
             }
         }
+        return redirect()->route('poll.requisites', [
+            'poll'  => $poll,
+        ])->withErrors($error);
+    }
+
+    public function requisitesSubmitInvited(Poll $poll, Request $request)
+    {
+        $error = '';
+        $users_invited_is = implode(',' , $request->invited);
+        Organizer::updateOrCreate([
+            'poll_id' => $poll->id,
+        ],
+            [
+                'users_invited_id' => $users_invited_is,
+            ]
+        );
         return redirect()->route('poll.requisites', [
             'poll'  => $poll,
         ])->withErrors($error);

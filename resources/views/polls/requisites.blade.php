@@ -41,6 +41,42 @@
 
                     @endif
                 </div>
+                @if (!$poll->blank_doc)
+                    <div class="px-1 py-4 sm:px-6 flex-row-reverse ">
+                        <form method="POST" action="{{route('poll.generateBlank',['poll'=>$poll])}}">
+                            @csrf
+                            <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
+                            <a href="{{route('poll.generateBlank',['poll'=>$poll])}}"
+                               onclick="event.preventDefault();
+                                                        this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
+                                <button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
+                                    {{ __('Сгенерировать бланк вопросов') }}
+                                </button>
+                            </a>
+                        </form>
+                    </div>
+                @else
+                    <div class="px-1 py-4 sm:px-1 flex-row-reverse ">
+                        <a href="{{$poll->blank_doc}}" target="_blank">
+                            <button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
+                                {{ __('Скачать бланк вопросов Ворде') }}
+                            </button>
+                        </a>
+                    </div>
+                    <div class="px-1 py-1 sm:px-1 flex-row-reverse ">
+                        <form method="POST" action="{{route('poll.generateBlank',['poll'=>$poll])}}">
+                            @csrf
+                            <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
+                            <a href="{{route('poll.generateBlank',['poll'=>$poll])}}"
+                               onclick="event.preventDefault();
+                                                        this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
+                                <button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
+                                    {{ __('Обновить бланк') }}
+                                </button>
+                            </a>
+                        </form>
+                    </div>
+                @endif
             </div>
             <div class="grid sm:grid-cols-2 lg:grid-cols-2 gap-4">
                 <form method="GET" action="{{route('poll.requisites.submitName',['poll'=>$poll->id])}}" class="inline-flex flex-col" name="pollName" id="pollName">
@@ -132,6 +168,44 @@
                             <button type="submit" form="organizers"
                                     class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 submit-button">
                                 Сохранить организаторов собрания
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="mt-10 sm:mt-0">
+            <div class="p-3 md:col-span-2">
+                <form method="GET" action="{{route('poll.requisites.SubmitInvited',['poll'=>$poll->id])}}" name="invited" id="invited">
+                    @csrf
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 p-5">
+                        <div>
+                            <div>Приглашенные</div>
+                            <div>
+                                <select name="invited[]"
+                                        class="mt-1 block w-full py-1 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        required multiple>
+                                    @foreach($users as $user)
+                                        @if(!$user->isVote() && $user->isAccess() )
+                                            @if(!empty($organizers) && $organizers->isInvited($user->id))
+                                                <option value="{{$user->id}}" selected>{{$user->name}}</option>
+                                            @else
+                                                <option value="{{$user->id}}">{{$user->name}}</option>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inline-flex flex-row w-full place-content-between">
+                        <div class="px-4 py-1 bg-gray-50  sm:px-6">
+                            <button type="submit" form="invited"
+                                    class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 submit-button">
+                                Сохранить приглашенных
                             </button>
                         </div>
                     </div>

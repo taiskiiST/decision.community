@@ -64,7 +64,7 @@
                         <a href="/polls/{{$poll->id}}/display"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
                                 Обновить
                             </button></a>
-                            @endif
+                        @endif
                     </div>
                 </div>
             @endif
@@ -106,6 +106,33 @@
                 </nav>
 
                 @foreach($poll->questions as $question)
+                    @if (auth()->user()->isAdmin())
+                        <div class="mt-10 sm:mt-0 {!! $loop->first ? '' : 'hidden' !!}" id="speaker_question_{!! $question->id !!}">
+                            <div class="p-3 md:col-span-2">
+                                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 p-5">
+                                    <div>
+                                        <div>Выступающие</div>
+                                        <div>
+                                            <select name="speakers{!! $question->id !!}[]"
+                                                    class="mt-1 block w-full py-1 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    required multiple
+                                                    id="select_speaker_question_{!! $question->id !!} ">
+                                                @foreach($users as $user)
+
+                                                    @if(($question->speakers()->count() > 0 ) && in_array($user->id, explode(',',$question->speakers()->first()->users_speaker_id) )  )
+                                                        <option value="{{$user->id}}" selected>{{$user->name}}</option>
+                                                    @else
+                                                        <option value="{{$user->id}}">{{$user->name}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="bg-white shadow overflow-hidden sm:rounded-lg {!! $loop->first ? '' : 'hidden' !!}" id="question_{!! $question->id !!}">
                         <div class="px-4 py-5 sm:px-6">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">
@@ -416,6 +443,9 @@
                 $("#question_" + current_id).addClass('hidden');
                 $("#question_" + num_id).removeClass('hidden');
 
+                $("#speaker_question_" + current_id).addClass('hidden');
+                $("#speaker_question_" + num_id ).removeClass('hidden');
+
                 let name_curr = $('#' + num).attr("name");
                 let current_loop_id = name_curr.replace("nav_loop_", "");
 
@@ -454,6 +484,9 @@
                 $("#question_" + current_id).addClass('hidden');
                 $("#question_" + prev_id ).removeClass('hidden');
 
+                $("#speaker_question_" + current_id).addClass('hidden');
+                $("#speaker_question_" + prev_id ).removeClass('hidden');
+
                 name_curr = $('#nav_' + prev_id).attr("name");
                 prev_id = name_curr.replace("nav_loop_", "");
 
@@ -487,6 +520,9 @@
 
                 $("#question_" + current_id).addClass('hidden');
                 $("#question_" + next_id ).removeClass('hidden');
+
+                $("#speaker_question_" + current_id).addClass('hidden');
+                $("#speaker_question_" + next_id ).removeClass('hidden');
 
                 name_curr = $('#nav_' + next_id).attr("name");
                 next_loop_id = name_curr.replace("nav_loop_", "");

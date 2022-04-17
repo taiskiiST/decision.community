@@ -132,7 +132,7 @@ class PollsController extends Controller
 
         $count_blank = 1;
 
-        $parser = new \HTMLtoOpenXML\Parser();
+        //$parser = new \HTMLtoOpenXML\Parser();
 
         //$ooXml = $parser->fromHTML($html);
         \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);

@@ -181,7 +181,7 @@
                                 @endforeach
                             </h3>
                         </div>
-                        @if (!$displayMode && auth()->user()->canVote() && ( round($quorum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP)  <= $quorum->count_of_voting_current ) )
+                        @if (!$displayMode && auth()->user()->canVote() )
                         <div>
                             <fieldset>
                                 <div class="bg-white rounded-md -space-y-px">

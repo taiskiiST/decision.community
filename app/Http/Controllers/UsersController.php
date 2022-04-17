@@ -144,6 +144,12 @@ class UsersController extends Controller
             }
         }
 
+        if (isset($parameters['password'])){
+            $password = Hash::make($parameters['password']);
+        }elseif(isset($request->id)){
+            $password = User::find($request->id)->password;
+        }
+
         if (!isset($request->id)) {
             $user = User::updateOrCreate(
                 [ 'phone' => $parameters['phone'], 'email' => $parameters['email-address']],
@@ -163,6 +169,7 @@ class UsersController extends Controller
                     'email' => $parameters['email-address'],
                     'name' => $parameters['name'],
                     'address' => $parameters['address'],
+                    'password' => $password,
                     'position_id' => $parameters['position'],
                     'permissions' => implode(',', $parameters['permission']),
                 ]

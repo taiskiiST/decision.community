@@ -24,6 +24,7 @@
         "livewire/livewire": "^2.3",
         "maatwebsite/excel": "^3.1",
         "phpoffice/phpword": "^0.18.3",
+        "rkorebrits/htmltoopenxml": "dev-master",
         "socialiteproviders/laravelpassport": "^4.1",
         "staudenmeir/laravel-cte": "^1.0"
     },

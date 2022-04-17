@@ -42,8 +42,8 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('poll.results');
     Route::post('/polls/create/{type_of_poll}', [PollsController::class, 'create'])->name('poll.create');
     Route::get('/polls/{poll}/edit/{error?}', [PollsController::class, 'edit'])->name('poll.edit');
-    Route::post('/polls/{poll}/generateProtocol', [PollsController::class, 'generateProtocol'])->name('poll.generateProtocol');
-    Route::post('/polls/{poll}/generateBlank', [PollsController::class, 'generateBlank'])->name('poll.generateBlank');
+    Route::post('/polls/{poll}/generateProtocol', [PollsController::class, 'generateProtocolWithOutTemplate'])->name('poll.generateProtocol');
+    Route::post('/polls/{poll}/generateBlank', [PollsController::class, 'generateBlankWithOutTemplate'])->name('poll.generateBlank');
     Route::post('/polls/{poll}/addProtocol', [PollsController::class, 'addProtocol'])->name('poll.addProtocol');
     Route::get('/polls/{poll}/delProtocol', [PollsController::class, 'delProtocol'])->name('poll.delProtocol');
     Route::post('/polls/delete/{poll}', [PollsController::class, 'delete'])->name('poll.delete');

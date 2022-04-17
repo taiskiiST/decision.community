@@ -79,6 +79,315 @@ class PollsController extends Controller
         }
     }
 
+    public function delTags($html)
+    {
+        $search = ['<i>','</i>','<p>','</p>','<b>','</b>'];
+        $html = str_replace($search, "", $html);
+        $search = '/<iframe.*?><\/iframe>/';
+        $html = preg_replace($search, "", $html);
+        $search = '/<a.*?<\/a>/';
+        $html = preg_replace($search, "", $html);
+        return $html;
+    }
+
+    public function generateBlankWithOutTemplate(Poll $poll, Request $request){
+        $phpWord = new  \PhpOffice\PhpWord\PhpWord();
+        $phpWord->setDefaultFontName('Times New Roman');
+        $phpWord->setDefaultFontSize(14);
+        $properties = $phpWord->getDocInfo();
+
+        $properties->setCreator('Serg');
+        $properties->setCompany('ТСН КП Березка');
+        $properties->setTitle('Бланк голосования');
+        $properties->setDescription('Бланк голосования');
+        $properties->setCategory('Голосования');
+        $properties->setLastModifiedBy('Serg');
+        $properties->setCreated(mktime(0, 0, 0, 4, 17, 2022));
+        $properties->setModified(mktime(0, 0, 0, 4, 17, 202));
+        $properties->setSubject('Голосование');
+        $properties->setKeywords('голсование');
+
+        $sectionStyle = array(
+            'orientation' => 'portrait',
+            'marginTop' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),
+            'marginLeft' => 600,
+            'marginRight' => 600,
+            'colsNum' => 1,
+            'pageNumberingStart' => 1,
+            'borderBottomSize'=>100,
+            'borderBottomColor'=>'C0C0C0'
+        );
+        $section = $phpWord->addSection($sectionStyle);
+
+//        $text = "PHPWord is a library written in pure PHP that provides a set of classes to write to and read from different document file formats.";
+//        $fontStyle = array('name'=>'Arial', 'size'=>36, 'color'=>'075776', 'bold'=>TRUE, 'italic'=>TRUE);
+        $parStyle = array('spaceBefore'=>10);
+
+        $section->addText("Бланк для голосования", ['size'=>25, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
+        $section->addText("ТСН \"КП Березка\"", ['size'=>25, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
+        $section->addText(date("d.m.Y"), '',['spaceBefore'=>10, 'align'=>'right']);
+        $section->addText(htmlspecialchars($poll->name), '',$parStyle);
+        $section->addText(PHP_EOL);
+        $section->addText("********************************************************************", '',$parStyle);
+
+        $count_blank = 1;
+
+        $parser = new \HTMLtoOpenXML\Parser();
+
+        //$ooXml = $parser->fromHTML($html);
+        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+        foreach ($poll->questions()->get() as $question){
+            $html = "По ".$count_blank." вопросу ".$question->text;
+            $html = $this->delTags($html);
+            $textlines = explode("<br />", $html);
+            //dd($textlines);
+            $textrun = $section->addTextRun();
+            $textrun->addText(array_shift($textlines));
+            foreach($textlines as $line) {
+                $textrun->addTextBreak();
+                // maybe twice if you want to seperate the text
+                // $textrun->addTextBreak(2);
+                $textrun->addText($line );
+            }
+//            \PhpOffice\PhpWord\Shared\Html::addHtml($section, $this->addNamespaces(htmlspecialchars_decode($parser->fromHTML($html))) );
+            //$section->addText($parser->fromHTML($html) );htmlspecialchars_decode
+            //\PhpOffice\PhpWord\Shared\Html::addHtml($section, $this->addNamespaces($parser->fromHTML($html)) );
+            ++$count_blank;
+            $section->addText("Варианты ответов:");
+            $count_answer_blank = 1;
+            $wordTable = $section->addTable(['borderSize' => 6, 'borderColor' => '999999', 'align' => 'left']);
+            $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+            $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText('№','',['align' => 'center','spaceAfter' => 150]);
+            $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(500),['valign' => 'center'])->addText('Варианты ответа');
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText('Отметка голоса');
+            foreach($question->answers()->get() as $answer){
+                $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+                $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText($count_answer_blank,'',['align' => 'center','spaceAfter' => 150]);
+                $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(500),['valign' => 'center'])->addText($answer->text,'',['valign' => 'center']);
+                $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150));
+                ++$count_answer_blank;
+            }
+            $section->addText("********************************************************************", '',$parStyle);
+        }
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,'Word2007');
+
+        $str_path = 'storage/app/public/storage/'.$poll->id.'/BlankNew.docx';
+        $objWriter->save(base_path($str_path));
+        $poll->update([
+            'blank_doc' =>  '/storage/storage/'.$poll->id.'/BlankNew.docx'
+        ]);
+        return redirect()->route('poll.requisites', [
+            'poll' => $poll,
+        ]);
+    }
+
+    public function generateProtocolWithOutTemplate(Poll $poll, Request $request){
+        $phpWord = new  \PhpOffice\PhpWord\PhpWord();
+        $phpWord->setDefaultFontName('Times New Roman');
+        $phpWord->setDefaultFontSize(14);
+        $properties = $phpWord->getDocInfo();
+
+        $properties->setCreator('Serg');
+        $properties->setCompany('ТСН КП Березка');
+        $properties->setTitle('Протокол голосования');
+        $properties->setDescription('Протокол голосования');
+        $properties->setCategory('Голосования');
+        $properties->setLastModifiedBy('Serg');
+        $properties->setCreated(mktime(0, 0, 0, 4, 17, 2022));
+        $properties->setModified(mktime(0, 0, 0, 4, 17, 202));
+        $properties->setSubject('Голосование');
+        $properties->setKeywords('голсование');
+
+        $sectionStyle = array(
+            'orientation' => 'portrait',
+            'marginTop' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),
+            'marginLeft' => 600,
+            'marginRight' => 600,
+            'colsNum' => 1,
+            'pageNumberingStart' => 1,
+            'borderBottomSize'=>100,
+            'borderBottomColor'=>'C0C0C0'
+        );
+        $section = $phpWord->addSection($sectionStyle);
+
+//        $text = "PHPWord is a library written in pure PHP that provides a set of classes to write to and read from different document file formats.";
+//        $fontStyle = array('name'=>'Arial', 'size'=>36, 'color'=>'075776', 'bold'=>TRUE, 'italic'=>TRUE);
+        $parStyle = array('spaceBefore'=>10);
+        $num_protocol = Poll::all()->count();
+        if(Quorum::where('poll_id',$poll->id)->get()->isNotEmpty()){
+            $qourum = Quorum::where('poll_id',$poll->id)->get()[0];
+        }else{
+            return redirect()->route('poll.results', [
+                'poll' => $poll,
+            ])->withErrors("Кворум пуст!");;
+        }
+        if(Organizer::where('poll_id',$poll->id)->get()->isNotEmpty()){
+            $organizers = Organizer::where('poll_id',$poll->id)->get()[0];
+        }else{
+            return redirect()->route('poll.results', [
+                'poll' => $poll,
+            ])->withErrors("Не назначены организаторы мероприятия!");;
+        }
+
+        $section->addText("ПРОТОКОЛ №".$num_protocol, ['size'=>18, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
+        $section->addText($poll->name, ['size'=>18, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
+        $section->addText("От ".date("d.m.Y"), '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addText("х.Ленинаван", '',['spaceBefore'=>10, 'align'=>'right']);
+        $section->addText("Присутствовали: список прилагается", '',['spaceBefore'=>10, 'align'=>'left']);
+
+        $invited = explode(',', $organizers->users_invited_id);
+        $srt_name_invited = '';
+        foreach ($invited as $key => $invite){
+            $srt_name_invited .= User::find($invite)->name.', ';
+        }
+        $srt_name_invited = substr($srt_name_invited,0,-2);
+        $section->addText("Из числа приглашенных: ".$srt_name_invited, '',['spaceBefore'=>10, 'align'=>'left']);
+
+        if(round($qourum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP) > $qourum->count_of_voting_current ){
+            $form_protocol = 'заочная';
+            $is_forum = 'не имеется';
+            $yes_no = 'не';
+        }else{
+            $form_protocol = 'очная';
+            $is_forum = 'имеется';
+            $yes_no = '';
+        }
+
+        $section->addText("Форма проведения Общего Собрания Членов ТСН: ".$form_protocol, '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addTextBreak();
+        $section->addText("ПОВЕСТКА ДНЯ:", ['size'=>18, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
+
+        $count = 1;
+        foreach ($poll->questions()->get() as $question){
+            $html = $this->delTags($question->text);
+            $textlines = explode("<br />", $html);
+            $textrun = $section->addTextRun();
+            $textrun->addText($count.". ".array_shift($textlines), '',['spaceBefore'=>10, 'align'=>'left']);
+            foreach($textlines as $line) {
+                $textrun->addTextBreak();
+                // maybe twice if you want to seperate the text
+                // $textrun->addTextBreak(2);
+                $textrun->addText($line, '',['spaceBefore'=>10, 'align'=>'left']);
+            }
+            ++$count;
+            //$section->addText($count.". ".$question->text, '',['spaceBefore'=>10, 'align'=>'left']);
+        }
+        $section->addText("********************************************************************", '',['spaceBefore'=>10]);
+        $section->addText("Слушали: Третьякова Сергея Владимировича. Для ведения собрания необходимо убедиться в наличие кворума и избрать председательствующего и секретаря собрания.", '',['spaceBefore'=>10]);
+        $section->addTextBreak();
+
+        $section->addText("По списку Членов ТСН на собрании из ".$qourum->all_users_that_can_vote." присутствует ".$qourum->count_of_voting_current." - кворум ".$is_forum."! Собрание ".$yes_no." правомочно принимать решения по вопросам повестки дня.", '',['spaceBefore'=>10]);
+        $section->addTextBreak();
+        $section->addText("Постановили избрать:", '',['spaceBefore'=>10, 'align'=>'left']);
+
+        $section->addText("Председателем собрания - ".User::find($organizers->user_chairman_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addText("Секретарем собрания - ".User::find($organizers->user_secretary_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addText("Ответственный за подсчет голосов - ".User::find($organizers->user_counter_votes_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addTextBreak();
+        $section->addText("Голосовали всего: ".$qourum->count_of_voting_current.", За - ".$qourum->count_of_voting_current." Против - 0, Воздержались - 0.", '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addTextBreak();
+        $dt_start = new \DateTime();
+        $dt_start->setTimestamp(strtotime($poll->start));
+        $section->addText("Секретарь объявил о начале собрания в ".date_format($dt_start,"d.m.Y, H:i:s")." по Московскому времени.", '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addText("********************************************************************", '',['spaceBefore'=>10]);
+
+        $count_question = 1;
+        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+        foreach ($poll->questions()->get() as $question){
+            $html = "По ".$count_question." вопросу ".$question->text;
+            $html = $this->delTags($html);
+            $textlines = explode("<br />", $html);
+            $textrun = $section->addTextRun();
+            $textrun->addText(array_shift($textlines));
+            foreach($textlines as $line) {
+                $textrun->addTextBreak();
+                $textrun->addText($line );
+            }
+            ++$count_question;
+
+            if($question->speakers()->count() > 0) {
+                foreach ($question->speakers()->get() as $speaker) {
+                    $speakers = explode(',', $speaker->users_speaker_id);
+                    $srt_name_speakers = '';
+                    foreach ($speakers as $key => $speaker_id) {
+                        $srt_name_speakers .= User::find($speaker_id)->name . ', ';
+                    }
+                }
+                $srt_name_speakers = substr($srt_name_speakers, 0, -2);
+            }else{
+                $srt_name_speakers = '';
+            }
+            $section->addTextBreak();
+            $section->addText("Слушали: ".$srt_name_speakers);
+            $section->addTextBreak();
+            $html = "Постановили: ".$question->text;
+            $html = $this->delTags($html);
+            $textlines = explode("<br />", $html);
+            $textrun = $section->addTextRun();
+            $textrun->addText(array_shift($textlines));
+            foreach($textlines as $line) {
+                $textrun->addTextBreak();
+                $textrun->addText($line );
+            }
+            $section->addTextBreak();
+            $section->addText("Голосовали всего: ".$qourum->count_of_voting_current, '',['spaceBefore'=>10, 'align'=>'left']);
+            $section->addTextBreak();
+            $count_answer_blank = 1;
+            $wordTable = $section->addTable(['borderSize' => 6, 'borderColor' => '999999', 'align' => 'left']);
+            $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+            $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText('№','',['align' => 'center','spaceAfter' => 150]);
+            $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'center'])->addText('Варианты ответа');
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText('Проголосовало');
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170),['valign' => 'center'])->addText('Проголосовало %');
+            foreach($question->answers()->get() as $answer){
+                $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+                $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText($count_answer_blank,'',['align' => 'center','spaceAfter' => 150]);
+                $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'center'])->addText($answer->text,'',['valign' => 'center']);
+                $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText($answer->countVotes($answer->id),'',['align' => 'center','spaceAfter' => 150]);
+                $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170),['valign' => 'center'])->addText($answer->percentOfQuestions($question->id, $answer->id)."%",'',['align' => 'center','spaceAfter' => 150]);
+                ++$count_answer_blank;
+            }
+            $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+            $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText('','',['align' => 'center','spaceAfter' => 150]);
+            $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'center'])->addText('ИТОГО','',['align' => 'center']);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText($qourum->count_of_voting_current,'',['align' => 'center']);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170),['valign' => 'center'])->addText('100%','',['align' => 'center']);
+            $section->addText("********************************************************************", '',$parStyle);
+        }
+        $dt_end = new \DateTime();
+        $dt_end->setTimestamp(strtotime($poll->finished));
+        $section->addText("Председатель собрания объявил о закрытии Общего Собрания Членов ТСН в ".date_format($dt_end,"d.m.Y, H:i:s"), '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addTextBreak();
+        $section->addText("Настоящий протокол составлен в трех подлинных экземплярах.", '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addTextBreak();
+        $section->addText("Председатель собрания _____________________________".User::find($organizers->user_chairman_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addTextBreak();
+        $section->addText("Секретарь собрания _____________________________".User::find($organizers->user_secretary_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addTextBreak();
+        $section->addText("Ответственный за подсчетом голосов _____________________________".User::find($organizers->user_counter_votes_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,'Word2007');
+
+        $str_path = 'storage/app/public/storage/'.$poll->id.'/ProtocolNew.docx';
+        $objWriter->save(base_path($str_path));
+        $poll->update([
+            'protocol_doc' =>  '/storage/storage/'.$poll->id.'/ProtocolNew.docx'
+        ]);
+        return redirect()->route('poll.results', [
+            'poll' => $poll,
+        ]);
+    }
+
+    function addNamespaces($xml) {
+        $root = '<w:wordDocument
+        xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml"
+        xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint"
+        xmlns:o="urn:schemas-microsoft-com:office:office">';
+        $root .= $xml;
+        $root .= '</w:wordDocument>';
+        return $root;
+    }
+
     public function generateBlank(Poll $poll, Request $request){
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(base_path('storage/app/public/storage/TemplateBlank.docx'));
 
@@ -89,7 +398,7 @@ class PollsController extends Controller
         foreach ($poll->questions()->get() as $question){
             $new_array = array(
                 'count_question_blank' => $count_blank,
-                'question_text_blank' => $question->text
+                'question_text_blank' => strip_tags($question->text)
             );
             ++$count_blank;
             array_push($replacements_blank, $new_array);

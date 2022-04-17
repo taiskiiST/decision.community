@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9010810019d7f363d5c2a77a79101114",
+    "content-hash": "fa6e26c2840b83e0c3f53801603f8fd1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3595,6 +3595,50 @@
                 }
             ],
             "time": "2020-08-18T17:17:46+00:00"
+        },
+        {
+            "name": "rkorebrits/htmltoopenxml",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rkorebrits/HTMLtoOpenXML.git",
+                "reference": "50a67d3fa1b86dc4817788c58119095695fdeb85"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rkorebrits/HTMLtoOpenXML/zipball/50a67d3fa1b86dc4817788c58119095695fdeb85",
+                "reference": "50a67d3fa1b86dc4817788c58119095695fdeb85",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4 || ^7.0 || ^7.1 || ^7.2 || ^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "HTMLtoOpenXML\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Richard Korebrits",
+                    "email": "richard@korebrits.com"
+                }
+            ],
+            "description": "Convert HTML to OpenOfficeXML",
+            "keywords": [
+                "OOXML",
+                "html"
+            ],
+            "support": {
+                "source": "https://github.com/rkorebrits/HTMLtoOpenXML/tree/master"
+            },
+            "time": "2021-11-30T07:47:45+00:00"
         },
         {
             "name": "socialiteproviders/laravelpassport",
@@ -10096,7 +10140,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "rkorebrits/htmltoopenxml": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

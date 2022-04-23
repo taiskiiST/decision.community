@@ -87,7 +87,8 @@ class Poll extends Model
         $questions = $questions->pluck('id')->toArray();
         $usersIdsThatVoted = Vote::whereIn('question_id', $questions)->select('user_id')->get();
 
-        return User::whereNotIn('id', $usersIdsThatVoted)->where('is_category', false)->get();
+        //return User::whereNotIn('id', $usersIdsThatVoted)->where('is_category', false)->get();
+        return User::whereNotIn('id', $usersIdsThatVoted)->get();
     }
 
     public function peopleThatVote(): Collection

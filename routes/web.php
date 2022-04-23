@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::post('/polls/{poll}/submit/public', [PollsController::class, 'submit'])->name('poll.submit.public');
 
     Route::get('/polls/{poll}/report_voted', [PollsController::class, 'report_voted'])->name('poll.report_voted');
+    Route::get('/polls/{poll}/report_dont_voted', [PollsController::class, 'report_dont_voted'])->name('poll.report_dont_voted');
     Route::get('/polls/{poll}/report', [PollsController::class, 'report'])->name('poll.report');
     Route::get('/polls/{poll}/results_list', [PollsController::class, 'results_list'])->name('poll.results_list');
 

@@ -875,6 +875,46 @@ class PollsController extends Controller
         return $out;
     }
 
+    public function report_dont_voted(Poll $poll)
+    {
+        $out = [];
+
+        $out = $poll->peopleThatDidNotVote();
+        $str = '<table class=\'min-w-full divide-y divide-gray-200\'>';
+        $str .= '<thead class=\'bg-gray-50\'>
+                        <tr>
+                                <th scope=\'col\' class=\'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider\'>
+                                        №
+                                </th>
+                                <th scope=\'col\' class=\'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider\'>
+                                        ФИО
+                                </th>
+                                <th scope=\'col\' class=\'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider\'>
+                                        Адрес
+                                </th>
+                                <th scope=\'col\' class=\'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider\'>
+                                        Телефон
+                                </th>
+                        </tr>
+                        </thead>
+                        <tbody>';
+        $cnt = 1;
+        foreach ($out as $user) {
+            if($user->canVote()) {
+                $str_class = ($cnt % 2)? 'bg-white' : 'bg-gray-200';
+                $str .= '<tr class=\'bg-white bg-gray-100 border-b border-gray-400 text-wrap '.$str_class.'\'>';
+                $str .= '<td class=\'text-center\'>' . $cnt . '</td><td>' . $user->name . '</td><td>' . $user->address . '</td><td>' . $user->phone . '</td><td>';
+                $str .= '</tr>';
+                ++$cnt;
+            }
+        }
+        $str .= '</tbody></table>';
+        return view('polls.report_dont_voted', [
+            'poll' => $poll,
+            'str' => $str,
+        ]);
+    }
+
     /**
      * Display the specified resource.
      *

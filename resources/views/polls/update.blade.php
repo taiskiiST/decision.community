@@ -154,7 +154,7 @@
 
                             @foreach($poll->questions as $question)
                                 <tr class="bg-white bg-gray-100 border-b border-gray-400">
-                                    <td colspan=3>
+                                    <td>
                                         <div class="px-6 py-4 whitespace-wrap text-sm text-gray-900 text-center text-wrap">
                                             {{$loop->index + 1}}. {!! $question->text !!}
                                         </div>

@@ -82,7 +82,7 @@
                 </div>
 
                 <div class="space-y-1">
-                    <div class="text-base font-medium leading-none text-white">{{ auth()->user()->name }}</div>
+                    <div class="text-base font-medium leading-none text-white text-wrap">{{ auth()->user()->name }}</div>
 
                     <div class="text-sm font-medium leading-none text-gray-400">{{ auth()->user()->email }}</div>
                 </div>

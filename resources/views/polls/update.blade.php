@@ -103,12 +103,11 @@
             </div>
         </div>
 
-
-        <div class="flex flex-col xl:hidden">
+        <div class="flex flex-col xl:hidden ">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
-                <div class="py-2 align-middle min-w-full sm:px-2 lg:px-8">
+                <div class="py-2 align-middle min-w-full sm:px-1 lg:px-8">
                     <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200 ">
+                        <table class="min-w-full divide-y divide-gray-200 flex flex-col">
                             <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-1 py-3 text-left text-xs whitespace-wrap text-wrap font-medium text-gray-500 uppercase tracking-wider">
@@ -153,9 +152,9 @@
                             <tbody>
 
                             @foreach($poll->questions as $question)
-                                <tr class="bg-white bg-gray-100 border-b border-gray-400">
+                                <tr class="bg-white bg-gray-100 border-b border-gray-400 flex flex-col">
                                     <td colspan=3>
-                                        <div class="px-6 py-4 whitespace-wrap text-sm text-gray-900 text-center text-wrap">
+                                        <div class="px-6 py-4 whitespace-wrap text-sm text-gray-900 text-left text-wrap">
                                             {{$loop->index + 1}}. {!! $question->text !!}
                                         </div>
                                         <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600 bg-gray-200">
@@ -170,15 +169,15 @@
                                         @if (auth()->user()->canManageItems())
                                             <div class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium bg-gray-200">
                                                 @if (!$poll->voteFinished() )
-                                                <form method="POST" action="{{route('question.delete',[$poll->id, $question->id])}}">
-                                                    @csrf
-                                                    <input name="del_question" value="{{$question->id}}" type="hidden"/>
-                                                    <a href="{{route('question.delete',[$poll->id, $question->id])}}"
-                                                       onclick="event.preventDefault();
+                                                    <form method="POST" action="{{route('question.delete',[$poll->id, $question->id])}}">
+                                                        @csrf
+                                                        <input name="del_question" value="{{$question->id}}" type="hidden"/>
+                                                        <a href="{{route('question.delete',[$poll->id, $question->id])}}"
+                                                           onclick="event.preventDefault();
                                                     this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
-                                                        {{ __('Удалить вопрос') }}
-                                                    </a>
-                                                </form>
+                                                            {{ __('Удалить вопрос') }}
+                                                        </a>
+                                                    </form>
                                                 @else
                                                     <a href="#" class="disabled">
                                                         {{ __('Удалить вопрос') }}
@@ -195,6 +194,8 @@
                 </div>
             </div>
         </div>
+
+
         @if (isset($error))
             {{$error}}
         @endif

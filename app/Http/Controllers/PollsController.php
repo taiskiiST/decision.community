@@ -365,6 +365,36 @@ class PollsController extends Controller
         $section->addText("Секретарь собрания _____________________________".User::find($organizers->user_secretary_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
         $section->addTextBreak();
         $section->addText("Ответственный за подсчетом голосов _____________________________".User::find($organizers->user_counter_votes_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addTextBreak();
+
+
+        $section->addPageBreak();
+        $section->addText("Список проголосовавших:", ['size'=>18, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
+        $section->addTextBreak();
+        $count_users = 1;
+
+        $wordTable = $section->addTable(['borderSize' => 6, 'borderColor' => '999999', 'align' => 'left']);
+        $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+        $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText('№','',['align' => 'center','spaceAfter' => 150]);
+        $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(300),['valign' => 'center'])->addText('ФИО');
+        $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'center'])->addText('Продпись');
+        foreach ( $poll->peopleThatVote() as $user ){
+            $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+            $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText($count_users,'',['align' => 'center','spaceAfter' => 150]);
+            $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(300),['valign' => 'center'])->addText($user->name,'',['valign' => 'center']);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'bottom'])->addText('_____________________','',['align' => 'center','spaceAfter' => 150]);
+            ++$count_users;
+        }
+        $section->addTextBreak();
+        $section->addText("Председатель собрания объявил о закрытии Общего Собрания Членов ТСН в ".date_format($dt_end,"d.m.Y, H:i:s"), '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addTextBreak();
+        $section->addText("Настоящий протокол составлен в трех подлинных экземплярах.", '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addTextBreak();
+        $section->addText("Председатель собрания _____________________________".User::find($organizers->user_chairman_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addTextBreak();
+        $section->addText("Секретарь собрания _____________________________".User::find($organizers->user_secretary_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addTextBreak();
+        $section->addText("Ответственный за подсчетом голосов _____________________________".User::find($organizers->user_counter_votes_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
 
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,'Word2007');
 

@@ -181,6 +181,86 @@ class PollsController extends Controller
         ]);
     }
 
+    public function generateBlankWithAnswersWithOutTemplate(Poll $poll, Request $request){
+        $phpWord = new  \PhpOffice\PhpWord\PhpWord();
+        $phpWord->setDefaultFontName('Times New Roman');
+        $phpWord->setDefaultFontSize(14);
+        $properties = $phpWord->getDocInfo();
+
+        $properties->setCreator('Serg');
+        $properties->setCompany('ТСН КП Березка');
+        $properties->setTitle('Бланк голосования');
+        $properties->setDescription('Бланк голосования');
+        $properties->setCategory('Голосования');
+        $properties->setLastModifiedBy('Serg');
+        $properties->setCreated(mktime(0, 0, 0, 4, 17, 2022));
+        $properties->setModified(mktime(0, 0, 0, 4, 17, 202));
+        $properties->setSubject('Голосование');
+        $properties->setKeywords('голсование');
+
+        $sectionStyle = array(
+            'orientation' => 'portrait',
+            'marginTop' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),
+            'marginLeft' => 600,
+            'marginRight' => 600,
+            'colsNum' => 1,
+            'pageNumberingStart' => 1,
+            'borderBottomSize'=>100,
+            'borderBottomColor'=>'C0C0C0'
+        );
+        $section = $phpWord->addSection($sectionStyle);
+        $parStyle = array('spaceBefore'=>10);
+        foreach ($poll->peopleThatVote() as $user){
+            $section->addText("Бланк для голосования", ['size'=>25, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
+            $section->addText("ТСН \"КП Березка\"", ['size'=>25, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
+            $section->addText(date("d.m.Y"), '',['spaceBefore'=>10, 'align'=>'right']);
+            $section->addText(htmlspecialchars($poll->name), '',$parStyle);
+            $section->addText("Бланк для голосования для члена ТСН: ".$user->name, '',$parStyle);
+            $section->addText(PHP_EOL);
+            $section->addText("********************************************************************", '',$parStyle);
+
+            $count_answer_blank = 1;
+            $section->addText("Ответы на вопросы голосования:");
+            \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+            $wordTable = $section->addTable(['borderSize' => 6, 'borderColor' => '999999', 'align' => 'left']);
+            $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+            $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText('№','',['align' => 'center','spaceAfter' => 150]);
+            $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(500),['valign' => 'center'])->addText('Текст вопроса');
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText('Варинат ответ за который отдан голос');
+            foreach ($poll->questions()->get() as $question){
+                $html = $question->text;
+                $html = $this->delTags($html);
+                $search = ['<br>','</br>','<br/>','<br />'];
+                $html = str_replace($search, "", $html);
+
+                $pattern = '/\s/i';
+                $replacement = ' ';
+                $html = preg_replace($pattern, $replacement, $html);
+                //dd($html);
+                $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+                $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText($count_answer_blank,'',['align' => 'center','spaceAfter' => 150]);
+                $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(500),['valign' => 'center'])->addText($html,['size'=>10],['valign' => 'center']);
+                $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText($question->answerThatUserVote($user),'',['valign' => 'center']);
+                ++$count_answer_blank;
+            }
+            $section->addText("********************************************************************", '',$parStyle);
+            $section->addText(PHP_EOL);
+            $section->addText("Подпись ___________________________". $user->name, ['size'=>14, 'bold'=>False],['spaceBefore'=>10, 'align'=>'left']);
+            $section->addPageBreak();
+        }
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,'Word2007');
+
+        $str_path = 'storage/app/public/storage/'.$poll->id.'/BlankNewWithAnswers.docx';
+        $objWriter->save(base_path($str_path));
+
+        $poll->update([
+            'blank_with_answers_doc' =>  '/storage/storage/'.$poll->id.'/BlankNewWithAnswers.docx'
+        ]);
+        return redirect()->route('poll.requisites', [
+            'poll' => $poll,
+        ]);
+    }
+
     public function generateProtocolWithOutTemplate(Poll $poll, Request $request){
         $phpWord = new  \PhpOffice\PhpWord\PhpWord();
         $phpWord->setDefaultFontName('Times New Roman');
@@ -350,7 +430,7 @@ class PollsController extends Controller
             $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
             $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText('','',['align' => 'center','spaceAfter' => 150]);
             $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'center'])->addText('ИТОГО','',['align' => 'center']);
-            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText($qourum->count_of_voting_current,'',['align' => 'center']);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText($poll->peopleThatVote()->count(),'',['align' => 'center']);
             $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170),['valign' => 'center'])->addText('100%','',['align' => 'center']);
             $section->addText("********************************************************************", '',$parStyle);
         }
@@ -385,10 +465,6 @@ class PollsController extends Controller
             $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'bottom'])->addText('_____________________','',['align' => 'center','spaceAfter' => 150]);
             ++$count_users;
         }
-        $section->addTextBreak();
-        $section->addText("Председатель собрания объявил о закрытии Общего Собрания Членов ТСН в ".date_format($dt_end,"d.m.Y, H:i:s"), '',['spaceBefore'=>10, 'align'=>'left']);
-        $section->addTextBreak();
-        $section->addText("Настоящий протокол составлен в трех подлинных экземплярах.", '',['spaceBefore'=>10, 'align'=>'left']);
         $section->addTextBreak();
         $section->addText("Председатель собрания _____________________________".User::find($organizers->user_chairman_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
         $section->addTextBreak();

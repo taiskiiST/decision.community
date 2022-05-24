@@ -23,7 +23,8 @@ class Poll extends Model
         'type_of_poll',
         'protocol',
         'protocol_doc',
-        'blank_doc'
+        'blank_doc',
+        'blank_with_answers_doc'
     ];
 
     public function isPublicMeetingTSN(): bool

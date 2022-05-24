@@ -24,6 +24,15 @@ class Question extends Model
     {
         return $this->hasMany(Answer::class);
     }
+    public function answerThatUserVote(User $user)
+    {
+        $answers = $this->hasMany(Answer::class);
+        foreach ($answers->get()  as $answer) {
+            if (Vote::where('answer_id', '=', $answer->id)->where('user_id', '=', $user->id)->where('question_id', '=', $this->id)->count() > 0 ){
+                return $answer->text;
+            }
+        }
+    }
     public function speakers(): HasOne
     {
         return $this->HasOne(Speaker::class);

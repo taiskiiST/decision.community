@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\Organizer;
 use App\Models\Permission;
 use App\Models\Poll;
+use App\Models\Position;
 use App\Models\Question;
 use App\Models\Quorum;
 use App\Models\Speaker;
@@ -290,10 +291,14 @@ class PollsController extends Controller
         );
         $section = $phpWord->addSection($sectionStyle);
 
+        $footer = $section->createFooter();
+        $footer->addPreserveText('{PAGE} / {NUMPAGES}', array('bold'=>true),array('align'=>'right'));
+
 //        $text = "PHPWord is a library written in pure PHP that provides a set of classes to write to and read from different document file formats.";
 //        $fontStyle = array('name'=>'Arial', 'size'=>36, 'color'=>'075776', 'bold'=>TRUE, 'italic'=>TRUE);
         $parStyle = array('spaceBefore'=>10);
-        $num_protocol = Poll::all()->count();
+
+        $num_protocol = Poll::where('type_of_poll', $poll->type_of_poll)->count() + 1;
         if(Quorum::where('poll_id',$poll->id)->get()->isNotEmpty()){
             $qourum = Quorum::where('poll_id',$poll->id)->get()[0];
         }else{
@@ -323,13 +328,17 @@ class PollsController extends Controller
         $srt_name_invited = substr($srt_name_invited,0,-2);
         $section->addText("Из числа приглашенных: ".$srt_name_invited, '',['spaceBefore'=>10, 'align'=>'left']);
 
-        if(round($qourum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP) > $qourum->count_of_voting_current ){
-            $form_protocol = 'заочная';
-            $is_forum = 'не имеется';
-            $yes_no = 'не';
+        $count_all_voters = User::where('permissions', 'LIKE', '%'.Permission::VOTE.'%')->count();
+        if(round($count_all_voters/2,0,PHP_ROUND_HALF_UP) > $qourum->count_of_voting_current ){
+            $form_protocol = 'очно-заочной';
+            $is_forum = 'не набран';
         }else{
             $form_protocol = 'очная';
             $is_forum = 'имеется';
+        }
+        if( round($count_all_voters/2,0,PHP_ROUND_HALF_UP) > $poll->peopleThatVote()->count() ) {
+            $yes_no = 'не ';
+        }else{
             $yes_no = '';
         }
 
@@ -353,18 +362,19 @@ class PollsController extends Controller
             //$section->addText($count.". ".$question->text, '',['spaceBefore'=>10, 'align'=>'left']);
         }
         $section->addText("********************************************************************", '',['spaceBefore'=>10]);
-        $section->addText("Слушали: Третьякова Сергея Владимировича. Для ведения собрания необходимо убедиться в наличие кворума и избрать председательствующего и секретаря собрания.", '',['spaceBefore'=>10]);
+        $section->addText("Слушали:", ['bold' => TRUE]);
+        $section->addText("Третьякова Сергея Владимировича. Для ведения собрания необходимо убедиться в наличие кворума и избрать председательствующего и секретаря собрания.", '',['spaceBefore'=>10]);
         $section->addTextBreak();
 
-        $section->addText("По списку Членов ТСН на собрании из ".$qourum->all_users_that_can_vote." присутствует ".$qourum->count_of_voting_current." - кворум ".$is_forum."! Собрание ".$yes_no." правомочно принимать решения по вопросам повестки дня.", '',['spaceBefore'=>10]);
+        $section->addText("По списку Членов ТСН на собрании из ".$count_all_voters." присутствует ".$qourum->count_of_voting_current." - кворум ".$is_forum."! Собрание будет проводиться в ".$form_protocol." форме. В голосовании в ".$form_protocol." форме приняли участие ".$poll->peopleThatVote()->count()." членов ТСН! Собрание ".$yes_no."легитимно и ".$yes_no."правомочно принимать решения по вопросам повестки дня.", '',['spaceBefore'=>10]);
         $section->addTextBreak();
-        $section->addText("Постановили избрать:", '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addText("Постановили избрать:", '',['spaceBefore'=>10, 'align'=>'left', 'bold'=> TRUE]);
 
         $section->addText("Председателем собрания - ".User::find($organizers->user_chairman_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
         $section->addText("Секретарем собрания - ".User::find($organizers->user_secretary_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
         $section->addText("Ответственный за подсчет голосов - ".User::find($organizers->user_counter_votes_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
         $section->addTextBreak();
-        $section->addText("Голосовали всего: ".$qourum->count_of_voting_current.", За - ".$qourum->count_of_voting_current." Против - 0, Воздержались - 0.", '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addText("Голосовали всего: ".$poll->peopleThatVote()->count().", За - ".$poll->peopleThatVote()->count()." Против - 0, Воздержались - 0.", '',['spaceBefore'=>10, 'align'=>'left']);
         $section->addTextBreak();
         $dt_start = new \DateTime();
         $dt_start->setTimestamp(strtotime($poll->start));
@@ -398,9 +408,11 @@ class PollsController extends Controller
                 $srt_name_speakers = '';
             }
             $section->addTextBreak();
-            $section->addText("Слушали: ".$srt_name_speakers);
+            $section->addText("Слушали: ", ['bold'=>TRUE]);
+            $section->addText($srt_name_speakers);
             $section->addTextBreak();
-            $html = "Постановили: ".$question->text;
+            $section->addText("Постановили: ", ['bold'=>TRUE]);
+            $html = $question->text;
             $html = $this->delTags($html);
             $textlines = explode("<br />", $html);
             $textrun = $section->addTextRun();
@@ -410,9 +422,10 @@ class PollsController extends Controller
                 $textrun->addText($line );
             }
             $section->addTextBreak();
-            $section->addText("Голосовали всего: ".$qourum->count_of_voting_current, '',['spaceBefore'=>10, 'align'=>'left']);
+            $section->addText("Голосовали всего: ".$poll->peopleThatVote()->count(), '',['spaceBefore'=>10, 'align'=>'left']);
             $section->addTextBreak();
             $count_answer_blank = 1;
+            $max_voters = 0;
             $wordTable = $section->addTable(['borderSize' => 6, 'borderColor' => '999999', 'align' => 'left']);
             $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
             $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText('№','',['align' => 'center','spaceAfter' => 150]);
@@ -420,11 +433,22 @@ class PollsController extends Controller
             $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText('Проголосовало');
             $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170),['valign' => 'center'])->addText('Проголосовало %');
             foreach($question->answers()->get() as $answer){
+                if ($max_voters < $answer->countVotes($answer->id))
+                    $max_voters = $answer->countVotes($answer->id);
+            }
+            foreach($question->answers()->get() as $answer){
                 $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
-                $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText($count_answer_blank,'',['align' => 'center','spaceAfter' => 150]);
-                $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'center'])->addText($answer->text,'',['valign' => 'center']);
-                $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText($answer->countVotes($answer->id),'',['align' => 'center','spaceAfter' => 150]);
-                $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170),['valign' => 'center'])->addText($answer->percentOfQuestions($question->id, $answer->id)."%",'',['align' => 'center','spaceAfter' => 150]);
+                if ($max_voters == $answer->countVotes($answer->id)){
+                    $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText($count_answer_blank, ['bold'=> TRUE], ['align' => 'center', 'spaceAfter' => 150]);
+                    $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText($answer->text, ['bold'=> TRUE], ['valign' => 'center']);
+                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($answer->countVotes($answer->id), ['bold'=> TRUE], ['align' => 'center', 'spaceAfter' => 150]);
+                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText($answer->percentOfQuestions($question->id, $answer->id) . "%", ['bold'=> TRUE], ['align' => 'center', 'spaceAfter' => 150]);
+                }else {
+                    $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText($count_answer_blank, '', ['align' => 'center', 'spaceAfter' => 150]);
+                    $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText($answer->text, '', ['valign' => 'center']);
+                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($answer->countVotes($answer->id), '', ['align' => 'center', 'spaceAfter' => 150]);
+                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText($answer->percentOfQuestions($question->id, $answer->id) . "%", '', ['align' => 'center', 'spaceAfter' => 150]);
+                }
                 ++$count_answer_blank;
             }
             $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
@@ -440,12 +464,28 @@ class PollsController extends Controller
         $section->addTextBreak();
         $section->addText("Настоящий протокол составлен в трех подлинных экземплярах.", '',['spaceBefore'=>10, 'align'=>'left']);
         $section->addTextBreak();
-        $section->addText("Председатель собрания _____________________________".User::find($organizers->user_chairman_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
-        $section->addTextBreak();
-        $section->addText("Секретарь собрания _____________________________".User::find($organizers->user_secretary_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
-        $section->addTextBreak();
-        $section->addText("Ответственный за подсчетом голосов _____________________________".User::find($organizers->user_counter_votes_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
-        $section->addTextBreak();
+
+        $count_users_with_positin = 1;
+        $wordTable = $section->addTable(['borderSize' => 6, 'borderColor' => '999999', 'align' => 'left']);
+        $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+        $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText('№','',['align' => 'center','spaceAfter' => 150]);
+        $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'center'])->addText('Должность');
+        $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText('ФИО');
+        $cell4 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170),['valign' => 'center'])->addText('Подпись');
+        foreach (User::whereNotNull('position_id')->get() as $user_with_position){
+            $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+            $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText($count_users_with_positin, '', ['align' => 'center', 'spaceAfter' => 150]);
+            $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'center'])->addText(Position::find($user_with_position->position_id)->position);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText($user_with_position->name,'',['valign' => 'center']);
+            $cell4 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170),['valign' => 'bottom'])->addText('','',['align' => 'center','spaceAfter' => 150]);
+            $count_users_with_positin ++;
+        }
+//        $section->addText("Председатель собрания _____________________________".User::find($organizers->user_chairman_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+//        $section->addTextBreak();
+//        $section->addText("Секретарь собрания _____________________________".User::find($organizers->user_secretary_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+//        $section->addTextBreak();
+//        $section->addText("Ответственный за подсчетом голосов _____________________________".User::find($organizers->user_counter_votes_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+//        $section->addTextBreak();
 
 
         $section->addPageBreak();
@@ -457,20 +497,30 @@ class PollsController extends Controller
         $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
         $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText('№','',['align' => 'center','spaceAfter' => 150]);
         $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(300),['valign' => 'center'])->addText('ФИО');
-        $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'center'])->addText('Продпись');
+        $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'center'])->addText('Подпись');
         foreach ( $poll->peopleThatVote() as $user ){
             $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
             $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText($count_users,'',['align' => 'center','spaceAfter' => 150]);
             $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(300),['valign' => 'center'])->addText($user->name,'',['valign' => 'center']);
-            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'bottom'])->addText('_____________________','',['align' => 'center','spaceAfter' => 150]);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'bottom'])->addText('','',['align' => 'center','spaceAfter' => 150]);
             ++$count_users;
         }
         $section->addTextBreak();
-        $section->addText("Председатель собрания _____________________________".User::find($organizers->user_chairman_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
-        $section->addTextBreak();
-        $section->addText("Секретарь собрания _____________________________".User::find($organizers->user_secretary_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
-        $section->addTextBreak();
-        $section->addText("Ответственный за подсчетом голосов _____________________________".User::find($organizers->user_counter_votes_id)->name, '',['spaceBefore'=>10, 'align'=>'left']);
+        $count_users_with_positin = 1;
+        $wordTable = $section->addTable(['borderSize' => 6, 'borderColor' => '999999', 'align' => 'left']);
+        $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+        $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50),['valign' => 'center'])->addText('№','',['align' => 'center','spaceAfter' => 150]);
+        $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'center'])->addText('Должность');
+        $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText('ФИО');
+        $cell4 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170),['valign' => 'center'])->addText('Подпись');
+        foreach (User::whereNotNull('position_id')->get() as $user_with_position){
+            $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
+            $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText($count_users_with_positin, '', ['align' => 'center', 'spaceAfter' => 150]);
+            $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250),['valign' => 'center'])->addText(Position::find($user_with_position->position_id)->position);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150),['valign' => 'center'])->addText($user_with_position->name,'',['valign' => 'center']);
+            $cell4 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170),['valign' => 'bottom'])->addText('','',['align' => 'center','spaceAfter' => 150]);
+            $count_users_with_positin ++;
+        }
 
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,'Word2007');
 

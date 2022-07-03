@@ -22,6 +22,9 @@
                                     Количествой файлов
                                 </th>
                                 <th scope="col" class="relative px-6 py-3">
+                                    Детали
+                                </th>
+                                <th scope="col" class="relative px-6 py-3">
                                     @if ($poll->voteFinished() )
                                         <span class="text-green-600">Голосование окончено {{date_create($poll->finished)->format('d-m-Y H:i:s')}}</span>
                                     @endif
@@ -68,6 +71,9 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
                                         {{ $question->question_files()->count() }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
+                                        <a href="{{route('poll.questions.view_question',[$question->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр</a>
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium ">
                                         @if (auth()->user()->canManageItems() )
@@ -164,10 +170,16 @@
                                             <div class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium">
                                                 <a href="@if (!$poll->voteFinished() ){{route('poll.questions.index',[$poll->id, $question->id])}} @else # @endif" class=" @if ($poll->voteFinished() ) disabled @else text-indigo-600 hover:text-indigo-900 @endif ">Изменить вопрос</a>
                                             </div>
+                                            <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600 bg-gray-200">
+                                                <a href="{{route('poll.questions.view_question',[$question->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр вопроса</a>
+                                            </div>
+                                        @else
+                                            <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600">
+                                                <a href="{{route('poll.questions.view_question',[$question->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр вопроса</a>
+                                            </div>
                                         @endif
-
                                         @if (auth()->user()->canManageItems())
-                                            <div class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium bg-gray-200">
+                                            <div class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium">
                                                 @if (!$poll->voteFinished() )
                                                     <form method="POST" action="{{route('question.delete',[$poll->id, $question->id])}}">
                                                         @csrf

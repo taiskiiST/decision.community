@@ -162,7 +162,6 @@ class Item extends Model
                          Item::select('items.*')
                              ->join('tree', 'tree.id', '=', 'items.parent_id')
                      );
-
         return Item::from('tree')
                     ->withRecursiveExpression('tree', $query)
                     ->get();
@@ -201,10 +200,19 @@ class Item extends Model
                          Item::select('items.*')
                              ->join('tree', 'items.id',  '=', 'tree.parent_id' )
                      );
+//        foreach (){
+//
+//        }
+
 
         return Item::from('tree')
                    ->withRecursiveExpression('tree', $query)
                    ->get();
+
+//        return Item::from('tree')
+//            ->withExpression('tree', $query)
+//            ->get();
+        //withExpression
     }
 
     /**

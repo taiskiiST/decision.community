@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Poll;
 use App\Models\Question;
+use GraphQL\Query;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -99,6 +100,21 @@ class QuestionsController extends Controller
         return view('questions.create');
     }
 
+    public function viewQuestion(Question $question)
+    {
+        return view('questions.view_question', [
+            'question' => $question,
+            'poll' => $question->poll()->get()->first()
+        ]);
+    }
+
+    public function searchQuestion(Request $request)
+    {
+        $search_text = $request->search;
+        $matches_questions = Question::where('text', 'LIKE', '%'.$search_text.'%')->get();
+        //dd($matches_questions);
+        return view('questions.search', ['questions'=>$matches_questions, 'search_text'=>$search_text]);
+    }
     public function switchTypeFile ($type_of_file){
         switch ( $type_of_file){
             case 'pdf':

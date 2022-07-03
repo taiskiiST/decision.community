@@ -38,6 +38,11 @@ class Question extends Model
         return $this->HasOne(Speaker::class);
     }
 
+    public function poll(): HasOne
+    {
+        return $this->HasOne(Poll::class,'id','poll_id');
+    }
+
     public function question_files(): HasMany
     {
         return $this->hasMany(QuestionFile::class);

@@ -86,7 +86,7 @@
                                             Количество файлов - {{ $question->question_files()->count() }}
                                         </div>
                                         <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600">
-                                            Просмотр вопроса
+                                            <a href="{{route('poll.questions.view_question',[$question->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр вопроса</a>
                                         </div>
 
                                     </td>

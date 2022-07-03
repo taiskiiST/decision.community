@@ -7,6 +7,7 @@ const {
     UPDATE_ITEM_NAME_URL,
     UPDATE_ITEM_PHONE_URL,
     UPDATE_ITEM_PIN_URL,
+    UPDATE_ITEM_DESCRIPTION_URL,
     UPDATE_ITEM_ADDRESS_URL,
     UPDATE_ITEM_THUMB_URL,
     ADD_ITEM_URL,
@@ -208,6 +209,24 @@ export const updateItemPhone = async (data) => {
 export const updateItemPin = async (data) => {
     try {
         const response = await client.put(UPDATE_ITEM_PIN_URL, data);
+
+        const { data: itemFromServer } = response;
+
+        if (! itemFromServer) {
+            return null;
+        }
+
+        return itemFromServer;
+    } catch (error) {
+        message.error(`Error occurred: ${error}`, 5);
+
+        return null;
+    }
+};
+
+export const updateItemDescription = async (data) => {
+    try {
+        const response = await client.put(UPDATE_ITEM_DESCRIPTION_URL, data);
 
         const { data: itemFromServer } = response;
 

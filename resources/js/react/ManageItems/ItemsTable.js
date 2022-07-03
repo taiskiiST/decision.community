@@ -10,6 +10,7 @@ const ItemsTable = ({
     onItemNameChange,
     onItemPhoneChange,
     onItemPinChange,
+    onItemDescriptionChange,
     onItemAddressChange,
     onItemThumbClicked,
     onElementaryChange
@@ -84,7 +85,14 @@ const ItemsTable = ({
                                     scope="col"
                                     className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Пин
+                                    Цена
+                                </th>
+
+                                <th
+                                    scope="col"
+                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    Описание
                                 </th>
 
                                 <th
@@ -194,6 +202,22 @@ const ItemsTable = ({
                                                         debounceTimeout={1000}
                                                         onChange={e => onItemPinChange(item, e)}
                                                         value={item.pin}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className="px-6 py-4 whitespace-wrap">
+                                            <div className="ml-4 w-full">
+                                                <div
+                                                    className="text-sm font-medium text-gray-900 w-full truncate"
+                                                >
+                                                    <DebounceInput
+                                                        className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
+                                                        type="text"
+                                                        debounceTimeout={1000}
+                                                        onChange={e => onItemDescriptionChange(item, e)}
+                                                        value={item.description}
                                                     />
                                                 </div>
                                             </div>

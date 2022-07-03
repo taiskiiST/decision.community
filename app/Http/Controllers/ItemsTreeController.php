@@ -33,6 +33,7 @@ class ItemsTreeController extends Controller
             'UPDATE_ITEM_NAME_URL'                  => route('items-tree.update-item-name'),
             'UPDATE_ITEM_PHONE_URL'                 => route('items-tree.update-item-phone'),
             'UPDATE_ITEM_PIN_URL'                   => route('items-tree.update-item-pin'),
+            'UPDATE_ITEM_DESCRIPTION_URL'           => route('items-tree.update-item-description'),
             'UPDATE_ITEM_ADDRESS_URL'               => route('items-tree.update-item-address'),
             'UPDATE_ITEM_ELEMENTARY_URL'            => route('items-tree.update-item-elementary'),
             'UPDATE_ITEM_THUMB_URL'                 => route('items-tree.update-item-thumb'),
@@ -184,6 +185,33 @@ class ItemsTreeController extends Controller
         ]);
 
         $item->pin = $params['pin'];
+
+        $item->save();
+
+        $item->refresh();
+
+        $item->addProperties();
+
+        return $item;
+    }
+
+    /**
+     * @return \App\Models\Item|string[]|null
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function updateItemDescription()
+    {
+        /** @var Item $item */
+        $item = Item::findOrFail(request('id'));
+
+        $this->authorize('update', $item);
+
+        $params = $this->validate(request(), [
+            'description' => 'required',
+        ]);
+
+        $item->description = $params['description'];
 
         $item->save();
 

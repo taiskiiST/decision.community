@@ -7,6 +7,7 @@ import {
     updateItemName,
     updateItemPhone,
     updateItemPin,
+    updateItemDescription,
     updateItemAddress,
     updateItemElementary,
     updateItemCommitteeMembers,
@@ -116,6 +117,7 @@ const App = () => {
             name,
             phone,
             pin,
+            description,
             address,
             is_category,
             thumbUrl,
@@ -146,6 +148,7 @@ const App = () => {
             thumbUrl: thumbUrl,
             phone: phone,
             pin: pin,
+            description: description,
             elementary: elementary,
             address: address,
             prepared: true,
@@ -505,6 +508,37 @@ const App = () => {
             newItemsByKeys.set(id, {
                 ...item,
                 pin: pin,
+            });
+
+            return newItemsByKeys;
+        });
+    };
+
+    const onItemDescriptionChange = async (item, e) => {
+        const newDescription = e.target.value;
+        if (! newDescription) {
+            return;
+        }
+
+        const { id } = item;
+
+        const updatedItemFromServer = await updateItemDescription({
+            id: id,
+            description: newDescription
+        });
+
+        if (! updatedItemFromServer) {
+            return;
+        }
+
+        setItemsByKeys(currentItemsByKeys => {
+            const newItemsByKeys = new Map(currentItemsByKeys);
+
+            const { description } = updatedItemFromServer;
+
+            newItemsByKeys.set(id, {
+                ...item,
+                description: description,
             });
 
             return newItemsByKeys;
@@ -1033,6 +1067,7 @@ const App = () => {
                         onItemNameChange={onItemNameChange}
                         onItemPhoneChange={onItemPhoneChange}
                         onItemPinChange={onItemPinChange}
+                        onItemDescriptionChange={onItemDescriptionChange}
                         onItemAddressChange={onItemAddressChange}
                         onItemThumbClicked={onItemThumbClicked}
                         onElementaryChange={onElementaryChange}

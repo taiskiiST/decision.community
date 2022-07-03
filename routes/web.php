@@ -102,6 +102,7 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::put('/items-tree/updateItemName', [ItemsTreeController::class, 'updateItemName'])->name('items-tree.update-item-name');
     Route::put('/items-tree/updateItemPhone', [ItemsTreeController::class, 'updateItemPhone'])->name('items-tree.update-item-phone');
     Route::put('/items-tree/updateItemPin', [ItemsTreeController::class, 'updateItemPin'])->name('items-tree.update-item-pin');
+    Route::put('/items-tree/updateItemDescription', [ItemsTreeController::class, 'updateItemDescription'])->name('items-tree.update-item-description');
     Route::put('/items-tree/updateItemAddress', [ItemsTreeController::class, 'updateItemAddress'])->name('items-tree.update-item-address');
     Route::put('/items-tree/updateItemElementary', [ItemsTreeController::class, 'updateItemElementary'])->name('items-tree.update-item-elementary');
     Route::put('/items-tree/updateItemCommitteeMembers', [ItemsTreeController::class, 'updateItemCommitteeMembers'])->name('items-tree.update-item-committee-members');

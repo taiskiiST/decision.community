@@ -64,6 +64,7 @@ class ItemsList extends Component
         $this->parentCategories = $this->currentCategory
             ->getAllParents()
             ->reverse();
+
     }
 
     /**
@@ -186,7 +187,8 @@ class ItemsList extends Component
         $this->items = auth()->user()
                              ->availableItems($doNotSetParentId ? -1 : ($this->currentCategory ? $this->currentCategory->id : null))
                              ->where(function (Builder $builder) {
-                                 $builder->where('name', 'LIKE', "%$this->search%");
+                                 $builder->where('name', 'LIKE', "%$this->search%")
+                                 ->orWhere('address', 'LIKE', "%$this->search%");
                              })
                              ->sortBy($this->sortBy)
                              ->get();

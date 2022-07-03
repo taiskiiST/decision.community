@@ -37,5 +37,27 @@
                 </svg>
             @endif
         </span>
+        <div class="flex-col justify-center pt-2 text-gray-700 group-hover:text-blue-500 font-semibold leading-tight">
+            @if ($item->address)
+                <div class="text-center">
+                    Адрес: {{$item->address}}
+                </div>
+            @endif
+            @if ($item->phone)
+                <div class="text-center pt-2">
+                    Телефон: {{$item->phone}}
+                </div>
+            @endif
+            @if ($item->pin)
+                <div class="text-center pt-2">
+                    Цена: {!! $item->pin !!}
+                </div>
+            @endif
+            @if ($item->description)
+                <div class="pt-2">
+                    {!! $item->description !!}
+                </div>
+            @endif
+        </div>
     </div>
 </div>

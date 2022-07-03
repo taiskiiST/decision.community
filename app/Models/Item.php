@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
  * @property string source
  * @property string thumb
  * @property mixed phone
+ * @property mixed description
  * @property mixed address
  * @property mixed pin
  * @property mixed elementary
@@ -203,11 +204,22 @@ class Item extends Model
 //        foreach (){
 //
 //        }
+        $search_items = Item::where("parent_id", "=",$this->parent_id)
+            ->where("is_category",1)
+                            ->unionAll(Item::where("parent_id", "=",$this->id)->where("is_category",1))
+                            ->distinct()
+                            ->get();
 
+        $search_items = Item::where("parent_id", "=",99999999999)->get();
 
-        return Item::from('tree')
-                   ->withRecursiveExpression('tree', $query)
-                   ->get();
+        //dd($search_items);
+
+        //dd($query->get());
+        return $search_items;
+
+//        return Item::from('tree')
+//                   ->withRecursiveExpression('tree', $query)
+//                   ->get();
 
 //        return Item::from('tree')
 //            ->withExpression('tree', $query)

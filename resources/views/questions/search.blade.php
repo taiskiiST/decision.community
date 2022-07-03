@@ -85,7 +85,7 @@
                                         <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600 bg-gray-200">
                                             Количество файлов - {{ $question->question_files()->count() }}
                                         </div>
-                                        <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600 bg-gray-200">
+                                        <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600">
                                             Просмотр вопроса
                                         </div>
 

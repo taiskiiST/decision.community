@@ -69,20 +69,21 @@
             <div class="-mr-2 flex md:hidden">
                 <div class="relative w-80">
                     <label class="sr-only" for="search">Поиск</label>
-                    <input
-                            type="search"
-                            class="appearance-none shadow border py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline w-full"
-                            id="search"
-                            placeholder="Поиск"
-                            autofocus
-                    />
-                    <button class="absolute inset-y-0 right-0 flex items-center bg-indigo-600 text-white text-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <a href="{{route('poll.questions.search_question')}}">
+                    <form action="{{route('poll.questions.search_question')}}" method="GET">
+                        <input
+                                type="search"
+                                class="appearance-none shadow border py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline w-30"
+                                id="search"
+                                placeholder="Поиск"
+                                name="search"
+                                autofocus
+                        />
+                        <button type="submit" class="absolute inset-y-0 right-0 flex items-center bg-indigo-600 text-white text-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             <svg class="w-10 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" stroke="currentColor">
                                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                             </svg>
-                        </a>
-                    </button>
+                        </button>
+                    </form>
                 </div>
                 <!-- Mobile menu button -->
                 <button

@@ -3,12 +3,12 @@
         <div class="flex items-center justify-between h-16">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <img class="h-10 w-10" src="/images/logo.png" alt="Workflow logo">
+                    <a href="/"><img class="h-10 w-10" src="/images/logo.png" alt="Workflow logo"></a>
                 </div>
 
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="{{ route('items.index') }}" class="nav-tab {{ in_array($currentRouteName, ['items.index', 'items.show']) ? 'nav-tab-current' : 'nav-tab-not-current'}}" hidden>Каталог товаров и услуг ТСН "КП Березка"</a>
+                        <a href="{{ route('items.index') }}" class="nav-tab {{ in_array($currentRouteName, ['items.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}" >Каталог товаров и услуг ТСН "КП Березка"</a>
 
                         <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
 
@@ -66,8 +66,8 @@
 
             </div>
 
-            <div class="-mr-2 flex md:hidden">
-                <div class="relative w-80">
+            <div class="-mr-2 flex md:hidden space-x-4">
+                <div class="relative w-50">
                     <label class="sr-only" for="search">Поиск</label>
                     <form action="{{route('poll.questions.search_question')}}" method="GET">
                         <input
@@ -127,8 +127,8 @@
             </div>
         </div>
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="{{ route('items.index') }}" class="nav-menu-link {{ in_array($currentRouteName, ['items.index']) ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Товары и услуги</a>
             @if (auth()->user()->canManageItems())
-                <a href="{{ route('items.index') }}" class="nav-menu-link {{ in_array($currentRouteName, ['items.index', 'items.show']) ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Товары и услуги</a>
                 <a href="#" class="nav-menu-link {{ $currentRouteName === 'items-tree' ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Головование и документы</a>
             @endif
             @if (auth() && auth()->user()->canVote())

@@ -6,7 +6,7 @@
     <div class="bg-white shadow overflow-hidden sm:rounded-lg" id="question_{!! $question->id !!}">
         <div class="px-4 py-5 sm:px-6">
             <h1 class="text-lg leading-6 font-bold text-gray-900">
-                <a href="{{route('poll.agenda',['poll'=> $poll->id])}}">{{$poll->name}}</a>
+                <a href="{{route('poll.agenda',['poll'=> $poll->id])}}" class="text-indigo-600 hover:text-indigo-900">{{$poll->name}}</a>
             </h1>
             <h3 class="text-lg leading-6 font-medium text-gray-900">
                 {!! $question->text !!}

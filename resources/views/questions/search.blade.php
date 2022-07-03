@@ -66,7 +66,7 @@
                             <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-1 py-3 text-left text-xs whitespace-wrap text-wrap font-medium text-gray-500 uppercase tracking-wider">
-                                    {{$question->poll()->get()->first()->name}}
+                                    <p >Результаты поиска по запросу: {{$search_text}}</p>
                                 </th>
                                 <th scope="col" class="relative px-1 py-3">
 

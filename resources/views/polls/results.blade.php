@@ -33,6 +33,7 @@
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     @foreach($poll->questions as $question)
                     <label class="block text-lg text-black font-semibold mt-10 whitespace-wrap">{{$loop->index + 1}}. {!!$question->text!!}</label>
+                    <p hidden>{{$maxCountAnswer = 0}}</p>
                     <table class="min-w-full divide-y divide-gray-200 border-b-2 border-gray-400 ">
                         <thead class="bg-gray-50">
                         <tr>
@@ -50,19 +51,24 @@
 
                         <tbody>
                         @foreach($question->answers as $answer)
+                            @if ($answer->countVotes($answer->id) > $maxCountAnswer)
+                                <p hidden>{{$maxCountAnswer = $answer->countVotes($answer->id)}}</p>
+                            @endif
+                        @endforeach
+                        @foreach($question->answers as $answer)
                             <tr class="bg-white @if ($loop->odd) bg-gray-200 @endif">
-                                <td class="px-6 py-4 whitespace-wrap text-left font-medium text-gray-900">
+                                <td class="px-6 py-4 whitespace-wrap text-left font-medium text-gray-900 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
                                     {{$answer->text}}
                                 </td>
 
-                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
                                     @if(!$poll->isPublicVote())
                                         {{$answer->countVotes($answer->id)}}
                                     @else
                                         {{$answer->countVotesAnonymous($answer->id)}}
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
                                     @if(!$poll->isPublicVote())
                                         {{$answer->percentOfQuestions($question->id, $answer->id) }}
                                     @else
@@ -133,12 +139,12 @@
                         @foreach($question->answers as $answer)
                             <tr class="bg-white bg-gray-100 border-b border-gray-400">
                                 <td>
-                                    <div class="px-1 py-4 whitespace-wrap text-sm font-bold text-gray-900 text-center">
-                                        {{$answer->text}}
+                                    <div class="px-1 py-4 whitespace-wrap text-sm font-bold text-gray-900 text-center @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
+                                        {{$answer->text}}  - {{$maxCountAnswer}}
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200">
+                                    <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
                                         @if(!$poll->isPublicVote())
                                             {{$answer->countVotes($answer->id)}}
                                         @else
@@ -147,7 +153,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200">
+                                    <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
                                         @if(!$poll->isPublicVote())
                                             {{$answer->percentOfQuestions($question->id, $answer->id) }}
                                         @else

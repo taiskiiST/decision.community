@@ -108,18 +108,24 @@
                                                                 : route('poll.results',[$poll->id])
                                                            }}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
                                         </td>
-                                        @if (auth()->user()->canManageItems())
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <form method="POST" action="{{ route('poll.delete',[$poll->id]) }}">
-                                                @csrf
-                                                <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
-                                                <a href="{{route('poll.delete',[$poll->id])}}"
-                                                   onclick="event.preventDefault();
-                                                    this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
+                                        @if (auth()->user()->canManageItems() && !$poll->voteFinished())
+                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <form method="POST" action="{{ route('poll.delete',[$poll->id]) }}">
+                                                    @csrf
+                                                    <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
+                                                    <a href="{{route('poll.delete',[$poll->id])}}"
+                                                       onclick="event.preventDefault();
+                                                        this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
+                                                        {{ __('Удалить') }}
+                                                    </a>
+                                                </form>
+                                            </td>
+                                        @else
+                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <a href="#" class="disabled">
                                                     {{ __('Удалить') }}
                                                 </a>
-                                            </form>
-                                        </td>
+                                            </td>
                                         @endif
                                     </tr>
                                 @endforeach
@@ -207,7 +213,7 @@
                                         <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
                                             <a href="{{route('poll.results',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
                                         </div>
-                                        @if (auth()->user()->canManageItems())
+                                        @if (auth()->user()->canManageItems() && !$poll->voteFinished())
                                             <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <form method="POST" action="{{ route('poll.delete',[$poll->id]) }}">
                                                     @csrf
@@ -219,6 +225,10 @@
                                                         {{ __('Удалить') }}
                                                     </a>
                                                 </form>
+                                            </div>
+                                        @else
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <a href="#" class="disabled">Удалить</a>
                                             </div>
                                         @endif
                                     </td>

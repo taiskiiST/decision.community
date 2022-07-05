@@ -74,11 +74,13 @@
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
                                         <a href="{{route('poll.questions.view_question',[$question->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр</a>
                                     </td>
-                                    @if (auth()->user()->canManageItems() )
+
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium ">
+                                        @if (auth()->user()->canManageItems() )
                                             <a href="@if (!$poll->voteFinished() ){{route('poll.questions.index',[$poll->id, $question->id])}} @else # @endif" class=" @if ($poll->voteFinished() ) disabled @else text-indigo-600 hover:text-indigo-900 @endif ">Изменить вопрос</a>
+                                        @endif
                                     </td>
-                                    @endif
+
                                     @if (auth()->user()->canManageItems() )
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium">
                                         @if (!$poll->voteFinished() )

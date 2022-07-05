@@ -195,44 +195,7 @@
             </div>
         </div>
     </div>
-    @if ($poll->finished)
-        @if (!$poll->protocol_doc)
-            <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
-                <form method="POST" action="{{route('poll.generateProtocol',['poll'=>$poll])}}">
-                    @csrf
-                    <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
-                    <a href="{{route('poll.generateProtocol',['poll'=>$poll])}}"
-                       onclick="event.preventDefault();
-                                                        this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
-                        <button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
-                            {{ __('Сгенерировать протокол') }}
-                        </button>
-                    </a>
-                </form>
-            </div>
-        @else
-            <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
-                <a href="{{$poll->protocol_doc}}" target="_blank">
-                    <button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
-                        {{ __('Скачать протокол в Ворде') }}
-                    </button>
-                </a>
-            </div>
-            <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
-                <form method="POST" action="{{route('poll.generateProtocol',['poll'=>$poll])}}">
-                    @csrf
-                    <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
-                    <a href="{{route('poll.generateProtocol',['poll'=>$poll])}}"
-                       onclick="event.preventDefault();
-                                                        this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
-                        <button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
-                            {{ __('Обновить протокол') }}
-                        </button>
-                    </a>
-                </form>
-            </div>
-        @endif
-    @endif
+
     @if ($poll->protocol)
     <label class="block text-lg py-8 text-black font-bold whitespace-wrap">Итоговый протокол:</label>
     <div class="lg:h-96 xl:h-96 2xl:h-96 md:h-96">

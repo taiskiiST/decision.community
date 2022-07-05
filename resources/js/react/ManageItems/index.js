@@ -6,7 +6,7 @@ import {
     removeItem,
     updateItemName,
     updateItemPhone,
-    updateItemPin,
+    updateItemCost,
     updateItemDescription,
     updateItemAddress,
     updateItemElementary,
@@ -116,7 +116,7 @@ const App = () => {
             parent_id,
             name,
             phone,
-            pin,
+            cost,
             description,
             address,
             is_category,
@@ -147,7 +147,7 @@ const App = () => {
             isLeaf: ! is_category,
             thumbUrl: thumbUrl,
             phone: phone,
-            pin: pin,
+            cost: cost,
             description: description,
             elementary: elementary,
             address: address,
@@ -483,17 +483,17 @@ const App = () => {
         });
     };
 
-    const onItemPinChange = async (item, e) => {
-        const newPin = e.target.value;
-        if (! newPin) {
+    const onItemCostChange = async (item, e) => {
+        const newCost = e.target.value;
+        if (! newCost) {
             return;
         }
 
         const { id } = item;
 
-        const updatedItemFromServer = await updateItemPin({
+        const updatedItemFromServer = await updateItemCost({
             id: id,
-            pin: newPin
+            cost: newCost
         });
 
         if (! updatedItemFromServer) {
@@ -503,11 +503,11 @@ const App = () => {
         setItemsByKeys(currentItemsByKeys => {
             const newItemsByKeys = new Map(currentItemsByKeys);
 
-            const { pin } = updatedItemFromServer;
+            const { cost } = updatedItemFromServer;
 
             newItemsByKeys.set(id, {
                 ...item,
-                pin: pin,
+                cost: cost,
             });
 
             return newItemsByKeys;
@@ -1066,7 +1066,7 @@ const App = () => {
                         tableInputsDisabled={tableInputsDisabled}
                         onItemNameChange={onItemNameChange}
                         onItemPhoneChange={onItemPhoneChange}
-                        onItemPinChange={onItemPinChange}
+                        onItemCostChange={onItemCostChange}
                         onItemDescriptionChange={onItemDescriptionChange}
                         onItemAddressChange={onItemAddressChange}
                         onItemThumbClicked={onItemThumbClicked}

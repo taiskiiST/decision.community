@@ -32,7 +32,7 @@ class ItemsTreeController extends Controller
             'UPDATE_ITEM_PARENT_URL'                => route('items-tree.update-item-parent'),
             'UPDATE_ITEM_NAME_URL'                  => route('items-tree.update-item-name'),
             'UPDATE_ITEM_PHONE_URL'                 => route('items-tree.update-item-phone'),
-            'UPDATE_ITEM_PIN_URL'                   => route('items-tree.update-item-pin'),
+            'UPDATE_ITEM_COST_URL'                  => route('items-tree.update-item-cost'),
             'UPDATE_ITEM_DESCRIPTION_URL'           => route('items-tree.update-item-description'),
             'UPDATE_ITEM_ADDRESS_URL'               => route('items-tree.update-item-address'),
             'UPDATE_ITEM_ELEMENTARY_URL'            => route('items-tree.update-item-elementary'),
@@ -59,7 +59,7 @@ class ItemsTreeController extends Controller
     {
         $this->authorize('create', Item::class);
 
-        return Item::select('id', 'name', 'phone', 'pin', 'address', 'parent_id', 'is_category', 'thumb', 'elementary')
+        return Item::select('id', 'name', 'phone', 'cost', 'address', 'parent_id', 'is_category', 'thumb', 'elementary')
                      ->get()
                      ->transform(function (Item $item) {
                          $item = $item->addProperties();
@@ -173,7 +173,7 @@ class ItemsTreeController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function updateItemPin()
+    public function updateItemCost()
     {
         /** @var Item $item */
         $item = Item::findOrFail(request('id'));
@@ -181,10 +181,10 @@ class ItemsTreeController extends Controller
         $this->authorize('update', $item);
 
         $params = $this->validate(request(), [
-            'pin' => 'required',
+            'cost' => 'required',
         ]);
 
-        $item->pin = $params['pin'];
+        $item->cost = $params['cost'];
 
         $item->save();
 
@@ -391,7 +391,7 @@ class ItemsTreeController extends Controller
             'name'          => $params['name'],
             'thumb'         => $thumbName,
             'parent_id'     => $parentId,
-            'pin'           => rand(0000,9999),
+            'cost'           => '',
             'is_category'   => false,
         ]);
 

@@ -6,7 +6,7 @@ const {
     UPDATE_ITEM_PARENT_URL,
     UPDATE_ITEM_NAME_URL,
     UPDATE_ITEM_PHONE_URL,
-    UPDATE_ITEM_PIN_URL,
+    UPDATE_ITEM_COST_URL,
     UPDATE_ITEM_DESCRIPTION_URL,
     UPDATE_ITEM_ADDRESS_URL,
     UPDATE_ITEM_THUMB_URL,
@@ -206,9 +206,9 @@ export const updateItemPhone = async (data) => {
     }
 };
 
-export const updateItemPin = async (data) => {
+export const updateItemCost = async (data) => {
     try {
-        const response = await client.put(UPDATE_ITEM_PIN_URL, data);
+        const response = await client.put(UPDATE_ITEM_COST_URL, data);
 
         const { data: itemFromServer } = response;
 

@@ -133,9 +133,6 @@
             @endif
             @if (auth() && auth()->user()->canVote())
                 <div class="flex flex-col pl-5">
-                    <a href="{{ route('items.index') }}" class="nav-tab {{ in_array($currentRouteName, ['items.index', 'items.show']) ? 'nav-tab-current' : 'nav-tab-not-current'}}" hidden>Каталог товаров и услуг ТСН "КП Березка"</a>
-                </div>
-                <div class="flex flex-col pl-5">
                     <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
                 </div>
                 @if (auth()->user()->isAdmin())

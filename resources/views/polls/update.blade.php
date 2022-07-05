@@ -24,12 +24,11 @@
                                 <th scope="col" class="relative px-6 py-3">
                                     Детали
                                 </th>
+                                @if ($poll->voteFinished() )
                                 <th scope="col" class="relative px-6 py-3">
-                                    @if ($poll->voteFinished() )
-                                        <span class="text-green-600">Голосование окончено {{date_create($poll->finished)->format('d-m-Y H:i:s')}}</span>
-                                    @endif
-
+                                    <span class="text-green-600">Голосование окончено {{date_create($poll->finished)->format('d-m-Y H:i:s')}}</span>
                                 </th>
+                                @endif
                                 @if (auth()->user()->canManageItems() )
                                     @if (! $poll->voteFinished() )
                                         <th scope="col" class="relative px-6 py-3">
@@ -75,31 +74,30 @@
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
                                         <a href="{{route('poll.questions.view_question',[$question->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр</a>
                                     </td>
+                                    @if (auth()->user()->canManageItems() )
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium ">
-                                        @if (auth()->user()->canManageItems() )
                                             <a href="@if (!$poll->voteFinished() ){{route('poll.questions.index',[$poll->id, $question->id])}} @else # @endif" class=" @if ($poll->voteFinished() ) disabled @else text-indigo-600 hover:text-indigo-900 @endif ">Изменить вопрос</a>
-                                        @endif
                                     </td>
-
+                                    @endif
+                                    @if (auth()->user()->canManageItems() )
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium">
-                                        @if (auth()->user()->canManageItems() )
-                                            @if (!$poll->voteFinished() )
-                                            <form method="POST" action="{{route('question.delete',[$poll->id, $question->id])}}">
-                                                @csrf
-                                                <input name="del_question" value="{{$question->id}}" type="hidden"/>
-                                                <a href="{{route('question.delete',[$poll->id, $question->id])}}"
-                                                   onclick="event.preventDefault();
-                                                    this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
-                                                    {{ __('Удалить вопрос') }}
-                                                </a>
-                                            </form>
-                                            @else
-                                                <a href="#" class="disabled">
-                                                    {{ __('Удалить вопрос') }}
-                                                </a>
-                                            @endif
+                                        @if (!$poll->voteFinished() )
+                                        <form method="POST" action="{{route('question.delete',[$poll->id, $question->id])}}">
+                                            @csrf
+                                            <input name="del_question" value="{{$question->id}}" type="hidden"/>
+                                            <a href="{{route('question.delete',[$poll->id, $question->id])}}"
+                                               onclick="event.preventDefault();
+                                                this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
+                                                {{ __('Удалить вопрос') }}
+                                            </a>
+                                        </form>
+                                        @else
+                                            <a href="#" class="disabled">
+                                                {{ __('Удалить вопрос') }}
+                                            </a>
                                         @endif
                                     </td>
+                                    @endif
                                 </tr>
                             @endforeach
                             </tbody>

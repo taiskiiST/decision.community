@@ -323,7 +323,9 @@ class PollsController extends Controller
         $invited = explode(',', $organizers->users_invited_id);
         $srt_name_invited = '';
         foreach ($invited as $key => $invite){
-            $srt_name_invited .= User::find($invite)->name.', ';
+            if (!empty($invite)) {
+                $srt_name_invited .= User::find($invite)->name . ', ';
+            }
         }
         $srt_name_invited = substr($srt_name_invited,0,-2);
         $section->addText("Из числа приглашенных: ".$srt_name_invited, '',['spaceBefore'=>10, 'align'=>'left']);
@@ -529,7 +531,7 @@ class PollsController extends Controller
         $poll->update([
             'protocol_doc' =>  '/storage/storage/'.$poll->id.'/ProtocolNew.docx'
         ]);
-        return redirect()->route('poll.results', [
+        return redirect()->route('poll.requisites', [
             'poll' => $poll,
         ]);
     }
@@ -755,6 +757,7 @@ class PollsController extends Controller
                     'error' => $error
                 ]);
             }else{
+
                 \JavaScript::put([
                     'poll' => $poll,
                     'csrf_token' =>  csrf_token(),
@@ -1367,6 +1370,7 @@ class PollsController extends Controller
             'poll' => $poll->id,
             'csrf_token' =>  csrf_token(),
             'file_protocol' => $poll->protocol ? $poll->protocol : '',
+            'is_admin' => auth()->user()->isAdmin(),
             'error' => $error
         ]);
 

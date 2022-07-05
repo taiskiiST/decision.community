@@ -120,7 +120,7 @@
                                                     </a>
                                                 </form>
                                             </td>
-                                        @else
+                                        @elseif (auth()->user()->canManageItems() && $poll->voteFinished())
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <a href="#" class="disabled">
                                                     {{ __('Удалить') }}
@@ -226,7 +226,7 @@
                                                     </a>
                                                 </form>
                                             </div>
-                                        @else
+                                        @elseif (auth()->user()->canManageItems() && $poll->voteFinished())
                                             <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <a href="#" class="disabled">Удалить</a>
                                             </div>

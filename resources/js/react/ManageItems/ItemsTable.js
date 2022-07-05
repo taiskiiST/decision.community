@@ -9,7 +9,7 @@ const ItemsTable = ({
     tableInputsDisabled,
     onItemNameChange,
     onItemPhoneChange,
-    onItemPinChange,
+    onItemCostChange,
     onItemDescriptionChange,
     onItemAddressChange,
     onItemThumbClicked,
@@ -200,8 +200,8 @@ const ItemsTable = ({
                                                         className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
                                                         type="text"
                                                         debounceTimeout={1000}
-                                                        onChange={e => onItemPinChange(item, e)}
-                                                        value={item.pin}
+                                                        onChange={e => onItemCostChange(item, e)}
+                                                        value={item.cost}
                                                     />
                                                 </div>
                                             </div>

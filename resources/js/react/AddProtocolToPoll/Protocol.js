@@ -300,7 +300,7 @@ class Protocol extends React.Component {
     }
 
     render() {
-        //console.log(this.state);
+        console.log(is_admin);
         return (
             <div id={`data_${this.state.fileUpload.file_id}`} className="col-span-6 sm:col-span-3 mt-8 border-t-8 border-double border-gray-400">
                 <div className="panel panel-default">

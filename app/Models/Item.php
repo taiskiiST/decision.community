@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Storage;
  * @property mixed phone
  * @property mixed description
  * @property mixed address
- * @property mixed pin
+ * @property mixed cost
  * @property mixed elementary
  * @property array|mixed currentCommitteeMembers
  * @property array|mixed currentPresidiumMembers

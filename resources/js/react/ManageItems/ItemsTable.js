@@ -2,6 +2,7 @@ import React from 'react';
 import { BallTriangle } from '../../shared/components/spinners/BallTriangle';
 import { Popconfirm } from 'antd';
 import { DebounceInput } from 'react-debounce-input';
+import Textarea from 'rc-textarea';
 
 const ItemsTable = ({
     items,
@@ -212,10 +213,10 @@ const ItemsTable = ({
                                                 <div
                                                     className="text-sm font-medium text-gray-900 w-full truncate"
                                                 >
-                                                    <DebounceInput
+                                                    <Textarea
                                                         className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
-                                                        type="text"
-                                                        debounceTimeout={1000}
+
+
                                                         onChange={e => onItemDescriptionChange(item, e)}
                                                         value={item.description}
                                                     />

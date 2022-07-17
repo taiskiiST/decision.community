@@ -59,7 +59,7 @@ class ItemsTreeController extends Controller
     {
         $this->authorize('create', Item::class);
 
-        return Item::select('id', 'name', 'phone', 'cost', 'address', 'parent_id', 'is_category', 'thumb', 'elementary')
+        return Item::select('id', 'name', 'phone', 'cost', 'address', 'description','parent_id', 'is_category', 'thumb', 'elementary')
                      ->get()
                      ->transform(function (Item $item) {
                          $item = $item->addProperties();

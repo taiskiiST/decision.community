@@ -42,7 +42,7 @@
                                         {{ $question->question_files()->count() }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
-                                        <a href="{{route('poll.questions.view_question',[$question->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр вопроса</a>
+                                        <a href="{{route('poll.questions.view_question',['question'=>$question->id,'search'=>$search_text])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр вопроса</a>
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium ">
                                     </td>
@@ -86,7 +86,7 @@
                                             Количество файлов - {{ $question->question_files()->count() }}
                                         </div>
                                         <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600">
-                                            <a href="{{route('poll.questions.view_question',[$question->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр вопроса</a>
+                                            <a href="{{route('poll.questions.view_question',['question'=>$question->id,'search'=>$search_text])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр вопроса</a>
                                         </div>
 
                                     </td>

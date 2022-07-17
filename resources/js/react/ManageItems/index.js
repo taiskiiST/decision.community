@@ -540,7 +540,6 @@ const App = () => {
                 ...item,
                 description: description,
             });
-
             return newItemsByKeys;
         });
     };

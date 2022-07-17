@@ -229,7 +229,6 @@ export const updateItemDescription = async (data) => {
         const response = await client.put(UPDATE_ITEM_DESCRIPTION_URL, data);
 
         const { data: itemFromServer } = response;
-
         if (! itemFromServer) {
             return null;
         }

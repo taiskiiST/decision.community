@@ -100,17 +100,22 @@ class QuestionsController extends Controller
         return view('questions.create');
     }
 
-    public function viewQuestion(Question $question)
+    public function viewQuestion(Question $question, $search = '')
     {
         return view('questions.view_question', [
             'question' => $question,
-            'poll' => $question->poll()->get()->first()
+            'poll' => $question->poll()->get()->first(),
+            'search' => $search ? $search:''
         ]);
     }
 
-    public function searchQuestion(Request $request)
+    public function searchQuestion(Request $request, $search = '')
     {
+
         $search_text = $request->search;
+        if ($search){
+            $search_text = $search;
+        }
         $matches_questions = Question::where('text', 'LIKE', '%'.$search_text.'%')->get();
         //dd($matches_questions);
         return view('questions.search', ['questions'=>$matches_questions, 'search_text'=>$search_text]);

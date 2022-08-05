@@ -213,13 +213,15 @@ const ItemsTable = ({
                                                 <div
                                                     className="text-sm font-medium text-gray-900 w-full truncate"
                                                 >
-                                                    <Textarea
+
+                                                    <DebounceInput
                                                         className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
-
-
+                                                        element="textarea"
+                                                        debounceTimeout={1000}
                                                         onChange={e => onItemDescriptionChange(item, e)}
                                                         value={item.description}
                                                     />
+
                                                 </div>
                                             </div>
                                         </td>

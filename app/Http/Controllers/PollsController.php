@@ -255,7 +255,7 @@ class PollsController extends Controller
         $objWriter->save(base_path($str_path));
 
         $poll->update([
-            'blank_with_answers_doc' =>  '/storage/storage/'.$poll->id.'/BlankNewWithAnswers.docx'
+            'blank_with_answers_doc' =>  '/storage/'.$poll->id.'/BlankNewWithAnswers.docx'
         ]);
         return redirect()->route('poll.requisites', [
             'poll' => $poll,
@@ -529,7 +529,7 @@ class PollsController extends Controller
         $str_path = 'storage/app/public/storage/'.$poll->id.'/ProtocolNew.docx';
         $objWriter->save(base_path($str_path));
         $poll->update([
-            'protocol_doc' =>  '/storage/storage/'.$poll->id.'/ProtocolNew.docx'
+            'protocol_doc' =>  '/storage/'.$poll->id.'/ProtocolNew.docx'
         ]);
         return redirect()->route('poll.requisites', [
             'poll' => $poll,

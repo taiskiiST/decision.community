@@ -10,7 +10,7 @@
                     <label class="px-1 py-4 block text-lg text-black font-semibold text-wrap">Обновление основных реквизитов голосования</label>
                 </div>
                 <div>
-                    @if ($poll->start)
+                 @if ($poll->start)
                     @if ($quorum)
                         <div class="inline-flex flex-row w-full place-content-between">
                             <div class="px-1 py-3 sm:px-6">
@@ -25,7 +25,7 @@
                             </div>
                         </div>
                     @endif
-                    @else
+                 @else
                         <form method="get" action="{{ route('poll.start',[$poll->id]) }}">
                             @csrf
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -39,45 +39,8 @@
                             </a>
                         </form>
 
-                    @endif
+                 @endif
                 </div>
-{{--                @if (!$poll->blank_doc)--}}
-{{--                    <div class="px-1 py-4 sm:px-6 flex-row-reverse ">--}}
-{{--                        <form method="POST" action="{{route('poll.generateBlank',['poll'=>$poll])}}">--}}
-{{--                            @csrf--}}
-{{--                            <input name="del_poll" value="{{$poll->id}}" type="hidden"/>--}}
-{{--                            <a href="{{route('poll.generateBlank',['poll'=>$poll])}}"--}}
-{{--                               onclick="event.preventDefault();--}}
-{{--                                                        this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">--}}
-{{--                                <button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >--}}
-{{--                                    {{ __('Сгенерировать бланк вопросов') }}--}}
-{{--                                </button>--}}
-{{--                            </a>--}}
-{{--                        </form>--}}
-{{--                    </div>--}}
-{{--                @else--}}
-{{--                    <div class="px-1 py-4 sm:px-1 flex-row-reverse ">--}}
-{{--                        <a href="{{$poll->blank_doc}}" target="_blank">--}}
-{{--                            <button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >--}}
-{{--                                {{ __('Скачать бланк вопросов Ворде') }}--}}
-{{--                            </button>--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                    <div class="px-1 py-1 sm:px-1 flex-row-reverse ">--}}
-{{--                        <form method="POST" action="{{route('poll.generateBlank',['poll'=>$poll])}}">--}}
-{{--                            @csrf--}}
-{{--                            <input name="del_poll" value="{{$poll->id}}" type="hidden"/>--}}
-{{--                            <a href="{{route('poll.generateBlank',['poll'=>$poll])}}"--}}
-{{--                               onclick="event.preventDefault();--}}
-{{--                                                        this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">--}}
-{{--                                <button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >--}}
-{{--                                    {{ __('Обновить бланк') }}--}}
-{{--                                </button>--}}
-{{--                            </a>--}}
-{{--                        </form>--}}
-{{--                    </div>--}}
-{{--                @endif--}}
-
 
                 <table>
                 @if (!$poll->blank_with_answers_doc)
@@ -85,14 +48,11 @@
                         <div class="px-1 py-4 sm:px-6 flex-row-reverse ">
                             <form method="POST" action="{{route('poll.generateBlankWithAnswers',['poll'=>$poll])}}">
                                 @csrf
-                                <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
-                                <a href="{{route('poll.generateBlankWithAnswers',['poll'=>$poll])}}"
-                                   onclick="event.preventDefault();
-                                                            this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
-                                    <button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
+
+                                    <button type="submit" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
                                         {{ __('Сгенерировать бланк с ответами') }}
                                     </button>
-                                </a>
+
                             </form>
                         </div>
                     </tr>
@@ -109,9 +69,8 @@
                         </td>
                         <td>
                             <div class="px-1 py-1 sm:px-1 flex-row-reverse ">
-                                <form method="POST" action="{{route('poll.generateBlankWithAnswers',['poll'=>$poll])}}">
+                                <form method="POST" action="{{ route('poll.generateBlankWithAnswers',['poll' => $poll] ) }}" name="blank">
                                     @csrf
-                                    <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
                                     <a href="{{route('poll.generateBlankWithAnswers',['poll'=>$poll])}}"
                                        onclick="event.preventDefault();
                                                                 this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
@@ -130,7 +89,6 @@
                             <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
                                 <form method="POST" action="{{route('poll.generateProtocol',['poll'=>$poll])}}">
                                     @csrf
-                                    <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
                                     <a href="{{route('poll.generateProtocol',['poll'=>$poll])}}"
                                        onclick="event.preventDefault();
                                                             this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
@@ -156,7 +114,6 @@
                                 <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
                                     <form method="POST" action="{{route('poll.generateProtocol',['poll'=>$poll])}}">
                                         @csrf
-                                        <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
                                         <a href="{{route('poll.generateProtocol',['poll'=>$poll])}}"
                                            onclick="event.preventDefault();
                                                                 this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">

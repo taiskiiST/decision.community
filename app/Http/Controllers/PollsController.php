@@ -195,7 +195,7 @@ class PollsController extends Controller
         $properties->setCategory('Голосования');
         $properties->setLastModifiedBy('Serg');
         $properties->setCreated(mktime(0, 0, 0, 4, 17, 2022));
-        $properties->setModified(mktime(0, 0, 0, 4, 17, 202));
+        $properties->setModified(mktime(0, 0, 0, 4, 17, 2022));
         $properties->setSubject('Голосование');
         $properties->setKeywords('голсование');
 

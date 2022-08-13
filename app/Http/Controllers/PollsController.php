@@ -1269,10 +1269,10 @@ class PollsController extends Controller
     {
         return view('polls.results_list', [
             'poll' => $poll,
-            'itemsNameHash'   => Item::all()->pluck('name', 'id'),
-            'itemsPhoneHash'   => Item::all()->pluck('phone', 'id'),
-            'itemsAddressHash'   => Item::all()->pluck('address', 'id'),
-            'itemsParentIdHash'   => Item::all()->pluck('parent_id', 'id')
+            'itemsNameHash'   => User::all()->pluck('name', 'id'),
+            'itemsPhoneHash'   => User::all()->pluck('phone', 'id'),
+            'itemsAddressHash'   => User::all()->pluck('address', 'id')
+            //'itemsParentIdHash'   => Item::all()->pluck('parent_id', 'id')
         ]);
     }
 

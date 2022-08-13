@@ -5,8 +5,6 @@
 @section('content')
 
 
-
-
 @foreach($arr_strings as $str)
     {!! $str  !!}
     <br />

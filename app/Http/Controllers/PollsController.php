@@ -1164,13 +1164,14 @@ class PollsController extends Controller
 
         $poll->peopleThatDidNotVote()->groupBy('parent_id')->each(function ($group, $groupId) use (&$out) {
             $parent = Item::find($groupId);
+            if(!is_null($parent) ) {
+                $hierarchy = $parent->getTopHierarchy();
 
-            $hierarchy = $parent->getTopHierarchy();
-
-            $out[$groupId] = [
-                'group' => $group,
-                'hierarchy' => $hierarchy
-            ];
+                $out[$groupId] = [
+                    'group' => $group,
+                    'hierarchy' => $hierarchy
+                ];
+            }
         });
         $str = '';
         $str1 = '';
@@ -1214,7 +1215,12 @@ class PollsController extends Controller
                 }
             }
         }
-        arsort($hierarchy_str);
+        if(empty($out)) {
+            $hierarchy_str = [];
+        }
+        if(is_null($hierarchy_str)) {
+            arsort($hierarchy_str);
+        }
         return view('polls.report', [
             'poll' => $poll,
             'out' => $out,

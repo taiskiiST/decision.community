@@ -13,7 +13,7 @@
     @foreach($question->answers as $answer)
         {{$answer->text}}    -        {{$answer->countVotes($answer->id)}} ({{ $answer->percentOfQuestions($question->id, $answer->id) }}%)<br/>
         @foreach($answer->listVotes($answer->id) as $vote)
-            - {{$itemsNameHash[$vote->user_id]}}, {{$itemsPhoneHash[$vote->user_id]}}, {{$itemsAddressHash[$vote->user_id]}}<br/>
+            - {{$itemsIdHash[$vote->user_id]}}, {{$itemsNameHash[$vote->user_id]}}, {{$itemsPhoneHash[$vote->user_id]}}, {{$itemsAddressHash[$vote->user_id]}}<br/>
         @endforeach
         <br />
     @endforeach

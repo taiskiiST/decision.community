@@ -1271,8 +1271,8 @@ class PollsController extends Controller
             'poll' => $poll,
             'itemsNameHash'   => User::all()->pluck('name', 'id'),
             'itemsPhoneHash'   => User::all()->pluck('phone', 'id'),
-            'itemsAddressHash'   => User::all()->pluck('address', 'id')
-            //'itemsParentIdHash'   => Item::all()->pluck('parent_id', 'id')
+            'itemsAddressHash'   => User::all()->pluck('address', 'id'),
+            'itemsIdHash'   => User::all()->pluck('id', 'id')
         ]);
     }
 

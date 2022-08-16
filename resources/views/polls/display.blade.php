@@ -313,7 +313,7 @@
 
             // Chrome требует наличия returnValue
             event.returnValue = ''
-            return confirm('Вы уверены что хотите прервать голосование? В этом случае ваш голос не будет зачтен!')
+
         })
 
         $("#button_cancel").click(

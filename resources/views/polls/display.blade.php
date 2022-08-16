@@ -81,7 +81,7 @@
                     </div>
                     <div class="flex">
                         @foreach($poll->questions as $question)
-                            <button id="nav_{!! $question->id !!}" class="{!! $loop->first ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex' !!} border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none" type="button" name="nav_loop_{!! $loop->index + 1 !!}">
+                            <button id="nav_{!! $question->id !!}" class="{!! $loop->first ? 'border-indigo-500 text-indigo-600 class_'.$question->id : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex class_'.$question->id !!} border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none" type="button" name="nav_loop_{!! $loop->index + 1 !!}">
                                 {!! $loop->index + 1 !!} <span class='max-mobile md:hidden'> / {!! $loop->count !!} </span>
                             </button>
                         @endforeach
@@ -211,7 +211,7 @@
                     </div>
                     <div class="flex">
                         @foreach($poll->questions as $question)
-                            <button id="nav_{!! $question->id !!}" class="{!! $loop->first ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex' !!} border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none" type="button" name="nav_loop_{!! $loop->index + 1 !!}">
+                            <button id="nav_{!! $question->id !!}" class="{!! $loop->first ? 'border-indigo-500 text-indigo-600 class_'.$question->id : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex class_'.$question->id !!} border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none" type="button" name="nav_loop_{!! $loop->index + 1 !!}">
                                 {!! $loop->index + 1 !!} <span class='max-mobile md:hidden'> / {!! $loop->count !!} </span>
                             </button>
                         @endforeach
@@ -454,7 +454,9 @@
                     array_of_radio.push($(this).attr("name"));
                     let name = $(this).attr("name");
                     let nav_id = name.replace("question_", "nav_");
-                    $('#' + nav_id).addClass("bg-green-200");
+                    //$('#' + nav_id).addClass("bg-green-200");
+                    nav_id = nav_id.replace("nav_", "class_");
+                    $('.' + nav_id).addClass("bg-green-200");
                 }
 
 
@@ -477,11 +479,14 @@
 
                 let current = $(".border-indigo-500.text-indigo-600").attr("id");
                 let current_id = current.replace("nav_", "");
-                $('#'+ current).removeClass("border-indigo-500 text-indigo-600");
-                $('#'+ current).addClass("border-transparent text-gray-500.hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex");
 
-                $('#'+ num).removeClass("border-transparent text-gray-500.hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex");
-                $('#'+ num).addClass("border-indigo-500 text-indigo-600");
+                current = current.replace("nav_", "class_");
+                $('.'+ current).removeClass("border-indigo-500 text-indigo-600");
+                $('.'+ current).addClass("border-transparent text-gray-500.hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex");
+
+                num = num.replace("nav_", "class_");
+                $('.'+ num).removeClass("border-transparent text-gray-500.hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex");
+                $('.'+ num).addClass("border-indigo-500 text-indigo-600");
 
                 $("#question_" + current_id).addClass('hidden');
                 $("#question_" + num_id).removeClass('hidden');
@@ -489,7 +494,7 @@
                 $("#speaker_question_" + current_id).addClass('hidden');
                 $("#speaker_question_" + num_id ).removeClass('hidden');
 
-                let name_curr = $('#' + num).attr("name");
+                let name_curr = $('.' + num).attr("name");
                 let current_loop_id = name_curr.replace("nav_loop_", "");
 
                 if (current_loop_id == 1){
@@ -502,7 +507,7 @@
                     $(".prev").removeClass('hidden');
                     $(".next").removeClass('hidden');
                 }
-                //console.log('next value ',  );
+
             }
         );
         $(".prev").click(
@@ -510,10 +515,11 @@
                 let current = $(".border-indigo-500.text-indigo-600").attr("id");
                 let current_id = current.replace("nav_", "");
 
-                $('#'+ current).removeClass("border-indigo-500 text-indigo-600");
-                $('#'+ current).addClass("border-transparent text-gray-500.hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex");
+                current = current.replace("nav_", "class_");
+                $('.'+ current).removeClass("border-indigo-500 text-indigo-600");
+                $('.'+ current).addClass("border-transparent text-gray-500.hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex");
 
-                let name_curr = $('#' + current).attr("name");
+                let name_curr = $('.' + current).attr("name");
                 let current_loop_id = name_curr.replace("nav_loop_", "");
 
                 let prev_loop_id = Number(current_loop_id) - 1;
@@ -521,8 +527,8 @@
                 let prev_id = document.getElementsByName("nav_loop_" + prev_loop_id)[0].id
                 prev_id = prev_id.replace("nav_", "");
 
-                $('#nav_' + prev_id ).removeClass("border-transparent text-gray-500.hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex");
-                $('#nav_' + prev_id ).addClass("border-indigo-500 text-indigo-600");
+                $('.class_' + prev_id ).removeClass("border-transparent text-gray-500.hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex");
+                $('.class_' + prev_id ).addClass("border-indigo-500 text-indigo-600");
 
                 $("#question_" + current_id).addClass('hidden');
                 $("#question_" + prev_id ).removeClass('hidden');
@@ -530,7 +536,7 @@
                 $("#speaker_question_" + current_id).addClass('hidden');
                 $("#speaker_question_" + prev_id ).removeClass('hidden');
 
-                name_curr = $('#nav_' + prev_id).attr("name");
+                name_curr = $('.class_' + prev_id).attr("name");
                 prev_id = name_curr.replace("nav_loop_", "");
 
                 if (prev_id == 1){
@@ -547,10 +553,11 @@
                 let current = $(".border-indigo-500.text-indigo-600").attr("id");
                 let current_id = current.replace("nav_", "");
 
-                $('#' + current).removeClass("border-indigo-500 text-indigo-600");
-                $('#' + current).addClass("border-transparent text-gray-500.hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex");
+                current = current.replace("nav_", "class_");
+                $('.' + current).removeClass("border-indigo-500 text-indigo-600");
+                $('.' + current).addClass("border-transparent text-gray-500.hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex");
 
-                let name_curr = $('#' + current).attr("name");
+                let name_curr = $('.' + current).attr("name");
                 let current_loop_id = name_curr.replace("nav_loop_", "");
 
                 let next_loop_id = Number(current_loop_id) + 1
@@ -558,8 +565,8 @@
                 let next_id = document.getElementsByName("nav_loop_" + next_loop_id)[0].id
                 next_id = next_id.replace("nav_", "");
 
-                $('#nav_' + next_id ).removeClass("border-transparent text-gray-500.hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex");
-                $('#nav_' + next_id ).addClass("border-indigo-500 text-indigo-600");
+                $('.class_' + next_id ).removeClass("border-transparent text-gray-500.hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex");
+                $('.class_' + next_id ).addClass("border-indigo-500 text-indigo-600");
 
                 $("#question_" + current_id).addClass('hidden');
                 $("#question_" + next_id ).removeClass('hidden');
@@ -567,7 +574,7 @@
                 $("#speaker_question_" + current_id).addClass('hidden');
                 $("#speaker_question_" + next_id ).removeClass('hidden');
 
-                name_curr = $('#nav_' + next_id).attr("name");
+                name_curr = $('.class_' + next_id).attr("name");
                 next_loop_id = name_curr.replace("nav_loop_", "");
 
                 if (next_loop_id == $(".next").attr('value')){

@@ -55,11 +55,11 @@
             @endif
             <!-- This example requires Tailwind CSS v2.0+ -->
             @if ($quorum)
-                <div class="inline-flex flex-row w-full place-content-between">
-                    <div class="px-1 py-3 sm:px-6">
-                        <label class="px-1 py-4 block text-lg text-black text-wrap">Зарегистрировано {{$quorum->count_of_voting_current}} из {{$quorum->all_users_that_can_vote}} членов ТСН <p class="font-semibold"> @if( ( round($quorum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP) ) <= $quorum->count_of_voting_current)Кворум есть! @else Кворума нет! @endif </p></label>
-                    </div>
-                </div>
+{{--                <div class="inline-flex flex-row w-full place-content-between">--}}
+{{--                    <div class="px-1 py-3 sm:px-6">--}}
+{{--                        <label class="px-1 py-4 block text-lg text-black text-wrap">Зарегистрировано {{$quorum->count_of_voting_current}} из {{$quorum->all_users_that_can_vote}} членов ТСН <p class="font-semibold"> @if( ( round($quorum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP) ) <= $quorum->count_of_voting_current)Кворум есть! @else Кворума нет! @endif </p></label>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
             @endif
             <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
                 <div class="text-center"><span style="font-size: x-large;"><b>{{$poll->name}}</b></span></div>
@@ -197,12 +197,44 @@
                         @endif
                     </div>
                 @endforeach
+                <br />
+            <!-- This example requires Tailwind CSS v2.0+ -->
+                <nav class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0">
+                    <div class="-mt-px w-0 flex-1 flex">
+                        <button class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 prev hidden outline-none focus:outline-none" type="button">
+                            <!-- Heroicon name: solid/arrow-narrow-left -->
+                            <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                            </svg>
+                            Предыдущий
+                        </button>
+                    </div>
+                    <div class="flex">
+                        @foreach($poll->questions as $question)
+                            <button id="nav_{!! $question->id !!}" class="{!! $loop->first ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hidden md:-mt-px md:flex' !!} border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none" type="button" name="nav_loop_{!! $loop->index + 1 !!}">
+                                {!! $loop->index + 1 !!} <span class='max-mobile md:hidden'> / {!! $loop->count !!} </span>
+                            </button>
+                        @endforeach
+                    </div>
+
+                    <div class="-mt-px w-0 flex-1 flex justify-end">
+                        <button class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 next outline-none focus:outline-none" value="{{$poll->questions->count()}}" type="button">
+                            Следующий
+                            <!-- Heroicon name: solid/arrow-narrow-right -->
+                            <svg class="ml-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </nav>
+
+
 
                 <div class="inline-flex flex-row w-full place-content-between">
                     <div class="px-4 py-3 sm:px-6">
                         <button type="submit" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hidden submit-button"
                        id="button_submit">
-                            Отправить
+                            Проголосовать!
                         </button>
                     </div>
                     <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
@@ -316,6 +348,18 @@
             showPage(1, file_id);
         }
 
+        // Extend jquery with flashing for elements
+        $.fn.flash = function(duration, iterations) {
+            duration = duration || 1000; // Default to 1 second
+            iterations = iterations || 1; // Default to 1 iteration
+            var iterationDuration = Math.floor(duration / iterations);
+
+            for (var i = 0; i < iterations; i++) {
+                this.fadeOut(iterationDuration).fadeIn(iterationDuration);
+            }
+            return this;
+        }
+
         // load and render specific page of the PDF
         async function showPage(page_no, file_id) {
             //console.log(page_no, file_id, pdf_url);
@@ -416,6 +460,12 @@
 
                 if ( array_of_radio.length == $(".next").attr('value')){
                     $('.submit-button').removeClass('hidden');
+                    window.scrollBy({
+                        top: 500,
+                        behavior: 'smooth'
+                    });
+
+                    $(".submit-button").flash(7500, 10); // Flash 4 times over a period of 1 second
                 }
                 //console.log('array_of_radio ',  array_of_radio);
             }

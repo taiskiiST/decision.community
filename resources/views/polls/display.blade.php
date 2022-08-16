@@ -232,7 +232,7 @@
 
                 <div class="inline-flex flex-row w-full place-content-between">
                     <div class="px-4 py-3 sm:px-6">
-                        <button type="submit" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hidden submit-button"
+                        <button type="button" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hidden submit-button"
                        id="button_submit">
                             Проголосовать!
                         </button>
@@ -303,16 +303,34 @@
 
         $("#button_submit").click(
             function () {
-                return confirm('Вы уверены? Ответы нельзя будет изменить впоследствии.')
+                if (confirm('Вы уверены? Ответы нельзя будет изменить впоследствии.')){
+                    $("#button_submit").addClass("submit_done");
+                    $('#button_submit').prop('type', 'submit');
+                    $("#button_submit").submit();
+                }else{
+                    $("#button_submit").addClass("submit_no");
+                }
+                return true
             }
         );
 
         window.addEventListener('beforeunload', function () {
-            // Отменяем поведение по умолчанию
-            event.preventDefault()
 
-            // Chrome требует наличия returnValue
-            event.returnValue = ''
+            if (!$("#button_submit").hasClass('submit_done') && !$("#button_submit").hasClass('submit_no')) {
+                // Отменяем поведение по умолчанию
+                event.preventDefault()
+
+                // Chrome требует наличия returnValue
+                event.returnValue = ''
+            }
+            if($("#button_submit").hasClass('submit_no')) {
+                // Отменяем поведение по умолчанию
+                event.preventDefault()
+
+                // Chrome требует наличия returnValue
+                event.returnValue = ''
+                $("#button_submit").removeClass("submit_no");
+            }
 
         })
 

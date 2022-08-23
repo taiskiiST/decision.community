@@ -21,6 +21,11 @@
                                 <th scope="col" class="relative px-6 py-3">
                                     Количествой файлов
                                 </th>
+                                @if (auth()->user()->canManageItems() )
+                                    <th scope="col" class="relative px-6 py-3">
+                                        Доступен всем
+                                    </th>
+                                @endif
                                 <th scope="col" class="relative px-6 py-3">
                                     Детали
                                 </th>
@@ -71,6 +76,11 @@
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
                                         {{ $question->question_files()->count() }}
                                     </td>
+                                    @if (auth()->user()->canManageItems() )
+                                        <td class="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
+                                            {{ $question->public? 'Да' : ''  }}
+                                        </td>
+                                    @endif
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
                                         <a href="{{route('poll.questions.view_question',['question' => $question->id, 'search'=>''])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр</a>
                                     </td>
@@ -161,7 +171,7 @@
                                 <tr class="bg-white bg-gray-100 border-b border-gray-400 flex flex-col">
                                     <td colspan=3>
                                         <div class="px-6 py-4 whitespace-wrap text-sm text-gray-900 text-left text-wrap">
-                                            {{$loop->index + 1}}. {!! $question->text !!}
+                                            {{$loop->index + 1}}. {!! $question->text !!} {{ $question->public && auth()->user()->isAdmin()  ? ' (ПУБЛИЧНЫЙ!)' : ''  }}
                                         </div>
                                         <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600 bg-gray-200">
                                             Количество файлов - {{ $question->question_files()->count() }}

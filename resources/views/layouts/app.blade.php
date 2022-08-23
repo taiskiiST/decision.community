@@ -12,6 +12,10 @@
         <livewire:nav-component />
     @endauth
 
+    @guest
+      @yield('guest-nav')
+    @endguest
+
     <header class="z-0 shadow">
         <div class="relative overflow-hidden h-128 bg-indigo-800">
             <img class="absolute left-0 top-0 w-full h-full object-cover h-auto opacity-50" src="/images/header.jpg" alt="Header Image" />

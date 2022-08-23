@@ -122,7 +122,14 @@ class QuestionsController extends Controller
        }
     }
 
+    public function viewPublicQuestions()
+    {
+        $public_questions = Question::where('public', 1)->get();
+        return view('questions.public_questions', [
+            'public_questions' => $public_questions
+        ]);
 
+    }
 
     public function searchQuestion(Request $request, $search = '')
     {

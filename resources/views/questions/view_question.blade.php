@@ -249,9 +249,15 @@
     <div class="inline-flex flex-row w-full place-content-between">
         <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
             @if ($search)
+                @if ($search == 'form_public_page')
+                    <a href="{{route('poll.questions.view_public_questions')}}"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
+                            Назад
+                        </button></a>
+                @else
                 <a href="{{route('poll.questions.search_question',['search'=>$search])}}"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
                         Назад
                     </button></a>
+                @endif
             @else
                 <a href="{{route('poll.agenda',['poll'=>$poll->id])}}"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
                         Назад

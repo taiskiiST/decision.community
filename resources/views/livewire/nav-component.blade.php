@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between h-16">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <a href="/"><img class="h-10 w-10" src="/images/logo.png" alt="Workflow logo"></a>
+                    <a href="{{route('poll.questions.view_public_questions')}}"><img class="h-10 w-10" src="/images/logo.png" alt="Workflow logo"></a>
                 </div>
 
                 <div class="hidden md:block">
@@ -135,6 +135,9 @@
                 <div class="flex flex-col pl-5">
                     <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
                 </div>
+                <div class="flex flex-col pl-5">
+                    <a href="{{route('poll.questions.view_public_questions')}}" class="nav-tab {{ in_array($currentRouteName, ['poll.questions.view_public_questions']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Публичные вопросы</a>
+                </div>
                 @if (auth()->user()->isAdmin())
                     <div class="flex flex-col pl-5">
                         <a href="{{ route('users.governance') }}" class="nav-tab {{ $currentRouteName === 'users.governance' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>
@@ -143,19 +146,17 @@
                         <a href="{{ route('users.manage') }}" class="nav-tab {{ $currentRouteName === 'users.manage' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Пользователи</a>
                     </div>
                 @endif
-                <div class="flex flex-col pl-5 w-full">
-                    {!! Form::open(['route' => ['logout'], 'method' => 'POST']) !!}
-                        <input name="uri_poll" value="/login" type="hidden"/>
-                        <a href="route('logout')"
-                           onclick="event.preventDefault();
-                            this.closest('form').submit();" class="nav-tab nav-tab-not-current">
-                            {{ __('Выйти') }}
-                        </a>
-                    {!! Form::close() !!}
-                </div>
             @endif
+            <div class="flex flex-col pl-5 w-full">
+                {!! Form::open(['route' => ['logout'], 'method' => 'POST']) !!}
+                <input name="uri_poll" value="/login" type="hidden"/>
+                <a href="route('logout')"
+                   onclick="event.preventDefault();
+                            this.closest('form').submit();" class="nav-tab nav-tab-not-current">
+                    {{ __('Выйти') }}
+                </a>
+                {!! Form::close() !!}
+            </div>
         </div>
-
-
     </div>
 </nav>

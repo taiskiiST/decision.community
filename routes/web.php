@@ -34,6 +34,9 @@ if (app()->isLocal()) {
 
 Route::get('/polls/view/question/{question}/{search?}', [QuestionsController::class, 'viewQuestion'])->name('poll.questions.view_question');
 
+Route::get('/polls/view/public/questions/', [QuestionsController::class, 'viewPublicQuestions'])->name('poll.questions.view_public_questions');
+
+
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
     Route::get('/polls/{poll}/start', [PollsController::class, 'start'])->name('poll.start');

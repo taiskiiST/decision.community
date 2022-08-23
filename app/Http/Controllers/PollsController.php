@@ -830,6 +830,7 @@ class PollsController extends Controller
 
     public function addQuestion(Request $request, Poll $poll){
         $inputs = $request->input();
+        //dd($inputs);
         foreach ($inputs as $key => $input){
             if (strpos($key, 'question_text_') === false) {
             } else {
@@ -849,12 +850,18 @@ class PollsController extends Controller
             } else {
                 $rules[$key] = 'required';
             }
+
+            if (strpos($key, 'QuestionPublic') === false) {
+            } else {
+                $rules[$key] = 'required';
+            }
         }
         $parameters = $this->validate($request, $rules);
         $flag = false;
         $is_update_file = false;
         $indexes_of_files = [];
         $indexes_of_answers = [];
+        //dd($parameters);
         foreach ($parameters as $key => $value){
             if (strpos($key, 'question_text_') === false) {
             } else {
@@ -935,9 +942,26 @@ class PollsController extends Controller
                 }
 
             }
+            if (strpos($key, 'QuestionPublic') === false) {
+            } else {
+                if ($parameters[$key] == 'on') {
+                    $question->update([
+                        'public' => 1,
+                    ]);
+                }else{
+                    $question->update([
+                        'public' => 0,
+                    ]);
+                }
+            }
 
         }
-        //dd($indexes_of_files);
+
+        if(!isset($parameters['QuestionPublic'])){
+            $question->update([
+                'public' => 0,
+            ]);
+        }
         if(!$flag &&  $question->question_files()->count() > 0){
             foreach ($question->question_files()->get() as $file){
                 Storage::disk('public')->delete($file->path_to_file);

@@ -140,7 +140,7 @@
                             <tr class="bg-white bg-gray-100 border-b border-gray-400">
                                 <td>
                                     <div class="px-1 py-4 whitespace-wrap text-sm font-bold text-gray-900 text-center @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                        {{$answer->text}}  - {{$maxCountAnswer}}
+                                        {{$answer->text}}
                                     </div>
                                 </td>
                                 <td>

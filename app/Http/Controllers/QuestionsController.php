@@ -102,12 +102,27 @@ class QuestionsController extends Controller
 
     public function viewQuestion(Question $question, $search = '')
     {
-        return view('questions.view_question', [
-            'question' => $question,
-            'poll' => $question->poll()->get()->first(),
-            'search' => $search ? $search:''
-        ]);
+        //dd($question->public);
+       if ($question->public){
+           return view('questions.view_question', [
+               'question' => $question,
+               'poll' => $question->poll()->get()->first(),
+               'search' => $search ? $search:''
+           ]);
+       }else{
+           if (auth()->user()){
+               return view('questions.view_question', [
+                   'question' => $question,
+                   'poll' => $question->poll()->get()->first(),
+                   'search' => $search ? $search:''
+               ]);
+            }else{
+               return redirect()->route('login');
+           }
+       }
     }
+
+
 
     public function searchQuestion(Request $request, $search = '')
     {

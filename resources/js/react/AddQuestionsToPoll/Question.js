@@ -24,6 +24,8 @@ class Question extends React.Component {
         this.submitForm = this.submitForm.bind(this);
         this.handleFileUploadInput = this.handleFileUploadInput.bind(this);
 
+        this.handleQuestionPublic = this.handleQuestionPublic.bind(this);
+
         this.form = React.createRef();
 
         if (!question) {
@@ -64,7 +66,8 @@ class Question extends React.Component {
                 formValid: false,
                 isValidAllTextOfFiles: true,
                 isValidAllUploadFiles: true,
-                isValidAllAnswers: true
+                isValidAllAnswers: true,
+                isPublic: ''
             };
         }else{
             let files_whith_ref;
@@ -94,7 +97,8 @@ class Question extends React.Component {
                 formValid: false,
                 isValidAllTextOfFiles: true,
                 isValidAllUploadFiles: true,
-                isValidAllAnswers: true
+                isValidAllAnswers: true,
+                isPublic: question['public']?'checked':''
             };
         }
 
@@ -725,6 +729,23 @@ class Question extends React.Component {
         }), this.validateAllInputOfAnswer);
     }
 
+    handleQuestionPublic = (e) => {
+        let checked
+
+        if( e.target.checked){
+            checked = 'checked'
+        }else {
+            checked = ''
+        }
+
+        this.setState((oldState) => ({
+            ...oldState,
+            isPublic: checked
+        }), this.validateAllInputOfAnswer);
+
+        //console.log('this.state: ',this.state);
+    }
+
     render() {
         return (
             <div className="shadow overflow-hidden sm:rounded-md">
@@ -836,6 +857,22 @@ class Question extends React.Component {
                     </div>
                 </div>
 
+                <div className="flex items-center px-4 py-5 bg-white sm:p-6">
+                    <div className="flex items-center">
+                        <input
+                            id="QuestionPublic"
+                            name="QuestionPublic"
+                            type="checkbox"
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                            onChange={this.handleQuestionPublic}
+                            defaultChecked={this.state.isPublic}
+                        />
+                        <label htmlFor="QuestionPublic" className="ml-2 block text-sm text-gray-900">
+                            Доступен всем
+                        </label>
+                    </div>
+                </div>
+
                 <div className="inline-flex flex-row w-full place-content-between">
                     <div className="px-4 py-3 bg-gray-50  sm:px-6">
                         {!question && <button type="submit" className={`${this.state.formValid
@@ -855,6 +892,7 @@ class Question extends React.Component {
                             </button>
                         }
                     </div>
+
                     <div className="px-4 py-3 bg-gray-50 sm:px-6 flex-row-reverse ">
                         {question && <a href={`/polls/${poll['id']}/edit`}>
                                 <button type="button"

@@ -48,11 +48,9 @@
                         <div class="px-1 py-4 sm:px-6 flex-row-reverse ">
                             <form method="POST" action="{{route('poll.generateBlankWithAnswers',['poll'=>$poll])}}">
                                 @csrf
-
-                                    <button type="submit" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
-                                        {{ __('Сгенерировать бланк с ответами') }}
-                                    </button>
-
+                                <button type="submit" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
+                                    {{ __('Сгенерировать бланк с ответами') }}
+                                </button>
                             </form>
                         </div>
                     </tr>
@@ -89,13 +87,9 @@
                             <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
                                 <form method="POST" action="{{route('poll.generateProtocol',['poll'=>$poll])}}">
                                     @csrf
-                                    <a href="{{route('poll.generateProtocol',['poll'=>$poll])}}"
-                                       onclick="event.preventDefault();
-                                                            this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
-                                        <button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
-                                            {{ __('Сгенерировать протокол') }}
-                                        </button>
-                                    </a>
+                                    <button type="submit" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
+                                        {{ __('Сгенерировать протокол') }}
+                                    </button>
                                 </form>
                             </div>
                         </tr>

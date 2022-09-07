@@ -44,7 +44,7 @@
                                                                         <td class="px-6 py-4 whitespace-nowrap text-center font-medium text-gray-900">
                                                                                 {{ $loop->index +1 }}
                                                                         </td>
-                                                                        <td class="px-6 py-4 whitespace-nowrap text-center font-medium text-gray-900">
+                                                                        <td class="px-6 py-4 whitespace-wrap text-wrap text-center font-medium text-gray-900">
                                                                                 {{ $user->name }}
                                                                         </td>
                                                                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
@@ -53,7 +53,7 @@
                                                                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                                                                 {{ $user->email }}
                                                                         </td>
-                                                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                                                        <td class="px-6 py-4 whitespace-wrap text-wrap text-center text-sm font-medium">
                                                                                 {{ $user->position() }}
                                                                         </td>
                                                                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">

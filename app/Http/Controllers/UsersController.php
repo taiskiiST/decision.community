@@ -12,9 +12,53 @@ use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
-    public function index(){
+    protected function prepareUsersForReact(){
         $users = User::all();
-        return view('users.index',['users' => $users]);
+        $cnt = 0;
+        $index = 0;
+        $users_new = [];
+        foreach ($users as $user_prepare){
+            $users_new[$index]['num'] = $cnt++;
+            $users_new[$index]['id'] = $user_prepare->id;
+            $users_new[$index]['name'] = $user_prepare->name;
+            $users_new[$index]['phone'] = $user_prepare->phone;
+            $users_new[$index]['email'] = $user_prepare->email;
+            $users_new[$index]['position'] = $user_prepare->position();
+            $users_new[$index]['permissions'] = '';
+            $users_new[$index]['permissions'] = $user_prepare->isAdmin() ? 'Администратор': '' ;
+
+            if(empty($users_new[$index]['permissions'])){
+                $users_new[$index]['permissions'] .= $user_prepare->isVote() ? "Допущен к голосованию": "";
+            }else{
+                $users_new[$index]['permissions'] .= $user_prepare->isVote() ? "=Допущен к голосованию": "";
+            }
+            if(empty($users_new[$index]['permissions'])){
+                $users_new[$index]['permissions'] .= $user_prepare->isGovernance() ? "Член правления": "";
+            }else{
+                $users_new[$index]['permissions'] .= $user_prepare->isGovernance() ? "=Член правления": "";
+            }
+            if(empty($users_new[$index]['permissions'])){
+                $users_new[$index]['permissions'] .= $user_prepare->isManageItems() ? "Модератор": "";
+            }else{
+                $users_new[$index]['permissions'] .= $user_prepare->isManageItems() ? "=Модератор": "";
+            }
+            if(empty($users_new[$index]['permissions'])){
+                $users_new[$index]['permissions'] .= $user_prepare->isAccess() ? "Допущен к сайту": "";
+            }else{
+                $users_new[$index]['permissions'] .= $user_prepare->isAccess() ? "=Допущен к сайту": "";
+            }
+            $index++;
+        }
+        return $users_new;
+    }
+    public function index(){
+        $users_new = $this->prepareUsersForReact();
+        \JavaScript::put([
+            'users' => $users_new,
+            'csrf_token' =>  csrf_token(),
+        ]);
+
+        return view('users.index',['users' => $users_new]);
     }
     public function addOrUpdateForm(Request $request){
         $permissions =  Permission::allPermission();
@@ -176,14 +220,22 @@ class UsersController extends Controller
             );
             //dd($user);
         }
-        $users = User::all();
+        $users = $this->prepareUsersForReact();
+        \JavaScript::put([
+            'users' => $users,
+            'csrf_token' =>  csrf_token(),
+        ]);
         return view('users.index',['users'=>$users]);
     }
 
     public function delete(Request $request){
         $user = User::find($request->user_del);
         $user->delete();
-        $users = User::all();
+        $users = $this->prepareUsersForReact();
+        \JavaScript::put([
+            'users' => $users,
+            'csrf_token' =>  csrf_token(),
+        ]);
         return view('users.index',['users'=>$users]);
     }
     public function governance(){

@@ -74,6 +74,8 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::post('/polls/{poll}/question/{question}/delete/', [QuestionsController::class, 'destroy'])->name('question.delete');
     Route::post('/polls/{poll}/questions/add', [PollsController::class, 'addQuestion'])->name('poll.addQuestion');
     Route::get('/polls/search/question/{search?}', [QuestionsController::class, 'searchQuestion'])->name('poll.questions.search_question');
+    Route::post('/polls/{poll}/question/{question}/public/', [QuestionsController::class, 'publicQuestion'])->name('question.public');
+
     //Route::get('/polls/{poll}/questions/add', [QuestionsController::class, 'add'])->name('poll.questions.add');
 
     Route::get('/manage/users', [UsersController::class, 'index'])->name('users.manage');

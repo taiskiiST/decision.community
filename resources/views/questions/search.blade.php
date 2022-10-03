@@ -36,7 +36,8 @@
                                         {{$loop->index + 1}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900">
-                                        {!! $question->text !!}
+                                        <p class="text-xs">{!! $question->poll->name !!}</p> <br />
+                                        <p class="text-lg">{!! $question->text !!}</p>
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
                                         {{ $question->question_files()->count() }}

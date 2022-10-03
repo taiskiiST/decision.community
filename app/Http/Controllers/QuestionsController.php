@@ -161,6 +161,20 @@ class QuestionsController extends Controller
 
         }
     }
+
+    public function publicQuestion(Poll $poll, Question $question)
+    {
+        if ($question->public){
+            $question->update(['public' => 0]);
+        }else{
+            $question->update(['public' => 1]);
+        }
+        return redirect()->route('poll.edit', [
+            'poll' => $poll
+        ]);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *

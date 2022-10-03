@@ -78,7 +78,19 @@
                                     </td>
                                     @if (auth()->user()->canManageItems() )
                                         <td class="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
-                                            {{ $question->public? 'Да' : ''  }}
+                                            @if (auth()->user()->canManageItems() )
+                                                <form method="POST" action="{{route('question.public',[$poll->id, $question->id])}}">
+                                                    @csrf
+                                                    <input name="public_question" value="{{$question->id}}" type="hidden"/>
+                                                    <a href="{{route('question.public',[$poll->id, $question->id])}}"
+                                                       onclick="event.preventDefault();
+                                                this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
+                                                        {{ $question->public? 'Да' : 'Нет'  }}
+                                                    </a>
+                                                </form>
+                                            @else
+                                                {{ $question->public? 'Да' : ''  }}
+                                            @endif
                                         </td>
                                     @endif
                                     <td class="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">

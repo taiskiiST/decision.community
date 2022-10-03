@@ -21,6 +21,7 @@ class UsersController extends Controller
             $users_new[$index]['num'] = $cnt++;
             $users_new[$index]['id'] = $user_prepare->id;
             $users_new[$index]['name'] = $user_prepare->name;
+            $users_new[$index]['address'] = $user_prepare->address;
             $users_new[$index]['phone'] = $user_prepare->phone;
             $users_new[$index]['email'] = $user_prepare->email;
             $users_new[$index]['position'] = $user_prepare->position();

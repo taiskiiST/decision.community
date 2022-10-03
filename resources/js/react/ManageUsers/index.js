@@ -6,6 +6,9 @@ const {users, csrf_token} = TSN;
 function Users() {
     const [searchTerm, setSearchTerm] = useState("");
     const [searchResults, setSearchResults] = useState(users);
+    const [onFilterName, setFilterName] = useState(1);
+    const [onFilterAddress, setFilterAddress] = useState(1);
+
     const handleChangeUsersFilter = event => {
         setSearchTerm(event.target.value);
     };
@@ -19,16 +22,45 @@ function Users() {
                 [].map.call(document.getElementsByClassName("permissions_" + index), item => item.innerHTML +=  "<div>" + permission + "</div>")
             ))
         ))
-    });
+    }, []);
     useEffect(() => {
-        const results = users.filter(person =>
+        const results = users
+            .filter(person =>
             person.name.toLowerCase().includes(searchTerm) || person.phone.includes(searchTerm)
             || ( person.email ? person.email.toLowerCase().includes(searchTerm) : "" )
             || ( person.position ? person.position.toLowerCase().includes(searchTerm) : "" )
             || ( person.permissions ? person.permissions.toLowerCase().includes(searchTerm) : "" )
+            || ( person.address ? person.address.toLowerCase().includes(searchTerm) : "" )
         );
         setSearchResults(results);
     }, [searchTerm]);
+
+    const handleClickNameSort = event => {
+        setFilterName(onFilterName? 0: 1);
+    };
+    useEffect(() => {
+        if(onFilterName){
+            const results = searchResults.sort((a, b) => a.name > b.name ? 1 : -1)
+            setSearchResults(results);
+        }else{
+            const  results = searchResults.sort((a, b) => a.name < b.name ? 1 : -1)
+            setSearchResults(results);
+        }
+    }, [onFilterName]);
+
+    const handleClickAddressSort = event => {
+        setFilterAddress(onFilterAddress? 0: 1);
+    };
+
+    useEffect(() => {
+        if(onFilterAddress){
+            const results = searchResults.sort((a, b) => a.address > b.address ? 1 : -1)
+            setSearchResults(results);
+        }else{
+            const  results = searchResults.sort((a, b) => a.address < b.address ? 1 : -1)
+            setSearchResults(results);
+        }
+    }, [onFilterAddress]);
 
     function handleClickUpdate(event) {
         event.preventDefault();
@@ -74,9 +106,19 @@ function Users() {
                                         №
                                     </th>
                                     <th scope="col" className="relative px-6 py-3 text-center">
-                                        ФИО
+                                        <button onClick={handleClickNameSort}
+                                                className="text-indigo-600 hover:text-indigo-900"
+                                        >
+                                            ФИО
+                                        </button>
                                     </th>
-
+                                    <th scope="col" className="relative px-6 py-3 text-center">
+                                        <button onClick={handleClickAddressSort}
+                                                className="text-indigo-600 hover:text-indigo-900"
+                                        >
+                                            Адрес
+                                        </button>
+                                    </th>
                                     <th scope="col" className="relative px-6 py-3 text-center">
                                         Телефон
                                     </th>
@@ -104,6 +146,9 @@ function Users() {
                                         </td>
                                         <td className="px-6 py-4 whitespace-wrap text-wrap text-center font-medium text-gray-900">
                                             {user.name}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                            {user.address}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                             {user.phone}
@@ -168,6 +213,10 @@ function Users() {
                                             <div
                                                 className="px-6 py-4 whitespace-wrap text-wrap text-sm font-bold text-gray-900 text-center bg-gray-200">
                                                 {index + 1}. {user.name}
+                                            </div>
+                                            <div
+                                                className="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-right">
+                                                {user.address}
                                             </div>
                                             <div
                                                 className="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-right">

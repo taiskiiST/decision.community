@@ -926,7 +926,7 @@ const App = () => {
     const potentialRevChairmen = getPotentialRevChairmen(selectedItem);
 
     return (
-        <div className="flex flex-col-reverse justify-end md:justify-between md:flex-row min-h-2xl p-2">
+        <div className="xl:flex lg:flex 2xl:flex min-h-2xl p-2">
             <AddCategoryModal
                 parentId={selectedItem ? selectedItem.id : null}
                 onCategoryAdded={onCategoryAdded}
@@ -1057,7 +1057,7 @@ const App = () => {
                     :  null
                 }
 
-                <div className="hidden md:block mt-2">
+                <div className="md:block mt-2 ">
                     <ItemsTableWrapper
                         selectedItemKey={selectedItemKey}
                         itemsByKeys={itemsByKeys}

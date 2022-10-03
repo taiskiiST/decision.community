@@ -37,28 +37,34 @@ function Users() {
 
     const handleClickNameSort = event => {
         setFilterName(onFilterName? 0: 1);
+        if(onFilterName){
+            setSearchResults(searchResults.sort((a, b) => a.name > b.name ? 1 : -1));
+        }else{
+            setSearchResults(searchResults.sort((a, b) => a.name < b.name ? 1 : -1));
+        }
     };
     useEffect(() => {
         if(onFilterName){
-            const results = searchResults.sort((a, b) => a.name > b.name ? 1 : -1)
-            setSearchResults(results);
+            setSearchResults(searchResults.sort((a, b) => a.name > b.name ? 1 : -1));
         }else{
-            const  results = searchResults.sort((a, b) => a.name < b.name ? 1 : -1)
-            setSearchResults(results);
+            setSearchResults(searchResults.sort((a, b) => a.name < b.name ? 1 : -1));
         }
     }, [onFilterName]);
 
     const handleClickAddressSort = event => {
         setFilterAddress(onFilterAddress? 0: 1);
+        if(onFilterAddress){
+            setSearchResults(searchResults.sort((a, b) => a.address > b.address ? 1 : -1));
+        }else{
+            setSearchResults(searchResults.sort((a, b) => a.address < b.address ? 1 : -1));
+        }
     };
 
     useEffect(() => {
         if(onFilterAddress){
-            const results = searchResults.sort((a, b) => a.address > b.address ? 1 : -1)
-            setSearchResults(results);
+            setSearchResults(searchResults.sort((a, b) => a.address > b.address ? 1 : -1));
         }else{
-            const  results = searchResults.sort((a, b) => a.address < b.address ? 1 : -1)
-            setSearchResults(results);
+            setSearchResults(searchResults.sort((a, b) => a.address < b.address ? 1 : -1));
         }
     }, [onFilterAddress]);
 

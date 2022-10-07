@@ -39,6 +39,7 @@ class User extends Authenticatable
         'email',
         'password',
         'permissions',
+        'additional_id'
     ];
 
     /**
@@ -115,6 +116,26 @@ class User extends Authenticatable
     {
         if (isset($this->hasOne(Position::class, 'id', 'position_id')->get()[0])) {
             return $this->hasOne(Position::class, 'id', 'position_id')->get()[0]->position;
+        }else{
+            return '';
+        }
+
+    }
+
+    public function ownership()
+    {
+        if (isset($this->hasOne(UsersAdditionalFields::class, 'id', 'additional_id')->get()[0])) {
+            return $this->hasOne(UsersAdditionalFields::class, 'id', 'additional_id')->get()[0]->ownership;
+        }else{
+            return '';
+        }
+
+    }
+
+    public function job()
+    {
+        if (isset($this->hasOne(UsersAdditionalFields::class, 'id', 'additional_id')->get()[0])) {
+            return $this->hasOne(UsersAdditionalFields::class, 'id', 'additional_id')->get()[0]->job;
         }else{
             return '';
         }

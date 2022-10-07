@@ -3,6 +3,7 @@
 ])
 
 @section('content')
+    @if ( auth()->user()->isAdmin() )
     <div class="mt-10 sm:mt-0">
         <div class="p-3 md:col-span-2">
             @if ($error)
@@ -78,6 +79,12 @@
 
         </div>
     </div>
+    @else
+        <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            <span class="block">Для доступа к этой странице нужно обладать правами администратора!</span>
+            <span class="block text-indigo-600">За вами уже выехали.</span>
+        </h2>
+    @endif
 @endsection
 
 @section('scripts')

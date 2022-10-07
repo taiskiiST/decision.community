@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Permission;
 use App\Models\Position;
 use App\Models\User;
+use App\Models\UsersAdditionalFields;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
@@ -61,6 +62,110 @@ class UsersController extends Controller
 
         return view('users.index',['users' => $users_new]);
     }
+
+    public function indexProfile(){
+        return view('users.profile',['user'=> auth()->user() ? auth()->user() : false, 'update' => false]);
+    }
+
+    public function updateProfile(){
+        return view('users.profile',['user'=> auth()->user() ? auth()->user() : false, 'update' => true]);
+    }
+
+    public function submitUpdateProfile(Request $request){
+        $inputs = $request->input();
+        $rules = [];
+        foreach ($inputs as $key => $input){
+            switch ($key){
+                case 'id' :
+                {
+                    $rules[$key] = 'required|numeric|exists:users,id';
+                    break;
+                }
+                case ('name') :
+                {
+                    $rules[$key] = 'required';
+                    break;
+                }
+                case ('address') :
+                {
+                    $rules[$key] = 'required';
+                    break;
+                }
+                case 'phone' :
+                {
+                    $rules[$key] = 'required|numeric|digits:10|unique:users,phone';
+                    break;
+                }
+                case 'email-address' :
+                {
+                    $rules[$key] = 'nullable|email:rfc|unique:users,email';
+                    break;
+                }
+                case 'ownership' :
+                {
+                    $rules[$key] = 'nullable';
+                    break;
+                }
+                case 'password' :
+                {
+                    if(isset($inputs['password'])) {
+                        $rules[$key] = 'required';
+                    }
+                    break;
+                }
+                case 'job' :
+                {
+                    $rules[$key] = 'nullable';
+                    break;
+                }
+            }
+        }
+        if(!isset($inputs['password'])) {
+            $rules['password'] = 'nullable';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect('profile-update')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $parameters = $this->validate( $request, $rules);
+        if (isset($parameters['password'])){
+            $password = Hash::make($parameters['password']);
+        }
+
+        $user = User::find($parameters['id']);
+
+        $user_additionals = UsersAdditionalFields::updateOrCreate(
+            ['id'=> $user->additional_id],
+            [
+                'job' => isset($parameters['job']) ? $parameters['job'] : '',
+                'ownership' => isset($parameters['ownership']) ? $parameters['ownership'] : ''
+            ]
+        );
+
+        $user->update(
+            [
+                'name' => $parameters['name'],
+                'address' => $parameters['address'],
+                'additional_id' => isset($user_additionals) ? $user_additionals->id : null
+            ]
+        );
+
+        if (isset($password)) {
+            $user->update(
+                [
+                    'password' => $password
+                ]
+            );
+        }
+
+        return view('users.profile',['user'=> $user, 'update' => false]);
+    }
+
     public function addOrUpdateForm(Request $request){
         $permissions =  Permission::allPermission();
         $permissions_name = [];
@@ -98,6 +203,7 @@ class UsersController extends Controller
         $positions = Position::all();
         return view('users.addOrUpdate', ['permissions' => $permissions_name, 'update'=> isset($request->user_update)? User::find($request->user_update) : false, 'positions' => $positions ]);
     }
+
     public function addOrUpdate(Request $request){
         $request->flash();
         $inputs = $request->input();
@@ -144,6 +250,16 @@ class UsersController extends Controller
                 case 'permission' :
                 {
                     $rules[$key] = 'required';
+                    break;
+                }
+                case 'ownership' :
+                {
+                    $rules[$key] = 'nullable';
+                    break;
+                }
+                case 'job' :
+                {
+                    $rules[$key] = 'nullable';
                     break;
                 }
             }
@@ -195,6 +311,16 @@ class UsersController extends Controller
             $password = User::find($request->id)->password;
         }
 
+        if(isset($parameters['job']) || isset($parameters['ownership']) ){
+            $user_additionals = UsersAdditionalFields::updateOrCreate(
+                ['id' => isset($request->id) ? User::find($request->id)->additional_id : ''],
+                [
+                    'job' => isset($parameters['job']) ? $parameters['job'] : '',
+                    'ownership' => isset($parameters['ownership']) ? $parameters['ownership'] : ''
+                ]
+            );
+        }
+
         if (!isset($request->id)) {
             $user = User::updateOrCreate(
                 [ 'phone' => $parameters['phone'], 'email' => $parameters['email-address']],
@@ -204,6 +330,7 @@ class UsersController extends Controller
                     'position_id' => $parameters['position'],
                     'password' => Hash::make($parameters['password']),
                     'permissions' => implode(',', $parameters['permission']),
+                    'additional_id' => isset($user_additionals) ? $user_additionals->id : null
                 ]
             );
         }else{
@@ -217,6 +344,7 @@ class UsersController extends Controller
                     'password' => $password,
                     'position_id' => $parameters['position'],
                     'permissions' => implode(',', $parameters['permission']),
+                    'additional_id' => isset($user_additionals) ? $user_additionals->id : null
                 ]
             );
             //dd($user);

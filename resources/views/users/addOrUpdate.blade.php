@@ -3,6 +3,7 @@
 ])
 
 @section('content')
+        @if ( auth()->user()->isAdmin() )
         <div class="mt-10 sm:mt-0">
                 @if ($errors->any())
                         <div class="alert alert-danger text-red-600 p-3">
@@ -53,6 +54,24 @@
                                                                         <div class="alert alert-danger">{{ $message }}</div>
                                                                         @enderror
                                                                 </div>
+
+
+                                                                <div class="col-span-3">
+                                                                        <label for="job" class="block text-sm font-medium text-gray-700">Место работы</label>
+                                                                        <input type="text" name="job" value="@if ($update){{$update->job()}}@else{{old('job')}} @endif"  id="job" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md @error('job') is-invalid @enderror" >
+                                                                        @error('job')
+                                                                        <div class="alert alert-danger">{{ $message }}</div>
+                                                                        @enderror
+                                                                </div>
+
+                                                                <div class="col-span-3">
+                                                                        <label for="ownership" class="block text-sm font-medium text-gray-700">Сведения о документе, подтверждающем право собственности на помещение</label>
+                                                                        <input type="text" name="ownership" value="@if ($update){{$update->ownership()}}@else{{old('ownership')}} @endif" id="ownership" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md @error('ownership') is-invalid @enderror" >
+                                                                        @error('ownership')
+                                                                        <div class="alert alert-danger">{{ $message }}</div>
+                                                                        @enderror
+                                                                </div>
+
 
                                                                 <div class="col-span-3">
                                                                         <label for="permission" class="block text-sm font-medium text-gray-700">Права</label>
@@ -122,6 +141,12 @@
                 </div>
         </form>
         </div>
+        @else
+                <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                        <span class="block">Для доступа к этой странице нужно обладать правами администратора!</span>
+                        <span class="block text-indigo-600">За вами уже выехали.</span>
+                </h2>
+        @endif
 @endsection
 
 @section('scripts')

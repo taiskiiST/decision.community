@@ -3,23 +3,25 @@
         <div class="flex items-center justify-between h-16">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <a href="{{route('poll.questions.view_public_questions')}}"><img class="h-10 w-10" src="/images/logo.png" alt="Workflow logo"></a>
+{{--                    <a href="{{route('poll.questions.view_public_questions')}}">--}}
+                        <img class="h-10 w-10" src="/images/logo.png" alt="Workflow logo">
+{{--                    </a>--}}
                 </div>
 
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="{{ route('items.index') }}" class="nav-tab {{ in_array($currentRouteName, ['items.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}" >Каталог товаров и услуг ТСН "КП Березка"</a>
+{{--                        <a href="{{ route('items.index') }}" class="nav-tab {{ in_array($currentRouteName, ['items.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}" >Каталог товаров и услуг ТСН "КП Березка"</a>--}}
 
-                        <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
+{{--                        <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>--}}
 
-                        @if (auth()->user()->canManageItems())
-                            <a href="{{ route('items-tree') }}" class="nav-tab {{ $currentRouteName === 'items-tree' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Управление</a>
-                        @endif
+{{--                        @if (auth()->user()->canManageItems())--}}
+{{--                            <a href="{{ route('items-tree') }}" class="nav-tab {{ $currentRouteName === 'items-tree' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Управление</a>--}}
+{{--                        @endif--}}
 
-                        @if (auth()->user()->isAdmin())
-                            <a href="{{ route('users.governance') }}" class="nav-tab {{ $currentRouteName === 'users.governance' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>
-                            <a href="{{ route('users.manage') }}" class="nav-tab {{ $currentRouteName === 'users.manage' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Пользователи</a>
-                        @endif
+{{--                        @if (auth()->user()->isAdmin())--}}
+{{--                            <a href="{{ route('users.governance') }}" class="nav-tab {{ $currentRouteName === 'users.governance' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>--}}
+{{--                            <a href="{{ route('users.manage') }}" class="nav-tab {{ $currentRouteName === 'users.manage' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Пользователи</a>--}}
+{{--                        @endif--}}
 
                         <div class="relative w-80">
                             <label class="sr-only" for="search">Поиск</label>
@@ -28,7 +30,7 @@
                                         type="search"
                                         class="appearance-none shadow border py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline w-full"
                                         id="search"
-                                        placeholder="Поиск"
+                                        placeholder="Поиск по голосованиям"
                                         name="search"
                                         autofocus
                                 />
@@ -39,42 +41,47 @@
                                 </button>
                             </form>
                         </div>
+                        <div class="flex flex-col">
+                            <div class="text-base font-medium leading-none text-white">{{ auth()->user()->name }}, {{ auth()->user()->address }}</div>
+
+                            <div class="text-sm font-medium leading-none text-gray-400 mt-1">{{ auth()->user()->email }}</div>
+                        </div>
+{{--                        <div class="flex flex-col">--}}
+{{--                            <div class="text-base font-medium leading-none text-white">Долг: 1 000 руб</div>--}}
+{{--                            <div class="text-sm font-medium leading-none text-gray-400 mt-1">Оплатить</div>--}}
+{{--                        </div>--}}
+
                     </div>
                 </div>
             </div>
 
-            <div class="hidden md:block">
-                <div class="ml-4 flex items-center md:ml-6">
-                    <div class="flex flex-col">
-                        <div class="text-base font-medium leading-none text-white">{{ auth()->user()->name }}</div>
+{{--            <div class="hidden md:block">--}}
+{{--                <div class="ml-4 flex items-center md:ml-6">--}}
 
-                        <div class="text-sm font-medium leading-none text-gray-400 mt-1">{{ auth()->user()->email }}</div>
-                    </div>
+{{--                    <div class="flex flex-col pl-5">--}}
+{{--                        <form method="POST" action="{{ route('logout') }}">--}}
+{{--                            @csrf--}}
+{{--                            <input name="uri_poll" value="/login" type="hidden"/>--}}
+{{--                            <a href="route('logout')"--}}
+{{--                               onclick="event.preventDefault();--}}
+{{--                                                    this.closest('form').submit();" class="text-base font-medium leading-none text-white">--}}
+{{--                                {{ __('Выйти') }}--}}
+{{--                            </a>--}}
+{{--                        </form>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                    <div class="flex flex-col pl-5">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <input name="uri_poll" value="/login" type="hidden"/>
-                            <a href="route('logout')"
-                               onclick="event.preventDefault();
-                                                    this.closest('form').submit();" class="text-base font-medium leading-none text-white">
-                                {{ __('Выйти') }}
-                            </a>
-                        </form>
-                    </div>
-                </div>
+{{--            </div>--}}
 
-            </div>
-
-            <div class="-mr-2 flex md:hidden space-x-4">
-                <div class="relative w-50">
+            <div class="-mr-2 flex  space-x-4">
+                <div class="relative w-60  md:hidden">
                     <label class="sr-only" for="search">Поиск</label>
                     <form action="{{route('poll.questions.search_question')}}" method="GET">
                         <input
                                 type="search"
-                                class="appearance-none shadow border py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline w-30"
+                                class="appearance-none shadow border py-2 pr-4 mr-2 text-gray-500 focus:outline-none focus:shadow-outline w-30"
                                 id="search"
-                                placeholder="Поиск"
+                                placeholder="Поиск по голосованиям"
                                 name="search"
                                 autofocus
                         />
@@ -107,8 +114,9 @@
 
       Open: "block", closed: "hidden"
     -->
-    <div class="{{ $isMenuOpen ? 'block' : 'hidden' }} md:hidden">
+    <div class="{{ $isMenuOpen ? 'block' : 'hidden' }}">
         <div class="pt-4 pb-3 border-t border-gray-700">
+            <a href="{{route('users.profile')}}" class="nav-menu-link nav-menu-link-not-current">
             <div class="flex items-center px-5 space-x-3">
                 <div class="flex-shrink-0 text-white">
                     <svg class="w-10 h-10" enable-background="new 0 0 48 48" id="Layer_1" version="1.1" viewBox="0 0 48 48" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -120,34 +128,42 @@
                 </div>
 
                 <div class="space-y-1">
-                    <div class="text-base font-medium leading-none text-white text-wrap">{{ auth()->user()->name }}</div>
+                    <div class="text-base font-medium leading-none text-white text-wrap">{{ auth()->user()->name }} <b>(личный кабинет)</b></div>
 
                     <div class="text-sm font-medium leading-none text-gray-400">{{ auth()->user()->email }}</div>
                 </div>
             </div>
+            </a>
         </div>
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href="{{ route('items.index') }}" class="nav-menu-link {{ in_array($currentRouteName, ['items.index']) ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Товары и услуги</a>
-            @if (auth()->user()->canManageItems())
-                <a href="#" class="nav-menu-link {{ $currentRouteName === 'items-tree' ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Головование и документы</a>
+                <a href="#" class="nav-menu-link nav-menu-link-not-current">Товары и услуги</a>
+                <div class="flex flex-col pl-5">
+                    <a href="{{ route('items.index') }}" class="nav-menu-link {{ in_array($currentRouteName, ['items.index']) ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Товары и услуги</a>
+                </div>
+            @if (auth()->user()->isAdmin())
+                <div class="flex flex-col pl-5">
+                    <a href="{{ route('items-tree') }}" class="nav-tab {{ $currentRouteName === 'items-tree' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Редактор товаров и услуг</a>
+                </div>
             @endif
+                <a href="#" class="nav-menu-link nav-menu-link-not-current">Голосование и документы</a>
             @if (auth() && auth()->user()->canVote())
                 <div class="flex flex-col pl-5">
                     <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
                 </div>
-                <div class="flex flex-col pl-5">
-                    <a href="{{route('poll.questions.view_public_questions')}}" class="nav-tab {{ in_array($currentRouteName, ['poll.questions.view_public_questions']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Публичные вопросы</a>
-                </div>
-                @if (auth()->user()->isAdmin())
-                    <div class="flex flex-col pl-5">
-                        <a href="{{ route('users.governance') }}" class="nav-tab {{ $currentRouteName === 'users.governance' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>
-                    </div>
-                    <div class="flex flex-col pl-5">
-                        <a href="{{ route('users.manage') }}" class="nav-tab {{ $currentRouteName === 'users.manage' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Пользователи</a>
-                    </div>
-                @endif
             @endif
-            <div class="flex flex-col pl-5 w-full">
+            <div class="flex flex-col pl-5">
+                <a href="{{route('poll.questions.view_public_questions')}}" class="nav-tab {{ in_array($currentRouteName, ['poll.questions.view_public_questions']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Публичные вопросы</a>
+            </div>
+            @if (auth()->user()->isAdmin())
+                <a href="#" class="nav-menu-link nav-menu-link-not-current">Администрирование</a>
+                <div class="flex flex-col pl-5">
+                    <a href="{{ route('users.governance') }}" class="nav-tab {{ $currentRouteName === 'users.governance' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>
+                </div>
+                <div class="flex flex-col pl-5">
+                    <a href="{{ route('users.manage') }}" class="nav-tab {{ $currentRouteName === 'users.manage' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Пользователи</a>
+                </div>
+            @endif
+
                 {!! Form::open(['route' => ['logout'], 'method' => 'POST']) !!}
                 <input name="uri_poll" value="/login" type="hidden"/>
                 <a href="route('logout')"
@@ -156,7 +172,6 @@
                     {{ __('Выйти') }}
                 </a>
                 {!! Form::close() !!}
-            </div>
         </div>
     </div>
 </nav>

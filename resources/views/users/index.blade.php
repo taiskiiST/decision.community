@@ -3,6 +3,7 @@
 ])
 
 @section('content')
+    @if ( auth()->user()->isAdmin() )
         <div id="users"></div>
         <div class="p-2">
                 <div class="inline-flex flex-row w-full place-content-between">
@@ -18,6 +19,12 @@
                         </div>
                 </div>
         </div>
+    @else
+        <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            <span class="block">Для доступа к этой странице нужно обладать правами администратора!</span>
+            <span class="block text-indigo-600">За вами уже выехали.</span>
+        </h2>
+    @endif
 @endsection
 
 @section('scripts')

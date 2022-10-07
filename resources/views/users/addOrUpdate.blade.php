@@ -48,8 +48,8 @@
                                                                 </div>
 
                                                                 <div class="col-span-3">
-                                                                        <label for="email-address" class="block text-sm font-medium text-gray-700">Электронная почта@if ($update) - Это поле менять нельзя!@endif</label>
-                                                                        <input type="email" name="email-address" value="@if ($update){{$update->email}}@else{{old('email-address')}}@endif" id="email-address" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md @error('email') is-invalid @enderror @if ($update) disabled @endif" >
+                                                                        <label for="email-address" class="block text-sm font-medium text-gray-700">Электронная почта</label>
+                                                                        <input type="email" name="email-address" value="@if ($update){{$update->email}}@else{{old('email-address')}}@endif" id="email-address" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md @error('email') is-invalid @enderror " >
                                                                         @error('email')
                                                                         <div class="alert alert-danger">{{ $message }}</div>
                                                                         @enderror

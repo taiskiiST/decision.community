@@ -13,7 +13,7 @@
                 </ul>
             </div>
         @endif
-        <form method="POST" action="@if($update) {{route('users.profile.submit.update')}} @else{{route('users.profile.update')}}@endif">
+        <form method="GET" action="@if($update) {{route('users.profile.submit.update')}} @else{{route('users.profile.update')}}@endif">
             @csrf
             <div class="md:grid md:grid-cols-6 md:gap-6">
                 <div class="mt-5 md:mt-0 md:col-span-2">
@@ -48,9 +48,8 @@
                                 </div>
 
                                 <div class="col-span-3">
-                                    <label for="email-address" class="block text-sm font-medium text-gray-700">Электронная почта@if ($update) - Это поле менять нельзя! В случае ошибки обратитесь к администратору.@endif</label>
-                                    <input type="email" name="email-address" value="@if ($user){{$user->email}}@else{{old('email-address')}}@endif" id="email-address" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md @error('email') is-invalid @enderror"
-                                    disabled>
+                                    <label for="email-address" class="block text-sm font-medium text-gray-700">Электронная почта</label>
+                                    <input type="email" name="email-address" value="@if ($user){{$user->email}}@else{{old('email-address')}}@endif" @if (!$update) disabled @endif id="email-address" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md @error('email') is-invalid @enderror" >
                                     @error('email')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror

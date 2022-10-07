@@ -127,7 +127,7 @@ class UsersController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return redirect('profile-update')
+            return redirect()->route('users.profile.update')
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -137,7 +137,7 @@ class UsersController extends Controller
             $password = Hash::make($parameters['password']);
         }
 
-        $user = User::find($parameters['id']);
+        $user = isset($parameters['id']) ? User::find($parameters['id']):'';
 
         $user_additionals = UsersAdditionalFields::updateOrCreate(
             ['id'=> $user->additional_id],
@@ -151,6 +151,7 @@ class UsersController extends Controller
             [
                 'name' => $parameters['name'],
                 'address' => $parameters['address'],
+                'email' => $parameters['email-address'],
                 'additional_id' => isset($user_additionals) ? $user_additionals->id : null
             ]
         );

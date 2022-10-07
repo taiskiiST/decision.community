@@ -79,8 +79,8 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     //Route::get('/polls/{poll}/questions/add', [QuestionsController::class, 'add'])->name('poll.questions.add');
 
     Route::get('/profile', [UsersController::class, 'indexProfile'])->name('users.profile');
-    Route::post('/profile-update', [UsersController::class, 'updateProfile'])->name('users.profile.update');
-    Route::post('/profile-submit-update', [UsersController::class, 'submitUpdateProfile'])->name('users.profile.submit.update');
+    Route::get('/profile-update', [UsersController::class, 'updateProfile'])->name('users.profile.update');
+    Route::get('/profile-submit-update', [UsersController::class, 'submitUpdateProfile'])->name('users.profile.submit.update');
 
     Route::get('/manage/users', [UsersController::class, 'index'])->name('users.manage');
     Route::get('/manage/add', [UsersController::class, 'addOrUpdateForm'])->name('users.add');

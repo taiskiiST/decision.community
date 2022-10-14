@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import {render} from "react-dom";
+import Highlighter from "react-highlight-words";
 
 const {users, csrf_token} = TSN;
 
@@ -7,29 +8,19 @@ function Users() {
     const [searchTerm, setSearchTerm] = useState("");
     const [searchResults, setSearchResults] = useState(users);
     const [onFilterName, setFilterName] = useState(1);
-    const [onFilterAddress, setFilterAddress] = useState(1);
+    const [onFilterAddress, setFilterAddress] = useState(0);
 
     const handleChangeUsersFilter = event => {
         setSearchTerm(event.target.value);
     };
 
     useEffect(() => {
-        searchResults.map((user,index) => (
-            [].map.call(document.getElementsByClassName("permissions_" + index), item => item.innerHTML =  "")
-        ))
-        searchResults.map((user,index) => (
-            user.permissions.split("=").map((permission) => (
-                [].map.call(document.getElementsByClassName("permissions_" + index), item => item.innerHTML +=  "<div>" + permission + "</div>")
-            ))
-        ))
-    }, []);
-    useEffect(() => {
         const results = users
             .filter(person =>
             person.name.toLowerCase().includes(searchTerm) || person.phone.includes(searchTerm)
             || ( person.email ? person.email.toLowerCase().includes(searchTerm) : "" )
             || ( person.position ? person.position.toLowerCase().includes(searchTerm) : "" )
-            || ( person.permissions ? person.permissions.toLowerCase().includes(searchTerm) : "" )
+            || ( person.permissions ? person.permissions.join().toLowerCase().includes(searchTerm) : "" )
             || ( person.address ? person.address.toLowerCase().includes(searchTerm) : "" )
         );
         setSearchResults(results);
@@ -151,22 +142,59 @@ function Users() {
                                             {index +1}
                                         </td>
                                         <td className="px-6 py-4 whitespace-wrap text-wrap text-center font-medium text-gray-900">
-                                            {user.name}
+                                            {user.name && <Highlighter
+                                                highlightClassName="Highlight"
+                                                searchWords={[searchTerm]}
+                                                autoEscape={true}
+                                                textToHighlight={user.name}
+                                            />
+                                            }
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                            {user.address}
+                                            {user.address && <Highlighter
+                                                highlightClassName="Highlight"
+                                                searchWords={[searchTerm]}
+                                                autoEscape={true}
+                                                textToHighlight={user.address}
+                                            />
+                                            }
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                            {user.phone}
+                                            {user.phone && <Highlighter
+                                                highlightClassName="Highlight"
+                                                searchWords={[searchTerm]}
+                                                autoEscape={true}
+                                                textToHighlight={user.phone}
+                                            />
+                                            }
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                            {user.email}
+                                            {user.email && <Highlighter
+                                                highlightClassName="Highlight"
+                                                searchWords={[searchTerm]}
+                                                autoEscape={true}
+                                                textToHighlight={user.email}
+                                            />
+                                            }
                                         </td>
                                         <td className="px-6 py-4 whitespace-wrap text-wrap text-center text-sm font-medium">
-                                            {user.position}
+                                            {user.position && <Highlighter
+                                                highlightClassName="Highlight"
+                                                searchWords={[searchTerm]}
+                                                autoEscape={true}
+                                                textToHighlight={user.position}
+                                            />
+                                            }
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-nowrap text-center text-sm font-medium">
-                                            <div className={`permissions_${index}`}></div>
+                                            {user.permissions ? user.permissions.map((permission, index) =>  <div key={`${index}`}>
+                                                <Highlighter
+                                                    highlightClassName="Highlight"
+                                                    searchWords={[searchTerm]}
+                                                    autoEscape={true}
+                                                    textToHighlight={permission}
+                                                />
+                                            </div> ) : ''}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                             <form method="POST" action="/manage/update">
@@ -218,27 +246,59 @@ function Users() {
                                         <td>
                                             <div
                                                 className="px-6 py-4 whitespace-wrap text-wrap text-sm font-bold text-gray-900 text-center bg-gray-200">
-                                                {index + 1}. {user.name}
+                                                {index + 1}. {user.name && <Highlighter
+                                                highlightClassName="Highlight"
+                                                searchWords={[searchTerm]}
+                                                autoEscape={true}
+                                                textToHighlight={user.name}
+                                            />
+                                            }
                                             </div>
-                                            <div
-                                                className="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-right">
-                                                {user.address}
+                                            <div className="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-right">
+                                                {user.address && <Highlighter
+                                                    highlightClassName="Highlight"
+                                                    searchWords={[searchTerm]}
+                                                    autoEscape={true}
+                                                    textToHighlight={user.address}
+                                                />
+                                                }
                                             </div>
-                                            <div
-                                                className="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-right">
-                                                {user.phone}
+                                            <div className="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-right">
+                                                {user.phone && <Highlighter
+                                                    highlightClassName="Highlight"
+                                                    searchWords={[searchTerm]}
+                                                    autoEscape={true}
+                                                    textToHighlight={user.phone}
+                                                />
+                                                }
                                             </div>
-                                            <div
-                                                className="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-right bg-gray-200">
-                                                {user.email}
+                                            <div className="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-right bg-gray-200">
+                                                {user.email && <Highlighter
+                                                    highlightClassName="Highlight"
+                                                    searchWords={[searchTerm]}
+                                                    autoEscape={true}
+                                                    textToHighlight={user.email}
+                                                />
+                                                }
                                             </div>
-                                            <div
-                                                className="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900 text-right">
-                                                {user.position}
+                                            <div className="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900 text-right">
+                                                {user.position && <Highlighter
+                                                    highlightClassName="Highlight"
+                                                    searchWords={[searchTerm]}
+                                                    autoEscape={true}
+                                                    textToHighlight={user.position}
+                                                />
+                                                }
                                             </div>
-                                            <div
-                                                className="px-6 py-4 whitespace-wrap text-right text-sm font-medium bg-gray-200">
-                                                <div className={`permissions_${index}`}></div>
+                                            <div className="px-6 py-4 whitespace-wrap text-right text-sm font-medium bg-gray-200">
+                                                {user.permissions ? user.permissions.map((permission, index) =>  <div key={`${index}`}>
+                                                    <Highlighter
+                                                        highlightClassName="Highlight"
+                                                        searchWords={[searchTerm]}
+                                                        autoEscape={true}
+                                                        textToHighlight={permission}
+                                                    />
+                                                </div> ) : ''}
                                             </div>
                                             <div className="px-6 py-4 whitespace-wrap text-right text-sm font-medium">
                                                 <form method="POST" action="/manage/update">

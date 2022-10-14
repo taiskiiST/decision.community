@@ -31,4 +31,11 @@
     @parent()
 
     <script src="{!! mix('/js/ManageUsers.js') !!}"></script>
+    <style type="text/css">
+        .Highlight{
+            background-color: rgb(129 140 248);
+        }
+    </style>
+
+
 @endsection

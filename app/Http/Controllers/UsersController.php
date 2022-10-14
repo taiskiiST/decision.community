@@ -51,8 +51,39 @@ class UsersController extends Controller
             }
             $index++;
         }
+
+        // Сортируем массив $data сначала по volume, затем по edition
+        $users_new = $this->array_orderby($users_new, 'address', SORT_ASC);
+
+
+        $index = 0;
+        foreach ($users_new as $user){
+            $users_new[$index]['permissions'] = explode('=',$users_new[$index]['permissions']);
+            $index++;
+        }
+
         return $users_new;
     }
+
+    // создадим функцию которая нам поможет в сортировке массивов
+    protected function array_orderby()
+    {
+        $args = func_get_args();
+        $data = array_shift($args);
+        foreach ($args as $n => $field) {
+            if (is_string($field)) {
+                $tmp = array();
+                foreach ($data as $key => $row)
+                    $tmp[$key] = $row[$field];
+                $args[$n] = $tmp;
+            }
+        }
+        $args[] = &$data;
+        call_user_func_array('array_multisort', $args);
+        return array_pop($args);
+    }
+
+
     public function index(){
         $users_new = $this->prepareUsersForReact();
         \JavaScript::put([

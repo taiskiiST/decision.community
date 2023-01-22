@@ -11,6 +11,7 @@ class Permission
 {
     const ACCESS              = 'access';
     const ADMIN               = 'admin';
+    const SUPER_ADMIN         = 'super_admin';
     const MANAGE_ITEMS        = 'manage-items';
     const VOTE                = 'voter';
     const GOVERNANCE          = 'governance';
@@ -26,6 +27,7 @@ class Permission
         self::ADMIN,
         self::VOTE,
         self::GOVERNANCE,
+        self::SUPER_ADMIN,
     ];
 
     public static function allPermission()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AnonymousUser;
 use App\Models\AnonymousVote;
 use App\Models\Answer;
+use App\Models\Company;
 use App\Models\Item;
 use App\Models\Organizer;
 use App\Models\Permission;
@@ -37,10 +38,17 @@ class PollsController extends Controller
      */
     public function index()
     {
+        //$company = Company::where('uri','LIKE', session('subdomain'))->first();
+//       dd(session('subdomain'));
         return view('polls.index', [
-            'polls' => Poll::all(),
-            'users' => User::all()
+            'polls' => Poll::where('company_id', session('current_company')->id)->get(),
+            'users' => User::where('company_id', session('current_company')->id)->get(),
+            'siteTitle' => session('current_company')->title
         ]);
+//        return view('polls.index', [
+//            'polls' => Poll::all(),
+//            'users' => User::all()
+//        ]);
     }
 
 
@@ -250,6 +258,10 @@ class PollsController extends Controller
             $section->addPageBreak();
         }
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,'Word2007');
+
+        if(!file_exists(base_path('storage/app/public/storage/'.$poll->id))){
+            mkdir(base_path('storage/app/public/storage/'.$poll->id));
+        }
 
         $str_path = 'storage/app/public/storage/'.$poll->id.'/BlankNewWithAnswers.docx';
         $objWriter->save(base_path($str_path));
@@ -525,6 +537,10 @@ class PollsController extends Controller
         }
 
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,'Word2007');
+
+        if(!file_exists(base_path('storage/app/public/storage/'.$poll->id))){
+            mkdir(base_path('storage/app/public/storage/'.$poll->id));
+        }
 
         $str_path = 'storage/app/public/storage/'.$poll->id.'/ProtocolNew.docx';
         $objWriter->save(base_path($str_path));
@@ -803,7 +819,10 @@ class PollsController extends Controller
         $poll = Poll::find($request['del_poll']);
         $poll->delete();
         return redirect()->route('polls.index', [
-            'polls' => Poll::all()
+            'polls' => Poll::where('company_id', session('current_company')->id)->get(),
+            'poll_id' => '0'
+            //'users' => User::where('company_id', session('current_company')->id)->get(),
+            //'siteTitle' => session('current_company')->title
         ]);
     }
 
@@ -822,7 +841,8 @@ class PollsController extends Controller
 
         $poll = Poll::create([
             'name' => $parameters['poll-name'],
-            'type_of_poll' => $parameters['type_of_poll']
+            'type_of_poll' => $parameters['type_of_poll'],
+            'company_id' => session('current_company')->id
         ]);
 
         return redirect()->route('poll.questions.create',['poll' => $poll->id]);
@@ -869,13 +889,17 @@ class PollsController extends Controller
                 if($question_text_id == '0'){
                     $question = $poll->questions()->create([
                         'poll_id' => $poll->id,
-                        'text' => $value
+                        'text' => $value,
+                        'company_id' => session('current_company')->id
                     ]);
                     $question_text_id = $question->id;
                 }else {
                     $question = $poll->questions()->updateOrInsert(
                         ['id' => $question_text_id, 'poll_id' => $poll->id],
-                        ['text' => $value]
+                        [
+                            'text' => $value,
+                            'company_id' => session('current_company')->id
+                        ]
                     );
                     $question = Question::find($question_text_id);
                 }
@@ -1085,12 +1109,20 @@ class PollsController extends Controller
                         <tbody>';
         $cnt = 1;
         foreach ($out as $user) {
-            if($user->canVote()) {
-                $str_class = ($cnt % 2)? 'bg-white' : 'bg-gray-200';
-                $str .= '<tr class=\'bg-white bg-gray-100 border-b border-gray-400 text-wrap '.$str_class.'\'>';
-                $str .= '<td class=\'text-center\'>' . $cnt . '</td><td>' . $user->name . '</td><td>' . $user->address . '</td><td>' . $user->phone . '</td><td>';
-                $str .= '</tr>';
-                ++$cnt;
+            if($user->canVote() && ($user->company_id == session('current_company')->id) ) {
+                if($poll->isGovernanceMeetingTSN() && $user->isGovernance()){
+                    $str_class = ($cnt % 2)? 'bg-white' : 'bg-gray-200';
+                    $str .= '<tr class=\'bg-white bg-gray-100 border-b border-gray-400 text-wrap '.$str_class.'\'>';
+                    $str .= '<td class=\'text-center\'>' . $cnt . '</td><td>' . $user->name . '</td><td>' . $user->address . '</td><td>' . $user->phone . '</td><td>';
+                    $str .= '</tr>';
+                    ++$cnt;
+                }elseif(!$poll->isGovernanceMeetingTSN()){
+                    $str_class = ($cnt % 2)? 'bg-white' : 'bg-gray-200';
+                    $str .= '<tr class=\'bg-white bg-gray-100 border-b border-gray-400 text-wrap '.$str_class.'\'>';
+                    $str .= '<td class=\'text-center\'>' . $cnt . '</td><td>' . $user->name . '</td><td>' . $user->address . '</td><td>' . $user->phone . '</td><td>';
+                    $str .= '</tr>';
+                    ++$cnt;
+                }
             }
         }
         $str .= '</tbody></table>';
@@ -1313,7 +1345,7 @@ class PollsController extends Controller
         $user = auth()->user();
 
         if($request->private_poll){
-            $user = AnonymousUser::create();
+            $user = AnonymousUser::create();//['company_id' => session('current_company')->id]);
             $anonymous = true;
         }
 
@@ -1371,7 +1403,7 @@ class PollsController extends Controller
                             continue;
                         }
                         $user->vote($question, $answer);
-                        $user_anonymous = AnonymousUser::create();
+                        $user_anonymous = AnonymousUser::create();//['company_id' => session('current_company')->id]);
                         $user_anonymous->vote($question, $answer);
                     } else {
                         return redirect()->route('poll.display', [$poll->id])

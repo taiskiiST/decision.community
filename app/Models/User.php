@@ -39,7 +39,8 @@ class User extends Authenticatable
         'email',
         'password',
         'permissions',
-        'additional_id'
+        'additional_id',
+        'company_id'
     ];
 
     /**
@@ -68,6 +69,15 @@ class User extends Authenticatable
     {
 
         return in_array(Permission::ADMIN, explode(',', $this->permissions));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuperAdmin(): bool
+    {
+
+        return in_array(Permission::SUPER_ADMIN, explode(',', $this->permissions));
     }
 
     /**

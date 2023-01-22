@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Company;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +32,9 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        //dd($request->company_id);
+        $company = Company::find($request->company_id);
+        $request->session()->put('current_company', $company);
 
         return redirect()->intended(RouteServiceProvider::HOME);
         //return redirect()->intended($_SERVER['HTTP_REFERER'].'/polls');

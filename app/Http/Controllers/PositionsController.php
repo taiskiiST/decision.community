@@ -10,7 +10,7 @@ class PositionsController extends Controller
     public function positionManage(Request $request)
     {
         return view('positions.index', [
-            'positions' => Position::all(),
+            'positions' => Position::where('company_id',session('current_company')->id)->get(),
             'error'=> ''
         ]);
     }
@@ -30,7 +30,7 @@ class PositionsController extends Controller
             'position' => $request->position_name
         ]);
         return view('positions.index', [
-            'positions' => Position::all(),
+            'positions' => Position::where('company_id',session('current_company')->id)->get(),
             'error'=> ''
         ]);
     }
@@ -40,12 +40,12 @@ class PositionsController extends Controller
     }
     public function positionAddSubmit(Request $request)
     {
-
-        $position = Position::updateOrCreate([
-            'position' => $request->position_name
-        ]);
+        $position = Position::upsert([
+            ['position' => $request->position_name,
+            'company_id' => session('current_company')->id]
+        ],['position', 'company_id'],['position', 'company_id']);
         return view('positions.index', [
-            'positions' => Position::all(),
+            'positions' => Position::where('company_id',session('current_company')->id)->get(),
             'error'=> ''
         ]);
     }
@@ -56,7 +56,7 @@ class PositionsController extends Controller
             $position->delete();
         }
         return view('positions.index', [
-            'positions' => Position::all(),
+            'positions' => Position::where('company_id',session('current_company')->id)->get(),
             'error'=> ''
         ]);
     }

@@ -124,7 +124,7 @@ class QuestionsController extends Controller
 
     public function viewPublicQuestions()
     {
-        $public_questions = Question::where('public', 1)->get();
+        $public_questions = Question::where('public', 1)->where('company_id',session('current_company')->id)->get();
         return view('questions.public_questions', [
             'public_questions' => $public_questions
         ]);

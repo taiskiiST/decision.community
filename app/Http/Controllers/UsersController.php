@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Permission;
 use App\Models\Position;
 use App\Models\User;
@@ -14,7 +15,11 @@ use Illuminate\Support\Facades\Validator;
 class UsersController extends Controller
 {
     protected function prepareUsersForReact(){
-        $users = User::all();
+        if (!auth()->user()->isSuperAdmin()){
+            $users = User::where('company_id',session('current_company')->id)->get();
+        }else{
+            $users = User::all();
+        }
         $cnt = 0;
         $index = 0;
         $users_new = [];
@@ -49,6 +54,13 @@ class UsersController extends Controller
             }else{
                 $users_new[$index]['permissions'] .= $user_prepare->isAccess() ? "=Допущен к сайту": "";
             }
+            if(empty($users_new[$index]['permissions'])){
+                $users_new[$index]['permissions'] .= $user_prepare->isSuperAdmin() ? "Супер Администратор": "";
+            }else{
+                $users_new[$index]['permissions'] .= $user_prepare->isSuperAdmin() ? "=Супер Администратор": "";
+            }
+            $users_new[$index]['company_id'] = $user_prepare->company_id;
+
             $index++;
         }
 
@@ -89,6 +101,9 @@ class UsersController extends Controller
         \JavaScript::put([
             'users' => $users_new,
             'csrf_token' =>  csrf_token(),
+            'companies' => Company::all(),
+            'current_company' => session('current_company'),
+            'isSuperAdmin' => auth()->user()->isSuperAdmin() ? true : false,
         ]);
 
         return view('users.index',['users' => $users_new]);
@@ -210,7 +225,7 @@ class UsersController extends Controller
                 }
                 case $permission == Permission::VOTE :
                 {
-                    array_push($permissions_name, [Permission::VOTE => 'Член ТСН']);
+                    array_push($permissions_name, [Permission::VOTE => 'Допущен к голосованию']);
                     break;
                 }
                 case $permission == Permission::ACCESS :
@@ -232,7 +247,7 @@ class UsersController extends Controller
         }
 
         $permissions_name = Arr::sortRecursive($permissions_name);
-        $positions = Position::all();
+        $positions = Position::where('company_id',session('current_company')->id)->get();
         return view('users.addOrUpdate', ['permissions' => $permissions_name, 'update'=> isset($request->user_update)? User::find($request->user_update) : false, 'positions' => $positions ]);
     }
 
@@ -315,6 +330,7 @@ class UsersController extends Controller
         }
 
         $parameters = $this->validate( $request, $rules);
+
         if (!in_array("governance", $parameters['permission'])) {
             $parameters['position'] = null;
         }
@@ -362,7 +378,8 @@ class UsersController extends Controller
                     'position_id' => $parameters['position'],
                     'password' => Hash::make($parameters['password']),
                     'permissions' => implode(',', $parameters['permission']),
-                    'additional_id' => isset($user_additionals) ? $user_additionals->id : null
+                    'additional_id' => isset($user_additionals) ? $user_additionals->id : null,
+                    'company_id' => session('current_company')->id
                 ]
             );
         }else{
@@ -376,15 +393,21 @@ class UsersController extends Controller
                     'password' => $password,
                     'position_id' => $parameters['position'],
                     'permissions' => implode(',', $parameters['permission']),
-                    'additional_id' => isset($user_additionals) ? $user_additionals->id : null
+                    'additional_id' => isset($user_additionals) ? $user_additionals->id : null,
+                    'company_id' => session('current_company')->id
                 ]
             );
-            //dd($user);
+
         }
+        //dd($user);
         $users = $this->prepareUsersForReact();
+        //dd(auth()->user());
         \JavaScript::put([
             'users' => $users,
             'csrf_token' =>  csrf_token(),
+            'companies' => Company::all(),
+            'current_company' => session('current_company'),
+            'isSuperAdmin' => auth()->user()->isSuperAdmin() ? true : false,
         ]);
         return view('users.index',['users'=>$users]);
     }
@@ -396,15 +419,22 @@ class UsersController extends Controller
         \JavaScript::put([
             'users' => $users,
             'csrf_token' =>  csrf_token(),
+            'companies' => Company::all(),
+            'current_company' => session('current_company'),
+            'isSuperAdmin' => auth()->user()->isSuperAdmin() ? true : false,
         ]);
         return view('users.index',['users'=>$users]);
     }
+
     public function governance(){
-        $users = User::all();
+        //$users = User::all();
+        $users = User::where('company_id',session('current_company')->id)->get();
         $permissions =  Permission::allPermission();
-        $positions = Position::all();
+        //$positions = Position::all();
+        $positions = Position::where('company_id',session('current_company')->id)->get();
         return view('users.governance',['permissions' => $permissions, 'positions' => $positions, 'users' => $users, 'error'=>'' ]);
     }
+
     public function governanceManage(Request $request){
         $request->flash();
         $inputs = $request->input();
@@ -424,7 +454,8 @@ class UsersController extends Controller
             foreach ($inputs as $position_id => $user_id) {
                 if(is_numeric($position_id)){
                     //dd($user_id);
-                    $users = User::all();
+                    //$users = User::all();
+                    $users = User::where('company_id',session('current_company')->id)->get();
                     foreach ($users as $user){
                         if ($user->position_id == $position_id){
                             $user->update([
@@ -439,9 +470,12 @@ class UsersController extends Controller
                 }
             }
         }
-        $users = User::all();
+        //$users = User::all();
+        $users = User::where('company_id',session('current_company')->id)->get();
         $permissions =  Permission::allPermission();
-        $positions = Position::all();
+        //$positions = Position::all();
+        $positions = Position::where('company_id',session('current_company')->id)->get();
+
         return view('users.governance',['permissions' => $permissions, 'positions' => $positions, 'users' => $users, 'error' => $error ]);
     }
 }

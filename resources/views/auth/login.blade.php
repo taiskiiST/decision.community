@@ -12,9 +12,11 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
+        @if (!isset($company_id)) <div class="text-center text-3xl"> Страница не найдена! </div> @else
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
-
+            <div hidden> <input name="company_id" value="{{$company_id}}" /></div>
             <!-- Phone -->
             <div>
                 <x-label for="phone" :value="__('Phone')" />
@@ -52,5 +54,6 @@
                 </x-button>
             </div>
         </form>
+        @endif
     </x-auth-card>
 </x-guest-layout>

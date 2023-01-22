@@ -3,7 +3,9 @@
 ])
 
 @section('content')
-    @if ( auth()->user()->isAdmin() )
+
+
+    @if ( auth()->user()->isAdmin() || auth()->user()->isSuperAdmin() )
         <div id="users"></div>
         <div class="p-2">
                 <div class="inline-flex flex-row w-full place-content-between">

@@ -7,6 +7,8 @@ use App\Http\Controllers\PollsController;
 use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PositionsController;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,8 +38,10 @@ Route::get('/polls/view/question/{question}/{search?}', [QuestionsController::cl
 
 Route::get('/polls/view/public/questions/', [QuestionsController::class, 'viewPublicQuestions'])->name('poll.questions.view_public_questions');
 
+Route::get('/404', [Controller::class, 'view404'])->name('404');
 
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
+    //dd(Route::current());
     Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
     Route::get('/polls/{poll}/start', [PollsController::class, 'start'])->name('poll.start');
     Route::get('/polls/{poll_id?}/index/{id_question?}', [PollsController::class, 'index'])->name('polls.index');
@@ -136,5 +140,21 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+
+Route::group(['domain' => '{subdomain}.berezka.test'], function () {
+    Route::get('{never_used?}', function ($subdomain, $never_used = null) {
+        $company = \App\Models\Company::where('uri', $subdomain)->first();
+        if ($company){
+            if (!auth()->user()){
+                return view('auth.login', ['company_id' => $company->id]);
+            }
+        }else{
+            return Redirect::to(env('APP_URL').'/404');
+        }
+    })->where('never_used', '.*')
+    ;
+});
+
 
 require __DIR__.'/auth.php';

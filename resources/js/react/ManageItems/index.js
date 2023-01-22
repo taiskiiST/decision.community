@@ -1003,59 +1003,59 @@ const App = () => {
             </div>
 
             <div className="md:flex-grow p-1 min-h-full overflow-hidden">
-                {
-                    selectedItem && selectedItem.isCategory ?
-                    (
-                        <React.Fragment>
-                            <MembersPicker
-                                id="committee_members_picker_id"
-                                item={selectedItem}
-                                onCommitteeListChange={onCommitteeListChange}
-                                onPresidiumListChange={onPresidiumListChange}
-                                onChairmanChange={onChairmanChange}
-                                potentialCommitteeMembers={potentialCommitteeMembers}
-                                potentialPresidiumMembers={potentialPresidiumMembers}
-                                potentialChairmen={potentialChairmen}
+                {/*{*/}
+                {/*    selectedItem && selectedItem.isCategory ?*/}
+                {/*    (*/}
+                {/*        // <React.Fragment>*/}
+                {/*        /!*    <MembersPicker*!/*/}
+                {/*        /!*        id="committee_members_picker_id"*!/*/}
+                {/*        /!*        item={selectedItem}*!/*/}
+                {/*        /!*        onCommitteeListChange={onCommitteeListChange}*!/*/}
+                {/*        /!*        onPresidiumListChange={onPresidiumListChange}*!/*/}
+                {/*        /!*        onChairmanChange={onChairmanChange}*!/*/}
+                {/*        /!*        potentialCommitteeMembers={potentialCommitteeMembers}*!/*/}
+                {/*        /!*        potentialPresidiumMembers={potentialPresidiumMembers}*!/*/}
+                {/*        /!*        potentialChairmen={potentialChairmen}*!/*/}
 
-                                currentCommitteeMembers={currentCommitteeMembers}
-                                committeeListId={`item_${selectedItem.id}_committee_list`}
-                                committeePickerLabel="Комитет"
+                {/*        /!*        currentCommitteeMembers={currentCommitteeMembers}*!/*/}
+                {/*        /!*        committeeListId={`item_${selectedItem.id}_committee_list`}*!/*/}
+                {/*        /!*        committeePickerLabel="Комитет"*!/*/}
 
-                                currentPresidiumMembers={currentPresidiumMembers}
-                                presidiumListId={`item_${selectedItem.id}_presidium_list`}
-                                presidiumPickerLabel="Президиум"
+                {/*        /!*        currentPresidiumMembers={currentPresidiumMembers}*!/*/}
+                {/*        /!*        presidiumListId={`item_${selectedItem.id}_presidium_list`}*!/*/}
+                {/*        /!*        presidiumPickerLabel="Президиум"*!/*/}
 
-                                currentChairman={currentChairman}
-                                chairmenListId={`item_${selectedItem.id}_chairmen_list`}
-                                chairmanPickerLabel="Председатель"
-                            />
+                {/*        /!*        currentChairman={currentChairman}*!/*/}
+                {/*        /!*        chairmenListId={`item_${selectedItem.id}_chairmen_list`}*!/*/}
+                {/*        /!*        chairmanPickerLabel="Председатель"*!/*/}
+                {/*        /!*    />*!/*/}
 
-                            <MembersPicker
-                                id="rev_committee_members_picker_id"
-                                item={selectedItem}
-                                onCommitteeListChange={onRevCommitteeListChange}
-                                onPresidiumListChange={onRevPresidiumListChange}
-                                onChairmanChange={onRevChairmanChange}
-                                potentialCommitteeMembers={potentialRevCommitteeMembers}
-                                potentialPresidiumMembers={potentialRevPresidiumMembers}
-                                potentialChairmen={potentialRevChairmen}
+                {/*        /!*    <MembersPicker*!/*/}
+                {/*        /!*        id="rev_committee_members_picker_id"*!/*/}
+                {/*        /!*        item={selectedItem}*!/*/}
+                {/*        /!*        onCommitteeListChange={onRevCommitteeListChange}*!/*/}
+                {/*        /!*        onPresidiumListChange={onRevPresidiumListChange}*!/*/}
+                {/*        /!*        onChairmanChange={onRevChairmanChange}*!/*/}
+                {/*        /!*        potentialCommitteeMembers={potentialRevCommitteeMembers}*!/*/}
+                {/*        /!*        potentialPresidiumMembers={potentialRevPresidiumMembers}*!/*/}
+                {/*        /!*        potentialChairmen={potentialRevChairmen}*!/*/}
 
-                                currentCommitteeMembers={currentRevCommitteeMembers}
-                                committeeListId={`item_${selectedItem.id}_rev_committee_list`}
-                                committeePickerLabel="Рев. Комитет"
+                {/*        /!*        currentCommitteeMembers={currentRevCommitteeMembers}*!/*/}
+                {/*        /!*        committeeListId={`item_${selectedItem.id}_rev_committee_list`}*!/*/}
+                {/*        /!*        committeePickerLabel="Рев. Комитет"*!/*/}
 
-                                currentPresidiumMembers={currentRevPresidiumMembers}
-                                presidiumListId={`item_${selectedItem.id}_rev_presidium_list`}
-                                presidiumPickerLabel="Рев. Президиум"
+                {/*        /!*        currentPresidiumMembers={currentRevPresidiumMembers}*!/*/}
+                {/*        /!*        presidiumListId={`item_${selectedItem.id}_rev_presidium_list`}*!/*/}
+                {/*        /!*        presidiumPickerLabel="Рев. Президиум"*!/*/}
 
-                                currentChairman={currentRevChairman}
-                                chairmenListId={`item_${selectedItem.id}_rev_chairmen_list`}
-                                chairmanPickerLabel="Рев. Председатель"
-                            />
-                        </React.Fragment>
-                    )
-                    :  null
-                }
+                {/*        /!*        currentChairman={currentRevChairman}*!/*/}
+                {/*        /!*        chairmenListId={`item_${selectedItem.id}_rev_chairmen_list`}*!/*/}
+                {/*        /!*        chairmanPickerLabel="Рев. Председатель"*!/*/}
+                {/*        /!*    />*!/*/}
+                {/*        /!*</React.Fragment>*!/*/}
+                {/*    )*/}
+                {/*    :  null*/}
+                {/*}*/}
 
                 <div className="md:block mt-2 ">
                     <ItemsTableWrapper

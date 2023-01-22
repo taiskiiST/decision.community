@@ -5,7 +5,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name') }}</title>
+    <title>@if (session('current_company')) {{session('current_company')->title}} @else {{ config('app.name') }} @endif </title>
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>

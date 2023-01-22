@@ -60,6 +60,7 @@ class ItemsTreeController extends Controller
         $this->authorize('create', Item::class);
 
         return Item::select('id', 'name', 'phone', 'cost', 'address', 'description','parent_id', 'is_category', 'thumb', 'elementary')
+            ->where('company_id',session('current_company')->id)
                      ->get()
                      ->transform(function (Item $item) {
                          $item = $item->addProperties();
@@ -393,6 +394,7 @@ class ItemsTreeController extends Controller
             'parent_id'     => $parentId,
             'cost'           => '',
             'is_category'   => false,
+            'company_id' => session('current_company')->id
         ]);
 
         Storage::move($tmpPath, $newItem->thumbPath());
@@ -473,6 +475,7 @@ class ItemsTreeController extends Controller
             'thumb'         => $thumbName,
             'parent_id'     => $parentId,
             'is_category'   => true,
+            'company_id' => session('current_company')->id
         ]);
 
         Storage::move($tmpPath, $newCategory->thumbPath());

@@ -72,6 +72,20 @@
                                                                         @enderror
                                                                 </div>
 
+                                                                @if(auth()->user()->isSuperAdmin())
+                                                                <div class="col-span-3">
+                                                                        <label for="company" class="block text-sm font-medium text-gray-700">Площадка принятия решений организации:</label>
+                                                                        <select type="text" name="company" id="company" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md @error('company') is-invalid @enderror">
+                                                                        @foreach ($companies as $company)
+                                                                                        <option @if ($company->id == $update->company_id) selected @endif value="{{$company->id}}">{{$company->title}}</option>
+                                                                        @endforeach
+                                                                        </select>
+                                                                        @error('company')
+                                                                        <div class="alert alert-danger">{{ $message }}</div>
+                                                                        @enderror
+                                                                </div>
+                                                                @endif
+
 
                                                                 <div class="col-span-3">
                                                                         <label for="permission" class="block text-sm font-medium text-gray-700">Права</label>

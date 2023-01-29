@@ -152,6 +152,11 @@ class UsersController extends Controller
                     $rules[$key] = 'nullable';
                     break;
                 }
+                case 'company' :
+                {
+                    $rules[$key] = 'required';
+                    break;
+                }
                 case 'password' :
                 {
                     if(isset($inputs['password'])) {
@@ -192,6 +197,14 @@ class UsersController extends Controller
                 'ownership' => isset($parameters['ownership']) ? $parameters['ownership'] : ''
             ]
         );
+
+        if (auth()->user()->isSuperAdmin()){
+            $user->update(
+                [
+                    'company_id' => $parameters['company']
+                ]
+            );
+        }
 
         $user->update(
             [
@@ -248,7 +261,12 @@ class UsersController extends Controller
 
         $permissions_name = Arr::sortRecursive($permissions_name);
         $positions = Position::where('company_id',session('current_company')->id)->get();
-        return view('users.addOrUpdate', ['permissions' => $permissions_name, 'update'=> isset($request->user_update)? User::find($request->user_update) : false, 'positions' => $positions ]);
+        return view('users.addOrUpdate', [
+                                                'permissions' => $permissions_name,
+                                                'update'=> isset($request->user_update)? User::find($request->user_update) : false,
+                                                'positions' => $positions,
+                                                'companies' => Company::all()
+                                                ]);
     }
 
     public function addOrUpdate(Request $request){
@@ -302,6 +320,11 @@ class UsersController extends Controller
                 case 'ownership' :
                 {
                     $rules[$key] = 'nullable';
+                    break;
+                }
+                case 'company' :
+                {
+                    $rules[$key] = 'required';
                     break;
                 }
                 case 'job' :
@@ -398,6 +421,13 @@ class UsersController extends Controller
                 ]
             );
 
+        }
+        if (auth()->user()->isSuperAdmin() && isset($parameters['company']) ){
+            $user->update(
+                [
+                    'company_id' => $parameters['company']
+                ]
+            );
         }
         //dd($user);
         $users = $this->prepareUsersForReact();

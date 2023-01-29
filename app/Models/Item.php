@@ -64,7 +64,8 @@ class Item extends Model
      */
     public function scopeFirstLevel(Builder $builder): Builder
     {
-        return $builder->where('parent_id', null);
+        return $builder->where('parent_id', null)
+            ->where('company_id', session('current_company')->id);
     }
 
     /**
@@ -95,7 +96,7 @@ class Item extends Model
      */
     public function items(): Collection
     {
-        return Item::where('parent_id', $this->id)->get();
+        return Item::where('parent_id', $this->id)->where('company_id', session('current_company')->id)->get();
     }
 
     /**
@@ -103,7 +104,9 @@ class Item extends Model
      */
     public function countItems(): int
     {
-        return Item::where('parent_id', $this->id)->count();
+        return Item::where('parent_id', $this->id)
+            ->where('company_id', session('current_company')->id)
+            ->count();
     }
 
     /**
@@ -118,6 +121,7 @@ class Item extends Model
         }
 
         return Item::where('parent_id', $this->id)
+            ->where('company_id', session('current_company')->id)
                    ->count();
     }
 
@@ -159,6 +163,7 @@ class Item extends Model
     public function getAllChildren(): Collection
     {
         $query = Item::where('parent_id', $this->id)
+            ->where('company_id', session('current_company')->id)
                      ->unionAll(
                          Item::select('items.*')
                              ->join('tree', 'tree.id', '=', 'items.parent_id')
@@ -179,6 +184,7 @@ class Item extends Model
     public function getAllNonCategoryChildren(): Collection
     {
         $query = Item::where('parent_id', $this->id)
+            ->where('company_id', session('current_company')->id)
                      ->unionAll(
                          Item::select('items.*')
                              ->join('tree', 'tree.id', '=', 'items.parent_id')
@@ -197,6 +203,7 @@ class Item extends Model
     public function getAllParents(): Collection
     {
         $query = Item::where('id', $this->parent_id)
+            ->where('company_id', session('current_company')->id)
                      ->unionAll(
                          Item::select('items.*')
                              ->join('tree', 'items.id',  '=', 'tree.parent_id' )
@@ -205,6 +212,7 @@ class Item extends Model
 //
 //        }
         $search_items = Item::where("parent_id", "=",$this->parent_id)
+            ->where('company_id', session('current_company')->id)
             ->where("is_category",1)
                             ->unionAll(Item::where("parent_id", "=",$this->id)->where("is_category",1))
                             ->distinct()

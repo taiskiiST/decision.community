@@ -33,6 +33,22 @@ class Question extends Model
             }
         }
     }
+    public function middleAnswerThatAllUsersMarkOnReport()
+    {
+        $answers = $this->hasMany(Answer::class);
+        $summ_all_answers = 0;
+        foreach ($answers->get()  as $answer) {
+            if (Vote::where('answer_id', '=', $answer->id)->where('question_id', '=', $this->id)->count() > 0 ){
+                $summ_all_answers += Vote::where('answer_id', '=', $answer->id)->where('question_id', '=', $this->id)->count() * $answer->text;
+            }
+        }
+        $count_users_that_voted_by_question = Vote::where('question_id', '=', $this->id)->count();
+        if ($count_users_that_voted_by_question) {
+            return round($summ_all_answers / $count_users_that_voted_by_question);
+        }else{
+            return 0;
+        }
+    }
     public function speakers(): HasOne
     {
         return $this->HasOne(Speaker::class);

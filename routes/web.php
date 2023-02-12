@@ -43,6 +43,7 @@ Route::get('/404', [Controller::class, 'view404'])->name('404');
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     //dd(Route::current());
     Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
+    Route::get('/polls/{poll}/display_report', [PollsController::class, 'display_report'])->name('poll.display_report');
     Route::get('/polls/{poll}/start', [PollsController::class, 'start'])->name('poll.start');
     Route::get('/polls/{poll_id?}/index/{id_question?}', [PollsController::class, 'index'])->name('polls.index');
     Route::post('/polls/{poll}/submit', [PollsController::class, 'submit'])->name('poll.submit');

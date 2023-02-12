@@ -6,7 +6,7 @@ import FilePreview from './FilePreview';
 import AnswerPreview from "./AnswerPreview";
 import FormErrors from "./FormErrors";
 
-const { poll, count_question, current_num_question, csrf_token, question, files, answer, error } = TSN;
+const { poll, count_question, current_num_question, csrf_token, question, files, answer, error, isReport } = TSN;
 
 class Question extends React.Component {
 
@@ -27,13 +27,13 @@ class Question extends React.Component {
         this.handleQuestionPublic = this.handleQuestionPublic.bind(this);
 
         this.form = React.createRef();
-
         if (!question) {
             this.state = {
                 fileUploads: [
                     // {guid: 'guid', text: 'File Name', fileUpload: '', isValidText: false, isValidFileSize: false, isValidFileName: false, hideDragAndDrop:'',fileInputRef:''},
                 ],
-                answers: [
+
+                answers: ! isReport ?  [
                     // {guid: 'guid', text: 'Answer', isValidText: false}
                     {
                         answer_id: uuidv4(),
@@ -50,7 +50,37 @@ class Question extends React.Component {
                         text: 'Воздержался',
                         isValidText: true
                     },
-                ],
+                ] :
+                    [
+                        // {guid: 'guid', text: 'Answer', isValidText: false}
+                        {
+                            answer_id: uuidv4(),
+                            text: '1',
+                            isValidText: true
+                        },
+                        {
+                            answer_id: uuidv4(),
+                            text: '2',
+                            isValidText: true
+                        },
+                        {
+                            answer_id: uuidv4(),
+                            text: '3',
+                            isValidText: true
+                        },
+                        {
+                            answer_id: uuidv4(),
+                            text: '4',
+                            isValidText: true
+                        },
+                        {
+                            answer_id: uuidv4(),
+                            text: '5',
+                            isValidText: true
+                        }
+                    ]
+                ,
+
                 inputTextOfQuestion: {
                     text: '', isValid: false
                 },
@@ -843,13 +873,16 @@ class Question extends React.Component {
                                                                onDeleteAnswer={this.handleDeletingAnswer}
                                                                onChangeTextInputAnswer={this.handleAnswerInput}
                                                                isUpdate={question}
+                                                               isReport={isReport}
                                                                numQuestion={current_num_question}
                                                 />
                                             ))
                                         }
                                     </div>
 
-                                    <AddAnswerToQuestion handleAddingAnswer={this.handleAddingAnswer}/>
+                                    <AddAnswerToQuestion handleAddingAnswer={this.handleAddingAnswer}
+                                                         isReport={isReport}
+                                    />
 
 
                             </div>

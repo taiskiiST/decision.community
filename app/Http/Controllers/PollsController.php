@@ -19,6 +19,7 @@ use App\Models\User;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Arr;
 
 
 class PollsController extends Controller
@@ -40,6 +41,9 @@ class PollsController extends Controller
     {
         //$company = Company::where('uri','LIKE', session('subdomain'))->first();
 //       dd(session('subdomain'));
+        if(!session('current_company')){
+            $this->authorizeResource(Poll::class, 'poll');
+        }
         return view('polls.index', [
             'polls' => Poll::where('company_id', session('current_company')->id)->get(),
             'users' => User::where('company_id', session('current_company')->id)->get(),
@@ -69,6 +73,10 @@ class PollsController extends Controller
             }
             case TypeOfPoll::PUBLIC_VOTE: {
                 $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::PUBLIC_VOTE)->get();
+                break;
+            }
+            case TypeOfPoll::REPORT_DONE: {
+                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::REPORT_DONE)->get();
                 break;
             }
         }
@@ -1039,10 +1047,41 @@ class PollsController extends Controller
     {
         $this->updateQuorumInfo($poll);
         $quorum = Quorum::where('poll_id', $poll->id)->count() > 0 ? Quorum::where('poll_id', $poll->id)->get()[0]:'';
-        return view('polls.display', [
+
+        if ($poll->isReportDone()){
+            foreach ($poll->questions as $question){
+                $ratings[] = $question->answerThatUserVote(auth()->user()) ? $question->answerThatUserVote(auth()->user()) : 0;
+                foreach ($question->answers()->get() as $answer){
+                    $answers[$question->id][] = $answer;
+                }
+            }
+            //dd($ratings);
+            \JavaScript::put([
+                'questions' => $poll->questions,
+                'ratings_questions' => $ratings,
+                'answers' => $answers
+            ]);
+            return view('polls.display_report', [
+                'poll' => $poll,
+                'quorum' => $quorum,
+                'displayMode' => false,
+                'users' => User::all()
+            ]);
+        }else{
+            return view('polls.display', [
+                'poll' => $poll,
+                'quorum' => $quorum,
+                'displayMode' => false,
+                'users' => User::all()
+            ]);
+        }
+    }
+
+    public function display_report(Poll $poll)
+    {
+
+        return view('polls.display_report', [
             'poll' => $poll,
-            'quorum' => $quorum,
-            'displayMode' => false,
             'users' => User::all()
         ]);
     }
@@ -1350,7 +1389,7 @@ class PollsController extends Controller
         }
 
         foreach ($poll->questions as $question) {
-            $rules["question_{$question->id}"] = 'required|exists:answers,id';
+            $rules["question_{$question->id}"] = $poll->isReportDone() ? 'required' : 'required|exists:answers,id';
             if(!empty($request->input('speakers'.$question->id))){
                 $list = implode(',',$request->input('speakers'.$question->id));
                 Speaker::updateOrCreate([
@@ -1362,20 +1401,41 @@ class PollsController extends Controller
                 );
             }
         }
+        //dd($request);
         $parameters = $this->validate($request, $rules);
+        //dd($parameters);
         if(!$anonymous && !$poll->isPublicVote()) {
             foreach ($poll->questions as $question) {
                 if (!Vote::where('question_id', '=', $question->id)
-                    ->where('user_id', '=', $user->id)->count()) {
+                    ->where('user_id', '=', $user->id)->count() ) {
+                    //dd($parameters["question_{$question->id}"]);
                     $answerId = $parameters["question_{$question->id}"];
                     $answer = Answer::find($answerId);
+                    //dd($answer);
+
                     if (!$answer) {
                         continue;
                     }
                     $user->vote($question, $answer);
                 } else {
-                    return redirect()->route('poll.display', [$poll->id])
-                        ->withErrors("Вы уже проголосовали по данному вопросу!");
+                    if ($poll->isReportDone()){
+                        $answerId = $parameters["question_{$question->id}"];
+                        $answer = Answer::find($answerId);
+                        //dd($answer);
+
+                        if (!$answer) {
+                            continue;
+                        }
+                        $user->vote($question, $answer);
+                    }else {
+                        return redirect()->route('poll.display', [$poll->id])
+                            ->withErrors("Вы уже проголосовали по данному вопросу!");
+                    }
+                }
+            }
+            if ($poll->isReportDone()){
+                foreach($poll->questions() as $question){
+
                 }
             }
             return view('polls.results', [

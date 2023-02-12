@@ -191,12 +191,15 @@ class User extends Authenticatable
 
     public function vote(Question $question, Answer $answer): Model
     {
+        //return $this->votes()->upsert([ 'answer_id' => $answer->id, 'question_id' => $question->id, 'user_id' => $this->id ],[  'answer_id' => $answer->id, 'question_id' => $question->id, 'user_id' => $this->id],['answer_id' => $answer->id]);
+
         return $this->votes()->updateOrCreate([
             'question_id' => $question->id,
-            'answer_id' => $answer->id
+            'user_id' => $this->id
         ], [
+            'answer_id' => $answer->id,
             'question_id' => $question->id,
-            'answer_id' => $answer->id
+            'user_id' => $this->id
         ]);
     }
 

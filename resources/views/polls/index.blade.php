@@ -44,6 +44,7 @@
                                             @if ($poll->isGovernanceMeetingTSN()) <div class="text-xs font-bold">Опрос для Правления ТСН</div>@endif
                                             @if ($poll->isVoteForTSN()) <div class="text-xs font-bold">Опрос для Членов ТСН</div>@endif
                                             @if ($poll->isPublicVote()) <div class="text-xs font-bold">Публичный опрос</div>@endif
+                                            @if ($poll->isReportDone()) <div class="text-xs font-bold">Отчет по проделанной работе</div>@endif
                                                 @if (auth()->user()->isAdmin())
                                                     <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
                                                 @else
@@ -78,9 +79,22 @@
                                             @endif
                                         @else
                                             @if (auth()->user()->canVote())
-                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <span class="text-red-600">Вы уже проголосовали</span>
-                                                </td>
+                                                @if (!$poll->isReportDone())
+                                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                        <span class="text-red-600">Вы уже проголосовали</span>
+                                                    </td>
+                                                @else
+                                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                        @if($poll->voteFinished() || !$poll->voteStart() )
+                                                            <a href="#" class="disabled">Дать оценку</a>
+                                                        @else
+                                                            <a href="{{$poll->isPublicVote()
+                                                                ? route('poll.display.public',[$poll->id])
+                                                                : route('poll.display',[$poll->id])
+                                                           }}" class="text-indigo-600 hover:text-indigo-900">Дать оценку</a>
+                                                        @endif
+                                                    </td>
+                                                @endif
                                             @else
                                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                     <span class="text-red-600">Недостаточно прав для голосования</span>
@@ -163,6 +177,7 @@
                                             @if ($poll->isGovernanceMeetingTSN()) <div>Опрос для Правления ТСН</div>@endif
                                             @if ($poll->isVoteForTSN()) <div>Опрос для Членов ТСН</div>@endif
                                             @if ($poll->isPublicVote()) <div>Публичный опрос</div>@endif
+                                            @if ($poll->isReportDone()) <div>Отчет по проделанной работе</div>@endif
                                                 @if (auth()->user()->isAdmin())
                                                     <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
                                                 @else
@@ -191,9 +206,15 @@
                                                 </div>
                                             @endif
                                         @else
-                                            <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                                                <span class="text-red-600">Вы уже проголосовали</span>
-                                            </div>
+                                            @if (!$poll->isReportDone())
+                                                <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                                                    <span class="text-red-600">Вы уже проголосовали</span>
+                                                </div>
+                                            @else
+                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                    <a href="{{$poll->voteFinished()|| ! $poll->voteStart() ? '#' : route('poll.display',[$poll->id])  }}" class="@if ($poll->voteFinished() || ! $poll->voteStart()) disabled @else text-indigo-600 hover:text-indigo-900 @endif">Дать оценку</a>
+                                                </div>
+                                            @endif
                                         @endif
 
                                     <!-- show.blade.php -->
@@ -261,6 +282,11 @@
                 <div>
                     <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::PUBLIC_VOTE])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                         Создать Тайное голосование
+                    </a>
+                </div>
+                <div>
+                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::REPORT_DONE])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Создать Отчетность
                     </a>
                 </div>
             </div>

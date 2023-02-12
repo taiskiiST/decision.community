@@ -11,6 +11,7 @@ class TypeOfPoll extends Model
     const GOVERNANCE_MEETING_TSN    = 'Собрание Правления ТСН';
     const VOTE_FOR_TSN              = 'Опрос для членов ТСН';
     const PUBLIC_VOTE               = 'Публичный опрос';
+    const REPORT_DONE               = 'Отчет о проделанной работе';
 
     protected $fillable = [
         'type_of_polls'

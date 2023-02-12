@@ -29,6 +29,22 @@
             color: #337AB7;
             content: "\2714";
         }
+
+        button {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+        .on {
+            color: #000;
+        }
+        .off {
+            color: #ccc;
+        }
+        /*.star {*/
+        /*    font-size: 100%;*/
+        /*}*/
     </style>
 @endsection
 
@@ -54,13 +70,6 @@
                 {!! Form::open(['route' => ['poll.submit.public', ['poll' => $poll] ], 'method' => 'POST']) !!}
             @endif
             <!-- This example requires Tailwind CSS v2.0+ -->
-            @if ($quorum)
-{{--                <div class="inline-flex flex-row w-full place-content-between">--}}
-{{--                    <div class="px-1 py-3 sm:px-6">--}}
-{{--                        <label class="px-1 py-4 block text-lg text-black text-wrap">Зарегистрировано {{$quorum->count_of_voting_current}} из {{$quorum->all_users_that_can_vote}} членов ТСН <p class="font-semibold"> @if( ( round($quorum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP) ) <= $quorum->count_of_voting_current)Кворум есть! @else Кворума нет! @endif </p></label>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-            @endif
             <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
                 <div class="text-center"><span style="font-size: x-large;"><b>{{$poll->name}}</b></span></div>
                 @if ($poll->isPublicVote() || !auth()->user()->isAccess())
@@ -176,6 +185,7 @@
                         </div>
                         @if (!$displayMode && auth()->user()->canVote() )
                         <div>
+                            @if (!$poll->isReportDone())
                             <fieldset>
                                 <div class="bg-white rounded-md -space-y-px">
                                 @foreach($question->answers as $answer)
@@ -193,10 +203,14 @@
                                     @endforeach
                                 </div>
                             </fieldset>
+                            @endif
                         </div>
                         @endif
                     </div>
                 @endforeach
+                @if ($poll->isReportDone())
+                    <div class="text-center" id="RatingStars" class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none"></div>
+                @endif
                 <br />
             <!-- This example requires Tailwind CSS v2.0+ -->
                 <nav class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0">
@@ -232,7 +246,7 @@
 
                 <div class="inline-flex flex-row w-full place-content-between">
                     <div class="px-4 py-3 sm:px-6">
-                        <button type="button" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hidden submit-button"
+                        <button type="button" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 @if ( !$poll->isReportDone()) hidden @endif submit-button"
                        id="button_submit">
                             Проголосовать!
                         </button>
@@ -294,6 +308,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.228/pdf.min.js"></script>
+    <script src="{!! mix('/js/RatingStarsForReports.js') !!}"></script>
     <script>
         var _PDF_DOC = [],
             _CURRENT_PAGE = [],
@@ -303,13 +318,13 @@
 
         $("#button_submit").click(
             function () {
-                if (confirm('Вы `уверены`? Ответы нельзя будет изменить впоследствии.')){
+                //if (confirm('Вы `уверены`? Ответы нельзя будет изменить впоследствии.')){
                     $("#button_submit").addClass("submit_done");
                     $('#button_submit').prop('type', 'submit');
                     $("#button_submit").submit();
-                }else{
-                    $("#button_submit").addClass("submit_no");
-                }
+                // }else{
+                //     $("#button_submit").addClass("submit_no");
+                // }
                 return true
             }
         );
@@ -574,6 +589,9 @@
                 $("#speaker_question_" + current_id).addClass('hidden');
                 $("#speaker_question_" + prev_id ).removeClass('hidden');
 
+                $('#id_'+ current_id).addClass("hidden");
+                $('#id_'+ prev_id).removeClass("hidden");
+
                 name_curr = $('.class_' + prev_id).attr("name");
                 prev_id = name_curr.replace("nav_loop_", "");
 
@@ -611,6 +629,9 @@
 
                 $("#speaker_question_" + current_id).addClass('hidden');
                 $("#speaker_question_" + next_id ).removeClass('hidden');
+
+                $('#id_'+ current_id).addClass("hidden");
+                $('#id_'+ next_id).removeClass("hidden");
 
                 name_curr = $('.class_' + next_id).attr("name");
                 next_loop_id = name_curr.replace("nav_loop_", "");

@@ -12,10 +12,11 @@ class AnswerPreview extends React.Component {
         const num_of_answer = this.props.num_of_answer;
         const isUpdate = this.props.isUpdate;
         const num_question = this.props.numQuestion;
-
+        const isReport = this.props.isReport;
+        //console.log(isReport);
         return (
             <div>
-            <div id={`answer_${answer.answer_id}`} className="col-span-6 sm:col-span-3 mt-8 border-t-8 border-double border-gray-400">
+                <div id={`answer_${answer.answer_id}`} className={`col-span-6 sm:col-span-3 mt-8 border-t-8 border-double border-gray-400 ${isReport ? 'hidden': ''}`}>
                    <div className="inline-flex flex-row w-full">
                        {!isUpdate && <label htmlFor={`text_answer_${answer.answer_id}`} className="mt-3 block text-sm font-medium text-gray-700">Введите текст ответа к вопросу №{num_of_question}, ответ №{num_of_answer+1} </label>}
                        {isUpdate && <label htmlFor={`text_answer_${answer.answer_id}`} className="mt-3 block text-sm font-medium text-gray-700">Введите текст ответа к вопросу №{num_question}, ответ №{num_of_answer+1} </label>}

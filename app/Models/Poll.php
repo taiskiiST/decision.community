@@ -38,6 +38,11 @@ class Poll extends Model
         return ($this->getTypeOfPoll() == TypeOfPoll::GOVERNANCE_MEETING_TSN) ? true : false;
     }
 
+    public function isReportDone(): bool
+    {
+        return ($this->getTypeOfPoll() == TypeOfPoll::REPORT_DONE) ? true : false;
+    }
+
     public function isVoteForTSN(): bool
     {
         return ($this->getTypeOfPoll() == TypeOfPoll::VOTE_FOR_TSN) ? true : false;

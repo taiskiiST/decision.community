@@ -95,7 +95,8 @@ class QuestionsController extends Controller
             'answer' => isset($question[0])
                 ? $answers
                 : '',
-            'error' => $error
+            'error' => $error,
+            'isReport' => $poll->isReportDone()
         ]);
         return view('questions.create');
     }

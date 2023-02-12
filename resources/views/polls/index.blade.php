@@ -68,12 +68,12 @@
                                             @else
                                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                     @if($poll->voteFinished() || !$poll->voteStart() )
-                                                        <a href="#" class="disabled">Голосовать</a>
+                                                        <a href="#" class="disabled">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
                                                     @else
                                                         <a href="{{$poll->isPublicVote()
                                                                 ? route('poll.display.public',[$poll->id])
                                                                 : route('poll.display',[$poll->id])
-                                                           }}" class="text-indigo-600 hover:text-indigo-900">Голосовать</a>
+                                                           }}" class="text-indigo-600 hover:text-indigo-900">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
                                                     @endif
                                                 </td>
                                             @endif
@@ -202,7 +202,7 @@
                                                 </div>
                                             @else
                                                 <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <a href="{{$poll->voteFinished()|| ! $poll->voteStart() ? '#' : route('poll.display',[$poll->id])  }}" class="@if ($poll->voteFinished() || ! $poll->voteStart()) disabled @else text-indigo-600 hover:text-indigo-900 @endif">Голосовать</a>
+                                                    <a href="{{$poll->voteFinished()|| ! $poll->voteStart() ? '#' : route('poll.display',[$poll->id])  }}" class="@if ($poll->voteFinished() || ! $poll->voteStart()) disabled @else text-indigo-600 hover:text-indigo-900 @endif">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
                                                 </div>
                                             @endif
                                         @else

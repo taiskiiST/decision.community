@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-        //dd($request->company_id);
+
         $company = Company::find($request->company_id);
         $request->session()->put('current_company', $company);
 

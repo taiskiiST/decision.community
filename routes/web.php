@@ -143,7 +143,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 
-Route::group(['domain' => '{subdomain}.berezka.test'], function () {
+Route::group(['domain' => '{subdomain}.'.env('APP_URL')], function () {
     Route::get('{never_used?}', function ($subdomain, $never_used = null) {
         $company = \App\Models\Company::where('uri', $subdomain)->first();
         if ($company){

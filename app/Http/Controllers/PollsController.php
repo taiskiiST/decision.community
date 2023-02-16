@@ -19,7 +19,6 @@ use App\Models\User;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Arr;
 
 
 class PollsController extends Controller
@@ -40,7 +39,6 @@ class PollsController extends Controller
     public function index()
     {
         //$company = Company::where('uri','LIKE', session('subdomain'))->first();
-//       dd(session('subdomain'));
         if(!session('current_company')){
             $this->authorizeResource(Poll::class, 'poll');
         }

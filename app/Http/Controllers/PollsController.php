@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\AnonymousUser;
 use App\Models\AnonymousVote;
 use App\Models\Answer;
@@ -19,6 +20,7 @@ use App\Models\User;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 
 class PollsController extends Controller
@@ -40,6 +42,7 @@ class PollsController extends Controller
     {
         //$company = Company::where('uri','LIKE', session('subdomain'))->first();
         if(!session('current_company')){
+            Auth::logout();
             $this->authorizeResource(Poll::class, 'poll');
         }
         return view('polls.index', [

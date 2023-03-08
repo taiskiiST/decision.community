@@ -1,12 +1,15 @@
 {
     "/js/app.js": "/js/app.js?id=718f86786db14541086e",
     "/js/ManageItems.js": "/js/ManageItems.js?id=2ca94cb1b2a60e488467",
-    "/js/AddQuestionsToPoll.js": "/js/AddQuestionsToPoll.js?id=d65e9ac0814feca047f7",
+    "/js/AddQuestionsToPoll.js": "/js/AddQuestionsToPoll.js?id=71b9dfbbc799a01d9f77",
     "/js/AddProtocolToPoll.js": "/js/AddProtocolToPoll.js?id=f174c39e788485ada5ab",
-    "/js/ManageUsers.js": "/js/ManageUsers.js?id=ec0fef6548e287492e56",
+    "/js/ManageUsers.js": "/js/ManageUsers.js?id=3a25ceb4344ddcc08a02",
     "/js/RatingStarsForReports.js": "/js/RatingStarsForReports.js?id=b82fcbd14cd1ae730d79",
+    "/js/SuggestedQuestions.js": "/js/SuggestedQuestions.js?id=abe3851226dcc20918ac",
+    "/js/GlobalSearchQuestions.js": "/js/GlobalSearchQuestions.js?id=27749b9fb1591cf09421",
+    "/js/GlobalSearchQuestionsSmallScreen.js": "/js/GlobalSearchQuestionsSmallScreen.js?id=be74824db77c11092b3d",
     "/js/manifest.js": "/js/manifest.js?id=b264a6e7d3be4f44d458",
-    "/css/app.css": "/css/app.css?id=6bf0457f86d7e8b6faf3",
+    "/css/app.css": "/css/app.css?id=df413f99c53152418c5a",
     "/js/vendor.js": "/js/vendor.js?id=fa7031ea6e96c07317ef",
     "/css/antd.css": "/css/antd.css?id=f4870f01bf3e38923b08"
 }

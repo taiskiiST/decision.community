@@ -2,40 +2,6 @@
     'headerName' => "Общедоступные вопросы",
 ])
 
-@section('guest-nav')
-    <nav class="bg-gradient-to-l from-gray-900 via-blue-900 to-indigo-900">
-        <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <a href="{{route('poll.questions.view_public_questions')}}"><img class="h-10 w-10" src="/images/logo.png" alt="Workflow logo"></a>
-                    </div>
-                    <div class="hidden md:block">
-                        <div class="ml-10 flex items-baseline space-x-4">
-                            <label class="block text-lg text-white font-bold whitespace-wrap">Информационная страница публичных данных ТСН "КП Березка"</label>
-                        </div>
-                    </div>
-                    <div class="md:hidden">
-                        <div class="ml-10 flex items-baseline space-x-4">
-                            <label class="block text-sm text-white font-bold whitespace-wrap">Информационная страница публичных данных ТСН "КП Березка"</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ml-4 flex items-center md:ml-6">
-                    <div class="flex flex-col pl-5">
-                            <a href="{{route('login')}}"  class="text-base font-medium leading-none text-white">
-                                {{ __('Войти') }}
-                            </a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </nav>
-@endsection
-
-
 @section('content')
     <div class="p-2">
         <!-- This example requires Tailwind CSS v2.0+ -->

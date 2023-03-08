@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Poll;
 use App\Models\Question;
+use App\Models\User;
 use GraphQL\Query;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class QuestionsController extends Controller
@@ -96,7 +98,8 @@ class QuestionsController extends Controller
                 ? $answers
                 : '',
             'error' => $error,
-            'isReport' => $poll->isReportDone()
+            'isReport' => $poll->isReportDone(),
+            'isSuggestedQuestion' => $poll->isSuggestedQuestion()
         ]);
         return view('questions.create');
     }
@@ -125,9 +128,41 @@ class QuestionsController extends Controller
 
     public function viewPublicQuestions()
     {
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $public_questions = Question::where('public', 1)->where('company_id',session('current_company')->id)->get();
         return view('questions.public_questions', [
             'public_questions' => $public_questions
+        ]);
+
+    }
+
+    public function viewSuggestedQuestions()
+    {
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
+        $suggested_questions = Question::where('suggest', 1)->where('company_id',session('current_company')->id)->get();
+        foreach ($suggested_questions as $question){
+            $cnt_files_in_question [$question->id] = $question->question_files()->count();
+        }
+
+        \JavaScript::put([
+            'csrf_token' =>  csrf_token(),
+            'itemsNameHash'   => User::where('company_id',session('current_company')->id)->get()->pluck('name', 'id'),
+            'itemsPollNameHash'   => Poll::where('company_id',session('current_company')->id)->get()->pluck('name', 'id'),
+            'itemsPollFinishedHash'   => Poll::where('company_id',session('current_company')->id)->get()->pluck('finished', 'id'),
+            'suggested_questions' => $suggested_questions,
+            'hasOwnQuestions' => Question::hasOwnQuestions($suggested_questions),
+            'authUserId'=> auth()->user()->id,
+            'cnt_files_in_question' => $cnt_files_in_question
+        ]);
+
+        return view('questions.suggested_questions', [
+            'itemsNameHash'   => User::where('company_id',session('current_company')->id)->get()->pluck('name', 'id'),
+            'itemsPollNameHash'   => Poll::where('company_id',session('current_company')->id)->get()->pluck('name', 'id'),
+            'suggested_questions' => $suggested_questions
         ]);
 
     }
@@ -143,6 +178,17 @@ class QuestionsController extends Controller
         //dd($matches_questions);
         return view('questions.search', ['questions'=>$matches_questions, 'search_text'=>$search_text]);
     }
+
+    public function searchQuestions(Request $request)
+    {
+        $search_text = $request->searchQuestionsText;
+        if(!$search_text){
+            return '';
+        }
+        $matches_questions = Question::where('text', 'LIKE', '%'.$search_text.'%')->get();
+        return $matches_questions;
+    }
+
     public function switchTypeFile ($type_of_file){
         switch ( $type_of_file){
             case 'pdf':
@@ -181,7 +227,7 @@ class QuestionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Poll $poll)
+    public function suggestedcreate(Poll $poll)
     {
         \JavaScript::put([
             'poll' => $poll,

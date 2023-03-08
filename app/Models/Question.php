@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @property mixed id
@@ -52,6 +53,17 @@ class Question extends Model
     public function speakers(): HasOne
     {
         return $this->HasOne(Speaker::class);
+    }
+
+    static function hasOwnQuestions($questions)
+    {
+        foreach ($questions as $question){
+            if ($question->author == auth()->user()->id){
+                return true;
+            }
+
+        }
+        return false;
     }
 
     public function poll(): HasOne

@@ -43,15 +43,20 @@ class Poll extends Model
         return ($this->getTypeOfPoll() == TypeOfPoll::REPORT_DONE) ? true : false;
     }
 
-    public function isVoteForTSN(): bool
+    public function isSuggestedQuestion(): bool
     {
-        return ($this->getTypeOfPoll() == TypeOfPoll::VOTE_FOR_TSN) ? true : false;
+        return ($this->getTypeOfPoll() == TypeOfPoll::SUGGESTED_POLL) ? true : false;
     }
 
-    public function isPublicVote(): bool
-    {
-        return ($this->getTypeOfPoll() == TypeOfPoll::PUBLIC_VOTE) ? true : false;
-    }
+//    public function isVoteForTSN(): bool
+//    {
+//        return ($this->getTypeOfPoll() == TypeOfPoll::VOTE_FOR_TSN) ? true : false;
+//    }
+
+//    public function isPublicVote(): bool
+//    {
+//        return ($this->getTypeOfPoll() == TypeOfPoll::PUBLIC_VOTE) ? true : false;
+//    }
 
     public function getTypeOfPoll()
     {

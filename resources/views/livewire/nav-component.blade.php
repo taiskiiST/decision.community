@@ -23,24 +23,8 @@
 {{--                            <a href="{{ route('users.manage') }}" class="nav-tab {{ $currentRouteName === 'users.manage' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Пользователи</a>--}}
 {{--                        @endif--}}
 
-                        <div class="relative w-80">
-                            <label class="sr-only" for="search">Поиск</label>
-                            <form action="{{route('poll.questions.search_question')}}" method="GET">
-                                <input
-                                        type="search"
-                                        class="appearance-none shadow border py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline w-full"
-                                        id="search"
-                                        placeholder="Поиск по голосованиям"
-                                        name="search"
-                                        autofocus
-                                />
-                                <button type="submit" class="absolute inset-y-0 right-0 flex items-center bg-indigo-600 text-white text-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    <svg class="w-10 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" stroke="currentColor">
-                                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
+                        <div id="searchQuestionsFullScreen"></div>
+
                         <div class="flex flex-col">
                             <div class="text-base font-medium leading-none text-white">{{ auth()->user()->name }}, {{ auth()->user()->address }}</div>
 
@@ -50,7 +34,6 @@
 {{--                            <div class="text-base font-medium leading-none text-white">Долг: 1 000 руб</div>--}}
 {{--                            <div class="text-sm font-medium leading-none text-gray-400 mt-1">Оплатить</div>--}}
 {{--                        </div>--}}
-
                     </div>
                 </div>
             </div>
@@ -73,37 +56,37 @@
 
 {{--            </div>--}}
 
+            <div class="hidden md:block xl:inline-flex">
+                <div>
+                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::SUGGESTED_POLL ])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Предложить вопрос к рассмотрению
+                    </a>
+                </div>
+            </div>
+            <div class="hidden md:block xl:inline-flex">
+                <div>
+                    <a href="{{route('poll.questions.view_suggested_questions')}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Список предложенных вопросов
+                    </a>
+                </div>
+            </div>
+
             <div class="-mr-2 flex  space-x-4">
                 <div class="relative w-60  md:hidden">
-                    <label class="sr-only" for="search">Поиск</label>
-                    <form action="{{route('poll.questions.search_question')}}" method="GET">
-                        <input
-                                type="search"
-                                class="appearance-none shadow border py-2 pr-4 mr-2 text-gray-500 focus:outline-none focus:shadow-outline w-30"
-                                id="search"
-                                placeholder="Поиск по голосованиям"
-                                name="search"
-                                autofocus
-                        />
-                        <button type="submit" class="absolute inset-y-0 right-0 flex items-center bg-indigo-600 text-white text-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            <svg class="w-10 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" stroke="currentColor">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </form>
+                    <div id="searchQuestionsSmallScreen"></div>
                 </div>
                 <!-- Mobile menu button -->
                 <button
-                    wire:click="toggleMenu"
+                    onClick="toggleMenu()"
                     class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white">
                     <!-- Menu open: "hidden", Menu closed: "block" -->
-                    <svg class="{{ $isMenuOpen ? 'hidden' : 'block' }} h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                    <div class="block h-6 w-6 hamburger"><svg stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
+                        </svg></div>
                     <!-- Menu open: "block", Menu closed: "hidden" -->
-                    <svg class="{{ $isMenuOpen ? 'block' : 'hidden' }} h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                    <div class="hidden h-6 w-6 cross"><svg stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                        </svg></div>
                 </button>
             </div>
         </div>
@@ -114,7 +97,7 @@
 
       Open: "block", closed: "hidden"
     -->
-    <div class="{{ $isMenuOpen ? 'block' : 'hidden' }}">
+    <div class="hidden menu_dropdown">
         <div class="pt-4 pb-3 border-t border-gray-700">
             <a href="{{route('users.profile')}}" class="nav-menu-link nav-menu-link-not-current">
             <div class="flex items-center px-5 space-x-3">
@@ -154,6 +137,16 @@
             <div class="flex flex-col pl-5">
                 <a href="{{route('poll.questions.view_public_questions')}}" class="nav-tab {{ in_array($currentRouteName, ['poll.questions.view_public_questions']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Публичные вопросы</a>
             </div>
+            <div class="flex flex-col pl-5 xl:hidden">
+                <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::SUGGESTED_POLL ])}}" class="nav-tab {{ in_array($currentRouteName, ['polls.create']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">
+                    Предложить вопрос к рассмотрению
+                </a>
+            </div>
+            <div class="flex flex-col pl-5 xl:hidden">
+                <a href="{{route('poll.questions.view_suggested_questions')}}" class="nav-tab {{ in_array($currentRouteName, ['poll.questions.view_suggested_questions']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">
+                    Список предложенных вопросов
+                </a>
+            </div>
             @if (auth()->user()->isAdmin())
                 <a href="#" class="nav-menu-link nav-menu-link-not-current">Администрирование</a>
                 <div class="flex flex-col pl-5">
@@ -175,3 +168,54 @@
         </div>
     </div>
 </nav>
+
+@section('scripts')
+    @parent()
+
+    <script src="{!! mix('/js/GlobalSearchQuestions.js') !!}"></script>
+    <script src="{!! mix('/js/GlobalSearchQuestionsSmallScreen.js') !!}"></script>
+    <script>
+        function toggleMenu() {
+            if (document.getElementsByClassName("block h-6 w-6 hamburger").length >0 ){
+                var ex_class;
+                for (ex_class of document.getElementsByClassName("block h-6 w-6 hamburger")) {
+                    ex_class.className = "hidden h-6 w-6 hamburger";
+                    console.log(ex_class);
+                }
+            }else{
+                var ex_class;
+                for (ex_class of document.getElementsByClassName("hidden h-6 w-6 hamburger")) {
+                    ex_class.className = "block h-6 w-6 hamburger";
+                    console.log('jopa2');
+                }
+            }
+            if (document.getElementsByClassName("block h-6 w-6 cross").length >0 ){
+                var ex_class;
+                for (ex_class of document.getElementsByClassName("block h-6 w-6 cross")) {
+                    ex_class.className = "hidden h-6 w-6 cross";
+                    console.log('jopa3');
+                }
+            }else{
+                var ex_class;
+                for (ex_class of document.getElementsByClassName("hidden h-6 w-6 cross")) {
+                    ex_class.className = "block h-6 w-6 cross";
+                    console.log('jopa4');
+                }
+            }
+
+            if (document.getElementsByClassName("hidden menu_dropdown").length >0 ){
+                var ex_class;
+                for (ex_class of document.getElementsByClassName("hidden menu_dropdown")) {
+                    ex_class.className = "block menu_dropdown";
+                }
+            }else{
+                var ex_class;
+                for (ex_class of document.getElementsByClassName("block menu_dropdown")) {
+                    ex_class.className = "hidden menu_dropdown";
+                }
+            }
+
+        }
+
+    </script>
+@endsection

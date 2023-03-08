@@ -37,6 +37,7 @@ if (app()->isLocal()) {
 Route::get('/polls/view/question/{question}/{search?}', [QuestionsController::class, 'viewQuestion'])->name('poll.questions.view_question');
 
 Route::get('/polls/view/public/questions/', [QuestionsController::class, 'viewPublicQuestions'])->name('poll.questions.view_public_questions');
+Route::get('/polls/view/suggested/questions/', [QuestionsController::class, 'viewSuggestedQuestions'])->name('poll.questions.view_suggested_questions');
 
 Route::get('/404', [Controller::class, 'view404'])->name('404');
 
@@ -78,7 +79,10 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::get('/polls/{poll}/questions/create', [QuestionsController::class, 'create'])->name('poll.questions.create');
     Route::post('/polls/{poll}/question/{question}/delete/', [QuestionsController::class, 'destroy'])->name('question.delete');
     Route::post('/polls/{poll}/questions/add', [PollsController::class, 'addQuestion'])->name('poll.addQuestion');
+
     Route::get('/polls/search/question/{search?}', [QuestionsController::class, 'searchQuestion'])->name('poll.questions.search_question');
+    Route::post('/searchQuestions', [QuestionsController::class, 'searchQuestions'])->name('poll.questions.search_questions');
+
     Route::post('/polls/{poll}/question/{question}/public/', [QuestionsController::class, 'publicQuestion'])->name('question.public');
 
     //Route::get('/polls/{poll}/questions/add', [QuestionsController::class, 'add'])->name('poll.questions.add');

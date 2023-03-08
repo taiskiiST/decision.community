@@ -57,6 +57,9 @@ class ItemsTreeController extends Controller
      */
     public function getItems()
     {
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $this->authorize('create', Item::class);
 
         return Item::select('id', 'name', 'phone', 'cost', 'address', 'description','parent_id', 'is_category', 'thumb', 'elementary')
@@ -340,6 +343,9 @@ class ItemsTreeController extends Controller
      */
     public function addItem()
     {
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $this->authorize('create', Item::class);
 
         $params = $this->validate(request(), [
@@ -424,6 +430,9 @@ class ItemsTreeController extends Controller
      */
     public function addCategory()
     {
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $this->authorize('create', Item::class);
 
         $params = $this->validate(request(), [

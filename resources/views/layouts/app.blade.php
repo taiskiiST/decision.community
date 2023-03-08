@@ -11,7 +11,6 @@
     @auth
         <livewire:nav-component />
     @endauth
-
     @guest
       @yield('guest-nav')
     @endguest
@@ -25,6 +24,7 @@
     <main class="flex-1">
         <div class="max-w-9xl mx-auto py-6 px-2 sm:px-6 lg:px-8">
             <div class="relative -mt-118 h-auto bg-white px-0 shadow-xl">
+                <div id="AppendSectionDiv"><table id="AppendSectionTable"></table></div>
                 @yield('content')
             </div>
         </div>

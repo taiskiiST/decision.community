@@ -68,14 +68,18 @@ class PollsController extends Controller
                 $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::GOVERNANCE_MEETING_TSN)->get();
                 break;
             }
-            case TypeOfPoll::VOTE_FOR_TSN: {
-                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::VOTE_FOR_TSN)->get();
+            case TypeOfPoll::SUGGESTED_POLL: {
+                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::SUGGESTED_POLL)->get();
                 break;
             }
-            case TypeOfPoll::PUBLIC_VOTE: {
-                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::PUBLIC_VOTE)->get();
-                break;
-            }
+//            case TypeOfPoll::VOTE_FOR_TSN: {
+//                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::VOTE_FOR_TSN)->get();
+//                break;
+//            }
+//            case TypeOfPoll::PUBLIC_VOTE: {
+//                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::PUBLIC_VOTE)->get();
+//                break;
+//            }
             case TypeOfPoll::REPORT_DONE: {
                 $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::REPORT_DONE)->get();
                 break;
@@ -825,6 +829,9 @@ class PollsController extends Controller
      */
     public function delete(Request $request)
     {
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $poll = Poll::find($request['del_poll']);
         $poll->delete();
         return redirect()->route('polls.index', [
@@ -843,6 +850,9 @@ class PollsController extends Controller
      */
     public function store(Request $request)
     {
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $rules["type_of_poll"] = 'required';
         $rules["poll-name"] = 'required';
         $parameters = $this->validate($request, $rules);
@@ -858,6 +868,9 @@ class PollsController extends Controller
     }
 
     public function addQuestion(Request $request, Poll $poll){
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $inputs = $request->input();
         //dd($inputs);
         foreach ($inputs as $key => $input){
@@ -884,6 +897,14 @@ class PollsController extends Controller
             } else {
                 $rules[$key] = 'required';
             }
+            if (strpos($key, 'SuggestedQuestion') === false) {
+            } else {
+                $rules[$key] = 'required';
+            }
+            if (strpos($key, 'QuestionEditingDone_') === false) {
+            } else {
+                $rules[$key] = 'required';
+            }
         }
         $parameters = $this->validate($request, $rules);
         $flag = false;
@@ -899,12 +920,13 @@ class PollsController extends Controller
                     $question = $poll->questions()->create([
                         'poll_id' => $poll->id,
                         'text' => $value,
+                        'author' => auth()->user()->id,
                         'company_id' => session('current_company')->id
                     ]);
                     $question_text_id = $question->id;
                 }else {
                     $question = $poll->questions()->updateOrInsert(
-                        ['id' => $question_text_id, 'poll_id' => $poll->id],
+                        ['id' => $question_text_id, 'poll_id' => $poll->id, 'author' => auth()->user()->id],
                         [
                             'text' => $value,
                             'company_id' => session('current_company')->id
@@ -987,14 +1009,51 @@ class PollsController extends Controller
                     ]);
                 }
             }
+            if (strpos($key, 'SuggestedQuestion') === false) {
+            } else {
+                if ($parameters[$key] == 'on') {
+                    $question->update([
+                        'suggest' => 1,
+                    ]);
+                }else{
+                    $question->update([
+                        'suggest' => 0,
+                    ]);
+                }
+            }
+
+            if (strpos($key, 'QuestionEditingDone_') === false) {
+            } else {
+                if(!isset($question)){
+                    $question_editing_id = preg_replace('/QuestionEditingDone_/','',$key);
+                    $question = Question::find($question_editing_id);
+                }
+                if ($parameters[$key] == 'on') {
+                    $question->update([
+                        'is_editing' => 0,
+                    ]);
+                }else{
+                    $question->update([
+                        'is_editing' => 1,
+                    ]);
+                }
+            }
 
         }
 
-        if(!isset($parameters['QuestionPublic'])){
+        if(!isset($parameters['SuggestedQuestion'])){
             $question->update([
-                'public' => 0,
+                'suggest' => 0,
             ]);
         }
+
+        if(!isset($parameters['QuestionEditingDone_'.$question->id])) {
+            $question->update([
+                'is_editing' => 1,
+            ]);
+        }
+
+
         if(!$flag &&  $question->question_files()->count() > 0){
             foreach ($question->question_files()->get() as $file){
                 Storage::disk('public')->delete($file->path_to_file);
@@ -1014,9 +1073,13 @@ class PollsController extends Controller
                 $answer->delete();
             }
         }
-        return redirect()->route('poll.edit', [
-            'poll' => $poll
-        ]);
+        if ($question->suggest){
+            return redirect()->route('poll.questions.view_suggested_questions');
+        }else {
+            return redirect()->route('poll.edit', [
+                'poll' => $poll
+            ]);
+        }
     }
     /**
      * Display the specified resource.
@@ -1056,7 +1119,8 @@ class PollsController extends Controller
                     $answers[$question->id][] = $answer;
                 }
             }
-            //dd($ratings);
+            //dd($poll->questions->count());
+            if($poll->questions->count() == 0){$ratings = '';$answers='';}
             \JavaScript::put([
                 'questions' => $poll->questions,
                 'ratings_questions' => $ratings,
@@ -1126,6 +1190,9 @@ class PollsController extends Controller
 
     public function report_dont_voted(Poll $poll)
     {
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $out = [];
 
         $out = $poll->peopleThatDidNotVote();
@@ -1405,7 +1472,8 @@ class PollsController extends Controller
         //dd($request);
         $parameters = $this->validate($request, $rules);
         //dd($parameters);
-        if(!$anonymous && !$poll->isPublicVote()) {
+        //if(!$anonymous && !$poll->isPublicVote()) {
+        if(!$anonymous ) {
             foreach ($poll->questions as $question) {
                 if (!Vote::where('question_id', '=', $question->id)
                     ->where('user_id', '=', $user->id)->count() ) {

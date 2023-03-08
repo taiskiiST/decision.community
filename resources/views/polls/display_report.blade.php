@@ -62,19 +62,13 @@
         </div>
     @endif
 
-    @if (auth()->user() ? auth() && auth()->user()->canVote()|| auth()->user()->isAccess() : $poll->isPublicVote() )
-        @if ($poll->isPublicVote() || auth()->user()->isAccess() || (!$poll->finished && !$poll->authUserVote() && !$poll->isGovernanceMeetingTSN() || $displayMode) || $poll->isGovernanceMeetingTSN() && auth()->user()->isGovernance() )
-            @if (!$poll->isPublicVote() || !auth()->user()->isAccess())
-                {!! Form::open(['route' => ['poll.submit', ['poll' => $poll] ], 'method' => 'POST']) !!}
-            @else
-                {!! Form::open(['route' => ['poll.submit.public', ['poll' => $poll] ], 'method' => 'POST']) !!}
-            @endif
+    @if (auth()->user() ? auth() && auth()->user()->canVote()|| auth()->user()->isAccess() : '' )
+        @if ( auth()->user()->isAccess() || (!$poll->finished && !$poll->authUserVote() && !$poll->isGovernanceMeetingTSN() || $displayMode) || $poll->isGovernanceMeetingTSN() && auth()->user()->isGovernance() )
+            {!! Form::open(['route' => ['poll.submit', ['poll' => $poll] ], 'method' => 'POST']) !!}
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
                 <div class="text-center"><span style="font-size: x-large;"><b>{{$poll->name}}</b></span></div>
-                @if ($poll->isPublicVote() || !auth()->user()->isAccess())
-                    <input name="private_poll" value="true" hidden/>
-                @endif
+
                 <br/>
 
                 <!-- This example requires Tailwind CSS v2.0+ -->

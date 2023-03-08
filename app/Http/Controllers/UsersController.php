@@ -16,6 +16,9 @@ class UsersController extends Controller
 {
     protected function prepareUsersForReact(){
         if (!auth()->user()->isSuperAdmin()){
+            if(!session('current_company')){
+                return redirect()->route('polls.index');
+            }
             $users = User::where('company_id',session('current_company')->id)->get();
         }else{
             $users = User::all();
@@ -227,6 +230,9 @@ class UsersController extends Controller
     }
 
     public function addOrUpdateForm(Request $request){
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $permissions =  Permission::allPermission();
         $permissions_name = [];
         foreach ($permissions as $permission){
@@ -270,6 +276,9 @@ class UsersController extends Controller
     }
 
     public function addOrUpdate(Request $request){
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $request->flash();
         $inputs = $request->input();
         $rules = [];
@@ -458,6 +467,9 @@ class UsersController extends Controller
 
     public function governance(){
         //$users = User::all();
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $users = User::where('company_id',session('current_company')->id)->get();
         $permissions =  Permission::allPermission();
         //$positions = Position::all();
@@ -466,6 +478,9 @@ class UsersController extends Controller
     }
 
     public function governanceManage(Request $request){
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $request->flash();
         $inputs = $request->input();
         $array_count_values = array_count_values($inputs);

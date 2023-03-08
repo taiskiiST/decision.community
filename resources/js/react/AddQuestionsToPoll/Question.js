@@ -6,11 +6,12 @@ import FilePreview from './FilePreview';
 import AnswerPreview from "./AnswerPreview";
 import FormErrors from "./FormErrors";
 
-const { poll, count_question, current_num_question, csrf_token, question, files, answer, error, isReport } = TSN;
+const { poll, count_question, current_num_question, csrf_token, question, files, answer, error, isReport, isSuggestedQuestion } = TSN;
 
 class Question extends React.Component {
 
     constructor(props) {
+        //console.log(isSuggestedQuestion);
         super(props);
         //this.props.clickTextForFile = false;
         this.handleAddingFile = this.handleAddingFile.bind(this);
@@ -25,6 +26,7 @@ class Question extends React.Component {
         this.handleFileUploadInput = this.handleFileUploadInput.bind(this);
 
         this.handleQuestionPublic = this.handleQuestionPublic.bind(this);
+        this.handleQuestionEditing = this.handleQuestionEditing.bind(this);
 
         this.form = React.createRef();
         if (!question) {
@@ -97,7 +99,8 @@ class Question extends React.Component {
                 isValidAllTextOfFiles: true,
                 isValidAllUploadFiles: true,
                 isValidAllAnswers: true,
-                isPublic: ''
+                isPublic: '',
+                isEditing: ''
             };
         }else{
             let files_whith_ref;
@@ -128,7 +131,8 @@ class Question extends React.Component {
                 isValidAllTextOfFiles: true,
                 isValidAllUploadFiles: true,
                 isValidAllAnswers: true,
-                isPublic: question['public']?'checked':''
+                isPublic: question['public']?'checked':'',
+                isEditing: question['is_editing']?'':'checked'
             };
         }
 
@@ -776,6 +780,23 @@ class Question extends React.Component {
         //console.log('this.state: ',this.state);
     }
 
+    handleQuestionEditing = (e) => {
+        let checked
+
+        if( e.target.checked){
+            checked = 'checked'
+        }else {
+            checked = ''
+        }
+
+        this.setState((oldState) => ({
+            ...oldState,
+            isEditing: checked
+        }), this.validateAllInputOfAnswer);
+
+       //console.log('this.state: ',this.state);
+    }
+
     render() {
         return (
             <div className="shadow overflow-hidden sm:rounded-md">
@@ -791,19 +812,35 @@ class Question extends React.Component {
                     <div className="mt-10 sm:mt-0">
                         <div className="grid">
                             <div className="mt-5 md:mt-0 md:col-span-2">
-                                    <div className="col-span-1">
+                                    <div className="col-span-2 inline-flex">
                                         <div className="px-4 sm:px-0">
                                                 { !question &&
                                                     <h3 className="text-lg font-medium leading-6 text-gray-900 mt-6 ml-6">
-                                                        Добавление вопроса к опросу: {poll['name']}
+                                                        Добавление вопроса к теме: {poll['name']}
                                                     </h3>
                                                 }
                                                 { question &&
                                                     <h3 className="text-lg font-medium leading-6 text-gray-900 mt-6 ml-6">
-                                                        Изменения вопроса {current_num_question} к опросу: {poll['name']} с id {question['id']}
+                                                        Изменения вопроса {current_num_question} по теме: {poll['name']} с id {question['id']}
                                                     </h3>
                                                 }
                                         </div>
+                                        {isSuggestedQuestion && <div className="flex items-center px-4 py-5 bg-white sm:p-6">
+                                            <div className="flex items-center">
+                                                <input
+                                                    id="QuestionEditingDone"
+                                                    name={`QuestionEditingDone_${question['id']}`}
+                                                    type="checkbox"
+                                                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                                    onChange={this.handleQuestionEditing}
+                                                    defaultChecked={this.state.isEditing}
+                                                />
+                                                <label htmlFor="QuestionPublic" className="ml-2 block text-sm text-gray-900">
+                                                    Окончеть режим редактирования (PS Если вы ставите галочку, то после подтверждения вопрос будет доступен к голосованию всем пользователям и изменить вопрос будет невозможно! В случае ошибки, вопрос можно будет только удалить.)
+                                                </label>
+                                            </div>
+                                        </div>
+                                        }
                                     </div>
 
                                     <div id="question" className="col-span-3 sm:col-span-3 mt-6 pt-6 border-t border-gray-400 ">
@@ -890,7 +927,7 @@ class Question extends React.Component {
                     </div>
                 </div>
 
-                <div className="flex items-center px-4 py-5 bg-white sm:p-6">
+                {!isSuggestedQuestion && <div className="flex items-center px-4 py-5 bg-white sm:p-6">
                     <div className="flex items-center">
                         <input
                             id="QuestionPublic"
@@ -904,6 +941,17 @@ class Question extends React.Component {
                             Доступен всем
                         </label>
                     </div>
+                </div>
+                }
+
+                <div hidden>
+                        <input
+                            id="SuggestedQuestion"
+                            name="SuggestedQuestion"
+                            type="checkbox"
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                            defaultChecked={isSuggestedQuestion ? 'checked' : ''}
+                        />
                 </div>
 
                 <div className="inline-flex flex-row w-full place-content-between">
@@ -927,14 +975,21 @@ class Question extends React.Component {
                     </div>
 
                     <div className="px-4 py-3 bg-gray-50 sm:px-6 flex-row-reverse ">
-                        {question && <a href={`/polls/${poll['id']}/edit`}>
+                        {!isSuggestedQuestion && <a href={`/polls/${poll['id']}/edit`}>
                                 <button type="button"
                                         className="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                     Отмена
                                 </button>
                             </a>
                         }
-                        {!question && <a href={`/polls/${poll['id']}/index/`}>
+                        {isSuggestedQuestion && <a href={`/polls/view/suggested/questions`}>
+                            <button type="button"
+                                    className="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                Отмена
+                            </button>
+                        </a>
+                        }
+                        {(!question && !isSuggestedQuestion) && <a href={`/polls/${poll['id']}/index/`}>
                             <button type="button"
                                     className="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                 Отмена

@@ -19,6 +19,7 @@ class Permission
     const AVAILABLE_PERMISSIONS = [
         self::ACCESS,
         self::MANAGE_ITEMS,
+        self::VOTE
     ];
 
     const ALL_PERMISSIONS = [

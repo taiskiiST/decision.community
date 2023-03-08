@@ -11,14 +11,14 @@
                 <input type="text" name="type_of_poll" value={{$type_of_poll}} class="hidden">
                     <div class="col-span-1">
                         <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900 mt-6 ml-6">Создание нового опроса</h3>
+                            <h3 class="text-lg font-medium leading-6 text-gray-900 mt-6 ml-6">Предложить к рассмотрению вопрос</h3>
                         </div>
                     </div>
                     <div class="shadow overflow-hidden sm:rounded-md">
                         <div class="px-4 py-5 bg-white sm:p-6">
                             <div class="grid grid-cols-6 gap-6">
                                 <div class="col-span-6 sm:col-span-3">
-                                    <label for="poll-name" class="block text-sm font-medium text-gray-700">Введите название опроса</label>
+                                    <label for="poll-name" class="block text-sm font-medium text-gray-700">Введите тему для предлагаемого к рассмотрению вопроса</label>
                                     <input type="text" name="poll-name" id="poll-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                 </div>
                             </div>

@@ -1,6 +1,26 @@
 @extends('layouts.app', [
     'headerName' => "Подробный разбор вопроса",
 ])
+@section('styles')
+    @parent
+
+    <style>
+        button {
+            background-color: transparent;
+            border: none;
+            outline: none;
+        }
+        .on {
+            color: #000;
+        }
+        .off {
+            color: #ccc;
+        }
+        /*.star {*/
+        /*    font-size: 100%;*/
+        /*}*/
+    </style>
+@endsection
 
 @section('content')
     <div class="bg-white shadow overflow-hidden sm:rounded-lg" id="question_{!! $question->id !!}">
@@ -77,7 +97,9 @@
             </h3>
         </div>
     </div>
+
     <div class="flex flex-col hidden lg:-mt-px xl:flex p-4">
+        @if (!$poll->isReportDone())
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -117,18 +139,10 @@
                                     {{$answer->text}}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                    @if(!$poll->isPublicVote())
-                                        {{$answer->countVotes($answer->id)}}
-                                    @else
-                                        {{$answer->countVotesAnonymous($answer->id)}}
-                                    @endif
+                                    {{$answer->countVotes($answer->id)}}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                    @if(!$poll->isPublicVote())
-                                        {{$answer->percentOfQuestions($question->id, $answer->id) }}
-                                    @else
-                                        {{$answer->percentOfQuestionsAnonymous($question->id, $answer->id) }}
-                                    @endif%
+                                    {{$answer->percentOfQuestions($question->id, $answer->id) }}
                                 </td>
                             </tr>
                         @endforeach
@@ -139,18 +153,10 @@
                                 ИТОГО
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold">
-                                @if(!$poll->isPublicVote())
-                                    {{$question->countVotesByQuestion($question->id)}}
-                                @else
-                                    {{$question->countVotesByQuestionAnonymous($question->id)}}
-                                @endif
+                                {{$question->countVotesByQuestion($question->id)}}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold">
-                                @if(!$poll->isPublicVote())
-                                    {{$question->countVotesByQuestion($question->id)? 100 : 0 }}%
-                                @else
-                                    {{$question->countVotesByQuestionAnonymous($question->id)? 100 : 0 }}%
-                                @endif
+                                {{$question->countVotesByQuestion($question->id)? 100 : 0 }}%
                             </td>
                         </tr>
                         </tbody>
@@ -158,8 +164,27 @@
                 </div>
             </div>
         </div>
+        @else
+            <div class="text-center">
+                <div id="id_33" class="flex flex-nowrap inline-block overflow-visible justify-center">
+
+                    @for ($i = 1; $i <= 5; $i++)
+                        <div class="w-1/9 text-7xl">
+                            <button type="button" class="@if( $i <= $question->middleAnswerThatAllUsersMarkOnReport() ) on @else off @endif index_{{$i}} middelAnswerQuestion_{{$question->middleAnswerThatAllUsersMarkOnReport()}}">
+                                <span class="">★</span>
+                            </button>
+                        </div>
+                    @endfor
+                </div>
+                <label class="italic"> Средняя оценка работы <b>{{$question->middleAnswerThatAllUsersMarkOnReport()}}</b> @if ($question->middleAnswerThatAllUsersMarkOnReport() == 1) балл@elseif($question->middleAnswerThatAllUsersMarkOnReport() == 5) баллов@else балла@endif!</label>
+            </div>
+        @endif
     </div>
+
+
+
     <div class="flex flex-col xl:hidden p-4">
+        @if (!$poll->isReportDone())
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
             <div class="py-2 align-middle min-w-full sm:px-1 lg:px-8">
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -196,20 +221,12 @@
                                 </td>
                                 <td>
                                     <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                        @if(!$poll->isPublicVote())
-                                            {{$answer->countVotes($answer->id)}}
-                                        @else
-                                            {{$answer->countVotesAnonymous($answer->id)}}
-                                        @endif
+                                        {{$answer->countVotes($answer->id)}}
                                     </div>
                                 </td>
                                 <td>
                                     <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                        @if(!$poll->isPublicVote())
-                                            {{$answer->percentOfQuestions($question->id, $answer->id) }}
-                                        @else
-                                            {{$answer->percentOfQuestionsAnonymous($question->id, $answer->id) }}
-                                        @endif
+                                        {{$answer->percentOfQuestions($question->id, $answer->id) }}
                                     </div>
                                 </td>
                             </tr>
@@ -223,20 +240,12 @@
                             </td>
                             <td>
                                 <div class="px-1 py-4 whitespace-nowrap font-bold text-center text-sm font-medium bg-gray-200">
-                                    @if(!$poll->isPublicVote())
-                                        {{$question->countVotesByQuestion($question->id)}}
-                                    @else
-                                        {{$question->countVotesByQuestionAnonymous($question->id)}}
-                                    @endif
+                                    {{$question->countVotesByQuestion($question->id)}}
                                 </div>
                             </td>
                             <td>
                                 <div class="px-1 py-4 whitespace-nowrap font-bold text-center text-sm font-medium bg-gray-200">
-                                    @if(!$poll->isPublicVote())
-                                        {{$question->countVotesByQuestion($question->id)? 100 : 0 }}%
-                                    @else
-                                        {{$question->countVotesByQuestionAnonymous($question->id)? 100 : 0 }}%
-                                    @endif
+                                    {{$question->countVotesByQuestion($question->id)? 100 : 0 }}%
                                 </div>
                             </td>
                         </tr>
@@ -245,14 +254,36 @@
                 </div>
             </div>
         </div>
+        @else
+            <div class="text-center">
+                <div id="id_33" class="flex flex-nowrap inline-block overflow-visible justify-center">
+
+                    @for ($i = 1; $i <= 5; $i++)
+                        <div class="w-1/9 text-7xl">
+                            <button type="button" class="@if( $i <= $question->middleAnswerThatAllUsersMarkOnReport() ) on @else off @endif index_{{$i}} middelAnswerQuestion_{{$question->middleAnswerThatAllUsersMarkOnReport()}}">
+                                <span class="">★</span>
+                            </button>
+                        </div>
+                    @endfor
+                </div>
+                <label class="italic"> Средняя оценка работы <b>{{$question->middleAnswerThatAllUsersMarkOnReport()}}</b> @if ($question->middleAnswerThatAllUsersMarkOnReport() == 1) балл@elseif($question->middleAnswerThatAllUsersMarkOnReport() == 5) баллов@else балла@endif!</label>
+            </div>
+        @endif
     </div>
+
     <div class="inline-flex flex-row w-full place-content-between">
         <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
             @if ($search)
                 @if ($search == 'form_public_page')
-                    <a href="{{route('poll.questions.view_public_questions')}}"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
+                    @if($poll->isSuggestedQuestion())
+                        <a href="{{route('poll.questions.view_suggested_questions')}}"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
+                                Назад
+                            </button></a>
+                    @else
+                        <a href="{{route('poll.questions.view_public_questions')}}"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
                             Назад
                         </button></a>
+                    @endif
                 @else
                 <a href="{{route('poll.questions.search_question',['search'=>$search])}}"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
                         Назад

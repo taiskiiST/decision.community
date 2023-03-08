@@ -15,16 +15,22 @@ class TypesOfPollsSeeder extends Seeder
     public function run()
     {
         TypeOfPoll::create([
-            'type_of_poll' => 'Общее собрание членов ТСН'
+            'type_of_poll' => 'Принятие решений членами сообщества'
         ]);
         TypeOfPoll::create([
-            'type_of_poll' => 'Собрание Правления ТСН'
+            'type_of_poll' => 'Принятие решений членами правления'
         ]);
         TypeOfPoll::create([
-            'type_of_poll' => 'Опрос для членов ТСН'
+            'type_of_poll' => 'Отчет о проделанной работе'
         ]);
-        TypeOfPoll::create([
-            'type_of_poll' => 'Публичный опрос'
+        ypeOfPoll::create([
+            'type_of_poll' => 'Предложение к рассмотрению вопроса'
         ]);
+//        TypeOfPoll::create([
+//            'type_of_poll' => 'Опрос для членов ТСН'
+//        ]);
+//        TypeOfPoll::create([
+//            'type_of_poll' => 'Публичный опрос'
+//        ]);
     }
 }

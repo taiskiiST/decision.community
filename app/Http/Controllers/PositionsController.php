@@ -9,6 +9,9 @@ class PositionsController extends Controller
 {
     public function positionManage(Request $request)
     {
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         return view('positions.index', [
             'positions' => Position::where('company_id',session('current_company')->id)->get(),
             'error'=> ''
@@ -24,7 +27,9 @@ class PositionsController extends Controller
     }
     public function positionUpdateSubmit(Request $request)
     {
-        //dd($request);
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $position = Position::find($request->position_id);
         $position->update([
             'position' => $request->position_name
@@ -40,6 +45,9 @@ class PositionsController extends Controller
     }
     public function positionAddSubmit(Request $request)
     {
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $position = Position::upsert([
             ['position' => $request->position_name,
             'company_id' => session('current_company')->id]
@@ -51,6 +59,9 @@ class PositionsController extends Controller
     }
     public function positionDelete(Request $request)
     {
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $position = Position::find($request->idToDelPosition);
         if(isset($position)) {
             $position->delete();

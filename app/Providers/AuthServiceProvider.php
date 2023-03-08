@@ -30,7 +30,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('access-app', function (User $user) {
-            return in_array(Permission::ACCESS, explode(',', $user->permissions));
+            //return in_array(Permission::ACCESS, explode(',', $user->permissions));
+            return $user->isAccess();
         });
 
         Gate::define('manage-items', function (User $user) {

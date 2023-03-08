@@ -14,6 +14,9 @@
         body {
             font-family: 'Nunito' !important;
         }
+        .Highlight{
+            background-color: rgb(129 140 248);
+        }
     </style>
 
     <link href="{{ mix('css/antd.css') }}" rel="stylesheet">

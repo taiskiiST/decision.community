@@ -35,15 +35,15 @@
 
                             <tbody>
                                 @foreach($polls as $poll)
+                                    @if(! \App\Models\Question::hasOwnQuestions($poll->questions()->get())  )
                                     <tr class="bg-white @if ($loop->odd) bg-gray-200 @endif">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                             {{ $loop->index + 1 }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900">
-                                            @if ($poll->isPublicMeetingTSN()) <div class="text-xs font-bold">Опрос для Общего Собрания ТСН</div>@endif
-                                            @if ($poll->isGovernanceMeetingTSN()) <div class="text-xs font-bold">Опрос для Правления ТСН</div>@endif
-                                            @if ($poll->isVoteForTSN()) <div class="text-xs font-bold">Опрос для Членов ТСН</div>@endif
-                                            @if ($poll->isPublicVote()) <div class="text-xs font-bold">Публичный опрос</div>@endif
+                                            @if ($poll->isPublicMeetingTSN()) <div class="text-xs font-bold">Принятие решений членами сообщества</div>@endif
+                                            @if ($poll->isGovernanceMeetingTSN()) <div class="text-xs font-bold">Принятие решений членами правления</div>@endif
+
                                             @if ($poll->isReportDone()) <div class="text-xs font-bold">Отчет по проделанной работе</div>@endif
                                                 @if (auth()->user()->isAdmin())
                                                     <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
@@ -70,9 +70,7 @@
                                                     @if($poll->voteFinished() || !$poll->voteStart() )
                                                         <a href="#" class="disabled">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
                                                     @else
-                                                        <a href="{{$poll->isPublicVote()
-                                                                ? route('poll.display.public',[$poll->id])
-                                                                : route('poll.display',[$poll->id])
+                                                        <a href="{{ route('poll.display',[$poll->id])
                                                            }}" class="text-indigo-600 hover:text-indigo-900">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
                                                     @endif
                                                 </td>
@@ -88,9 +86,7 @@
                                                         @if($poll->voteFinished() || !$poll->voteStart() )
                                                             <a href="#" class="disabled">Дать оценку</a>
                                                         @else
-                                                            <a href="{{$poll->isPublicVote()
-                                                                ? route('poll.display.public',[$poll->id])
-                                                                : route('poll.display',[$poll->id])
+                                                            <a href="{{ route('poll.display',[$poll->id])
                                                            }}" class="text-indigo-600 hover:text-indigo-900">Дать оценку</a>
                                                         @endif
                                                     </td>
@@ -117,9 +113,7 @@
                                             </td>
                                         @endif
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="{{$poll->isPublicVote()
-                                                                ? route('poll.results.public',[$poll->id])
-                                                                : route('poll.results',[$poll->id])
+                                            <a href="{{ route('poll.results',[$poll->id])
                                                            }}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
                                         </td>
                                         @if (auth()->user()->canManageItems() && !$poll->voteFinished())
@@ -142,6 +136,7 @@
                                             </td>
                                         @endif
                                     </tr>
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>
@@ -173,10 +168,9 @@
                                             {{ $loop->index +1 }}
                                         </div>
                                         <div class="px-1 py-1 whitespace-wrap text-xs  font-bold text-gray-900 text-center">
-                                            @if ($poll->isPublicMeetingTSN()) <div>Опрос для Общего Собрания ТСН</div>@endif
-                                            @if ($poll->isGovernanceMeetingTSN()) <div>Опрос для Правления ТСН</div>@endif
-                                            @if ($poll->isVoteForTSN()) <div>Опрос для Членов ТСН</div>@endif
-                                            @if ($poll->isPublicVote()) <div>Публичный опрос</div>@endif
+                                            @if ($poll->isPublicMeetingTSN()) <div>Принятие решений членами сообщества</div>@endif
+                                            @if ($poll->isGovernanceMeetingTSN()) <div>Принятие решений членами правления</div>@endif
+
                                             @if ($poll->isReportDone()) <div>Отчет по проделанной работе</div>@endif
                                                 @if (auth()->user()->isAdmin())
                                                     <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
@@ -266,27 +260,27 @@
             <div class="xl:inline-flex">
                 <div>
                     <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::PUBLIC_MEETING_TSN ])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Создать опрос для Общего Собрания ТСН
+                        Принятие решений членами сообщества
                     </a>
                 </div>
                 <div>
                     <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::GOVERNANCE_MEETING_TSN])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Создать опрос для Правления ТСН
+                        Принятие решений членами правления
                     </a>
                 </div>
-                <div>
-                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::VOTE_FOR_TSN])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Создать опрос для Членов ТСН
-                    </a>
-                </div>
-                <div>
-                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::PUBLIC_VOTE])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Создать Тайное голосование
-                    </a>
-                </div>
+{{--                <div>--}}
+{{--                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::VOTE_FOR_TSN])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">--}}
+{{--                        Создать опрос для Членов ТСН--}}
+{{--                    </a>--}}
+{{--                </div>--}}
+{{--                <div>--}}
+{{--                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::PUBLIC_VOTE])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">--}}
+{{--                        Создать Тайное голосование--}}
+{{--                    </a>--}}
+{{--                </div>--}}
                 <div>
                     <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::REPORT_DONE])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Создать Отчетность
+                        Отчет о проделанной работе
                     </a>
                 </div>
             </div>

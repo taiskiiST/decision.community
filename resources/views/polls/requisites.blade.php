@@ -14,14 +14,7 @@
                     @if ($quorum)
                         <div class="inline-flex flex-row w-full place-content-between">
                             <div class="px-1 py-3 sm:px-6">
-                                <label class="px-1 py-4 block text-lg text-black text-wrap">Зарегистрировано {{$quorum->count_of_voting_current}} из {{$quorum->all_users_that_can_vote}} членов ТСН <p class="font-semibold"> @if( ( round($quorum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP) ) <= $quorum->count_of_voting_current)Кворум есть! @else Кворума нет! @endif </p></label>
-                            </div>
-                            <div class="px-1 py-7 sm:px-6 flex-row-reverse ">
-                                @if( ( round($quorum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP) ) > $quorum->count_of_voting_current)
-                                    <a href="/polls/{{$poll->id}}/requisites"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" >
-                                            Обновить
-                                        </button></a>
-                                @endif
+                                <label class="px-1 py-4 block text-lg text-black text-wrap">Зарегистрировано {{$quorum}} членов ТСН</label>
                             </div>
                         </div>
                     @endif

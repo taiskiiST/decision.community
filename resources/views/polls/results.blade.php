@@ -120,6 +120,17 @@
                 </div>
             </div>
             @endif
+            @if ($poll->isSuggestedQuestion())
+                @if ($poll->questions()->first()->accepted)
+                    <div class="flex px-4 py-7 sm:px-8">
+                        <table>
+                            <th class="bg-green-200">
+                                Кворум набран! Результаты голосования по данному вопросу будут приняты к учету в обязательном порядке!
+                            </th>
+                        </table>
+                    </div>
+                @endif
+            @endif
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     @foreach($poll->questions as $question)

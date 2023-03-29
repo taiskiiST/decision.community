@@ -40,7 +40,6 @@ class User extends Authenticatable
         'password',
         'permissions',
         'additional_id',
-        'company_id'
     ];
 
     /**
@@ -122,6 +121,17 @@ class User extends Authenticatable
         return in_array($permission, explode(',', $this->permissions));
     }
 
+    public function isHaveCompany($company): bool
+    {
+        foreach($this->companies()->get() as $cmp){
+            if ($cmp->id == $company->id){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function position()
     {
         if (isset($this->hasOne(Position::class, 'id', 'position_id')->get()[0])) {
@@ -155,6 +165,11 @@ class User extends Authenticatable
     public function positions()
     {
         return Position::all();
+    }
+
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class);
     }
 
 

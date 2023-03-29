@@ -70,6 +70,16 @@ class Poll extends Model
         return $this->hasMany(Question::class);
     }
 
+    public function ownPollAuthor()
+    {
+        if ($this->questions()->get()->count()){
+            if ($this->questions()->first()->author == auth()->user()->id){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @return string
      */

@@ -58,7 +58,7 @@ class PollPolicy
      */
     public function create(User $user): bool
     {
-        return $user->isAdmin();
+        return $user->canVote();
     }
 
     /**
@@ -70,7 +70,7 @@ class PollPolicy
      */
     public function update(User $user, Poll $poll): bool
     {
-        return $user->isAdmin();
+        return $user->canVote();
     }
 
     /**
@@ -82,6 +82,6 @@ class PollPolicy
      */
     public function delete(User $user, Poll $poll): bool
     {
-        return $user->isAdmin();
+        return $user->canVote();
     }
 }

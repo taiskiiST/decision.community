@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Poll;
 use App\Models\Question;
 use App\Models\User;
@@ -147,20 +148,25 @@ class QuestionsController extends Controller
         foreach ($suggested_questions as $question){
             $cnt_files_in_question [$question->id] = $question->question_files()->count();
         }
+        foreach ($suggested_questions as $question){
+            $hashUserVoteQuestions [$question->id] = Poll::find($question->poll_id)->authUserVote();
+        }
 
+        //dd($hashUserVoteQuestions);
         \JavaScript::put([
             'csrf_token' =>  csrf_token(),
-            'itemsNameHash'   => User::where('company_id',session('current_company')->id)->get()->pluck('name', 'id'),
+            'itemsNameHash'   => Company::find(session('current_company')->id)->users()->get()->pluck('name', 'id'),
             'itemsPollNameHash'   => Poll::where('company_id',session('current_company')->id)->get()->pluck('name', 'id'),
             'itemsPollFinishedHash'   => Poll::where('company_id',session('current_company')->id)->get()->pluck('finished', 'id'),
             'suggested_questions' => $suggested_questions,
             'hasOwnQuestions' => Question::hasOwnQuestions($suggested_questions),
             'authUserId'=> auth()->user()->id,
-            'cnt_files_in_question' => $cnt_files_in_question
+            'cnt_files_in_question' => $cnt_files_in_question,
+            'isAuthUserVote' => $hashUserVoteQuestions
         ]);
 
         return view('questions.suggested_questions', [
-            'itemsNameHash'   => User::where('company_id',session('current_company')->id)->get()->pluck('name', 'id'),
+            'itemsNameHash'   => Company::find(session('current_company')->id)->users()->get()->pluck('name', 'id'),
             'itemsPollNameHash'   => Poll::where('company_id',session('current_company')->id)->get()->pluck('name', 'id'),
             'suggested_questions' => $suggested_questions
         ]);
@@ -307,5 +313,17 @@ class QuestionsController extends Controller
         return redirect()->route('poll.edit', [
             'poll' => $poll
         ]);
+    }
+
+    public function destroy_suggested(Question $question)
+    {
+       // dd($question);
+        foreach($question->question_files()->get() as $file){
+            Storage::disk('public')->delete($file->path_to_file);
+        }
+        $poll = Poll::find($question->poll_id);
+        $question->delete();
+        $poll->delete();
+        return redirect()->route('poll.questions.view_suggested_questions');
     }
 }

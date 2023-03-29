@@ -45,9 +45,10 @@ class PollsController extends Controller
             Auth::logout();
             $this->authorizeResource(Poll::class, 'poll');
         }
+        //dd(Company::find(session('current_company')->id)->users()->get()->pluck('name','id'));
         return view('polls.index', [
             'polls' => Poll::where('company_id', session('current_company')->id)->get(),
-            'users' => User::where('company_id', session('current_company')->id)->get(),
+            'users' => Company::find(session('current_company')->id)->users()->get()->pluck('name','id'),
             'siteTitle' => session('current_company')->title
         ]);
 //        return view('polls.index', [
@@ -324,8 +325,8 @@ class PollsController extends Controller
         $parStyle = array('spaceBefore'=>10);
 
         $num_protocol = Poll::where('type_of_poll', $poll->type_of_poll)->count() + 1;
-        if(Quorum::where('poll_id',$poll->id)->get()->isNotEmpty()){
-            $qourum = Quorum::where('poll_id',$poll->id)->get()[0];
+        if(Quorum::all()->where('company_id', session('current_company')->id)->last()->all_users_that_can_vote){
+            $qourum = Quorum::all()->where('company_id', session('current_company')->id)->last()->all_users_that_can_vote;
         }else{
             return redirect()->route('poll.results', [
                 'poll' => $poll,
@@ -356,13 +357,13 @@ class PollsController extends Controller
         $section->addText("Из числа приглашенных: ".$srt_name_invited, '',['spaceBefore'=>10, 'align'=>'left']);
 
         $count_all_voters = User::where('permissions', 'LIKE', '%'.Permission::VOTE.'%')->count();
-        if(round($count_all_voters/2,0,PHP_ROUND_HALF_UP) > $qourum->count_of_voting_current ){
-            $form_protocol = 'очно-заочной';
+//        if(round($count_all_voters/2,0,PHP_ROUND_HALF_UP) > $qourum->count_of_voting_current ){
+            $form_protocol = 'заочной';
             $is_forum = 'не набран';
-        }else{
-            $form_protocol = 'очная';
-            $is_forum = 'имеется';
-        }
+//        }else{
+//            $form_protocol = 'очная';
+//            $is_forum = 'имеется';
+        //}
         if( round($count_all_voters/2,0,PHP_ROUND_HALF_UP) > $poll->peopleThatVote()->count() ) {
             $yes_no = 'не ';
         }else{
@@ -393,7 +394,7 @@ class PollsController extends Controller
         $section->addText("Третьякова Сергея Владимировича. Для ведения собрания необходимо убедиться в наличие кворума и избрать председательствующего и секретаря собрания.", '',['spaceBefore'=>10]);
         $section->addTextBreak();
 
-        $section->addText("По списку Членов ТСН на собрании из ".$count_all_voters." присутствует ".$qourum->count_of_voting_current." - кворум ".$is_forum."! Собрание будет проводиться в ".$form_protocol." форме. В голосовании в ".$form_protocol." форме приняли участие ".$poll->peopleThatVote()->count()." членов ТСН! Собрание ".$yes_no."легитимно и ".$yes_no."правомочно принимать решения по вопросам повестки дня.", '',['spaceBefore'=>10]);
+        $section->addText("По списку Членов ТСН на собрании из ".$count_all_voters." проголосовало ".$poll->peopleThatVote()->count()."  - кворум ".$is_forum."! Собрание будет проводиться в ".$form_protocol." форме. В голосовании в ".$form_protocol." форме приняли участие ".$poll->peopleThatVote()->count()." членов ТСН! Собрание ".$yes_no."легитимно и ".$yes_no."правомочно принимать решения по вопросам повестки дня.", '',['spaceBefore'=>10]);
         $section->addTextBreak();
         $section->addText("Постановили избрать:", '',['spaceBefore'=>10, 'align'=>'left', 'bold'=> TRUE]);
 
@@ -624,8 +625,8 @@ class PollsController extends Controller
     public function generateProtocol(Poll $poll, Request $request){
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(base_path('storage/app/public/storage/TemplateProtocol.docx'));
         $num_protocol = Poll::all()->count();
-        if(Quorum::where('poll_id',$poll->id)->get()->isNotEmpty()){
-            $qourum = Quorum::where('poll_id',$poll->id)->get()[0];
+        if(Quorum::all()->where('company_id', session('current_company')->id)->last()->all_users_that_can_vote){
+            $qourum = Quorum::all()->where('company_id', session('current_company')->id)->last()->all_users_that_can_vote;
         }else{
             return redirect()->route('poll.results', [
                 'poll' => $poll,
@@ -640,15 +641,15 @@ class PollsController extends Controller
         }
 
         \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(false);
-        if(round($qourum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP) > $qourum->count_of_voting_current ){
+        //if(round($qourum->all_users_that_can_vote/2,0,PHP_ROUND_HALF_UP) > $qourum->count_of_voting_current ){
             $form_protocol = 'заочная';
             $is_forum = 'не имеется';
             $yes_no = 'не';
-        }else{
-            $form_protocol = 'очная';
-            $is_forum = 'имеется';
-            $yes_no = '';
-        }
+//        }else{
+//            $form_protocol = 'очная';
+//            $is_forum = 'имеется';
+//            $yes_no = '';
+//        }
         $count = 1;
         $replacements_agenda = [];
         foreach ($poll->questions()->get() as $question){
@@ -669,7 +670,7 @@ class PollsController extends Controller
             $new_array = array(
                 'count_question' => $count,
                 'question_text' => $question->text,
-                'qourum_count_of_voting_current' => $qourum->count_of_voting_current,
+               // 'qourum_count_of_voting_current' => $qourum->count_of_voting_current,
             );
 
             ++$count;
@@ -742,13 +743,13 @@ class PollsController extends Controller
         $templateProcessor->setValue('form', $form_protocol);
         //$templateProcessor->setValue('agenda', htmlspecialchars($text_agenda));
         $templateProcessor->setValue('all_users', $qourum->all_users_that_can_vote);
-        $templateProcessor->setValue('current_sum_users', $qourum->count_of_voting_current);
+        //$templateProcessor->setValue('current_sum_users', $qourum->count_of_voting_current);
         $templateProcessor->setValue('is_quorum', $is_forum);
         $templateProcessor->setValue('yes_no', $yes_no);
         $templateProcessor->setValue('chairman', User::find($organizers->user_chairman_id)->name );
         $templateProcessor->setValue('secretary', User::find($organizers->user_secretary_id)->name );
         $templateProcessor->setValue('counter_vote', User::find($organizers->user_counter_votes_id)->name );
-        $templateProcessor->setValue('current_sum_users_yes', $qourum->count_of_voting_current );
+        //$templateProcessor->setValue('current_sum_users_yes', $qourum->count_of_voting_current );
         $templateProcessor->setValue('current_sum_users_no', 0 );
         $templateProcessor->setValue('current_sum_users_nothing', 0 );
         $templateProcessor->setValue('start', date_format($dt_start,"d.m.Y, H:i:s") );
@@ -1032,9 +1033,15 @@ class PollsController extends Controller
                     $question->update([
                         'is_editing' => 0,
                     ]);
+                    $poll->update([
+                        'start' =>  date('Y-m-d H:i:s'),
+                    ]);
                 }else{
                     $question->update([
                         'is_editing' => 1,
+                    ]);
+                    $poll->update([
+                        'start' =>  null,
                     ]);
                 }
             }
@@ -1109,8 +1116,8 @@ class PollsController extends Controller
      */
     public function display(Poll $poll)
     {
-        $this->updateQuorumInfo($poll);
-        $quorum = Quorum::where('poll_id', $poll->id)->count() > 0 ? Quorum::where('poll_id', $poll->id)->get()[0]:'';
+        //$this->updateQuorumInfo($poll);
+        //$quorum = Quorum::where('poll_id', $poll->id)->count() > 0 ? Quorum::where('poll_id', $poll->id)->get()[0]:'';
 
         if ($poll->isReportDone()){
             foreach ($poll->questions as $question){
@@ -1128,14 +1135,14 @@ class PollsController extends Controller
             ]);
             return view('polls.display_report', [
                 'poll' => $poll,
-                'quorum' => $quorum,
+                //'quorum' => $quorum,
                 'displayMode' => false,
                 'users' => User::all()
             ]);
         }else{
             return view('polls.display', [
                 'poll' => $poll,
-                'quorum' => $quorum,
+                //'quorum' => $quorum,
                 'displayMode' => false,
                 'users' => User::all()
             ]);
@@ -1502,14 +1509,17 @@ class PollsController extends Controller
                     }
                 }
             }
-            if ($poll->isReportDone()){
-                foreach($poll->questions() as $question){
-
+            if ($poll->isSuggestedQuestion()){
+                $count_all_voters = Quorum::all()->where('company_id', session('current_company')->id)->last()->all_users_that_can_vote;
+                //$count_all_voters = User::where('permissions', 'LIKE', '%'.Permission::VOTE.'%')->count();
+                if( round($count_all_voters/2,0,PHP_ROUND_HALF_UP) <= $poll->peopleThatVote()->count() ) {
+                    $poll->questions()->first()->update([
+                        'accepted' => true
+                    ]);
                 }
             }
             return view('polls.results', [
                 'poll' => $poll,
-
             ]);
         }else{
             if($anonymous) {
@@ -1591,7 +1601,7 @@ class PollsController extends Controller
             'error' => '',
             'users' => User::all(),
             'organizers' => Organizer::where('poll_id', $poll->id)->count()>0 ? Organizer::where('poll_id', $poll->id)->get()[0]:'',
-            'quorum' => Quorum::where('poll_id', $poll->id)->count() > 0 ? Quorum::where('poll_id', $poll->id)->get()[0]:''
+            'quorum' => Quorum::all()->where('company_id', session('current_company')->id)->last()->all_users_that_can_vote
         ]);
     }
 

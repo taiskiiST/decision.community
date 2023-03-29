@@ -4,7 +4,7 @@ import Highlighter from "react-highlight-words";
 import { Listbox, Transition } from '@headlessui/react'
 
 
-const {users, csrf_token, companies, current_company, isSuperAdmin} = TSN;
+const {users, csrf_token, companies, current_company, isSuperAdmin, hash_company_users} = TSN;
 
 
 
@@ -28,7 +28,6 @@ function Users() {
             || ( person.position ? person.position.toLowerCase().includes(searchTerm) : "" )
             || ( person.permissions ? person.permissions.join().toLowerCase().includes(searchTerm) : "" )
             || ( person.address ? person.address.toLowerCase().includes(searchTerm) : "" ) )
-            && ( String(person.company_id) == String(selected.id) )
         );
         setSearchResults(results);
     }, [searchTerm]);
@@ -81,14 +80,13 @@ function Users() {
     }
 
     useEffect(() => {
-        const results = users
-            .filter(person =>
-                String(person.company_id) === String(selected.id)
-            )
+        const results = hash_company_users[selected.id]
+            // .filter(person =>
+            //     String(person.company_id) === String(selected.id)
+            // )
         setSearchResults(results)
     }, [selected]);
 
-    //console.log(isSuperAdmin);
 
     return (
         <div className="p-2">

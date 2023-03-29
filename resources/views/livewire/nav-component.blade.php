@@ -58,9 +58,15 @@
 
             <div class="hidden md:block xl:inline-flex">
                 <div>
-                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::SUGGESTED_POLL ])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Предложить вопрос к рассмотрению
-                    </a>
+                    <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::SUGGESTED_POLL])}}">
+                        @csrf
+                        <a href="#"
+                           onclick="event.preventDefault();
+                                                            this.closest('form').submit();"
+                           class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                            {{ __('Предложить вопрос к рассмотрению') }}
+                        </a>
+                    </form>
                 </div>
             </div>
             <div class="hidden md:block xl:inline-flex">

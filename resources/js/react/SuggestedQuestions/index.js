@@ -4,8 +4,7 @@ import Highlighter from "react-highlight-words";
 import { Listbox, Transition } from '@headlessui/react'
 
 
-const {csrf_token, itemsNameHash, itemsPollNameHash, suggested_questions, hasOwnQuestions, authUserId, cnt_files_in_question, itemsPollFinishedHash} = TSN;
-
+const {csrf_token, itemsNameHash, itemsPollNameHash, suggested_questions, hasOwnQuestions, authUserId, cnt_files_in_question, itemsPollFinishedHash, isAuthUserVote} = TSN;
 
 
 function SuggestedQuestions() {
@@ -43,7 +42,7 @@ function SuggestedQuestions() {
             if (String(selected) === String('Принятые к рассмортрению')) {
                  results = suggested_questions
                     .filter(question =>
-                        (question.author == authUserId) && (question.accepted == true)
+                        (question.accepted == true)
                     )
             }
         }
@@ -158,6 +157,10 @@ function SuggestedQuestions() {
                                         Количествой файлов
                                     </th>
 
+                                    <th scope="col" className="relative px-6 py-3">
+                                        Проголосовать
+                                    </th>
+
                                     {hasOwnQuestions && <th scope="col" className="relative px-6 py-3">
                                         Редкатировать свой вопрос
                                     </th>}
@@ -204,9 +207,23 @@ function SuggestedQuestions() {
                                             {cnt_files_in_question[question.id]}
                                         </td>
                                         <td className="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
-                                        { question.author == authUserId && <a href={`${ ! itemsPollFinishedHash[question.poll_id] ? '/polls/' + question.poll_id + '/questions/' + question.id + '': '#'}`} className={`${itemsPollFinishedHash[question.poll_id] ? 'disabled' : 'text-indigo-600 hover:text-indigo-900' }`}>Изменить вопрос</a>
+                                            {isAuthUserVote[question.id] && <p>Вы уже проголосовали</p>}
+                                            {!isAuthUserVote[question.id] && <a href={`/polls/${question.poll_id}/display/public`} className={`text-indigo-600 hover:text-indigo-900`}>Голосовать</a>}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
+                                        { question.author == authUserId && (question.is_editing == 1) && <a href={`${ ! itemsPollFinishedHash[question.poll_id] ? '/polls/' + question.poll_id + '/questions/' + question.id + '': '#'}`} className={`${itemsPollFinishedHash[question.poll_id] ? 'disabled' : 'text-indigo-600 hover:text-indigo-900' }`}>Изменить вопрос</a>
                                         }
-                                        { !(question.author == authUserId)&& !hasOwnQuestions && <a href={`/polls/view/question/${question.id}`} className="text-indigo-600 hover:text-indigo-900">Результаты голосования</a>
+                                        { !question.is_editing && (question.author == authUserId) &&  <form method="POST"
+                                                  action={`/question_suggested/${question.id}/delete/`} id="formId">
+
+                                                <input type="hidden" name="_token" value={csrf_token} />
+                                                <a href='#'
+                                                   className="text-indigo-600 hover:text-indigo-900">
+                                                   <button type="submit">
+                                                    Удалить вопрос
+                                                   </button>
+                                                </a>
+                                            </form>
                                         }
                                         </td>
                                         <td className="px-6 py-4 whitespace-wrap text-wrap text-sm font-medium text-gray-900">
@@ -354,15 +371,28 @@ function SuggestedQuestions() {
                                                 className="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600">
                                                 Количество файлов - {cnt_files_in_question[question.id]}
                                             </div>
-                                            <div className="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600 bg-gray-200">
-                                                { question.author == authUserId && <a href={`${ ! itemsPollFinishedHash[question.poll_id] ? '/polls/' + question.poll_id + '/questions/' + question.id + '': '#'}`} className={`${itemsPollFinishedHash[question.poll_id] ? 'disabled' : 'text-indigo-600 hover:text-indigo-900' }`}>Изменить вопрос</a>
-                                                }
-                                                { !(question.author == authUserId)&& !hasOwnQuestions && <a href={`/polls/view/question/${question.id}`} className="text-indigo-600 hover:text-indigo-900">Результаты голосования</a>
-                                                }
+                                            <div className="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium bg-gray-200">
+                                                <a href={`/polls/${question.poll_id}/display/public`} className="text-indigo-600 hover:text-indigo-900">Голосовать</a>
                                             </div>
                                             <div className="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600">
                                                 <a href={`/polls/view/question/${question.id}`} className="text-indigo-600 hover:text-indigo-900">Результаты голосования</a>
                                             </div>
+                                            { ((question.author == authUserId && (question.is_editing == 1)) || (!question.is_editing && (question.author == authUserId)) ) && <div className="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600 bg-gray-200">
+                                                { question.author == authUserId && (question.is_editing == 1) && <a href={`${ ! itemsPollFinishedHash[question.poll_id] ? '/polls/' + question.poll_id + '/questions/' + question.id + '': '#'}`} className={`${itemsPollFinishedHash[question.poll_id] ? 'disabled' : 'text-indigo-600 hover:text-indigo-900' }`}>Изменить вопрос</a>
+                                                }
+                                                { !question.is_editing && (question.author == authUserId) &&  <form method="POST"
+                                                                                                                    action={`/question_suggested/${question.id}/delete/`} id="formId">
+
+                                                    <input type="hidden" name="_token" value={csrf_token} />
+                                                    <a href='#'
+                                                       className="text-indigo-600 hover:text-indigo-900">
+                                                        <button type="submit">
+                                                            Удалить вопрос
+                                                        </button>
+                                                    </a>
+                                                </form>
+                                                }
+                                            </div>}
                                         </td>
                                     </tr>
                                 ))}

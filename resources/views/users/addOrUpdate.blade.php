@@ -75,14 +75,18 @@
                                                                 @if(auth()->user()->isSuperAdmin())
                                                                 <div class="col-span-3">
                                                                         <label for="company" class="block text-sm font-medium text-gray-700">Площадка принятия решений организации:</label>
-                                                                        <select type="text" name="company" id="company" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md @error('company') is-invalid @enderror">
-                                                                        @foreach ($companies as $company)
-                                                                                        @if ($update)
-                                                                                                <option @if ($company->id == $update->company_id) selected @endif value="{{$company->id}}">{{$company->title}}</option>
+                                                                        <select id="companies" name="companies[]" multiple="multiple" autocomplete="companies" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm h-28" required>
+                                                                                @foreach ($companies as $company)
+                                                                                        @if ( $update )
+                                                                                                @if ( $update->isHaveCompany($company) )
+                                                                                                        <option value="{{$company->id}}" selected>{{$company->title}}</option>
+                                                                                                @else
+                                                                                                        <option value="{{$company->id}}">{{$company->title}}</option>
+                                                                                                @endif
                                                                                         @else
                                                                                                 <option value="{{$company->id}}">{{$company->title}}</option>
                                                                                         @endif
-                                                                        @endforeach
+                                                                                @endforeach
                                                                         </select>
                                                                         @error('company')
                                                                         <div class="alert alert-danger">{{ $message }}</div>

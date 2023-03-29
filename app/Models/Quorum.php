@@ -10,10 +10,9 @@ class Quorum extends Model
     use HasFactory;
 
     protected $fillable = [
-        'poll_id',
-        'count_of_voting_current',
         'all_users_that_can_vote',
-        'list_of_all_current_users'
+        'company_id'
     ];
     protected $table = 'quorums';
+    public $timestamps = true;
 }

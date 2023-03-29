@@ -9,6 +9,7 @@
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
                 <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                     <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <p class="hidden">{{$loop_cnt = 0}}</p>
                         <table class="min-w-full divide-y divide-gray-200 ">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -35,21 +36,40 @@
 
                             <tbody>
                                 @foreach($polls as $poll)
-                                    @if(! \App\Models\Question::hasOwnQuestions($poll->questions()->get())  )
+                                    @if( $poll->isSuggestedQuestion())
+                                        @if ( $poll->questions()->get()->count() )
+                                            @if ($poll->questions()->first()->is_editing)
+                                                @continue
+                                            @endif
+                                        @endif
+                                    @endif
                                     <tr class="bg-white @if ($loop->odd) bg-gray-200 @endif">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            {{ $loop->index + 1 }}
+                                            {{ $loop_cnt + 1 }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900">
                                             @if ($poll->isPublicMeetingTSN()) <div class="text-xs font-bold">Принятие решений членами сообщества</div>@endif
                                             @if ($poll->isGovernanceMeetingTSN()) <div class="text-xs font-bold">Принятие решений членами правления</div>@endif
 
                                             @if ($poll->isReportDone()) <div class="text-xs font-bold">Отчет по проделанной работе</div>@endif
-                                                @if (auth()->user()->isAdmin())
-                                                    <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
+
+                                            @if (auth()->user()->isAdmin())
+                                                <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
+                                            @else
+                                                @if( $poll->isSuggestedQuestion())
+                                                    @if ( $poll->questions()->get()->count() )
+                                                        <div>Тема вопроса: {{ $poll->name }}</div>
+                                                    @endif
                                                 @else
                                                     <div>{{ $poll->name }}</div>
                                                 @endif
+                                            @endif
+
+                                            @if( $poll->isSuggestedQuestion())
+                                                @if ( $poll->questions()->get()->count() )
+                                                    <div class="text-xs font-bold">Автор вопроса: {{$users[$poll->questions()->first()->author] }}</div>
+                                                @endif
+                                            @endif
                                         </td>
                                         @if (! $poll->voteFinished() )
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -108,9 +128,29 @@
                                                 <a href="{{route('poll.edit',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
                                             </td>
                                         @else
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Повестка собрания</a>
-                                            </td>
+                                            @if ($poll->ownPollAuthor())
+                                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                                    <form method="POST" action="{{ route('poll.delete',[$poll->id]) }}">
+                                                        @csrf
+                                                        <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
+                                                        <a href="{{route('poll.delete',[$poll->id])}}"
+                                                           onclick="event.preventDefault();
+                                                           if (confirm('Вы уверены, что хотите удалить свой вопрос?') ){
+                                                        this.closest('form').submit();}" class="text-indigo-600 hover:text-indigo-900">
+                                                            {{ __('Удалить') }}
+                                                        </a>
+                                                    </form>
+                                                </td>
+                                            @else
+                                                @if( $poll->isSuggestedQuestion())
+                                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                    </td>
+                                                @else
+                                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                        <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр списком</a>
+                                                    </td>
+                                                @endif
+                                            @endif
                                         @endif
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a href="{{ route('poll.results',[$poll->id])
@@ -135,8 +175,8 @@
                                                 </a>
                                             </td>
                                         @endif
+                                        <p class="hidden">{{$loop_cnt += 1}}</p>
                                     </tr>
-                                    @endif
                                 @endforeach
                             </tbody>
                         </table>
@@ -150,6 +190,7 @@
             <div class="-my-2 overflow-x-auto sm:-mx-1 lg:-mx-8 ">
                 <div class="py-2 align-middle inline-block min-w-full sm:px-1 lg:px-8">
                     <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <p class="hidden">{{$loop_cnt_sml = 0}}</p>
                         <table class="min-w-full divide-y divide-gray-200 ">
                             <thead class="bg-gray-50">
                             <tr>
@@ -165,18 +206,29 @@
                                 <tr class="bg-white bg-gray-100 border-b border-gray-400">
                                     <td>
                                         <div class="px-1 py-1 whitespace-nowrap text-sm font-bold text-gray-900 text-center">
-                                            {{ $loop->index +1 }}
+                                            {{ $loop_cnt_sml +1 }}
                                         </div>
                                         <div class="px-1 py-1 whitespace-wrap text-xs  font-bold text-gray-900 text-center">
                                             @if ($poll->isPublicMeetingTSN()) <div>Принятие решений членами сообщества</div>@endif
                                             @if ($poll->isGovernanceMeetingTSN()) <div>Принятие решений членами правления</div>@endif
 
                                             @if ($poll->isReportDone()) <div>Отчет по проделанной работе</div>@endif
-                                                @if (auth()->user()->isAdmin())
-                                                    <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
+                                            @if (auth()->user()->isAdmin())
+                                                <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
+                                            @else
+                                                @if( $poll->isSuggestedQuestion())
+                                                    @if ( $poll->questions()->get()->count() )
+                                                        <div>Тема вопроса: {{ $poll->name }}</div>
+                                                    @endif
                                                 @else
                                                     <div>{{ $poll->name }}</div>
                                                 @endif
+                                            @endif
+                                            @if( $poll->isSuggestedQuestion())
+                                                @if ( $poll->questions()->get()->count() )
+                                                    <div class="text-xs font-bold">Автор вопроса: {{$users[$poll->questions()->first()->author] }}</div>
+                                                @endif
+                                            @endif
                                         </div>
                                         @if (! $poll->voteFinished() )
                                             <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-green-600 bg-gray-200">
@@ -221,22 +273,27 @@
                                                 <a href="{{route('poll.edit',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
                                             </div>
                                         @else
-                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Повестка собрания</a>
-                                            </div>
+                                            @if( $poll->isSuggestedQuestion())
+
+                                            @else
+                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                    <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр списком</a>
+                                                </div>
+                                            @endif
                                         @endif
-                                        <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
+                                        <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium  @if( !$poll->isSuggestedQuestion()) bg-gray-200 @endif">
                                             <a href="{{route('poll.results',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
                                         </div>
-                                        @if (auth()->user()->canManageItems() && !$poll->voteFinished())
-                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        @if (auth()->user()->canManageItems() && !$poll->voteFinished() || $poll->ownPollAuthor())
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium @if( $poll->isSuggestedQuestion()) bg-gray-200 @endif">
                                                 <form method="POST" action="{{ route('poll.delete',[$poll->id]) }}">
                                                     @csrf
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                     <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
                                                     <a href="{{route('poll.delete',[$poll->id])}}"
                                                        onclick="event.preventDefault();
-                                                            this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
+                                                            if (confirm('Вы уверены, что хотите удалить свой вопрос?') ){
+                                                        this.closest('form').submit();}" class="text-indigo-600 hover:text-indigo-900">
                                                         {{ __('Удалить') }}
                                                     </a>
                                                 </form>
@@ -248,6 +305,7 @@
                                         @endif
                                     </td>
                                 </tr>
+                                <p class="hidden">{{$loop_cnt_sml += 1}}</p>
                             @endforeach
                             </tbody>
                         </table>
@@ -259,14 +317,26 @@
         @if (auth()->user()->canManageItems())
             <div class="xl:inline-flex">
                 <div>
-                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::PUBLIC_MEETING_TSN ])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Принятие решений членами сообщества
-                    </a>
+                    <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::PUBLIC_MEETING_TSN ])}}">
+                        @csrf
+                        <a href="#"
+                           onclick="event.preventDefault();
+                                                            this.closest('form').submit();"
+                           class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                            {{ __('Принятие решений членами сообщества') }}
+                        </a>
+                    </form>
                 </div>
                 <div>
-                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::GOVERNANCE_MEETING_TSN])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Принятие решений членами правления
-                    </a>
+                    <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::GOVERNANCE_MEETING_TSN ])}}">
+                        @csrf
+                        <a href="#"
+                           onclick="event.preventDefault();
+                                                            this.closest('form').submit();"
+                           class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                            {{ __('Принятие решений членами правления') }}
+                        </a>
+                    </form>
                 </div>
 {{--                <div>--}}
 {{--                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::VOTE_FOR_TSN])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">--}}
@@ -279,9 +349,15 @@
 {{--                    </a>--}}
 {{--                </div>--}}
                 <div>
-                    <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::REPORT_DONE])}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Отчет о проделанной работе
-                    </a>
+                    <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::REPORT_DONE])}}">
+                        @csrf
+                        <a href="#"
+                           onclick="event.preventDefault();
+                                                            this.closest('form').submit();"
+                           class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                            {{ __('Отчет о проделанной работе') }}
+                        </a>
+                    </form>
                 </div>
             </div>
         @endif

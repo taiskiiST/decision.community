@@ -5,24 +5,44 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Permission;
 use App\Models\Position;
+use App\Models\Quorum;
 use App\Models\User;
 use App\Models\UsersAdditionalFields;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
-    protected function prepareUsersForReact(){
-        if (!auth()->user()->isSuperAdmin()){
-            if(!session('current_company')){
-                return redirect()->route('polls.index');
-            }
-            $users = User::where('company_id',session('current_company')->id)->get();
-        }else{
-            $users = User::all();
+    protected function companyUsers(){
+        $companies = Company::all();
+        $company_users = [];
+        $users_db = DB::table('users')
+            ->whereNotIn('id',
+                DB::table('users')
+                    ->join('company_user', 'users.id', '=', 'company_user.user_id')
+                    ->join('companies', 'companies.id', '=', 'company_user.company_id')
+                    ->select('users.id'))
+            ->select('users.*')
+            ->get();
+        $arr_users = [];
+        foreach($users_db as $user_db){
+            $arr_users[] = User::find($user_db->id);
         }
+        $company_users[0] = $this->prepareUsersForReact($arr_users);
+        foreach ($companies as $company){
+            if($company->users()->get()->count() > 0) {
+                $company_users[$company->id] = $this->prepareUsersForReact($company->users()->get());
+            }else{
+                $company_users[$company->id] = [];
+            }
+        }
+        // dd($company_users);
+        return $company_users;
+    }
+    protected function prepareUsersForReact($users){
         $cnt = 0;
         $index = 0;
         $users_new = [];
@@ -66,7 +86,6 @@ class UsersController extends Controller
 
             $index++;
         }
-
         // Сортируем массив $data сначала по volume, затем по edition
         $users_new = $this->array_orderby($users_new, 'address', SORT_ASC);
 
@@ -100,11 +119,24 @@ class UsersController extends Controller
 
 
     public function index(){
-        $users_new = $this->prepareUsersForReact();
+        if (!auth()->user()->isSuperAdmin()){
+            if(!session('current_company')){
+                return redirect()->route('polls.index');
+            }
+            $users = Company::find(session('current_company')->id)->users()->get();
+        }else{
+            $users = User::all();
+        }
+        $users_new = $this->prepareUsersForReact($users);
+        $hash_company_users = $this->companyUsers();
+        $companies = Company::all();
+        $companies->push(['id'=>0,'title'=>'Не закрепленные']);
+        //dd($companies);
         \JavaScript::put([
             'users' => $users_new,
             'csrf_token' =>  csrf_token(),
-            'companies' => Company::all(),
+            'companies' => $companies,
+            'hash_company_users' => $hash_company_users,
             'current_company' => session('current_company'),
             'isSuperAdmin' => auth()->user()->isSuperAdmin() ? true : false,
         ]);
@@ -331,7 +363,7 @@ class UsersController extends Controller
                     $rules[$key] = 'nullable';
                     break;
                 }
-                case 'company' :
+                case 'companies' :
                 {
                     $rules[$key] = 'required';
                     break;
@@ -362,6 +394,17 @@ class UsersController extends Controller
         }
 
         $parameters = $this->validate( $request, $rules);
+//        dd($parameters);
+
+//        if (isset($parameters['companies'])){
+//            $company_from_form = Company::find($parameters['companies']);
+//            if ( (session('current_company')->id != $company_from_form->id) && (!auth()->user()->isSuperAdmin()) ){
+//                return redirect('manage/add')
+//                    ->withErrors('Не достаточно прав на операцию!')
+//                    ->withInput();
+//            }
+//        }
+
 
         if (!in_array("governance", $parameters['permission'])) {
             $parameters['position'] = null;
@@ -410,10 +453,14 @@ class UsersController extends Controller
                     'position_id' => $parameters['position'],
                     'password' => Hash::make($parameters['password']),
                     'permissions' => implode(',', $parameters['permission']),
-                    'additional_id' => isset($user_additionals) ? $user_additionals->id : null,
-                    'company_id' => session('current_company')->id
+                    'additional_id' => isset($user_additionals) ? $user_additionals->id : null
+                    //'company_id' => session('current_company')->id
                 ]
             );
+            foreach ($parameters['companies'] as $company){
+                Company::find($company->id)->users()->save($user);
+            }
+            $this->refreshQuorums();
         }else{
             $user = User::updateOrCreate(
                 ['id'=> $request->id],
@@ -425,40 +472,89 @@ class UsersController extends Controller
                     'password' => $password,
                     'position_id' => $parameters['position'],
                     'permissions' => implode(',', $parameters['permission']),
-                    'additional_id' => isset($user_additionals) ? $user_additionals->id : null,
-                    'company_id' => session('current_company')->id
+                    'additional_id' => isset($user_additionals) ? $user_additionals->id : null
+                    //'company_id' => session('current_company')->id
                 ]
             );
+            //dd($user->companies() );
+            foreach ($user->companies()->get() as $company){
+                $company->users()->detach([$company->id => ['user_id' => $user->id] ]);
+            }
+            foreach ($parameters['companies'] as $company_id){
+                Company::find($company_id)->users()->attach([$user->id => ['company_id' => $company_id] ]);
+            }
+            $this->refreshQuorums();
 
         }
-        if (auth()->user()->isSuperAdmin() && isset($parameters['company']) ){
-            $user->update(
-                [
-                    'company_id' => $parameters['company']
-                ]
-            );
+
+
+        if (!auth()->user()->isSuperAdmin()){
+            if(!session('current_company')){
+                return redirect()->route('polls.index');
+            }
+            $users = Company::find(session('current_company')->id)->users()->get();
+        }else{
+            $users = User::all();
         }
-        //dd($user);
-        $users = $this->prepareUsersForReact();
-        //dd(auth()->user());
+        $users_new = $this->prepareUsersForReact($users);
+        $hash_company_users = $this->companyUsers();
+
+        $companies = Company::all();
+        $companies->push(['id'=>0,'title'=>'Не закрепленные']);
+
         \JavaScript::put([
-            'users' => $users,
+            'users' => $users_new,
             'csrf_token' =>  csrf_token(),
-            'companies' => Company::all(),
+            'companies' => $companies,
+            'hash_company_users' => $hash_company_users,
             'current_company' => session('current_company'),
             'isSuperAdmin' => auth()->user()->isSuperAdmin() ? true : false,
         ]);
         return view('users.index',['users'=>$users]);
     }
 
+    public function refreshQuorums(){
+        $companies = Company::all();
+        foreach ($companies as $company){
+            if(Quorum::selectRaw('MAX(created_at)')->where('company_id',$company->id)->get()->count() > 0) {
+                //dd($company->users()->where('permissions', '%like%', 'voter')->get());
+                $quorum = Quorum::selectRaw('MAX(created_at)')->where('company_id', $company->id)->get();
+                $quorum[0]->insert([
+                    'all_users_that_can_vote' => $company->users()->where('permissions', 'like', '%voter%')->get()->count(),
+                    'company_id' => $company->id,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }else{
+                $quorum = Quorum::create([
+                    'all_users_that_can_vote' => $company->users()->where('permissions', 'like', '%voter%')->get()->count(),
+                    'company_id' => $company->id,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+        }
+    }
+
     public function delete(Request $request){
         $user = User::find($request->user_del);
         $user->delete();
-        $users = $this->prepareUsersForReact();
+        $this->refreshQuorums();
+        if (!auth()->user()->isSuperAdmin()){
+            if(!session('current_company')){
+                return redirect()->route('polls.index');
+            }
+            $users = Company::find(session('current_company')->id)->users()->get();
+        }else{
+            $users = User::all();
+        }
+        $users = $this->prepareUsersForReact($users);
+        $hash_company_users = $this->companyUsers();
         \JavaScript::put([
             'users' => $users,
             'csrf_token' =>  csrf_token(),
             'companies' => Company::all(),
+            'hash_company_users' => $hash_company_users,
             'current_company' => session('current_company'),
             'isSuperAdmin' => auth()->user()->isSuperAdmin() ? true : false,
         ]);
@@ -470,7 +566,7 @@ class UsersController extends Controller
         if(!session('current_company')){
             return redirect()->route('polls.index');
         }
-        $users = User::where('company_id',session('current_company')->id)->get();
+        $users = Company::find(session('current_company')->id)->users()->get();
         $permissions =  Permission::allPermission();
         //$positions = Position::all();
         $positions = Position::where('company_id',session('current_company')->id)->get();
@@ -500,7 +596,7 @@ class UsersController extends Controller
                 if(is_numeric($position_id)){
                     //dd($user_id);
                     //$users = User::all();
-                    $users = User::where('company_id',session('current_company')->id)->get();
+                    $users = Company::find(session('current_company')->id)->users()->get();
                     foreach ($users as $user){
                         if ($user->position_id == $position_id){
                             $user->update([
@@ -516,7 +612,7 @@ class UsersController extends Controller
             }
         }
         //$users = User::all();
-        $users = User::where('company_id',session('current_company')->id)->get();
+        $users = Company::find(session('current_company')->id)->users()->get();
         $permissions =  Permission::allPermission();
         //$positions = Position::all();
         $positions = Position::where('company_id',session('current_company')->id)->get();

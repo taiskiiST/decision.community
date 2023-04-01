@@ -42,6 +42,7 @@ class PollsController extends Controller
     {
         //$company = Company::where('uri','LIKE', session('subdomain'))->first();
         if(!session('current_company')){
+            //dd('jopa');
             Auth::logout();
             $this->authorizeResource(Poll::class, 'poll');
         }

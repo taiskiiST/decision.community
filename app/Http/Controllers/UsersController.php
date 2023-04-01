@@ -477,11 +477,13 @@ class UsersController extends Controller
                 ]
             );
             //dd($user->companies() );
-            foreach ($user->companies()->get() as $company){
-                $company->users()->detach([$company->id => ['user_id' => $user->id] ]);
-            }
-            foreach ($parameters['companies'] as $company_id){
-                Company::find($company_id)->users()->attach([$user->id => ['company_id' => $company_id] ]);
+            if(isset($parameters['companies'])) {
+                foreach ($user->companies()->get() as $company) {
+                    $company->users()->detach([$company->id => ['user_id' => $user->id]]);
+                }
+                foreach ($parameters['companies'] as $company_id) {
+                    Company::find($company_id)->users()->attach([$user->id => ['company_id' => $company_id]]);
+                }
             }
             $this->refreshQuorums();
 
@@ -513,7 +515,7 @@ class UsersController extends Controller
         return view('users.index',['users'=>$users]);
     }
 
-    public function refreshQuorums(){
+    public static function refreshQuorums(){
         $companies = Company::all();
         foreach ($companies as $company){
             if(Quorum::selectRaw('MAX(created_at)')->where('company_id',$company->id)->get()->count() > 0) {

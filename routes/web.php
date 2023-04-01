@@ -153,7 +153,15 @@ Route::group(['domain' => '{subdomain}.'.env('APP_URL')], function () {
         $company = \App\Models\Company::where('uri', $subdomain)->first();
         if ($company){
             if (!auth()->user()){
+                if($never_used == 'register'){
+                    return view('auth.register', ['company' => $company]);
+                }
+                if($never_used == 'forgot-password'){
+                    return view('auth.forgot-password', ['company' => $company]);
+                }
                 return view('auth.login', ['company_id' => $company->id]);
+            }else{
+                return view('polls.index');
             }
         }else{
             return Redirect::to(env('APP_URL').'/404');

@@ -55,7 +55,7 @@
 {{--                </div>--}}
 
 {{--            </div>--}}
-
+            @if (auth()->user()->canVote())
             <div class="hidden md:block xl:inline-flex">
                 <div>
                     <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::SUGGESTED_POLL])}}">
@@ -69,6 +69,7 @@
                     </form>
                 </div>
             </div>
+            @endif
             <div class="hidden md:block xl:inline-flex">
                 <div>
                     <a href="{{route('poll.questions.view_suggested_questions')}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
@@ -135,19 +136,19 @@
                 </div>
             @endif
                 <a href="#" class="nav-menu-link nav-menu-link-not-current">Голосование и документы</a>
-            @if (auth() && auth()->user()->canVote())
-                <div class="flex flex-col pl-5">
-                    <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
-                </div>
-            @endif
+            <div class="flex flex-col pl-5">
+                <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
+            </div>
             <div class="flex flex-col pl-5">
                 <a href="{{route('poll.questions.view_public_questions')}}" class="nav-tab {{ in_array($currentRouteName, ['poll.questions.view_public_questions']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Публичные вопросы</a>
             </div>
+            @if (auth()->user()->canVote())
             <div class="flex flex-col pl-5 xl:hidden">
                 <a href="{{route('polls.create',['type_of_poll' =>  \App\Models\TypeOfPoll::SUGGESTED_POLL ])}}" class="nav-tab {{ in_array($currentRouteName, ['polls.create']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">
                     Предложить вопрос к рассмотрению
                 </a>
             </div>
+            @endif
             <div class="flex flex-col pl-5 xl:hidden">
                 <a href="{{route('poll.questions.view_suggested_questions')}}" class="nav-tab {{ in_array($currentRouteName, ['poll.questions.view_suggested_questions']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">
                     Список предложенных вопросов

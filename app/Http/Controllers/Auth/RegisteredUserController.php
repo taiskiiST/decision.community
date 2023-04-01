@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\UsersController;
+use App\Models\Company;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -35,15 +37,18 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
             'phone' => 'required|string|max:10|unique:users',
-            'email' => 'string|email|max:255|unique:users',
+            'email' => 'nullable|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
+            'address' => $request->address,
             'phone' => $request->phone,
             'email' => $request->email,
+            'permissions' => 'access',
             'password' => Hash::make($request->password),
         ]);
 
@@ -51,6 +56,10 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        //return view('polls.index');
+        $company = Company::find($request->company_id);
+        $request->session()->put('current_company', $company);
+        UsersController::refreshQuorums();
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 }

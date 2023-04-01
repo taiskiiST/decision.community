@@ -151,7 +151,10 @@ class QuestionsController extends Controller
         foreach ($suggested_questions as $question){
             $hashUserVoteQuestions [$question->id] = Poll::find($question->poll_id)->authUserVote();
         }
-
+        if($suggested_questions->count() == 0){
+            $cnt_files_in_question = [];
+            $hashUserVoteQuestions = [];
+        }
         //dd($hashUserVoteQuestions);
         \JavaScript::put([
             'csrf_token' =>  csrf_token(),

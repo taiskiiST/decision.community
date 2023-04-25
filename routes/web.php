@@ -8,6 +8,7 @@ use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PositionsController;
 use App\Http\Controllers\Controller;
+use App\Models\Question;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
@@ -33,10 +34,11 @@ if (app()->isLocal()) {
     Route::get('/dev', [DevController::class, 'index']);
 }
 
+//Route::get('/polls/view/public/questions/', [QuestionsController::class, 'viewPublicQuestions'])->name('poll.questions.view_public_questions');
+
 
 Route::get('/polls/view/question/{question}/{search?}', [QuestionsController::class, 'viewQuestion'])->name('poll.questions.view_question');
 
-Route::get('/polls/view/public/questions/', [QuestionsController::class, 'viewPublicQuestions'])->name('poll.questions.view_public_questions');
 Route::get('/polls/view/suggested/questions/', [QuestionsController::class, 'viewSuggestedQuestions'])->name('poll.questions.view_suggested_questions');
 
 Route::get('/404', [Controller::class, 'view404'])->name('404');
@@ -158,6 +160,12 @@ Route::group(['domain' => '{subdomain}.'.env('APP_URL')], function () {
                 }
                 if($never_used == 'forgot-password'){
                     return view('auth.forgot-password', ['company' => $company]);
+                }
+                if($never_used == 'polls/view/public/questions'){
+                    $public_questions = Question::where('public', 1)->where('company_id',$company->id)->get();
+                    return view('questions.public_questions', [
+                        'public_questions' => $public_questions
+                    ]);
                 }
                 return view('auth.login', ['company_id' => $company->id]);
             }else{

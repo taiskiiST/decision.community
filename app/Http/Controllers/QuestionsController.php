@@ -9,6 +9,7 @@ use App\Models\User;
 use GraphQL\Query;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 class QuestionsController extends Controller
@@ -127,17 +128,18 @@ class QuestionsController extends Controller
        }
     }
 
-    public function viewPublicQuestions()
-    {
-        if(!session('current_company')){
-            return redirect()->route('polls.index');
-        }
-        $public_questions = Question::where('public', 1)->where('company_id',session('current_company')->id)->get();
-        return view('questions.public_questions', [
-            'public_questions' => $public_questions
-        ]);
-
-    }
+//    public function viewPublicQuestions()
+//    {
+////        if(!session('current_company')){
+////            return redirect()->route('polls.index');
+////        }
+//        dd(Route::);
+//        $public_questions = Question::where('public', 1)->where('company_id',session('current_company')->id)->get();
+//        return view('questions.public_questions', [
+//            'public_questions' => $public_questions
+//        ]);
+//
+//    }
 
     public function viewSuggestedQuestions()
     {

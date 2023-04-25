@@ -35,6 +35,7 @@
                             </thead>
 
                             <tbody>
+
                                 @foreach($polls as $poll)
                                     @if( $poll->isSuggestedQuestion())
                                         @if ( $poll->questions()->get()->count() )

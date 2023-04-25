@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
     return redirect()->to('polls');
 });
@@ -149,7 +150,6 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-
 Route::group(['domain' => '{subdomain}.'.env('APP_URL')], function () {
     Route::get('{never_used?}', function ($subdomain, $never_used = null) {
         $company = \App\Models\Company::where('uri', $subdomain)->first();
@@ -161,6 +161,7 @@ Route::group(['domain' => '{subdomain}.'.env('APP_URL')], function () {
                 if($never_used == 'forgot-password'){
                     return view('auth.forgot-password', ['company' => $company]);
                 }
+
                 if($never_used == 'polls/view/public/questions'){
                     $public_questions = Question::where('public', 1)->where('company_id',$company->id)->get();
                     return view('questions.public_questions', [
@@ -169,6 +170,12 @@ Route::group(['domain' => '{subdomain}.'.env('APP_URL')], function () {
                 }
                 return view('auth.login', ['company_id' => $company->id]);
             }else{
+                if($never_used == 'polls/view/public/questions'){
+                    $public_questions = Question::where('public', 1)->where('company_id',$company->id)->get();
+                    return view('questions.public_questions', [
+                        'public_questions' => $public_questions
+                    ]);
+                }
                 return view('polls.index');
             }
         }else{

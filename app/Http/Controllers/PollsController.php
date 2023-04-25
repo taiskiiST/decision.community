@@ -47,6 +47,7 @@ class PollsController extends Controller
             $this->authorizeResource(Poll::class, 'poll');
         }
         //dd(Company::find(session('current_company')->id)->users()->get()->pluck('name','id'));
+
         return view('polls.index', [
             'polls' => Poll::where('company_id', session('current_company')->id)->get(),
             'users' => Company::find(session('current_company')->id)->users()->get()->pluck('name','id'),

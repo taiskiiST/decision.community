@@ -140,7 +140,7 @@
                 <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
             </div>
             <div class="flex flex-col pl-5">
-                <a href="{{route('poll.questions.view_public_questions')}}" class="nav-tab {{ in_array($currentRouteName, ['poll.questions.view_public_questions']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Публичные вопросы</a>
+                <a href="/polls/view/public/questions/" class="nav-tab {{ in_array($currentRouteName, ['poll.questions.view_public_questions']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Публичные вопросы</a>
             </div>
             @if (auth()->user()->canVote())
             <div class="flex flex-col pl-5 xl:hidden">

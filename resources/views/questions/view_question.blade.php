@@ -280,7 +280,7 @@
                                 Назад
                             </button></a>
                     @else
-                        <a href="{{route('poll.questions.view_public_questions')}}"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
+                        <a href="/polls/view/public/questions/"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
                             Назад
                         </button></a>
                     @endif

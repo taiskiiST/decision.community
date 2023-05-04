@@ -1225,7 +1225,7 @@ class PollsController extends Controller
                         <tbody>';
         $cnt = 1;
         foreach ($out as $user) {
-            if($user->canVote() && ($user->company_id == session('current_company')->id) ) {
+            if($user->canVote() && ($user->isHaveCompany (session('current_company') )) ) {
                 if($poll->isGovernanceMeetingTSN() && $user->isGovernance()){
                     $str_class = ($cnt % 2)? 'bg-white' : 'bg-gray-200';
                     $str .= '<tr class=\'bg-white bg-gray-100 border-b border-gray-400 text-wrap '.$str_class.'\'>';

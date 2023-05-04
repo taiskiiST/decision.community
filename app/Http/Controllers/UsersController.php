@@ -457,8 +457,9 @@ class UsersController extends Controller
                     //'company_id' => session('current_company')->id
                 ]
             );
-            foreach ($parameters['companies'] as $company){
-                Company::find($company->id)->users()->save($user);
+            //dd($parameters);
+            foreach ($parameters['companies'] as $company_id){
+                Company::find($company_id)->users()->save($user);
             }
             $this->refreshQuorums();
         }else{

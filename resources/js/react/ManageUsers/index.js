@@ -234,7 +234,7 @@ function Users() {
                                             />
                                             }
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                        <td className="px-6 py-4 whitespace-wrap text-wrap text-center text-sm font-medium">
                                             {user.address && <Highlighter
                                                 highlightClassName="Highlight"
                                                 searchWords={[searchTerm]}

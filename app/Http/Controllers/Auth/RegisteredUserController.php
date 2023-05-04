@@ -53,7 +53,7 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-
+        UsersController::refreshQuorums();
         Auth::login($user);
 
         //return view('polls.index');

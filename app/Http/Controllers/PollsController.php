@@ -1427,8 +1427,21 @@ class PollsController extends Controller
      */
     public function results(Poll $poll)
     {
+        $quorums = Quorum::where('company_id', session('current_company')->id)->get();
+        $past_dates = [];
+        $times_poll = strtotime($poll->start);
+        foreach ($quorums as $quorum){
+            $times_quorum = strtotime($quorum->created_at);
+            //echo(date($quorum->created_at)." - ".strtotime($quorum->created_at)." - ".$poll->start." - ".$times_poll."<br />");
+            if ($times_poll && ($times_poll >= $times_quorum)){
+                //$past_dates[] = $times_quorum;
+                $quorums_tmp = $quorum;
+            }
+        }
+
         return view('polls.results', [
-            'poll' => $poll
+            'poll' => $poll,
+            'quorum' => isset($quorums_tmp) ? $quorums_tmp : Quorum::where('company_id', session('current_company')->id)->get()->last()
         ]);
     }
     /**

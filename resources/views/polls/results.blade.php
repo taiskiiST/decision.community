@@ -168,7 +168,7 @@
                                                 {{$answer->countVotes($answer->id)}}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                                {{$answer->percentOfQuestions($question->id, $answer->id) }}%
+                                            {{round($answer->countVotes($answer->id) / $quorum->all_users_that_can_vote, 2)*100}}%
                                         </td>
                                     </tr>
                                 @endforeach
@@ -178,10 +178,10 @@
                                     </td>
 
                                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold">
-                                        {{$question->countVotesByQuestion($question->id)}}
+                                        {{$question->countVotesByQuestion($question->id)." из ".$quorum->all_users_that_can_vote}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold">
-                                        {{$question->countVotesByQuestion($question->id)? 100 : 0 }}%
+                                        {{$question->countVotesByQuestion($question->id)? round($question->countVotesByQuestion($question->id) / $quorum->all_users_that_can_vote, 2)*100 : 0 }}%
                                     </td>
                                 </tr>
                                 </tbody>
@@ -202,6 +202,8 @@
                                     @endfor
                                 </div>
                                 <label class="italic"> Средняя оценка работы <b>{{$question->middleAnswerThatAllUsersMarkOnReport()}}</b> @if ($question->middleAnswerThatAllUsersMarkOnReport() == 1) балл@elseif($question->middleAnswerThatAllUsersMarkOnReport() == 5) баллов@else балла@endif!</label>
+                                <br />
+                                <label class="italic"> Проголосовано <b>{{$question->countVotesByQuestion($question->id)}}</b> из <b>{{$quorum->all_users_that_can_vote}}</b></label>
                             </div>
                         @endif
                     @endforeach
@@ -256,7 +258,7 @@
                                 </td>
                                 <td>
                                     <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                        {{$answer->percentOfQuestions($question->id, $answer->id) }}
+                                        {{round($answer->countVotes($answer->id) / $quorum->all_users_that_can_vote, 2)*100}}%
                                     </div>
                                 </td>
                             </tr>
@@ -269,12 +271,12 @@
                                 </td>
                                 <td>
                                     <div class="px-1 py-4 whitespace-nowrap font-bold text-center text-sm font-medium bg-gray-200">
-                                        {{$question->countVotesByQuestion($question->id)}}
+                                        {{$question->countVotesByQuestion($question->id)." из ".$quorum->all_users_that_can_vote}}
                                     </div>
                                 </td>
                                 <td>
                                     <div class="px-1 py-4 whitespace-nowrap font-bold text-center text-sm font-medium bg-gray-200">
-                                        {{$question->countVotesByQuestion($question->id)? 100 : 0 }}%
+                                        {{$question->countVotesByQuestion($question->id)? round($question->countVotesByQuestion($question->id) / $quorum->all_users_that_can_vote, 2)*100 : 0 }}%
                                     </div>
                                 </td>
                             </tr>

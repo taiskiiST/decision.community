@@ -142,7 +142,7 @@
                                     {{$answer->countVotes($answer->id)}}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                    {{round($answer->countVotes($answer->id) / $quorum->all_users_that_can_vote, 2)*100}}%
+                                    {{round($answer->countVotes($answer->id) / $quorum->all_users_that_can_vote, 4)*100}}%
                                 </td>
                             </tr>
                         @endforeach
@@ -156,7 +156,7 @@
                                 {{$question->countVotesByQuestion($question->id)." из ".$quorum->all_users_that_can_vote}}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold">
-                                {{$question->countVotesByQuestion($question->id)? round($question->countVotesByQuestion($question->id) / $quorum->all_users_that_can_vote, 2)*100 : 0 }}%
+                                {{$question->countVotesByQuestion($question->id)? round($question->countVotesByQuestion($question->id) / $quorum->all_users_that_can_vote, 4)*100 : 0 }}%
                             </td>
                         </tr>
                         </tbody>
@@ -228,7 +228,7 @@
                                 </td>
                                 <td>
                                     <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                        {{round($answer->countVotes($answer->id) / $quorum->all_users_that_can_vote, 2)*100}}%
+                                        {{round($answer->countVotes($answer->id) / $quorum->all_users_that_can_vote, 4)*100}}%
                                     </div>
                                 </td>
                             </tr>
@@ -247,7 +247,7 @@
                             </td>
                             <td>
                                 <div class="px-1 py-4 whitespace-nowrap font-bold text-center text-sm font-medium bg-gray-200">
-                                    {{$question->countVotesByQuestion($question->id)? round($question->countVotesByQuestion($question->id) / $quorum->all_users_that_can_vote, 2)*100 : 0 }}%
+                                    {{$question->countVotesByQuestion($question->id)? round($question->countVotesByQuestion($question->id) / $quorum->all_users_that_can_vote, 4)*100 : 0 }}%
                                 </div>
                             </td>
                         </tr>

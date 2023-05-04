@@ -298,6 +298,8 @@
                                     @endfor
                                 </div>
                                 <label class="italic"> Средняя оценка работы <b>{{$question->middleAnswerThatAllUsersMarkOnReport()}}</b> @if ($question->middleAnswerThatAllUsersMarkOnReport() == 1) балл@elseif($question->middleAnswerThatAllUsersMarkOnReport() == 5) баллов@else балла@endif!</label>
+                                <br />
+                                <label class="italic"> Проголосовано <b>{{$question->countVotesByQuestion($question->id)}}</b> из <b>{{$quorum->all_users_that_can_vote}}</b></label>
                             </div>
                         @endif
                     @endforeach

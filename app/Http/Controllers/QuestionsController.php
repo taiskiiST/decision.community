@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Poll;
 use App\Models\Question;
+use App\Models\Quorum;
 use App\Models\User;
 use GraphQL\Query;
 use Illuminate\Http\Request;
@@ -109,18 +110,33 @@ class QuestionsController extends Controller
     public function viewQuestion(Question $question, $search = '')
     {
         //dd($question->public);
+        $quorums = Quorum::where('company_id', session('current_company')->id)->get();
+        $past_dates = [];
+        $poll = $question->poll()->get();
+        //dd($poll);
+        $times_poll = strtotime($poll[0]->start);
+        foreach ($quorums as $quorum){
+            $times_quorum = strtotime($quorum->created_at);
+            //echo(date($quorum->created_at)." - ".strtotime($quorum->created_at)." - ".$poll->start." - ".$times_poll."<br />");
+            if ($times_poll && ($times_poll >= $times_quorum)){
+                //$past_dates[] = $times_quorum;
+                $quorums_tmp = $quorum;
+            }
+        }
        if ($question->public){
            return view('questions.view_question', [
                'question' => $question,
                'poll' => $question->poll()->get()->first(),
-               'search' => $search ? $search:''
+               'search' => $search ? $search:'',
+               'quorum' => isset($quorums_tmp) ? $quorums_tmp : Quorum::where('company_id', session('current_company')->id)->get()->last()
            ]);
        }else{
            if (auth()->user()){
                return view('questions.view_question', [
                    'question' => $question,
                    'poll' => $question->poll()->get()->first(),
-                   'search' => $search ? $search:''
+                   'search' => $search ? $search:'',
+                   'quorum' => isset($quorums_tmp) ? $quorums_tmp : Quorum::where('company_id', session('current_company')->id)->get()->last()
                ]);
             }else{
                return redirect()->route('login');

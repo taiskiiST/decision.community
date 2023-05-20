@@ -109,7 +109,9 @@ class QuestionsController extends Controller
 
     public function viewQuestion(Question $question, $search = '')
     {
-        //dd($question->public);
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         $quorums = Quorum::where('company_id', session('current_company')->id)->get();
         $past_dates = [];
         $poll = $question->poll()->get();

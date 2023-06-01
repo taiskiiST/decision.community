@@ -46,6 +46,8 @@ Route::get('/404', [Controller::class, 'view404'])->name('404');
 
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     //dd(Route::current());
+    Route::get('/register', [PollsController::class, 'index'])->name('polls.index');
+
     Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
     Route::get('/polls/{poll}/display_report', [PollsController::class, 'display_report'])->name('poll.display_report');
     Route::get('/polls/{poll}/start', [PollsController::class, 'start'])->name('poll.start');
@@ -150,18 +152,22 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+require __DIR__.'/auth.php';
+
 Route::group(['domain' => '{subdomain}.'.env('APP_URL')], function () {
     Route::get('{never_used?}', function ($subdomain, $never_used = null) {
         $company = \App\Models\Company::where('uri', $subdomain)->first();
+        //dd($company);
+        //dd($never_used);
         if ($company){
             if (!auth()->user()){
-                if($never_used == 'register'){
-                    return view('auth.register', ['company' => $company]);
-                }
-                if($never_used == 'forgot-password'){
-                    return view('auth.forgot-password', ['company' => $company]);
-                }
-
+//                if($never_used == 'register'){
+//                    return view('auth.register', ['company' => $company]);
+//                }
+//                if($never_used == 'forgot-password'){
+//                    return view('auth.forgot-password', ['company' => $company]);
+//                }
+                //dd($never_used);
                 if($never_used == 'polls/view/public/questions'){
                     $public_questions = Question::where('public', 1)->where('company_id',$company->id)->get();
                     return view('questions.public_questions', [
@@ -170,6 +176,7 @@ Route::group(['domain' => '{subdomain}.'.env('APP_URL')], function () {
                 }
                 return view('auth.login', ['company_id' => $company->id]);
             }else{
+                //dd('jopa');
                 if($never_used == 'polls/view/public/questions'){
                     $public_questions = Question::where('public', 1)->where('company_id',$company->id)->get();
                     return view('questions.public_questions', [
@@ -186,4 +193,4 @@ Route::group(['domain' => '{subdomain}.'.env('APP_URL')], function () {
 });
 
 
-require __DIR__.'/auth.php';
+

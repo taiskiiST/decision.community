@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 
@@ -15,7 +16,7 @@ class PasswordResetLinkController extends Controller
      */
     public function create()
     {
-        return view('auth.forgot-password');
+        return view('auth.forgot-password', Company::where('uri', str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ))->first());
     }
 
     /**

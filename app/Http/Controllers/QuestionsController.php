@@ -109,20 +109,30 @@ class QuestionsController extends Controller
 
     public function viewQuestion(Question $question, $search = '')
     {
-        if(!session('current_company')){
+        if(!session('current_company') && !$question->public){
             return redirect()->route('polls.index');
         }
-        $quorums = Quorum::where('company_id', session('current_company')->id)->get();
+
+        if ($question->public){
+            $company = Company::where('uri', str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ))->first();
+            $quorums = Quorum::where('company_id', $company->id)->get();
+        }else{
+            $quorums = Quorum::where('company_id', session('current_company')->id)->get();
+        }
+
+
         $past_dates = [];
         $poll = $question->poll()->get();
         //dd($poll);
-        $times_poll = strtotime($poll[0]->start);
-        foreach ($quorums as $quorum){
-            $times_quorum = strtotime($quorum->created_at);
-            //echo(date($quorum->created_at)." - ".strtotime($quorum->created_at)." - ".$poll->start." - ".$times_poll."<br />");
-            if ($times_poll && ($times_poll >= $times_quorum)){
-                //$past_dates[] = $times_quorum;
-                $quorums_tmp = $quorum;
+        if (isset($quorums)) {
+            $times_poll = strtotime($poll[0]->start);
+            foreach ($quorums as $quorum) {
+                $times_quorum = strtotime($quorum->created_at);
+                //echo(date($quorum->created_at)." - ".strtotime($quorum->created_at)." - ".$poll->start." - ".$times_poll."<br />");
+                if ($times_poll && ($times_poll >= $times_quorum)) {
+                    //$past_dates[] = $times_quorum;
+                    $quorums_tmp = $quorum;
+                }
             }
         }
        if ($question->public){
@@ -130,7 +140,9 @@ class QuestionsController extends Controller
                'question' => $question,
                'poll' => $question->poll()->get()->first(),
                'search' => $search ? $search:'',
-               'quorum' => isset($quorums_tmp) ? $quorums_tmp : Quorum::where('company_id', session('current_company')->id)->get()->last()
+               'quorum' => isset($quorums_tmp) ?
+                                        $quorums_tmp :
+                                        Quorum::where('company_id', session('current_company')->id)->get()->last()
            ]);
        }else{
            if (auth()->user()){

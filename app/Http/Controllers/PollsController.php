@@ -1535,6 +1535,7 @@ class PollsController extends Controller
             }
             return view('polls.results', [
                 'poll' => $poll,
+                'quorum' => Quorum::where('company_id', session('current_company')->id)->get()->last()
             ]);
         }else{
             if($anonymous) {
@@ -1567,7 +1568,7 @@ class PollsController extends Controller
             }
             return redirect()->route('poll.results.public', [
                 'poll' => $poll,
-
+                'quorum' => Quorum::where('company_id', session('current_company')->id)->get()->last()
             ]);
         }
 
@@ -1610,11 +1611,14 @@ class PollsController extends Controller
 
     public function requisites(Poll $poll)
     {
+        if(!session('current_company')){
+            return redirect()->route('polls.index');
+        }
         //dd(Organizer::all());
         return view('polls.requisites', [
             'poll' => $poll,
             'error' => '',
-            'users' => User::all(),
+            'users' => Company::find(session('current_company')->id)->users()->get(),
             'organizers' => Organizer::where('poll_id', $poll->id)->count()>0 ? Organizer::where('poll_id', $poll->id)->get()[0]:'',
             'quorum' => Quorum::all()->where('company_id', session('current_company')->id)->last()->all_users_that_can_vote
         ]);

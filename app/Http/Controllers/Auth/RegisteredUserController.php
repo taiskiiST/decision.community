@@ -22,7 +22,7 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+        return view('auth.register', ['company' => Company::where('uri', str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ))->first()]);
     }
 
     /**
@@ -59,6 +59,7 @@ class RegisteredUserController extends Controller
         //return view('polls.index');
         $company = Company::find($request->company_id);
         $request->session()->put('current_company', $company);
+        $company->users()->save($user);
         UsersController::refreshQuorums();
         return redirect()->intended(RouteServiceProvider::HOME);
     }

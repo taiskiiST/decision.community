@@ -12,7 +12,7 @@
                     </ul>
                 </div>
             @endif
-            <label class="px-12 py-4 block text-lg text-black font-semibold">Должности ТСН</label>
+            <label class="px-12 py-4 block text-lg text-black font-semibold">Должности {{$_ENV['APP_NAME']}}</label>
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-2 gap-4 p-5 inline-flex">
                 <form method="POST" action="{{route('position.update')}}" class="inline-flex flex-col">

@@ -291,7 +291,7 @@ class UsersController extends Controller
                 }
                 case $permission == Permission::GOVERNANCE :
                 {
-                    array_push($permissions_name, [Permission::GOVERNANCE =>'Член Правления ТСН']);
+                    array_push($permissions_name, [Permission::GOVERNANCE =>'Член Правления']);
                     break;
                 }
             }

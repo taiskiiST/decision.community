@@ -122,7 +122,7 @@ class PollsController extends Controller
         $properties = $phpWord->getDocInfo();
 
         $properties->setCreator('Serg');
-        $properties->setCompany('ТСН КП Березка');
+        $properties->setCompany($_ENV['APP_NAME']);
         $properties->setTitle('Бланк голосования');
         $properties->setDescription('Бланк голосования');
         $properties->setCategory('Голосования');
@@ -149,7 +149,7 @@ class PollsController extends Controller
         $parStyle = array('spaceBefore'=>10);
 
         $section->addText("Бланк для голосования", ['size'=>25, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
-        $section->addText("ТСН \"КП Березка\"", ['size'=>25, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
+        $section->addText($_ENV['APP_NAME'], ['size'=>25, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
         $section->addText(date("d.m.Y"), '',['spaceBefore'=>10, 'align'=>'right']);
         $section->addText(htmlspecialchars($poll->name), '',$parStyle);
         $section->addText(PHP_EOL);
@@ -213,7 +213,7 @@ class PollsController extends Controller
         $properties = $phpWord->getDocInfo();
 
         $properties->setCreator('Serg');
-        $properties->setCompany('ТСН КП Березка');
+        $properties->setCompany($_ENV['APP_NAME']);
         $properties->setTitle('Бланк голосования');
         $properties->setDescription('Бланк голосования');
         $properties->setCategory('Голосования');
@@ -237,10 +237,10 @@ class PollsController extends Controller
         $parStyle = array('spaceBefore'=>10);
         foreach ($poll->peopleThatVote() as $user){
             $section->addText("Бланк для голосования", ['size'=>25, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
-            $section->addText("ТСН \"КП Березка\"", ['size'=>25, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
+            $section->addText($_ENV['APP_NAME'], ['size'=>25, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
             $section->addText(date("d.m.Y"), '',['spaceBefore'=>10, 'align'=>'right']);
             $section->addText(htmlspecialchars($poll->name), '',$parStyle);
-            $section->addText("Бланк для голосования для члена ТСН: ".$user->name, '',$parStyle);
+            $section->addText("Бланк для голосования для члена ".$_ENV['APP_NAME'].": ".$user->name, '',$parStyle);
             $section->addText(PHP_EOL);
             $section->addText("********************************************************************", '',$parStyle);
 
@@ -297,7 +297,7 @@ class PollsController extends Controller
         $properties = $phpWord->getDocInfo();
 
         $properties->setCreator('Serg');
-        $properties->setCompany('ТСН КП Березка');
+        $properties->setCompany($_ENV['APP_NAME']);
         $properties->setTitle('Протокол голосования');
         $properties->setDescription('Протокол голосования');
         $properties->setCategory('Голосования');
@@ -372,7 +372,7 @@ class PollsController extends Controller
             $yes_no = '';
         }
 
-        $section->addText("Форма проведения Общего Собрания Членов ТСН: ".$form_protocol, '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addText("Форма проведения Общего Собрания Членов ".$_ENV['APP_NAME'].": ".$form_protocol, '',['spaceBefore'=>10, 'align'=>'left']);
         $section->addTextBreak();
         $section->addText("ПОВЕСТКА ДНЯ:", ['size'=>18, 'bold'=>TRUE],['spaceBefore'=>10, 'align'=>'center']);
 
@@ -396,7 +396,7 @@ class PollsController extends Controller
         $section->addText("Третьякова Сергея Владимировича. Для ведения собрания необходимо убедиться в наличие кворума и избрать председательствующего и секретаря собрания.", '',['spaceBefore'=>10]);
         $section->addTextBreak();
 
-        $section->addText("По списку Членов ТСН на собрании из ".$count_all_voters." проголосовало ".$poll->peopleThatVote()->count()."  - кворум ".$is_forum."! Собрание будет проводиться в ".$form_protocol." форме. В голосовании в ".$form_protocol." форме приняли участие ".$poll->peopleThatVote()->count()." членов ТСН! Собрание ".$yes_no."легитимно и ".$yes_no."правомочно принимать решения по вопросам повестки дня.", '',['spaceBefore'=>10]);
+        $section->addText("По списку Членов ".$_ENV['APP_NAME']." на собрании из ".$count_all_voters." проголосовало ".$poll->peopleThatVote()->count()."  - кворум ".$is_forum."! Собрание будет проводиться в ".$form_protocol." форме. В голосовании в ".$form_protocol." форме приняли участие ".$poll->peopleThatVote()->count()." членов ТСН! Собрание ".$yes_no."легитимно и ".$yes_no."правомочно принимать решения по вопросам повестки дня.", '',['spaceBefore'=>10]);
         $section->addTextBreak();
         $section->addText("Постановили избрать:", '',['spaceBefore'=>10, 'align'=>'left', 'bold'=> TRUE]);
 
@@ -490,7 +490,7 @@ class PollsController extends Controller
         }
         $dt_end = new \DateTime();
         $dt_end->setTimestamp(strtotime($poll->finished));
-        $section->addText("Председатель собрания объявил о закрытии Общего Собрания Членов ТСН в ".date_format($dt_end,"d.m.Y, H:i:s"), '',['spaceBefore'=>10, 'align'=>'left']);
+        $section->addText("Председатель собрания объявил о закрытии Общего Собрания Членов ".$_ENV['APP_NAME']." в ".date_format($dt_end,"d.m.Y, H:i:s"), '',['spaceBefore'=>10, 'align'=>'left']);
         $section->addTextBreak();
         $section->addText("Настоящий протокол составлен в трех подлинных экземплярах.", '',['spaceBefore'=>10, 'align'=>'left']);
         $section->addTextBreak();
@@ -700,7 +700,7 @@ class PollsController extends Controller
 
 
 //**************************************************************
-        $users_all = User::all();
+        $users_all = Company::find(session('current_company')->id)->users()->get();
         $count = 1;
         $replacements_users = [];
         foreach ($users_all as $user){
@@ -1104,7 +1104,7 @@ class PollsController extends Controller
             'poll' => $poll,
             'displayMode' => true,
             'quorum' => '',
-            'users' => User::all()
+            'users' => Company::find(session('current_company')->id)->users()->get()
         ]);
     }
 
@@ -1139,14 +1139,14 @@ class PollsController extends Controller
                 'poll' => $poll,
                 //'quorum' => $quorum,
                 'displayMode' => false,
-                'users' => User::all()
+                'users' => Company::find(session('current_company')->id)->users()->get()
             ]);
         }else{
             return view('polls.display', [
                 'poll' => $poll,
                 //'quorum' => $quorum,
                 'displayMode' => false,
-                'users' => User::all()
+                'users' => Company::find(session('current_company')->id)->users()->get()
             ]);
         }
     }
@@ -1156,7 +1156,7 @@ class PollsController extends Controller
 
         return view('polls.display_report', [
             'poll' => $poll,
-            'users' => User::all()
+            'users' => Company::find(session('current_company')->id)->users()->get()
         ]);
     }
 
@@ -1454,10 +1454,10 @@ class PollsController extends Controller
     {
         return view('polls.results_list', [
             'poll' => $poll,
-            'itemsNameHash'   => User::all()->pluck('name', 'id'),
-            'itemsPhoneHash'   => User::all()->pluck('phone', 'id'),
-            'itemsAddressHash'   => User::all()->pluck('address', 'id'),
-            'itemsIdHash'   => User::all()->pluck('id', 'id')
+            'itemsNameHash'   => Company::find(session('current_company')->id)->users()->get()->pluck('name', 'id'),
+            'itemsPhoneHash'   => Company::find(session('current_company')->id)->users()->get()->pluck('phone', 'id'),
+            'itemsAddressHash'   => Company::find(session('current_company')->id)->users()->get()->pluck('address', 'id'),
+            'itemsIdHash'   => Company::find(session('current_company')->id)->users()->get()->pluck('id', 'id')
         ]);
     }
 
@@ -1683,7 +1683,7 @@ class PollsController extends Controller
     public function countCanVote()
     {
         $count = 0;
-        $users = User::all();
+        $users = Company::find(session('current_company')->id)->users()->get();
         foreach ($users as $user){
             if( in_array(Permission::VOTE, explode(',', $user->permissions )) ){
                 ++$count;

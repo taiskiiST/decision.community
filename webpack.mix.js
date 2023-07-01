@@ -25,12 +25,7 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .copy('node_modules/antd/dist/antd.css', 'public/css')
     .extract(['react', 'react-dom', 'antd'])
-    .options({
-        processCssUrls: false,
-        postCss: [
-            tailwindcss('./tailwind.config.js')
-        ],
-    });
+    .postCss('resources/css/tailwind.css', 'public/css', [require('tailwindcss')]);
 
 if (mix.inProduction()) {
     mix.version();

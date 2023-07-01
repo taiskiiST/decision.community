@@ -2,7 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const colors = require('tailwindcss/colors')
 
 module.exports = {
-    purge: [
+    content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
@@ -21,10 +21,14 @@ module.exports = {
             },
             colors: {
                 'brand-blue': '#1992d4',
-                'brand-green': '#00A94E',
+                'brand-green': '#247063',
+                'brand-yellow': '#FFCB73',
                 'brand-green-light': '#91C73E',
                 teal: colors.teal,
                 'black-65-opacity': 'rgba(0,0,0,.65)'
+            },
+            gridTemplateColumns: {
+                '20': 'repeat(20, minmax(0, 1fr))',
             },
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],

@@ -16,11 +16,13 @@ class PollSeeder extends Seeder
     public function run()
     {
         $poll1 = Poll::create([
+            'company_id' => 1,
             'name' => 'Основной вопрос',
             'type_of_poll' => 1
         ]);
 
         $question1 = $poll1->questions()->create([
+            'author' => 1,
             'text' => 'Проводить ли собрания в Zoom?'
         ]);
 
@@ -37,6 +39,7 @@ class PollSeeder extends Seeder
         ]);
 
         $question2 = $poll1->questions()->create([
+            'author' => 1,
             'text' => 'Знаете ли вы кто вашего координатора?'
         ]);
 
@@ -57,6 +60,7 @@ class PollSeeder extends Seeder
         ]);
 //==============================================================
         $question3 = $poll2->questions()->create([
+            'author' => 1,
             'text' => 'Выборы председателя Съезда:'
         ]);
 
@@ -98,6 +102,7 @@ class PollSeeder extends Seeder
         ]);
 //==============================================================
         $question4 = $poll2->questions()->create([
+            'author' => 1,
             'text' => 'Выборы секретаря Съезда (отличный от председателя):'
         ]);
         $question4->answers()->create([
@@ -138,6 +143,7 @@ class PollSeeder extends Seeder
         ]);
 //==============================================================
         $question5 = $poll2->questions()->create([
+            'author' => 1,
             'text' => 'Учреждение (создание) Профсоюза.'
         ]);
         $question5->answers()->create([
@@ -148,6 +154,7 @@ class PollSeeder extends Seeder
         ]);
         //==============================================================
         $question6 = $poll2->questions()->create([
+            'author' => 1,
             'text' => 'Утверждение Устава Профсоюза.'
         ]);
         $question6->answers()->create([
@@ -158,6 +165,7 @@ class PollSeeder extends Seeder
         ]);
         //==============================================================
         $question7 = $poll2->questions()->create([
+            'author' => 1,
             'text' => 'Избрать Комитет РПО в составе:
                     a. Корсунский Евгений Александрович
                     b. Акматова Нуржан Асанбаева
@@ -180,6 +188,7 @@ class PollSeeder extends Seeder
         ]);
         //==============================================================
         $question8 = $poll2->questions()->create([
+            'author' => 1,
             'text' => 'Собранию предлагается утвердить состав органов 
             управления профсоюза в порядке профсоюзных организаций в 
             соответствии со списками предложенными делегатами, а так же 
@@ -195,6 +204,7 @@ class PollSeeder extends Seeder
         ]);
         //==============================================================
         $question9 = $poll2->questions()->create([
+            'author' => 1,
             'text' => 'Поручить вновь избранному Комитету РПО поручить 
             Государственную регистрацию Профсоюза.'
         ]);
@@ -206,6 +216,7 @@ class PollSeeder extends Seeder
         ]);
         //==============================================================
         $question10 = $poll2->questions()->create([
+            'author' => 1,
             'text' => 'Поручить вновь избранному Комитету РПО предложить 
             текст письменного обращения к представителям действующей власти с
              целью заявлении своей политической воли о невозможности закрытия 

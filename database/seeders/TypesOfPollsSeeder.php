@@ -23,7 +23,7 @@ class TypesOfPollsSeeder extends Seeder
         TypeOfPoll::create([
             'type_of_poll' => 'Отчет о проделанной работе'
         ]);
-        ypeOfPoll::create([
+        TypeOfPoll::create([
             'type_of_poll' => 'Предложение к рассмотрению вопроса'
         ]);
 //        TypeOfPoll::create([

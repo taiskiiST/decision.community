@@ -15,4 +15,9 @@ class Controller extends BaseController
     {
         return view('404');
     }
+
+    public function main()
+    {
+        return view('main');
+    }
 }

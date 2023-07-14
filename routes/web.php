@@ -44,9 +44,12 @@ Route::get('/polls/view/suggested/questions/', [QuestionsController::class, 'vie
 
 Route::get('/404', [Controller::class, 'view404'])->name('404');
 
+Route::get('/main', [Controller::class, 'main'])->name('main');
+
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     //dd(Route::current());
-    Route::get('/register', [PollsController::class, 'index'])->name('polls.index');
+
+    Route::get('/register', [PollsController::class, 'index'])->name('polls.register');
 
     Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
     Route::get('/polls/{poll}/display_report', [PollsController::class, 'display_report'])->name('poll.display_report');
@@ -191,6 +194,3 @@ Route::group(['domain' => '{subdomain}.'.env('APP_URL')], function () {
     })->where('never_used', '.*')
     ;
 });
-
-
-

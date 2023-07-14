@@ -19,10 +19,10 @@ class UsersSeeder extends Seeder
             'email' => 'taiskii@mail.ru',
             'address' => 'Штрауса 22',
             'permissions' => 'access,manage-items,admin',
-            'password' => '$2y$10$bBGgpKOujrSx4DGmsOVtl.bCch.Bh.tSAwrqETb49g0kFMRNGopSi',
+            'password' => '$2y$10$rsEFqgsi9w5Rfmjl2zlyTOrbh20S7EoMzKENhFyU2oAw83oX.rtKW', // 12345
             'phone' => '9185430980'
         ]);
-		
+
 		User::create([
             'name' => 'Sergei',
             'email' => 'test@mail.ru',

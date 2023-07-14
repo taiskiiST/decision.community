@@ -8,6 +8,7 @@ use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PositionsController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\HomeController;
 use App\Models\Question;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -23,9 +24,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->to('polls');
-});
+Route::get('/', [HomeController::class, 'index'])
+     ->middleware('guest')
+     ->name('home');
 
 Route::get('/polls', function () {
     return redirect()->route('polls.index');
@@ -47,6 +48,10 @@ Route::get('/404', [Controller::class, 'view404'])->name('404');
 Route::get('/main', [Controller::class, 'main'])->name('main');
 
 Route::group(['middleware' => ['auth', 'can:access-app']], function () {
+//    Route::get('/', function () {
+//        return redirect()->to('polls');
+//    });
+
     //dd(Route::current());
 
     Route::get('/register', [PollsController::class, 'index'])->name('polls.register');

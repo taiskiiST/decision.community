@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
 use Illuminate\Database\Seeder;
 
 /**
@@ -21,8 +22,13 @@ class DatabaseSeeder extends Seeder
         //$this->call(ItemsSeeder::class);
         $this->call(TypesOfPollsSeeder::class);
 
-        $this->call(PollSeeder::class);
+        Company::create([
+            'uri' => 'berezka',
+            'title' => 'Берёзка'
+        ]);
 
         $this->call(UsersSeeder::class);
+
+        $this->call(PollSeeder::class);
     }
 }

@@ -18,11 +18,20 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        if (!str_replace($_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ) ){
-            return view('main');
-        }else{
-            return view('auth.login', ['company_id' => Company::where('uri', str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ))->first()->id] );
-        }
+
+//        if (!str_replace($_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ) ){
+//            return view('main');
+//        }else{
+//            return view('auth.login', ['company_id' => Company::where('uri', str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ))->first()->id] );
+//        }
+
+        dump(auth()->user());
+
+        // TODO: check company before using 'id'
+        return view('auth.login', [
+            'company_id' => Company::where('uri', str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ))
+                                   ->first()->id]
+        );
     }
 
     /**

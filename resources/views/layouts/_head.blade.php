@@ -8,7 +8,7 @@
     <title>@if (session('current_company')) {{session('current_company')->title}} @else {{ config('app.name') }} @endif </title>
 
     <!-- Scripts -->
-    <script src="{{ mix('js/app.js') }}" defer></script>
+    <script src="{{ mix('js/app.js') }}"></script>
 
     <style>
         body {

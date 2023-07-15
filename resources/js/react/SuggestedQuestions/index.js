@@ -4,7 +4,7 @@ import Highlighter from "react-highlight-words";
 import { Listbox, Transition } from '@headlessui/react'
 
 
-const {csrf_token, itemsNameHash, itemsPollNameHash, suggested_questions, hasOwnQuestions, authUserId, cnt_files_in_question, itemsPollFinishedHash, isAuthUserVote} = TSN;
+const {csrf_token, itemsNameHash, itemsPollNameHash, suggested_questions, hasOwnQuestions, authUserId, cnt_files_in_question, itemsPollFinishedHash, isAuthUserVote} = window.TSN || {};
 
 
 function SuggestedQuestions() {

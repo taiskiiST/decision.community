@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\AnonymousUser;
-use App\Models\AnonymousVote;
 use App\Models\Answer;
 use App\Models\Company;
 use App\Models\Item;
@@ -42,7 +40,6 @@ class PollsController extends Controller
     {
         //$company = Company::where('uri','LIKE', session('subdomain'))->first();
         if(!session('current_company')){
-            //dd('jopa');
             Auth::logout();
             $this->authorizeResource(Poll::class, 'poll');
         }
@@ -53,12 +50,7 @@ class PollsController extends Controller
             'users' => Company::find(session('current_company')->id)->users()->get()->pluck('name','id'),
             'siteTitle' => session('current_company')->title
         ]);
-//        return view('polls.index', [
-//            'polls' => Poll::all(),
-//            'users' => User::all()
-//        ]);
     }
-
 
     public function create(Request $request)
     {

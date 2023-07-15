@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment } from 'react';
 import {render} from "react-dom";
 import Highlighter from "react-highlight-words";
 
-const {all_questions, itemsNameHash, itemsPollNameHash, cnt_files_in_question} = TSN;
+const {all_questions, itemsNameHash, itemsPollNameHash, cnt_files_in_question} = window.TSN || {};
 
 
 function SearchQuestionsSmallScreen() {

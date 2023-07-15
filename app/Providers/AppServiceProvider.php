@@ -27,16 +27,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-//        View::share('all_questions', Question::all());
-//        $all_questions = Question::all();
-//        foreach ($all_questions as $question){
-//            $cnt_files_in_question [$question->id] = $question->question_files()->count();
-//        }
-//        \JavaScript::put([
-//            'all_questions' => $all_questions,
-//            'itemsNameHash'   => User::all()->pluck('name', 'id'),
-//            'itemsPollNameHash'   => Poll::all()->pluck('name', 'id'),
-//            'cnt_files_in_question' => $cnt_files_in_question
-//        ]);
+        View::share('all_questions', Question::all());
+        $all_questions = Question::all();
+        foreach ($all_questions as $question){
+            $cnt_files_in_question [$question->id] = $question->question_files()->count();
+        }
+
+        \JavaScript::put([
+            'all_questions' => $all_questions,
+            'itemsNameHash'   => User::all()->pluck('name', 'id'),
+            'itemsPollNameHash'   => Poll::all()->pluck('name', 'id'),
+            'cnt_files_in_question' => $cnt_files_in_question
+        ]);
     }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {render} from "react-dom";
 
-const {questions, ratings_questions, answers} = TSN;
+const {questions, ratings_questions, answers} = window.TSN || {};
 
 const StarRating = () => {
     const [ratings, setRating] = useState(ratings_questions);

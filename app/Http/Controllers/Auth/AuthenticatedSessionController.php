@@ -40,8 +40,7 @@ class AuthenticatedSessionController extends Controller
         $company = Company::find($request->company_id);
         $request->session()->put('current_company', $company);
 
-        return redirect()->intended(RouteServiceProvider::HOME);
-        //return redirect()->intended($_SERVER['HTTP_REFERER'].'/polls');
+        return redirect()->intended(route('polls.index'));
     }
 
     /**

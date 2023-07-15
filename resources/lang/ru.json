@@ -175,7 +175,7 @@
     "We were unable to find a registered user with this email address.": "Нам не удалось найти зарегистрированного пользователя с этим адресом электронной почты.",
     "We won't ask for your password again for a few hours.": "Мы не будем запрашивать Ваш пароль вновь в течение нескольких часов.",
     "When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.": "Если двух-факторная аутентификация включена, Вам будет предложено ввести случайный токен безопасности во время аутентификации. Вы можете получить этот токен в приложении Google Authenticator Вашего телефона.",
-    "Whoops! Something went wrong.": "Упс! Что-то пошло не так.",
+    "Whoops! Something went wrong.": "Что-то пошло не так.",
     "Whoops!": "Упс!",
     "Whoops, something went wrong on our servers.": "Упс, на наших серверах что-то пошло не так.",
     "You are logged in!": "Вы вошли в систему!",

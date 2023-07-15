@@ -6,7 +6,7 @@ import FilePreview from './FilePreview';
 import AnswerPreview from "./AnswerPreview";
 import FormErrors from "./FormErrors";
 
-const { poll, count_question,  csrf_token } = TSN;
+const { poll, count_question,  csrf_token } = window.TSN || {};
 
 class Question extends React.Component {
 

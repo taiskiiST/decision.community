@@ -187,26 +187,22 @@
                 var ex_class;
                 for (ex_class of document.getElementsByClassName("block h-6 w-6 hamburger")) {
                     ex_class.className = "hidden h-6 w-6 hamburger";
-                    console.log(ex_class);
                 }
             }else{
                 var ex_class;
                 for (ex_class of document.getElementsByClassName("hidden h-6 w-6 hamburger")) {
                     ex_class.className = "block h-6 w-6 hamburger";
-                    console.log('jopa2');
                 }
             }
             if (document.getElementsByClassName("block h-6 w-6 cross").length >0 ){
                 var ex_class;
                 for (ex_class of document.getElementsByClassName("block h-6 w-6 cross")) {
                     ex_class.className = "hidden h-6 w-6 cross";
-                    console.log('jopa3');
                 }
             }else{
                 var ex_class;
                 for (ex_class of document.getElementsByClassName("hidden h-6 w-6 cross")) {
                     ex_class.className = "block h-6 w-6 cross";
-                    console.log('jopa4');
                 }
             }
 

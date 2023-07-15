@@ -27,6 +27,7 @@
         "lodash": "^4.17.19",
         "postcss": "^8.4.24",
         "postcss-cli": "^8.2.0",
+        "postcss-import": "^15.1.0",
         "resolve-url-loader": "^3.1.0",
         "sass": "^1.29.0",
         "sass-loader": "^8.0.2",

@@ -18,8 +18,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        dump(auth()->user());
-
         // TODO: check company before using 'id'
         return view('auth.login', [
             'company_id' => Company::where('uri', str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ))

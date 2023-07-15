@@ -5,12 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Poll;
 use App\Models\Question;
-use App\Models\Quorum;
-use App\Models\User;
-use GraphQL\Query;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 class QuestionsController extends Controller
@@ -23,11 +18,11 @@ class QuestionsController extends Controller
     public function index(Request $request)
     {
         $error = '';
-        if (preg_match('/\/polls\/(\d+)\/questions\/(\d*)\/(.*?$)/', $request->getRequestUri(),$arr_index_poll_and_question)){
+        if (preg_match('/\/polls\/(\d+)\/questions\/(\d*)\/(.*?$)/', $request->getRequestUri(), $arr_index_poll_and_question)) {
             $poll = Poll::find($arr_index_poll_and_question[1]);
             $question = $poll->questions()->where('id', $arr_index_poll_and_question[2])->get();//ID question
             $error = rawurldecode($arr_index_poll_and_question[3]);
-        }elseif (preg_match('/\/polls\/(\d+)\/questions\/(\d*)/', $request->getRequestUri(),$arr_index_poll_and_question)){
+        } elseif (preg_match('/\/polls\/(\d+)\/questions\/(\d*)/', $request->getRequestUri(), $arr_index_poll_and_question)) {
             $poll = Poll::find($arr_index_poll_and_question[1]);
             $question = $poll->questions()->where('id', $arr_index_poll_and_question[2])->get();//ID question
         }
@@ -35,38 +30,38 @@ class QuestionsController extends Controller
             $count = 0;
             foreach ($poll->questions()->get() as $question_poll) {
                 $count++;
-                if ($question_poll->id == $question[0]->id){
+                if ($question_poll->id == $question[0]->id) {
                     break;
                 }
             }
 
             $files = [];
-            foreach ($question[0]->question_files()->get() as $file){
+            foreach ($question[0]->question_files()->get() as $file) {
                 preg_match('/\..*$/', $file->path_to_file, $matches_type_of_file);
-                $type_of_file = str_replace( ".", '', $matches_type_of_file[0]);
+                $type_of_file = str_replace(".", '', $matches_type_of_file[0]);
                 $type = $this->switchTypeFile($type_of_file);
 
-                array_push($files,[
-                    'file_id' => $file->id,
-                    'fileUpload' => [
-                        0 =>[
-                            'lastModified' => $file->updated_at,
-                            'lastModifiedDate' => Storage::disk('public')->lastModified($file->path_to_file),
-                            'name' => Storage::url($file->path_to_file),
-                            'size' => Storage::disk('public')->size($file->path_to_file),
-                            'type' => '',
-                            'webkitRelativePath' => ''
-                        ]
+                array_push($files, [
+                    'file_id'         => $file->id,
+                    'fileUpload'      => [
+                        0 => [
+                            'lastModified'       => $file->updated_at,
+                            'lastModifiedDate'   => Storage::disk('public')->lastModified($file->path_to_file),
+                            'name'               => Storage::url($file->path_to_file),
+                            'size'               => Storage::disk('public')->size($file->path_to_file),
+                            'type'               => '',
+                            'webkitRelativePath' => '',
+                        ],
                     ],
-                    'isValidText' => true,
-                    'text' => $file->text_for_file,
+                    'isValidText'     => true,
+                    'text'            => $file->text_for_file,
                     'isValidFileSize' => true,
                     'isValidFileName' => true,
                     'hideDragAndDrop' => true,
-                    'fileInputRef' => true,
-                    'type' => $type,
-                    'siFromStorage' => true,
-                    'fileLoaded' => false
+                    'fileInputRef'    => true,
+                    'type'            => $type,
+                    'siFromStorage'   => true,
+                    'fileLoaded'      => false,
                 ]);
             }
         }
@@ -76,86 +71,60 @@ class QuestionsController extends Controller
         if (isset($question[0])) {
             foreach ($question[0]->answers()->get() as $answer) {
                 array_push($answers, [
-                    'answer_id' => $answer->id,
-                    'text' => $answer->text,
-                    'isValidText' => true
+                    'answer_id'   => $answer->id,
+                    'text'        => $answer->text,
+                    'isValidText' => true,
                 ]);
             }
         }
-        if (!isset($count)){
-            $count='';
+        if (!isset($count)) {
+            $count = '';
         }
 
         \JavaScript::put([
-            'poll' => $poll,
-            'count_question' => $poll->questions()->count(),
+            'poll'                 => $poll,
+            'count_question'       => $poll->questions()->count(),
             'current_num_question' => $count,
-            'csrf_token' =>  csrf_token(),
-            'question' => isset($question[0])
+            'csrf_token'           => csrf_token(),
+            'question'             => isset($question[0])
                 ? $question[0]
                 : '',
-            'files' => isset($question[0])
+            'files'                => isset($question[0])
                 ? $files
                 : '',
-            'answer' => isset($question[0])
+            'answer'               => isset($question[0])
                 ? $answers
                 : '',
-            'error' => $error,
-            'isReport' => $poll->isReportDone(),
-            'isSuggestedQuestion' => $poll->isSuggestedQuestion()
+            'error'                => $error,
+            'isReport'             => $poll->isReportDone(),
+            'isSuggestedQuestion'  => $poll->isSuggestedQuestion(),
         ]);
         return view('questions.create');
     }
 
     public function viewQuestion(Question $question, $search = '')
     {
-        if(!session('current_company') && !$question->public){
+        if (!session('current_company') && !$question->public) {
             return redirect()->route('polls.index');
         }
 
-        if ($question->public){
-            $company = Company::where('uri', str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ))->first();
-            $quorums = Quorum::where('company_id', $company->id)->get();
-        }else{
-            $quorums = Quorum::where('company_id', session('current_company')->id)->get();
-        }
-
-
-        $past_dates = [];
-        $poll = $question->poll()->get();
-        //dd($poll);
-        if (isset($quorums)) {
-            $times_poll = strtotime($poll[0]->start);
-            foreach ($quorums as $quorum) {
-                $times_quorum = strtotime($quorum->created_at);
-                //echo(date($quorum->created_at)." - ".strtotime($quorum->created_at)." - ".$poll->start." - ".$times_poll."<br />");
-                if ($times_poll && ($times_poll >= $times_quorum)) {
-                    //$past_dates[] = $times_quorum;
-                    $quorums_tmp = $quorum;
-                }
+        if ($question->public) {
+            return view('questions.view_question', [
+                'question' => $question,
+                'poll'     => $question->poll()->get()->first(),
+                'search'   => $search ? $search : '',
+            ]);
+        } else {
+            if (auth()->user()) {
+                return view('questions.view_question', [
+                    'question' => $question,
+                    'poll'     => $question->poll()->get()->first(),
+                    'search'   => $search ? $search : '',
+                ]);
+            } else {
+                return redirect()->route('login');
             }
         }
-       if ($question->public){
-           return view('questions.view_question', [
-               'question' => $question,
-               'poll' => $question->poll()->get()->first(),
-               'search' => $search ? $search:'',
-               'quorum' => isset($quorums_tmp) ?
-                                        $quorums_tmp :
-                                        Quorum::where('company_id', session('current_company')->id)->get()->last()
-           ]);
-       }else{
-           if (auth()->user()){
-               return view('questions.view_question', [
-                   'question' => $question,
-                   'poll' => $question->poll()->get()->first(),
-                   'search' => $search ? $search:'',
-                   'quorum' => isset($quorums_tmp) ? $quorums_tmp : Quorum::where('company_id', session('current_company')->id)->get()->last()
-               ]);
-            }else{
-               return redirect()->route('login');
-           }
-       }
     }
 
 //    public function viewPublicQuestions()
@@ -173,37 +142,37 @@ class QuestionsController extends Controller
 
     public function viewSuggestedQuestions()
     {
-        if(!session('current_company')){
+        if (!session('current_company')) {
             return redirect()->route('polls.index');
         }
-        $suggested_questions = Question::where('suggest', 1)->where('company_id',session('current_company')->id)->get();
-        foreach ($suggested_questions as $question){
+        $suggested_questions = Question::where('suggest', 1)->where('company_id', session('current_company')->id)->get();
+        foreach ($suggested_questions as $question) {
             $cnt_files_in_question [$question->id] = $question->question_files()->count();
         }
-        foreach ($suggested_questions as $question){
+        foreach ($suggested_questions as $question) {
             $hashUserVoteQuestions [$question->id] = Poll::find($question->poll_id)->authUserVote();
         }
-        if($suggested_questions->count() == 0){
+        if ($suggested_questions->count() == 0) {
             $cnt_files_in_question = [];
             $hashUserVoteQuestions = [];
         }
         //dd($hashUserVoteQuestions);
         \JavaScript::put([
-            'csrf_token' =>  csrf_token(),
-            'itemsNameHash'   => Company::find(session('current_company')->id)->users()->get()->pluck('name', 'id'),
-            'itemsPollNameHash'   => Poll::where('company_id',session('current_company')->id)->get()->pluck('name', 'id'),
-            'itemsPollFinishedHash'   => Poll::where('company_id',session('current_company')->id)->get()->pluck('finished', 'id'),
-            'suggested_questions' => $suggested_questions,
-            'hasOwnQuestions' => Question::hasOwnQuestions($suggested_questions),
-            'authUserId'=> auth()->user()->id,
+            'csrf_token'            => csrf_token(),
+            'itemsNameHash'         => Company::find(session('current_company')->id)->users()->get()->pluck('name', 'id'),
+            'itemsPollNameHash'     => Poll::where('company_id', session('current_company')->id)->get()->pluck('name', 'id'),
+            'itemsPollFinishedHash' => Poll::where('company_id', session('current_company')->id)->get()->pluck('finished', 'id'),
+            'suggested_questions'   => $suggested_questions,
+            'hasOwnQuestions'       => Question::hasOwnQuestions($suggested_questions),
+            'authUserId'            => auth()->user()->id,
             'cnt_files_in_question' => $cnt_files_in_question,
-            'isAuthUserVote' => $hashUserVoteQuestions
+            'isAuthUserVote'        => $hashUserVoteQuestions,
         ]);
 
         return view('questions.suggested_questions', [
-            'itemsNameHash'   => Company::find(session('current_company')->id)->users()->get()->pluck('name', 'id'),
-            'itemsPollNameHash'   => Poll::where('company_id',session('current_company')->id)->get()->pluck('name', 'id'),
-            'suggested_questions' => $suggested_questions
+            'itemsNameHash'       => Company::find(session('current_company')->id)->users()->get()->pluck('name', 'id'),
+            'itemsPollNameHash'   => Poll::where('company_id', session('current_company')->id)->get()->pluck('name', 'id'),
+            'suggested_questions' => $suggested_questions,
         ]);
 
     }
@@ -212,28 +181,29 @@ class QuestionsController extends Controller
     {
 
         $search_text = $request->search;
-        if ($search){
+        if ($search) {
             $search_text = $search;
         }
-        $matches_questions = Question::where('text', 'LIKE', '%'.$search_text.'%')->get();
+        $matches_questions = Question::where('text', 'LIKE', '%' . $search_text . '%')->get();
         //dd($matches_questions);
-        return view('questions.search', ['questions'=>$matches_questions, 'search_text'=>$search_text]);
+        return view('questions.search', ['questions' => $matches_questions, 'search_text' => $search_text]);
     }
 
     public function searchQuestions(Request $request)
     {
         $search_text = $request->searchQuestionsText;
-        if(!$search_text){
+        if (!$search_text) {
             return '';
         }
-        $matches_questions = Question::where('text', 'LIKE', '%'.$search_text.'%')->get();
+        $matches_questions = Question::where('text', 'LIKE', '%' . $search_text . '%')->get();
         return $matches_questions;
     }
 
-    public function switchTypeFile ($type_of_file){
-        switch ( $type_of_file){
+    public function switchTypeFile($type_of_file)
+    {
+        switch ($type_of_file) {
             case 'pdf':
-               return $type_of_file;
+                return $type_of_file;
             case 'png':
                 return 'img';
             case 'jpg':
@@ -245,23 +215,22 @@ class QuestionsController extends Controller
             case 'bmp':
                 return 'img';
             default:
-                return'other';
+                return 'other';
 
         }
     }
 
     public function publicQuestion(Poll $poll, Question $question)
     {
-        if ($question->public){
+        if ($question->public) {
             $question->update(['public' => 0]);
-        }else{
+        } else {
             $question->update(['public' => 1]);
         }
         return redirect()->route('poll.edit', [
-            'poll' => $poll
+            'poll' => $poll,
         ]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -271,9 +240,9 @@ class QuestionsController extends Controller
     public function suggestedcreate(Poll $poll)
     {
         \JavaScript::put([
-            'poll' => $poll,
+            'poll'           => $poll,
             'count_question' => $poll->questions()->count(),
-            'csrf_token' =>  csrf_token()
+            'csrf_token'     => csrf_token(),
         ]);
 
         return view('questions.create');
@@ -282,27 +251,32 @@ class QuestionsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         //
     }
+
     /**
      * add a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function add(Request $request)
     {
         //
     }
+
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Question  $question
+     * @param \App\Models\Question $question
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Question $question)
@@ -313,7 +287,8 @@ class QuestionsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Question  $question
+     * @param \App\Models\Question $question
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Question $question)
@@ -324,8 +299,9 @@ class QuestionsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Question  $question
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Question $question
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Question $question)
@@ -336,24 +312,25 @@ class QuestionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Question  $question
+     * @param \App\Models\Question $question
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Poll $poll, Question $question)
     {
-        foreach($question->question_files()->get() as $file){
+        foreach ($question->question_files()->get() as $file) {
             Storage::disk('public')->delete($file->path_to_file);
         }
         $question->delete();
         return redirect()->route('poll.edit', [
-            'poll' => $poll
+            'poll' => $poll,
         ]);
     }
 
     public function destroy_suggested(Question $question)
     {
-       // dd($question);
-        foreach($question->question_files()->get() as $file){
+        // dd($question);
+        foreach ($question->question_files()->get() as $file) {
             Storage::disk('public')->delete($file->path_to_file);
         }
         $poll = Poll::find($question->poll_id);

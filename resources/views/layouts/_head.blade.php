@@ -19,8 +19,8 @@
         }
     </style>
 
-    <link href="{{ mix('css/tailwind.css') }}" rel="stylesheet">
     <link href="{{ mix('css/antd.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/tailwind.css') }}" rel="stylesheet">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
     @yield('styles')

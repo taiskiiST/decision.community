@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -25,8 +26,14 @@ class Poll extends Model
         'protocol_doc',
         'blank_doc',
         'blank_with_answers_doc',
-        'company_id'
+        'company_id',
+        'potential_voters_number'
     ];
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
 
     public function isPublicMeetingTSN(): bool
     {

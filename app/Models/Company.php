@@ -9,9 +9,22 @@ class Company extends Model
 {
     use HasFactory;
 
-
     public function users()
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public static function current(): ?self
+    {
+        if (!($company = session('current_company'))) {
+            return null;
+        }
+
+        return $company;
+    }
+
+    public function potentialVotersNumber(): int
+    {
+        return $this->users()->where('permissions', 'LIKE', '%' . Permission::VOTE . '%')->count();
     }
 }

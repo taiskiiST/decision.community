@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as SymphonyResponse;
 
 /**
@@ -206,16 +207,24 @@ class User extends Authenticatable
 
     public function vote(Question $question, Answer $answer): Model
     {
-        //return $this->votes()->upsert([ 'answer_id' => $answer->id, 'question_id' => $question->id, 'user_id' => $this->id ],[  'answer_id' => $answer->id, 'question_id' => $question->id, 'user_id' => $this->id],['answer_id' => $answer->id]);
+        $out = null;
 
-        return $this->votes()->updateOrCreate([
-            'question_id' => $question->id,
-            'user_id' => $this->id
-        ], [
-            'answer_id' => $answer->id,
-            'question_id' => $question->id,
-            'user_id' => $this->id
-        ]);
+        DB::transaction(function () use ($question, $answer, &$out) {
+            $question->poll->update([
+                'potential_voters_number' => $question->poll->company->potentialVotersNumber()
+            ]);
+
+            $out = $this->votes()->updateOrCreate([
+                'question_id' => $question->id,
+                'user_id' => $this->id
+            ], [
+                'answer_id' => $answer->id,
+                'question_id' => $question->id,
+                'user_id' => $this->id
+            ]);
+        });
+
+        return $out;
     }
 
     public function id(){

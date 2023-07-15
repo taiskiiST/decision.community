@@ -28,7 +28,7 @@ class UsersSeeder extends Seeder
             'email' => 'test@mail.ru',
             'address' => 'Садовая 5',
             'permissions' => 'access,manage-items',
-            'password' => '$2y$10$19V7rEK7RJptvN1a4v.p9uHznV0a0iGB9uDC4.0cXkflhMDFRdcYy',
+            'password' => '$2y$10$rsEFqgsi9w5Rfmjl2zlyTOrbh20S7EoMzKENhFyU2oAw83oX.rtKW',
             'phone' => '9881212124'
         ]);
     }

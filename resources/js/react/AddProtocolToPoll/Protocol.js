@@ -3,7 +3,7 @@ import PdfPreview from './PdfPreview';
 import {v4 as uuidv4} from "uuid";
 import FormErrors from "./FormErrors";
 
-const { poll, csrf_token, file_protocol, error, is_admin } = TSN;
+const { poll, csrf_token, file_protocol, error, is_admin } = window.TSN || {};
 
 
 var _PDF_DOC,

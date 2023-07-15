@@ -89,7 +89,7 @@
                                             @else
                                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                     @if($poll->voteFinished() || !$poll->voteStart() )
-                                                        <a href="#" class="disabled">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
+                                                        <a href="#" class="disabled text-gray-600 hover:text-gray-600 focus:text-gray-600">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
                                                     @else
                                                         <a href="{{ route('poll.display',[$poll->id])
                                                            }}" class="text-indigo-600 hover:text-indigo-900">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>

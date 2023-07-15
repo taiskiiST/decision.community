@@ -4,7 +4,7 @@ import Highlighter from "react-highlight-words";
 import { Listbox, Transition } from '@headlessui/react'
 
 
-const {users, csrf_token, companies, current_company, isSuperAdmin, hash_company_users} = TSN;
+const {users, csrf_token, companies, current_company, isSuperAdmin, hash_company_users} = window.TSN || {};
 
 
 

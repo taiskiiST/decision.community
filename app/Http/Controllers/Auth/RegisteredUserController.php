@@ -53,14 +53,12 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-        UsersController::refreshQuorums();
         Auth::login($user);
 
         //return view('polls.index');
         $company = Company::find($request->company_id);
         $request->session()->put('current_company', $company);
         $company->users()->save($user);
-        UsersController::refreshQuorums();
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 }

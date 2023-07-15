@@ -18,15 +18,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-
-//        if (!str_replace($_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ) ){
-//            return view('main');
-//        }else{
-//            return view('auth.login', ['company_id' => Company::where('uri', str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ))->first()->id] );
-//        }
-
-       // dump(auth()->user());
-
         // TODO: check company before using 'id'
         return view('auth.login', [
             'company_id' => Company::where('uri', str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ))
@@ -49,8 +40,7 @@ class AuthenticatedSessionController extends Controller
         $company = Company::find($request->company_id);
         $request->session()->put('current_company', $company);
 
-        return redirect()->intended(RouteServiceProvider::HOME);
-        //return redirect()->intended($_SERVER['HTTP_REFERER'].'/polls');
+        return redirect()->intended(route('polls.index'));
     }
 
     /**

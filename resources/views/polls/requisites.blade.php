@@ -11,10 +11,10 @@
                 </div>
                 <div>
                  @if ($poll->start)
-                    @if ($quorum)
+                    @if ($poll->potential_voters_number)
                         <div class="inline-flex flex-row w-full place-content-between">
                             <div class="px-1 py-3 sm:px-6">
-                                <label class="px-1 py-4 block text-lg text-black text-wrap">Зарегистрировано {{$quorum}} членов {{$_ENV['APP_NAME']}}</label>
+                                <label class="px-1 py-4 block text-lg text-black text-wrap">Зарегистрировано {{$poll->potential_voters_number}} членов {{$_ENV['APP_NAME']}}</label>
                             </div>
                         </div>
                     @endif

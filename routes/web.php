@@ -59,7 +59,6 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
     Route::get('/polls/{poll}/display_report', [PollsController::class, 'display_report'])->name('poll.display_report');
     Route::get('/polls/{poll}/start', [PollsController::class, 'start'])->name('poll.start');
-    Route::get('/polls/{poll_id?}/index/{id_question?}', [PollsController::class, 'index'])->name('polls.index');
     Route::post('/polls/{poll}/submit', [PollsController::class, 'submit'])->name('poll.submit');
     Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('poll.results');
     Route::post('/polls/create/{type_of_poll}', [PollsController::class, 'create'])->name('poll.create');

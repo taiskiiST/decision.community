@@ -97,6 +97,7 @@ class QuestionsController extends Controller
                 : '',
             'error'                => $error,
             'isReport'             => $poll->isReportDone(),
+            'isInformationPost'    => $poll->isInformationPost(),
             'isSuggestedQuestion'  => $poll->isSuggestedQuestion(),
         ]);
         return view('questions.create');

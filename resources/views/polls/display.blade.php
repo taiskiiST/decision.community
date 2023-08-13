@@ -47,7 +47,7 @@
     @endif
 
     @if (auth()->user() ? auth() && auth()->user()->canVote()|| auth()->user()->isAccess() : '' )
-        @if (auth()->user()->isAccess() || (!$poll->finished && !$poll->authUserVote() && !$poll->isGovernanceMeetingTSN() || $displayMode) || $poll->isGovernanceMeetingTSN() && auth()->user()->isGovernance() )
+        @if (auth()->user()->isAccess() || (!$poll->finished && !$poll->authUserVote() && !$poll->isGovernanceMeeting() || $displayMode) || $poll->isGovernanceMeeting() && auth()->user()->isGovernance() )
 
             {!! Form::open(['route' => ['poll.submit', ['poll' => $poll] ], 'method' => 'POST']) !!}
 
@@ -235,7 +235,7 @@
             </div>
             {!! Form::close() !!}
         @else
-            @if ($poll->isGovernanceMeetingTSN() && !auth()->user()->isGovernance())
+            @if ($poll->isGovernanceMeeting() && !auth()->user()->isGovernance())
                 <div class="bg-gray-50">
                     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
                         <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">

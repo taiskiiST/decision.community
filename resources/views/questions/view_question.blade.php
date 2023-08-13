@@ -98,6 +98,7 @@
         </div>
     </div>
 
+    @if (!$poll->isInformationPost())
     <div class="flex flex-col hidden lg:-mt-px xl:flex p-4">
         @if (!$poll->isReportDone())
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
@@ -182,9 +183,9 @@
             </div>
         @endif
     </div>
+    @endif
 
-
-
+    @if (!$poll->isInformationPost())
     <div class="flex flex-col xl:hidden p-4">
         @if (!$poll->isReportDone())
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
@@ -274,6 +275,7 @@
             </div>
         @endif
     </div>
+    @endif
 
     <div class="inline-flex flex-row w-full place-content-between">
         <div class="px-4 py-7 sm:px-6 flex-row-reverse ">

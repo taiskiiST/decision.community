@@ -1,16 +1,16 @@
 {
     "/js/app.js": "/js/app.js?id=a379062c681d165ec0a6bc8a8f14b47a",
     "/js/ManageItems.js": "/js/ManageItems.js?id=567a1482756827dc87c0843ed16e9907",
-    "/js/AddQuestionsToPoll.js": "/js/AddQuestionsToPoll.js?id=ff688dfab99e119b524cffc84f04c7da",
+    "/js/AddQuestionsToPoll.js": "/js/AddQuestionsToPoll.js?id=bc292adba10ebfcefd948e493d7eb078",
     "/js/AddProtocolToPoll.js": "/js/AddProtocolToPoll.js?id=0e040a326b57562286c69cc4f6d35c49",
-    "/js/ManageUsers.js": "/js/ManageUsers.js?id=de309f2045a6768bc1bae6644bd9f030",
+    "/js/ManageUsers.js": "/js/ManageUsers.js?id=f371d9219c5634790bf89829a4046dca",
     "/js/RatingStarsForReports.js": "/js/RatingStarsForReports.js?id=aff9f84ed9436381296ca4df8b8c3cdc",
-    "/js/SuggestedQuestions.js": "/js/SuggestedQuestions.js?id=426e97faaacbb35e92f28b01ce3f3310",
-    "/js/GlobalSearchQuestions.js": "/js/GlobalSearchQuestions.js?id=47fff0d7746f54c808c071132b1dd367",
-    "/js/GlobalSearchQuestionsSmallScreen.js": "/js/GlobalSearchQuestionsSmallScreen.js?id=cac939944339256cd310c65d5027a2ec",
+    "/js/SuggestedQuestions.js": "/js/SuggestedQuestions.js?id=0ef66e42b2fb191a1a4442f95a046434",
+    "/js/GlobalSearchQuestions.js": "/js/GlobalSearchQuestions.js?id=1e1eb33027c9c8cf3f9f369e197ac86c",
+    "/js/GlobalSearchQuestionsSmallScreen.js": "/js/GlobalSearchQuestionsSmallScreen.js?id=f3341efc83f4638a718d47ece10a10cb",
     "/js/manifest.js": "/js/manifest.js?id=21de9386e9da9a284c55468584512c6a",
     "/css/app.css": "/css/app.css?id=c4f43187cd162d0ae7369fb249d1f393",
-    "/css/tailwind.css": "/css/tailwind.css?id=32921bb982b5029d1b2c3744e83e4d16",
+    "/css/tailwind.css": "/css/tailwind.css?id=bb782b179706a738b7c26c58ff21e747",
     "/js/vendor.js": "/js/vendor.js?id=c0b47da3f272b98ec633261bd7668881",
     "/css/antd.css": "/css/antd.css?id=c2c69468dff41332a8656cc1cf98ff9a"
 }

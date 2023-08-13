@@ -49,10 +49,11 @@
                                             {{ $loop_cnt + 1 }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900">
-                                            @if ($poll->isPublicMeetingTSN()) <div class="text-xs font-bold">Принятие решений членами сообщества</div>@endif
-                                            @if ($poll->isGovernanceMeetingTSN()) <div class="text-xs font-bold">Принятие решений членами правления</div>@endif
+                                            @if ($poll->isPublicMeeting()) <div class="text-xs font-bold">Принятие решений членами сообщества</div>@endif
+                                            @if ($poll->isGovernanceMeeting()) <div class="text-xs font-bold">Принятие решений членами правления</div>@endif
 
                                             @if ($poll->isReportDone()) <div class="text-xs font-bold">Отчет по проделанной работе</div>@endif
+                                            @if ($poll->isInformationPost()) <div class="text-xs font-bold">Информационный пост</div>@endif
 
                                             @if (auth()->user()->isAdmin())
                                                 <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
@@ -72,52 +73,66 @@
                                                 @endif
                                             @endif
                                         </td>
-                                        @if (! $poll->voteFinished() )
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <span class="text-green-600">@if (! $poll->voteStart() )Голосование еще не началось@elseГолосование активно@endif</span>
-                                            </td>
-                                        @else
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <span class="text-red-600">Голосование окончено {{date_create($poll->finished)->format('d-m-Y H:i:s')}}</span>
-                                            </td>
-                                        @endif
-                                        @if (! $poll->authUserVote() && auth()->user()->canVote())
-                                            @if ($poll->isGovernanceMeetingTSN() && !auth()->user()->isGovernance())
-                                                <td class="px-6 py-4 whitespace-wrap text-right text-sm font-medium">
-                                                    Доступно только для членов Правления
+
+                                        @if (!$poll->isInformationPost())
+                                            @if (! $poll->voteFinished() )
+                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                    <span class="text-green-600">@if (! $poll->voteStart() )Голосование еще не началось@elseГолосование активно@endif</span>
                                                 </td>
                                             @else
                                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    @if($poll->voteFinished() || !$poll->voteStart() )
-                                                        <a href="#" class="disabled text-gray-600 hover:text-gray-600 focus:text-gray-600">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
-                                                    @else
-                                                        <a href="{{ route('poll.display',[$poll->id])
-                                                           }}" class="text-indigo-600 hover:text-indigo-900">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
-                                                    @endif
+                                                    <span class="text-red-600">Голосование окончено {{date_create($poll->finished)->format('d-m-Y H:i:s')}}</span>
                                                 </td>
                                             @endif
                                         @else
-                                            @if (auth()->user()->canVote())
-                                                @if (!$poll->isReportDone())
-                                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                        <span class="text-red-600">Вы уже проголосовали</span>
+                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <span class="text-red-600">Голосование не доступно</span>
+                                            </td>
+                                        @endif
+
+                                        @if (!$poll->isInformationPost())
+                                            @if (! $poll->authUserVote() && auth()->user()->canVote())
+                                                @if ($poll->isGovernanceMeeting() && !auth()->user()->isGovernance())
+                                                    <td class="px-6 py-4 whitespace-wrap text-right text-sm font-medium">
+                                                        Доступно только для членов Правления
                                                     </td>
                                                 @else
                                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                         @if($poll->voteFinished() || !$poll->voteStart() )
-                                                            <a href="#" class="disabled">Дать оценку</a>
+                                                            <a href="#" class="disabled text-gray-600 hover:text-gray-600 focus:text-gray-600">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
                                                         @else
                                                             <a href="{{ route('poll.display',[$poll->id])
-                                                           }}" class="text-indigo-600 hover:text-indigo-900">Дать оценку</a>
+                                                               }}" class="text-indigo-600 hover:text-indigo-900">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
                                                         @endif
                                                     </td>
                                                 @endif
                                             @else
-                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <span class="text-red-600">Недостаточно прав для голосования</span>
-                                                </td>
+                                                @if (auth()->user()->canVote())
+                                                    @if (!$poll->isReportDone())
+                                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                            <span class="text-red-600">Вы уже проголосовали</span>
+                                                        </td>
+                                                    @else
+                                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                            @if($poll->voteFinished() || !$poll->voteStart() )
+                                                                <a href="#" class="disabled">Дать оценку</a>
+                                                            @else
+                                                                <a href="{{ route('poll.display',[$poll->id])
+                                                               }}" class="text-indigo-600 hover:text-indigo-900">Дать оценку</a>
+                                                            @endif
+                                                        </td>
+                                                    @endif
+                                                @else
+                                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                        <span class="text-red-600">Недостаточно прав для голосования</span>
+                                                    </td>
 
+                                                @endif
                                             @endif
+                                        @else
+                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <span class="text-red-600"></span>
+                                            </td>
                                         @endif
                                         <!-- show.blade.php -->
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -153,10 +168,18 @@
                                                 @endif
                                             @endif
                                         @endif
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="{{ route('poll.results',[$poll->id])
-                                                           }}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
-                                        </td>
+
+                                        @if (!$poll->isInformationPost())
+                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <a href="{{ route('poll.results',[$poll->id])
+                                                               }}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
+                                            </td>
+                                        @else
+                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <span class="text-red-600"></span>
+                                            </td>
+                                        @endif
+
                                         @if (auth()->user()->canManageItems() && !$poll->voteFinished())
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <form method="POST" action="{{ route('poll.delete',[$poll->id]) }}">
@@ -210,10 +233,12 @@
                                             {{ $loop_cnt_sml +1 }}
                                         </div>
                                         <div class="px-1 py-1 whitespace-wrap text-xs  font-bold text-gray-900 text-center">
-                                            @if ($poll->isPublicMeetingTSN()) <div>Принятие решений членами сообщества</div>@endif
-                                            @if ($poll->isGovernanceMeetingTSN()) <div>Принятие решений членами правления</div>@endif
+                                            @if ($poll->isPublicMeeting()) <div>Принятие решений членами сообщества</div>@endif
+                                            @if ($poll->isGovernanceMeeting()) <div>Принятие решений членами правления</div>@endif
 
                                             @if ($poll->isReportDone()) <div>Отчет по проделанной работе</div>@endif
+                                            @if ($poll->isInformationPost()) <div>Информационный пост</div>@endif
+
                                             @if (auth()->user()->isAdmin())
                                                 <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
                                             @else
@@ -231,62 +256,80 @@
                                                 @endif
                                             @endif
                                         </div>
-                                        @if (! $poll->voteFinished() )
-                                            <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-green-600 bg-gray-200">
-                                                <span class="text-green-600">@if (! $poll->voteStart() )Голосование еще не началось@elseГолосование активно@endif</span>
-                                            </div>
-                                        @else
-                                            <div class="px-6 py-4 whitespace-wrap text-left text-sm font-medium text-red-600 bg-gray-200">
-                                                Голосование окончено {{date_create($poll->finished)->format('d-m-Y H:i:s')}}
-                                            </div>
-                                        @endif
 
-
-                                        @if (! $poll->authUserVote() && auth()->user()->canVote())
-                                            @if ($poll->isGovernanceMeetingTSN() && !auth()->user()->isGovernance())
-                                                <div class="px-6 py-4 whitespace-wrap text-right text-sm font-medium">
-                                                    Доступно только для членов Правления
+                                        @if (!$poll->isInformationPost())
+                                            @if (! $poll->voteFinished() )
+                                                <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-green-600 bg-gray-200">
+                                                    <span class="text-green-600">@if (! $poll->voteStart() )Голосование еще не началось@elseГолосование активно@endif</span>
                                                 </div>
                                             @else
-                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <a href="{{$poll->voteFinished()|| ! $poll->voteStart() ? '#' : route('poll.display',[$poll->id])  }}" class="@if ($poll->voteFinished() || ! $poll->voteStart()) disabled @else text-indigo-600 hover:text-indigo-900 @endif">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
+                                                <div class="px-6 py-4 whitespace-wrap text-left text-sm font-medium text-red-600 bg-gray-200">
+                                                    Голосование окончено {{date_create($poll->finished)->format('d-m-Y H:i:s')}}
                                                 </div>
                                             @endif
                                         @else
-                                            @if (!$poll->isReportDone())
-                                                <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                                                    <span class="text-red-600">Вы уже проголосовали</span>
-                                                </div>
+                                            <div class="px-6 py-4 whitespace-wrap text-left text-sm font-medium text-red-600 bg-gray-200">
+                                                Голосование не доступно
+                                            </div>
+                                        @endif
+
+                                        @if (!$poll->isInformationPost())
+                                            @if (! $poll->authUserVote() && auth()->user()->canVote())
+                                                @if ($poll->isGovernanceMeeting() && !auth()->user()->isGovernance())
+                                                    <div class="px-6 py-4 whitespace-wrap text-right text-sm font-medium">
+                                                        Доступно только для членов Правления
+                                                    </div>
+                                                @else
+                                                    <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                        <a href="{{$poll->voteFinished()|| ! $poll->voteStart() ? '#' : route('poll.display',[$poll->id])  }}" class="@if ($poll->voteFinished() || ! $poll->voteStart()) disabled @else text-indigo-600 hover:text-indigo-900 @endif">@if (!$poll->isReportDone())Голосовать@elseДать оценку@endif</a>
+                                                    </div>
+                                                @endif
                                             @else
-                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <a href="{{$poll->voteFinished()|| ! $poll->voteStart() ? '#' : route('poll.display',[$poll->id])  }}" class="@if ($poll->voteFinished() || ! $poll->voteStart()) disabled @else text-indigo-600 hover:text-indigo-900 @endif">Дать оценку</a>
-                                                </div>
+                                                @if (!$poll->isReportDone())
+                                                    <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                                                        <span class="text-red-600">Вы уже проголосовали</span>
+                                                    </div>
+                                                @else
+                                                    <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                        <a href="{{$poll->voteFinished()|| ! $poll->voteStart() ? '#' : route('poll.display',[$poll->id])  }}" class="@if ($poll->voteFinished() || ! $poll->voteStart()) disabled @else text-indigo-600 hover:text-indigo-900 @endif">Дать оценку</a>
+                                                    </div>
+                                                @endif
                                             @endif
                                         @endif
 
                                     <!-- show.blade.php -->
-                                        <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
-                                            <a href="{{ $poll->path() }}" class="text-indigo-600 hover:text-indigo-900">Просмотр</a>
-                                        </div>
+                                        @if (!$poll->isInformationPost())
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
+                                                <a href="{{ $poll->path() }}" class="text-indigo-600 hover:text-indigo-900">Просмотр</a>
+                                            </div>
+                                        @else
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <a href="{{ $poll->path() }}" class="text-indigo-600 hover:text-indigo-900">Просмотр</a>
+                                            </div>
+                                        @endif
 
                                         @if (auth()->user()->canManageItems() )
-                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium @if( $poll->isInformationPost()) bg-gray-200 @endif">
                                                 <a href="{{route('poll.edit',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
                                             </div>
                                         @else
                                             @if( $poll->isSuggestedQuestion())
 
                                             @else
-                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium @if( $poll->isInformationPost()) bg-gray-200 @endif">
                                                     <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр списком</a>
                                                 </div>
                                             @endif
                                         @endif
-                                        <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium  @if( !$poll->isSuggestedQuestion()) bg-gray-200 @endif">
-                                            <a href="{{route('poll.results',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
-                                        </div>
+
+                                        @if (!$poll->isInformationPost())
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium  @if( !$poll->isInformationPost()) bg-gray-200 @endif">
+                                                <a href="{{route('poll.results',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
+                                            </div>
+                                        @endif
+
                                         @if (auth()->user()->canManageItems() && !$poll->voteFinished() || $poll->ownPollAuthor())
-                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium @if( $poll->isSuggestedQuestion()) bg-gray-200 @endif">
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <form method="POST" action="{{ route('poll.delete',[$poll->id]) }}">
                                                     @csrf
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -318,7 +361,7 @@
         @if (auth()->user()->canManageItems())
             <div class="xl:inline-flex">
                 <div>
-                    <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::PUBLIC_MEETING_TSN ])}}">
+                    <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::PUBLIC_MEETING ])}}">
                         @csrf
                         <a href="#"
                            onclick="event.preventDefault();
@@ -329,7 +372,7 @@
                     </form>
                 </div>
                 <div>
-                    <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::GOVERNANCE_MEETING_TSN ])}}">
+                    <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::GOVERNANCE_MEETING ])}}">
                         @csrf
                         <a href="#"
                            onclick="event.preventDefault();
@@ -357,6 +400,17 @@
                                                             this.closest('form').submit();"
                            class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                             {{ __('Отчет о проделанной работе') }}
+                        </a>
+                    </form>
+                </div>
+                <div>
+                    <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::INFORMATION_POST])}}">
+                        @csrf
+                        <a href="#"
+                           onclick="event.preventDefault();
+                                                            this.closest('form').submit();"
+                           class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                            {{ __('Информационный пост') }}
                         </a>
                     </form>
                 </div>

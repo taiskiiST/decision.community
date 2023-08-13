@@ -53,14 +53,14 @@ class PollsController extends Controller
     public function create(Request $request)
     {
         switch ($request->type_of_poll) {
-            case TypeOfPoll::PUBLIC_MEETING_TSN:
+            case TypeOfPoll::PUBLIC_MEETING:
             {
-                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll', '=', TypeOfPoll::PUBLIC_MEETING_TSN)->get();
+                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll', '=', TypeOfPoll::PUBLIC_MEETING)->get();
                 break;
             }
-            case TypeOfPoll::GOVERNANCE_MEETING_TSN:
+            case TypeOfPoll::GOVERNANCE_MEETING:
             {
-                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll', '=', TypeOfPoll::GOVERNANCE_MEETING_TSN)->get();
+                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll', '=', TypeOfPoll::GOVERNANCE_MEETING)->get();
                 break;
             }
             case TypeOfPoll::SUGGESTED_POLL:
@@ -79,6 +79,11 @@ class PollsController extends Controller
             case TypeOfPoll::REPORT_DONE:
             {
                 $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll', '=', TypeOfPoll::REPORT_DONE)->get();
+                break;
+            }
+            case TypeOfPoll::INFORMATION_POST:
+            {
+                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll', '=', TypeOfPoll::INFORMATION_POST)->get();
                 break;
             }
         }
@@ -1208,13 +1213,13 @@ class PollsController extends Controller
         $cnt = 1;
         foreach ($out as $user) {
             if ($user->canVote() && ($user->isHaveCompany(session('current_company')))) {
-                if ($poll->isGovernanceMeetingTSN() && $user->isGovernance()) {
+                if ($poll->isGovernanceMeeting() && $user->isGovernance()) {
                     $str_class = ($cnt % 2) ? 'bg-white' : 'bg-gray-200';
                     $str .= '<tr class=\'bg-white bg-gray-100 border-b border-gray-400 text-wrap ' . $str_class . '\'>';
                     $str .= '<td class=\'text-center\'>' . $cnt . '</td><td>' . $user->name . '</td><td>' . $user->address . '</td><td>' . $user->phone . '</td><td>';
                     $str .= '</tr>';
                     ++$cnt;
-                } elseif (!$poll->isGovernanceMeetingTSN()) {
+                } elseif (!$poll->isGovernanceMeeting()) {
                     $str_class = ($cnt % 2) ? 'bg-white' : 'bg-gray-200';
                     $str .= '<tr class=\'bg-white bg-gray-100 border-b border-gray-400 text-wrap ' . $str_class . '\'>';
                     $str .= '<td class=\'text-center\'>' . $cnt . '</td><td>' . $user->name . '</td><td>' . $user->address . '</td><td>' . $user->phone . '</td><td>';

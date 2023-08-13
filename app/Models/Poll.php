@@ -35,14 +35,14 @@ class Poll extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function isPublicMeetingTSN(): bool
+    public function isPublicMeeting(): bool
     {
-        return ($this->getTypeOfPoll() == TypeOfPoll::PUBLIC_MEETING_TSN) ? true : false;
+        return ($this->getTypeOfPoll() == TypeOfPoll::PUBLIC_MEETING) ? true : false;
     }
 
-    public function isGovernanceMeetingTSN(): bool
+    public function isGovernanceMeeting(): bool
     {
-        return ($this->getTypeOfPoll() == TypeOfPoll::GOVERNANCE_MEETING_TSN) ? true : false;
+        return ($this->getTypeOfPoll() == TypeOfPoll::GOVERNANCE_MEETING) ? true : false;
     }
 
     public function isReportDone(): bool
@@ -53,6 +53,11 @@ class Poll extends Model
     public function isSuggestedQuestion(): bool
     {
         return ($this->getTypeOfPoll() == TypeOfPoll::SUGGESTED_POLL) ? true : false;
+    }
+
+    public function isInformationPost(): bool
+    {
+        return ($this->getTypeOfPoll() == TypeOfPoll::INFORMATION_POST) ? true : false;
     }
 
 //    public function isVoteForTSN(): bool

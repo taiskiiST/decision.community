@@ -6,7 +6,7 @@ import FilePreview from './FilePreview';
 import AnswerPreview from "./AnswerPreview";
 import FormErrors from "./FormErrors";
 
-const { poll, count_question, current_num_question, csrf_token, question, files, answer, error, isReport, isSuggestedQuestion } = window.TSN || {};
+const { poll, count_question, current_num_question, csrf_token, question, files, answer, error, isReport, isInformationPost, isSuggestedQuestion } = window.TSN || {};
 
 class Question extends React.Component {
 
@@ -35,25 +35,29 @@ class Question extends React.Component {
                     // {guid: 'guid', text: 'File Name', fileUpload: '', isValidText: false, isValidFileSize: false, isValidFileName: false, hideDragAndDrop:'',fileInputRef:''},
                 ],
 
-                answers: ! isReport ?  [
-                    // {guid: 'guid', text: 'Answer', isValidText: false}
-                    {
-                        answer_id: uuidv4(),
-                        text: 'За',
-                        isValidText: true
-                    },
-                    {
-                        answer_id: uuidv4(),
-                        text: 'Против',
-                        isValidText: true
-                    },
-                    {
-                        answer_id: uuidv4(),
-                        text: 'Воздержался',
-                        isValidText: true
-                    },
-                ] :
-                    [
+                answers: ! isReport ?
+                            isInformationPost ? [
+
+                                ]
+                                : [
+                                    // {guid: 'guid', text: 'Answer', isValidText: false}
+                                    {
+                                        answer_id: uuidv4(),
+                                        text: 'За',
+                                        isValidText: true
+                                    },
+                                    {
+                                        answer_id: uuidv4(),
+                                        text: 'Против',
+                                        isValidText: true
+                                    },
+                                    {
+                                        answer_id: uuidv4(),
+                                        text: 'Воздержался',
+                                        isValidText: true
+                                    },
+                                ]
+                    : [
                         // {guid: 'guid', text: 'Answer', isValidText: false}
                         {
                             answer_id: uuidv4(),
@@ -137,7 +141,7 @@ class Question extends React.Component {
         }
 
 
-
+        //console.log(this.state);
     }
 
     submitForm(e) {
@@ -902,7 +906,7 @@ class Question extends React.Component {
 
                                     <div id="answer_container">
                                         {
-                                            this.state.answers.map((answer,index) => (
+                                            !isInformationPost && this.state.answers.map((answer,index) => (
                                                 <AnswerPreview key={answer.answer_id}
                                                                answer={answer}
                                                                num_of_question={count_question+1}
@@ -917,9 +921,9 @@ class Question extends React.Component {
                                         }
                                     </div>
 
-                                    <AddAnswerToQuestion handleAddingAnswer={this.handleAddingAnswer}
+                                { !isInformationPost && <AddAnswerToQuestion handleAddingAnswer={this.handleAddingAnswer}
                                                          isReport={isReport}
-                                    />
+                                    />}
 
 
                             </div>

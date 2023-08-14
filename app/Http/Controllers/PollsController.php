@@ -1194,7 +1194,13 @@ class PollsController extends Controller
         }
         $out = [];
 
-        $out = $poll->peopleThatDidNotVote();
+        if($poll->isGovernanceMeeting()){
+            $out = $poll->peopleThatDidNotVoteGovernance();
+        }else{
+            $out = $poll->peopleThatDidNotVoteVoters();
+        }
+
+
         $str = '<table class=\'min-w-full divide-y divide-gray-200\'>';
         $str .= '<thead class=\'bg-gray-50\'>
                         <tr>

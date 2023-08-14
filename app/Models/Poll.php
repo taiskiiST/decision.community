@@ -125,6 +125,27 @@ class Poll extends Model
         return User::whereNotIn('id', $usersIdsThatVoted)->get();
     }
 
+    public function peopleThatDidNotVoteGovernance(): Collection
+    {
+        $questions = $this->questions;
+        $questions = $questions->pluck('id')->toArray();
+        $usersIdsThatVoted = Vote::whereIn('question_id', $questions)->select('user_id')->get();
+
+        //return User::whereNotIn('id', $usersIdsThatVoted)->where('is_category', false)->get();
+
+        return Company::find(session('current_company')->id)->users()->whereNotIn('id', $usersIdsThatVoted)->where('permissions','LIKE','%governance%')->get();
+    }
+
+    public function peopleThatDidNotVoteVoters(): Collection
+    {
+        $questions = $this->questions;
+        $questions = $questions->pluck('id')->toArray();
+        $usersIdsThatVoted = Vote::whereIn('question_id', $questions)->select('user_id')->get();
+
+        //return User::whereNotIn('id', $usersIdsThatVoted)->where('is_category', false)->get();
+        return Company::find(session('current_company')->id)->users()->whereNotIn('id', $usersIdsThatVoted)->where('permissions','LIKE','%voter%')->get();
+    }
+
     public function peopleThatVote(): Collection
     {
         $questions = $this->questions;

@@ -864,7 +864,6 @@ class PollsController extends Controller
             return redirect()->route('polls.index');
         }
         $inputs = $request->input();
-        //dd($inputs);
         foreach ($inputs as $key => $input) {
             if (strpos($key, 'question_text_') === false) {
             } else {
@@ -937,11 +936,13 @@ class PollsController extends Controller
                             'text_for_file' => $value,
                         ]);
                         array_push($indexes_of_files, $file->id);
+                        break;
                     }
                 }
 
                 if ($request->hasFile($file_id) && $request->file($file_id)->isValid()) {
                     if ($question->question_files()->where('id', $file_id)->count() > 0) {
+                        //ddd($file);
                         Storage::disk('public')->delete($file->path_to_file);
                         $file_new = $question->question_files()->updateOrInsert(
                             ['id' => $file_id, 'question_id' => $question->id],
@@ -972,6 +973,8 @@ class PollsController extends Controller
                     }
                 }
             }
+            //ddd($indexes_of_files);
+
             if (strpos($key, 'text_answer_') === false) {
             } else {
                 $answer_id = preg_replace('/text_answer_/', '', $key);

@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { EditorState} from 'draft-js';
+import { convertFromRaw } from 'draft-js';
+import { convertToRaw } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import AddFileToQuestion from "./AddFileToQuestion";
 import AddAnswerToQuestion from "./AddAnswerToQuestion";
 import FilePreview from './FilePreview';
@@ -13,13 +18,14 @@ class Question extends React.Component {
     constructor(props) {
         //console.log(isSuggestedQuestion);
         super(props);
+
         //this.props.clickTextForFile = false;
         this.handleAddingFile = this.handleAddingFile.bind(this);
         this.handleAddingAnswer = this.handleAddingAnswer.bind(this);
         this.handleDeletingFile = this.handleDeletingFile.bind(this);
         this.handleDeletingAnswer = this.handleDeletingAnswer.bind(this);
 
-        this.handleQuestionTextInput = this.handleQuestionTextInput.bind(this);
+        //this.handleQuestionTextInput = this.handleQuestionTextInput.bind(this);
         this.handleFileTextInput = this.handleFileTextInput.bind(this);
         this.handleAnswerInput = this.handleAnswerInput.bind(this);
         this.submitForm = this.submitForm.bind(this);
@@ -28,13 +34,16 @@ class Question extends React.Component {
         this.handleQuestionPublic = this.handleQuestionPublic.bind(this);
         this.handleQuestionEditing = this.handleQuestionEditing.bind(this);
 
+        this.onEditorStateChange = this.onEditorStateChange.bind(this);
+
         this.form = React.createRef();
+
         if (!question) {
             this.state = {
                 fileUploads: [
                     // {guid: 'guid', text: 'File Name', fileUpload: '', isValidText: false, isValidFileSize: false, isValidFileName: false, hideDragAndDrop:'',fileInputRef:''},
                 ],
-
+                editorStateText: EditorState.createEmpty(),
                 answers: ! isReport ?
                             isInformationPost ? [
 
@@ -120,7 +129,8 @@ class Question extends React.Component {
                 fileUploads: files_whith_ref,
                 answers: answer,
                 inputTextOfQuestion: {
-                    text: question['text'], isValid: true
+                    text: question['text'],
+                    isValid: true
                 },
                 formErrors: {
                     inputTextOfQuestion: '',
@@ -136,12 +146,10 @@ class Question extends React.Component {
                 isValidAllUploadFiles: true,
                 isValidAllAnswers: true,
                 isPublic: question['public']?'checked':'',
-                isEditing: question['is_editing']?'':'checked'
+                isEditing: question['is_editing']?'':'checked',
+                editorStateText: Array.from(question['text'])[0] == '{'  ? EditorState.createWithContent(convertFromRaw(JSON.parse(question['text']))) : EditorState.createWithText((question['text'])),
             };
         }
-
-
-        //console.log(this.state);
     }
 
     submitForm(e) {
@@ -158,19 +166,20 @@ class Question extends React.Component {
         // }
     }
 
-    handleQuestionTextInput = (e) => {
-        const value = e.target.value;
-        this.setState((oldState) => ({
-                ...oldState,
-            inputTextOfQuestion:
-                    {
-                        ...oldState.inputTextOfQuestion,
-                        text: value
-                    }
-
-            }), this.validateFormTextQuestion(value)
-        )
-    }
+    // handleQuestionTextInput = (e) => {
+    //     console.log (e);
+    //     const value = e.blocks[0];//.text;
+    //     this.setState((oldState) => ({
+    //             ...oldState,
+    //         inputTextOfQuestion:
+    //                 {
+    //                     ...oldState.inputTextOfQuestion,
+    //                     text: value
+    //                 }
+    //
+    //         }), this.validateFormTextQuestion(value)
+    //     )
+    // }
 
     validateFormTextQuestion(value) {
         if (value.length > 0 ){
@@ -679,8 +688,9 @@ class Question extends React.Component {
     validateForm() {
         // console.log('this.state.inputTextOfQuestion.isValid', this.state.inputTextOfQuestion.isValid);
          //console.log('this.state.isValidAllUploadFiles: ', this.state.isValidAllUploadFiles);
-        this.setState({formValid: this.state.inputTextOfQuestion.isValid
-                                    &&   this.state.isValidAllTextOfFiles
+        this.setState({formValid:
+                this.state.inputTextOfQuestion.isValid  &&
+                this.state.isValidAllTextOfFiles
                                     &&   this.state.isValidAllUploadFiles
                                     &&   this.state.isValidAllAnswers
         });
@@ -800,8 +810,25 @@ class Question extends React.Component {
 
        //console.log('this.state: ',this.state);
     }
+    onEditorStateChange = (editorStateText) => {
+        //console.log( JSON.stringify(editorStateText.getCurrentContent()) ;
+        //console.log( JSON.stringify(editorStateText.getEntityMap()) );
+        this.setState((oldState) => ({
+            ...oldState,
+            editorStateText: editorStateText
+        }), this.validateFormTextQuestion(editorStateText.getCurrentContent().getBlockMap().first()['text']));
 
+        //{`question_text_${question.id}`}
+        //console.log(question);
+        if (question['id']){
+            document.getElementById('question_text_' + question['id']).value = JSON.stringify(convertToRaw(editorStateText.getCurrentContent()));
+        }else {
+            document.getElementById('question_text_0').value = JSON.stringify(convertToRaw(editorStateText.getCurrentContent()));
+        }
+
+    };
     render() {
+        const { editorStateText } = this.state;
         return (
             <div className="shadow overflow-hidden sm:rounded-md">
                 <div className="panel panel-default">
@@ -860,24 +887,67 @@ class Question extends React.Component {
                                                 вопроса №{current_num_question} (поддерживается HTML формат) </label>
                                             }
                                         </div>
-                                        {!question && <textarea type="text"
-                                                                name="question_text_0"
-                                                                id="question_text_0"
-                                                                autoComplete="given-name"
-                                                                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                                                value={this.state.inputTextOfQuestion.text}
-                                                                onChange={this.handleQuestionTextInput}
-                                            ></textarea>
-                                        }
-                                        {question && <textarea type="text"
-                                                                name={`question_text_${question.id}`}
-                                                                id={`question_text_${question.id}`}
-                                                                autoComplete="given-name"
-                                                                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                                                value={this.state.inputTextOfQuestion.text}
-                                                                onChange={this.handleQuestionTextInput}
-                                        ></textarea>
-                                        }
+                                        {!question && <div className="rdw-storybook-root">
+                                            <Editor
+                                                name="question_text_0"
+                                                id="question_text_0"
+                                                defaultEditorState={this.state.editorStateText}
+                                                toolbarClassName="rdw-storybook-toolbar"
+                                                wrapperClassName="rdw-storybook-wrapper"
+                                                editorClassName="rdw-storybook-editor"
+                                                onEditorStateChange={this.onEditorStateChange}
+                                                toolbarStyle={{
+                                                    border: "1px solid #ccc",
+                                                    borderRadius: "0.313rem",
+                                                }}
+                                                editorStyle={{
+                                                    padding: "0.625rem",
+                                                    fontFamily: "montserrat",
+                                                    border: "1px solid #ccc",
+                                                    marginTop: "1rem",
+                                                    backgroundColor: "#fff",
+                                                    borderRadius: "0.625rem",
+                                                    minHeight: "10rem",
+                                                    boxShadow: "0px 2px 4px 0px hsla(0, 0%, 0%, 0.451)",
+                                                }}
+                                            />
+                                            <input hidden
+                                                   name="question_text_0"
+                                                   id="question_text_0"
+                                                   defaultValue={this.state.editorStateText}
+                                            />
+                                        </div>}
+
+                                        {question && <div className="rdw-storybook-root">
+                                            <Editor
+                                                name={`question_text_${question.id}`}
+                                                id={`question_text_${question.id}`}
+                                                defaultEditorState={this.state.editorStateText}
+                                                //contentState={this.state.editorStateText}
+                                                wrapperClassName="demo-wrapper"
+                                                editorClassName="demo-editor"
+                                                onEditorStateChange={this.onEditorStateChange}
+                                                toolbarStyle={{
+                                                    border: "1px solid #ccc",
+                                                    borderRadius: "0.313rem",
+                                                }}
+                                                editorStyle={{
+                                                    padding: "0.625rem",
+                                                    fontFamily: "montserrat",
+                                                    border: "1px solid #ccc",
+                                                    marginTop: "1rem",
+                                                    backgroundColor: "#fff",
+                                                    borderRadius: "0.625rem",
+                                                    minHeight: "10rem",
+                                                    boxShadow: "0px 2px 4px 0px hsla(0, 0%, 0%, 0.451)",
+                                                }}
+                                            />
+                                            <input hidden
+                                                   name={`question_text_${question.id}`}
+                                                   id={`question_text_${question.id}`}
+                                                   defaultValue={this.state.editorStateText}
+                                            />
+                                        </div>}
                                     </div>
 
                                     <div id="files_container">

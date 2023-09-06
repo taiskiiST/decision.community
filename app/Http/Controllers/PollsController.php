@@ -863,6 +863,7 @@ class PollsController extends Controller
         if (!session('current_company')) {
             return redirect()->route('polls.index');
         }
+        //dd($request->input());
         $inputs = $request->input();
         foreach ($inputs as $key => $input) {
             if (strpos($key, 'question_text_') === false) {
@@ -1575,12 +1576,23 @@ class PollsController extends Controller
      */
     public function edit(Poll $poll, $error = '')
     {
+        foreach ($poll->questions as $question) {
+            $cnt_files_in_question [$question->id] = $question->question_files()->count();
+        }
+        if ($poll->questions->count() == 0) {
+            $cnt_files_in_question = [];
+        }
+
         \JavaScript::put([
             'poll'          => $poll->id,
             'csrf_token'    => csrf_token(),
             'file_protocol' => $poll->protocol ? $poll->protocol : '',
             'is_admin'      => auth()->user()->isAdmin(),
             'error'         => $error,
+            'questions'     => $poll->questions,
+            'cnt_files_in_question' => $cnt_files_in_question,
+            'poll_finished' => $poll->voteFinished(),
+            'poll_full'          => $poll,
         ]);
 
         return view('polls.update', [
@@ -1590,10 +1602,22 @@ class PollsController extends Controller
 
     public function agenda(Poll $poll)
     {
+        foreach ($poll->questions as $question) {
+            $cnt_files_in_question [$question->id] = $question->question_files()->count();
+        }
+        if ($poll->questions->count() == 0) {
+            $cnt_files_in_question = [];
+        }
         \JavaScript::put([
             'poll'          => $poll->id,
             'csrf_token'    => csrf_token(),
             'file_protocol' => $poll->protocol ? $poll->protocol : '',
+            'is_admin'      => auth()->user()->isAdmin(),
+            'questions'     => $poll->questions,
+            'cnt_files_in_question' => $cnt_files_in_question,
+            'poll_finished' => $poll->voteFinished(),
+            'poll_full'          => $poll,
+
         ]);
 
         return view('polls.update', [

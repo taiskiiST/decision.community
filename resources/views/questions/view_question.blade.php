@@ -29,7 +29,7 @@
                 <a href="{{route('poll.agenda',['poll'=> $poll->id])}}" class="text-indigo-600 hover:text-indigo-900">{{$poll->name}}</a>
             </h1>
             <h3 class="text-lg leading-6 font-medium text-gray-900">
-                {!! $question->text !!}
+                <div id="ViewQuestion"></div>
             </h3>
         </div>
         <div class="px-4 py-5 sm:px-6">
@@ -306,6 +306,7 @@
 
 @section('scripts')
     @parent()
+    <script src="{!! mix('/js/ViewQuestion.js') !!}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.228/pdf.min.js"></script>
     <script>

@@ -108,7 +108,12 @@ class QuestionsController extends Controller
         if (!session('current_company') && !$question->public) {
             return redirect()->route('polls.index');
         }
+        \JavaScript::put([
+            'question'             => isset($question)
+                ? $question
+                : '',
 
+        ]);
         if ($question->public) {
             return view('questions.view_question', [
                 'question' => $question,

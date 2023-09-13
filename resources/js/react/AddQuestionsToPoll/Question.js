@@ -12,9 +12,8 @@ import AnswerPreview from "./AnswerPreview";
 import FormErrors from "./FormErrors";
 
 const { poll, count_question, current_num_question, csrf_token, question, files, answer, error, isReport, isInformationPost, isSuggestedQuestion } = window.TSN || {};
-
+var ChangeTextFieldFlag = false;
 class Question extends React.Component {
-
     constructor(props) {
         //console.log(isSuggestedQuestion);
         super(props);
@@ -583,7 +582,7 @@ class Question extends React.Component {
         if (!event.target.files[0]){
             return false
         }
-        console.log(event.target.files[0].type );
+        //console.log(event.target.files[0].type );
         switch (event.target.files[0].type) {
             case 'image/png':
                 type = 'img';
@@ -599,10 +598,12 @@ class Question extends React.Component {
                 break;
         }
         newFile = this.checkFileTypeSizeName(type, event.target.files, id);
-        //console.log('newFile ', newFile);
-        this.setState({
+
+        this.setState((oldState) => ({
+            ...oldState,
             fileUploads: newFile
-        })
+        }), this.validateForm);
+        console.log('this.state.fileUploads', this.state.fileUploads);
     }
 
     handleAnswerInput = (e) => {
@@ -813,6 +814,7 @@ class Question extends React.Component {
     onEditorStateChange = (editorStateText) => {
         //console.log( JSON.stringify(editorStateText.getCurrentContent()) ;
         //console.log( JSON.stringify(editorStateText.getEntityMap()) );
+        ChangeTextFieldFlag = true;
         this.setState((oldState) => ({
             ...oldState,
             editorStateText: editorStateText
@@ -828,7 +830,7 @@ class Question extends React.Component {
 
     };
     render() {
-        const { editorStateText } = this.state;
+
         return (
             <div className="shadow overflow-hidden sm:rounded-md">
                 <div className="panel panel-default">
@@ -914,7 +916,7 @@ class Question extends React.Component {
                                             <input hidden
                                                    name="question_text_0"
                                                    id="question_text_0"
-                                                   defaultValue={this.state.editorStateText}
+                                                   defaultValue={ChangeTextFieldFlag ? this.state.editorStateText : JSON.stringify(convertToRaw(this.state.editorStateText.getCurrentContent()))  }
                                             />
                                         </div>}
 
@@ -945,7 +947,7 @@ class Question extends React.Component {
                                             <input hidden
                                                    name={`question_text_${question.id}`}
                                                    id={`question_text_${question.id}`}
-                                                   defaultValue={this.state.editorStateText}
+                                                   defaultValue={ChangeTextFieldFlag ? this.state.editorStateText : JSON.stringify(convertToRaw(this.state.editorStateText.getCurrentContent()))  }
                                             />
                                         </div>}
                                     </div>

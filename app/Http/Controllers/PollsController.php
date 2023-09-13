@@ -1093,6 +1093,21 @@ class PollsController extends Controller
     //// polls/7
     public function show(Poll $poll)
     {
+        $question_hash_speakers = [];
+        $question_hash_files = [];
+        foreach ($poll->questions()->get() as $question){
+            $question_hash_speakers [$question->id] = $question->speakers()->get();
+            $question_hash_files [$question->id] = $question->question_files;
+            //dd($question->question_files);
+        }
+
+        \JavaScript::put([
+            'questions'     => $poll->questions,
+            'is_admin'      => auth()->user()->isAdmin(),
+            'users'         => Company::find(session('current_company')->id)->users()->get(),
+            'question_hash_speakers' => $question_hash_speakers,
+            'question_hash_files' => $question_hash_files,
+        ]);
         return view('polls.display', [
             'poll'        => $poll,
             'displayMode' => true,

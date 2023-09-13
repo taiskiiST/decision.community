@@ -674,6 +674,7 @@ var _ref = window.TSN || {},
   isReport = _ref.isReport,
   isInformationPost = _ref.isInformationPost,
   isSuggestedQuestion = _ref.isSuggestedQuestion;
+var ChangeTextFieldFlag = false;
 var Question = /*#__PURE__*/function (_React$Component) {
   _inherits(Question, _React$Component);
   var _super = _createSuper(Question);
@@ -719,7 +720,7 @@ var Question = /*#__PURE__*/function (_React$Component) {
       if (!event.target.files[0]) {
         return false;
       }
-      console.log(event.target.files[0].type);
+      //console.log(event.target.files[0].type );
       switch (event.target.files[0].type) {
         case 'image/png':
           type = 'img';
@@ -735,10 +736,12 @@ var Question = /*#__PURE__*/function (_React$Component) {
           break;
       }
       newFile = _this.checkFileTypeSizeName(type, event.target.files, id);
-      //console.log('newFile ', newFile);
-      _this.setState({
-        fileUploads: newFile
-      });
+      _this.setState(function (oldState) {
+        return _objectSpread(_objectSpread({}, oldState), {}, {
+          fileUploads: newFile
+        });
+      }, _this.validateForm);
+      console.log('this.state.fileUploads', _this.state.fileUploads);
     });
     _defineProperty(_assertThisInitialized(_this), "handleAnswerInput", function (e) {
       var name = e.target.name;
@@ -797,6 +800,7 @@ var Question = /*#__PURE__*/function (_React$Component) {
     _defineProperty(_assertThisInitialized(_this), "onEditorStateChange", function (editorStateText) {
       //console.log( JSON.stringify(editorStateText.getCurrentContent()) ;
       //console.log( JSON.stringify(editorStateText.getEntityMap()) );
+      ChangeTextFieldFlag = true;
       _this.setState(function (oldState) {
         return _objectSpread(_objectSpread({}, oldState), {}, {
           editorStateText: editorStateText
@@ -1417,7 +1421,6 @@ var Question = /*#__PURE__*/function (_React$Component) {
     key: "render",
     value: function render() {
       var _this3 = this;
-      var editorStateText = this.state.editorStateText;
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: "shadow overflow-hidden sm:rounded-md",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
@@ -1517,7 +1520,7 @@ var Question = /*#__PURE__*/function (_React$Component) {
                         hidden: true,
                         name: "question_text_0",
                         id: "question_text_0",
-                        defaultValue: this.state.editorStateText
+                        defaultValue: ChangeTextFieldFlag ? this.state.editorStateText : JSON.stringify((0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertToRaw)(this.state.editorStateText.getCurrentContent()))
                       })]
                     }), question && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
                       className: "rdw-storybook-root",
@@ -1548,7 +1551,7 @@ var Question = /*#__PURE__*/function (_React$Component) {
                         hidden: true,
                         name: "question_text_".concat(question.id),
                         id: "question_text_".concat(question.id),
-                        defaultValue: this.state.editorStateText
+                        defaultValue: ChangeTextFieldFlag ? this.state.editorStateText : JSON.stringify((0,draft_js__WEBPACK_IMPORTED_MODULE_1__.convertToRaw)(this.state.editorStateText.getCurrentContent()))
                       })]
                     })]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {

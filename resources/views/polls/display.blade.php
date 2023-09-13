@@ -85,106 +85,8 @@
                         </button>
                     </div>
                 </nav>
+                <div id="displayQuestionsEditor"> </div>
 
-                @foreach($poll->questions as $question)
-                    @if (auth()->user()->isAdmin())
-                        <div class="mt-10 sm:mt-0 {!! $loop->first ? '' : 'hidden' !!}" id="speaker_question_{!! $question->id !!}">
-                            <div class="p-3 md:col-span-2">
-                                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 p-5">
-                                    <div>
-                                        <div>Выступающие</div>
-                                        <div>
-                                            <select name="speakers{!! $question->id !!}[]"
-                                                    class="mt-1 block w-full py-1 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                    required multiple
-                                                    id="select_speaker_question_{!! $question->id !!} ">
-                                                @foreach($users as $user)
-
-                                                    @if(($question->speakers()->count() > 0 ) && in_array($user->id, explode(',',$question->speakers()->first()->users_speaker_id) )  )
-                                                        <option value="{{$user->id}}" selected>{{$user->name}}</option>
-                                                    @else
-                                                        <option value="{{$user->id}}">{{$user->name}}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg {!! $loop->first ? '' : 'hidden' !!}" id="question_{!! $question->id !!}">
-                        <div class="px-4 py-5 sm:px-6">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">
-                                {{$loop->index + 1}}) {!! $question->text !!}
-                            </h3>
-                        </div>
-                        <div class="px-4 py-5 sm:px-6">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">
-                                @foreach($question->question_files as $file)
-                                    <p class="@if (!$loop->first) pt-10 @endif">Описание: {{$file->text_for_file}}</p>
-                                    @if (strpos($file->path_to_file, '.pdf') === false)
-                                    @else
-
-                                        <object data="{{Storage::url($file->path_to_file) }}" type="application/pdf" width="100%" class="lg:h-96 xl:h-96 2xl:h-96">
-                                            <div id="pdf-main-container-{{$file->id}}" >
-                                                <button id="show-pdf-button-{{$file->id}}" value="{{Storage::url($file->path_to_file)}}" lang="{{$file->id}}" class="hidden files_pdf">Show PDF</button>
-                                                <div id="pdf-loader-{{$file->id}}">Загружается...</div>
-                                                <div id="pdf-contents-{{$file->id}}">
-                                                    <div id="pdf-meta-{{$file->id}}">
-                                                        <div class="inline-flex flex-row w-full place-content-between">
-                                                            <div class="py-3">
-                                                                <button id="pdf-prev-{{$file->id}}" lang="{{$file->id}}" value="{{Storage::url($file->path_to_file)}}" onclick="clickPrev({{$file->id}})" class="pdf-prev mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Назад</button>
-                                                                <button id="pdf-next-{{$file->id}}" lang="{{$file->id}}" value="{{Storage::url($file->path_to_file)}}" onclick="clickNext({{$file->id}})" class="pdf-next mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Вперед</button>
-                                                            </div>
-                                                            <div class="px-1 py-7 sm:px-6 flex-row-reverse ">
-                                                                <div id="page-count-container-{{$file->id}}" class="inline-flex">Страница&nbsp;<div id="pdf-current-page-{{$file->id}}"></div>/<div id="pdf-total-pages-{{$file->id}}"></div></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="div_canvas-{{$file->id}}" style="width:100%;height:500px;overflow-x:scroll;overflow-y:scroll;">
-                                                        <canvas id="pdf-canvas-{{$file->id}}" class="w-full" style="min-width:500px;"></canvas>
-                                                    </div>
-                                                    <div id="page-loader-{{$file->id}}">Загружается страница...</div>
-                                                </div>
-                                                <button id="download_file_{{$file->id}}"><a href="{{Storage::url($file->path_to_file)}}" target="_blank" class="mt-4 inline-flex items-center px-2 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Открыть в отдельном окне</a></button>
-                                            </div>
-                                        </object>
-                                    @endif
-                                    @if (preg_match('/\.jpg|\.png/', $file->path_to_file) )
-                                        <img src={{Storage::url($file->path_to_file)}} />
-                                    @endif
-                                    @if (preg_match('/\.jpg|\.png|\.pdf/', $file->path_to_file) )
-                                    @else
-                                        <a href={{Storage::url($file->path_to_file)}} target="_blank" className="bg-violet-500 hover:bg-violet-400 active:bg-violet-600 focus:outline-none focus:ring focus:ring-violet-300">Скачать</a>
-                                    @endif
-                                @endforeach
-                            </h3>
-                        </div>
-                        @if (!$displayMode && auth()->user()->canVote() )
-                        <div>
-                            <fieldset>
-                                <div class="bg-white rounded-md -space-y-px">
-                                @foreach($question->answers as $answer)
-                                    <!-- Checked: "bg-indigo-50 border-indigo-200 z-10", Not Checked: "border-gray-200" -->
-                                        <label class="border-gray-200 rounded-tl-md rounded-tr-md relative border p-4 flex cursor-pointer">
-                                            <input type="radio" name="question_{{$question->id}}" value="{{ $answer->id }}" class="h-4 w-4 mt-0.5 cursor-pointer text-indigo-600 border-gray-300 focus:ring-indigo-500 input-radio" aria-labelledby="privacy-setting-0-label" aria-describedby="privacy-setting-0-description" {{ old('question_'.$question->id) ? 'checked': '' }}">
-
-                                            <div class="ml-3 flex flex-col">
-                                                <!-- Checked: "text-indigo-900", Not Checked: "text-gray-900" -->
-                                                <span id="privacy-setting-0-label" class="text-gray-900 block text-sm font-medium">
-                                                    {{ $answer->text  }}
-                                                </span>
-                                            </div>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </fieldset>
-                        </div>
-                        @endif
-                    </div>
-                @endforeach
                 <br />
             <!-- This example requires Tailwind CSS v2.0+ -->
                 <nav class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0">
@@ -278,8 +180,11 @@
             @endif
         @endif
     @endif
+@endsection
 
-
+@section('scripts')
+    @parent()
+    <script src="{!! mix('/js/DisplayQuestionsEditor.js') !!}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.228/pdf.min.js"></script>
     <script>

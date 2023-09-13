@@ -10,6 +10,7 @@
     "/js/GlobalSearchQuestionsSmallScreen.js": "/js/GlobalSearchQuestionsSmallScreen.js",
     "/js/PreviewTextQuestion.js": "/js/PreviewTextQuestion.js",
     "/js/ViewQuestion.js": "/js/ViewQuestion.js",
+    "/js/DisplayQuestionsEditor.js": "/js/DisplayQuestionsEditor.js",
     "/js/manifest.js": "/js/manifest.js",
     "/css/app.css": "/css/app.css",
     "/css/tailwind.css": "/css/tailwind.css",

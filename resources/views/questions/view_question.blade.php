@@ -127,23 +127,23 @@
                         <tbody>
 
                         @foreach($question->answers as $answer)
-                            @if ($answer->countVotes($answer->id) > $maxCountAnswer)
-                                <p hidden>{{$maxCountAnswer = $answer->countVotes($answer->id)}}</p>
+                            @if ($answer->countVotes() > $maxCountAnswer)
+                                <p hidden>{{$maxCountAnswer = $answer->countVotes()}}</p>
                             @endif
                         @endforeach
                         @foreach($question->answers as $answer)
                             <tr class="bg-white @if ($loop->odd) bg-gray-200 @endif">
-                                <td class="px-6 py-4 whitespace-wrap text-left font-medium text-gray-900 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
+                                <td class="px-6 py-4 whitespace-wrap text-left font-medium text-gray-900 @if ($answer->countVotes() == $maxCountAnswer) font-bold @endif">
                                     {{$loop->index + 1}}
                                 </td>
-                                <td class="px-6 py-4 whitespace-wrap text-left font-medium text-gray-900 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
+                                <td class="px-6 py-4 whitespace-wrap text-left font-medium text-gray-900 @if ($answer->countVotes() == $maxCountAnswer) font-bold @endif">
                                     {{$answer->text}}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                    {{$answer->countVotes($answer->id)}}
+                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium @if ($answer->countVotes() == $maxCountAnswer) font-bold @endif">
+                                    {{$answer->countVotes()}}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                    {{ $poll->potential_voters_number ? round($answer->countVotes($answer->id) / $poll->potential_voters_number, 4) * 100 : 0 }}%
+                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium @if ($answer->countVotes() == $maxCountAnswer) font-bold @endif">
+                                    {{ $poll->potential_voters_number ? round($answer->countVotes() / $poll->potential_voters_number, 4) * 100 : 0 }}%
                                 </td>
                             </tr>
                         @endforeach
@@ -154,10 +154,10 @@
                                 ИТОГО
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold">
-                                {{$question->countVotesByQuestion($question->id)." из ".$poll->potential_voters_number}}
+                                {{$question->countVotesByQuestion()." из ".$poll->potential_voters_number}}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold">
-                                {{$question->countVotesByQuestion($question->id) && $poll->potential_voters_number ? round($question->countVotesByQuestion($question->id) / $poll->potential_voters_number, 4) * 100 : 0 }}%
+                                {{$question->countVotesByQuestion() && $poll->potential_voters_number ? round($question->countVotesByQuestion($question->id) / $poll->potential_voters_number, 4) * 100 : 0 }}%
                             </td>
                         </tr>
                         </tbody>
@@ -179,7 +179,7 @@
                 </div>
                 <label class="italic"> Средняя оценка работы <b>{{$question->middleAnswerThatAllUsersMarkOnReport()}}</b> @if ($question->middleAnswerThatAllUsersMarkOnReport() == 1) балл@elseif($question->middleAnswerThatAllUsersMarkOnReport() == 5) баллов@else балла@endif!</label>
                 <br />
-                <label class="italic"> Проголосовано <b>{{$question->countVotesByQuestion($question->id)}}</b> из <b>{{$poll->potential_voters_number}}</b></label>
+                <label class="italic"> Проголосовано <b>{{$question->countVotesByQuestion()}}</b> из <b>{{$poll->potential_voters_number}}</b></label>
             </div>
         @endif
     </div>
@@ -213,23 +213,23 @@
                         @foreach($question->answers as $answer)
                             <tr class="bg-white bg-gray-100 border-b border-gray-400">
                                 <td>
-                                    <div class="px-1 py-4 whitespace-wrap text-sm text-gray-900 text-center @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
+                                    <div class="px-1 py-4 whitespace-wrap text-sm text-gray-900 text-center @if ($answer->countVotes() == $maxCountAnswer) font-bold @endif">
                                         {{$loop->index + 1}}
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="px-1 py-4 whitespace-wrap text-sm text-gray-900 text-center @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
+                                    <div class="px-1 py-4 whitespace-wrap text-sm text-gray-900 text-center @if ($answer->countVotes() == $maxCountAnswer) font-bold @endif">
                                         {{$answer->text}}
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                        {{$answer->countVotes($answer->id)}}
+                                    <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200 @if ($answer->countVotes() == $maxCountAnswer) font-bold @endif">
+                                        {{$answer->countVotes()}}
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                        {{ $poll->potential_voters_number ? round($answer->countVotes($answer->id) / $poll->potential_voters_number, 4) * 100 : 0 }}%
+                                    <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200 @if ($answer->countVotes() == $maxCountAnswer) font-bold @endif">
+                                        {{ $poll->potential_voters_number ? round($answer->countVotes() / $poll->potential_voters_number, 4) * 100 : 0 }}%
                                     </div>
                                 </td>
                             </tr>
@@ -243,12 +243,12 @@
                             </td>
                             <td>
                                 <div class="px-1 py-4 whitespace-nowrap font-bold text-center text-sm font-medium bg-gray-200">
-                                    {{$question->countVotesByQuestion($question->id)." из ".$poll->potential_voters_number}}
+                                    {{$question->countVotesByQuestion()." из ".$poll->potential_voters_number}}
                                 </div>
                             </td>
                             <td>
                                 <div class="px-1 py-4 whitespace-nowrap font-bold text-center text-sm font-medium bg-gray-200">
-                                    {{$question->countVotesByQuestion($question->id) && $poll->potential_voters_number ? round($question->countVotesByQuestion($question->id) / $poll->potential_voters_number, 4) * 100 : 0 }}%
+                                    {{$question->countVotesByQuestion() && $poll->potential_voters_number ? round($question->countVotesByQuestion($question->id) / $poll->potential_voters_number, 4) * 100 : 0 }}%
                                 </div>
                             </td>
                         </tr>
@@ -271,7 +271,7 @@
                 </div>
                 <label class="italic"> Средняя оценка работы <b>{{$question->middleAnswerThatAllUsersMarkOnReport()}}</b> @if ($question->middleAnswerThatAllUsersMarkOnReport() == 1) балл@elseif($question->middleAnswerThatAllUsersMarkOnReport() == 5) баллов@else балла@endif!</label>
                 <br />
-                <label class="italic"> Проголосовано <b>{{$question->countVotesByQuestion($question->id)}}</b> из <b>{{$poll->potential_voters_number}}</b></label>
+                <label class="italic"> Проголосовано <b>{{$question->countVotesByQuestion()}}</b> из <b>{{$poll->potential_voters_number}}</b></label>
             </div>
         @endif
     </div>

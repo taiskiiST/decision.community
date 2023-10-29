@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.1",
+        "php": "^7.3|^8.2",
         "ext-json": "*",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -26,7 +26,8 @@
         "phpoffice/phpword": "^0.18.3",
         "rkorebrits/htmltoopenxml": "dev-master",
         "socialiteproviders/laravelpassport": "^4.1",
-        "staudenmeir/laravel-cte": "^1.0"
+        "staudenmeir/laravel-cte": "^1.0",
+      "ext-imagick": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.8",

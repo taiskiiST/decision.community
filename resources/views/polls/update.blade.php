@@ -16,97 +16,7 @@
         <div class="flex flex-col xl:hidden ">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
                 <div class="py-2 align-middle min-w-full sm:px-1 lg:px-8">
-                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200 flex flex-col">
-                            <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-1 py-3 text-left text-xs whitespace-wrap text-wrap font-medium text-gray-500 uppercase tracking-wider">
-                                    {{$poll->name}}
-                                </th>
-                                <th scope="col" class="relative px-1 py-3">
-                                    @if ($poll->voteFinished() )
-                                        <span class="text-green-600 whitespace-wrap text-wrap">Голосование окончено {{date_create($poll->finished)->format('d-m-Y H:i:s')}}</span>
-                                    @endif
-
-                                </th>
-                                @if (auth()->user()->canManageItems())
-                                    @if (! $poll->voteFinished() )
-                                        <th scope="col" class="relative px-1 py-3">
-                                            <form method="POST" action="{{route('poll.endVote',[$poll->id])}}">
-                                                @csrf
-                                                <a href="{{route('poll.endVote',[$poll->id])}}"
-                                                   onclick="event.preventDefault();
-                                                    this.closest('form').submit();" class="text-green-600 whitespace-wrap text-wrap hover:text-green-900">
-                                                    {{ __('Окончить голосование') }}
-                                                </a>
-                                            </form>
-                                            {{--                                        <span class="text-green-600">Окончить голосование</span>--}}
-                                        </th>
-                                    @else
-                                        <th scope="col" class="relative px-1 py-3">
-                                            <form method="POST" action="{{route('poll.endVote',[$poll->id])}}">
-                                                @csrf
-                                                <a href="{{route('poll.endVote',[$poll->id])}}"
-                                                   onclick="event.preventDefault();
-                                                    this.closest('form').submit();" class="text-red-600 whitespace-wrap text-wrap hover:text-red-900">
-                                                    {{ __('Возобновить голосование') }}
-                                                </a>
-                                            </form>
-                                            {{--                                        <span class="text-red-600">Возобновить голосование</span>--}}
-                                        </th>
-                                    @endif
-                                @endif
-
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            @foreach($poll->questions as $question)
-                                <tr class="bg-white bg-gray-100 border-b border-gray-400 flex flex-col">
-                                    <td colspan=3>
-                                        <div class="px-6 py-4 whitespace-wrap text-sm text-gray-900 text-left text-wrap">
-                                            {{$loop->index + 1}}. {!! $question->text !!} {{ $question->public && auth()->user()->isAdmin()  ? ' (ПУБЛИЧНЫЙ!)' : ''  }}
-                                        </div>
-                                        <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600 bg-gray-200">
-                                            Количество файлов - {{ $question->question_files()->count() }}
-                                        </div>
-                                        @if (auth()->user()->canManageItems())
-                                            <div class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium">
-                                                <a href="@if (!$poll->voteFinished() ){{route('poll.questions.index',[$poll->id, $question->id])}} @else # @endif" class=" @if ($poll->voteFinished() ) disabled @else text-indigo-600 hover:text-indigo-900 @endif ">Изменить вопрос</a>
-                                            </div>
-                                            <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600 bg-gray-200">
-                                                <a href="{{route('poll.questions.view_question',[$question->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр вопроса</a>
-                                            </div>
-                                        @else
-                                            <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-green-600">
-                                                <a href="{{route('poll.questions.view_question',[$question->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр вопроса</a>
-                                            </div>
-                                        @endif
-                                        @if (auth()->user()->canManageItems())
-                                            <div class="px-6 py-4 whitespace-wrap text-wrap text-right text-sm font-medium">
-                                                @if (!$poll->voteFinished() )
-                                                    <form method="POST" action="{{route('question.delete',[$poll->id, $question->id])}}">
-                                                        @csrf
-                                                        <input name="del_question" value="{{$question->id}}" type="hidden"/>
-                                                        <a href="{{route('question.delete',[$poll->id, $question->id])}}"
-                                                           onclick="event.preventDefault();
-                                                    this.closest('form').submit();" class="text-indigo-600 hover:text-indigo-900">
-                                                            {{ __('Удалить вопрос') }}
-                                                        </a>
-                                                    </form>
-                                                @else
-                                                    <a href="#" class="disabled">
-                                                        {{ __('Удалить вопрос') }}
-                                                    </a>
-                                                @endif
-                                            </div>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <div id="PreviewTextQuestionMobile"></div>
                 </div>
             </div>
         </div>
@@ -147,4 +57,5 @@
     @parent()
     <script src="{!! mix('/js/AddProtocolToPoll.js') !!}"></script>
     <script src="{!! mix('/js/PreviewTextQuestion.js') !!}"></script>
+    <script src="{!! mix('/js/PreviewTextQuestionMobile.js') !!}"></script>
 @endsection

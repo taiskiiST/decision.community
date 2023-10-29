@@ -40,7 +40,7 @@ class Question extends Model
         $summ_all_answers = 0;
         foreach ($answers->get()  as $answer) {
             if (Vote::where('answer_id', '=', $answer->id)->where('question_id', '=', $this->id)->count() > 0 ){
-                $summ_all_answers += Vote::where('answer_id', '=', $answer->id)->where('question_id', '=', $this->id)->count() * $answer->text;
+                $summ_all_answers += Vote::where('answer_id', '=', $answer->id)->where('question_id', '=', $this->id)->count() * (int)$answer->text;
             }
         }
         $count_users_that_voted_by_question = Vote::where('question_id', '=', $this->id)->count();
@@ -76,9 +76,9 @@ class Question extends Model
         return $this->hasMany(QuestionFile::class);
     }
 
-    public function countVotesByQuestion($question_id)
+    public function countVotesByQuestion()
     {
-        $vote = Vote::where('question_id', '=', $question_id)->count();
+        $vote = Vote::where('question_id', '=', $this->id)->count();
         return $vote;
     }
     public function countVotesByQuestionAnonymous($question_id)
@@ -93,7 +93,7 @@ class Question extends Model
         $summ = $question->countQuestionsAll($question);
         $x = 0;
         foreach ($question->answers() as $answer){
-            $cnt = $answer->countVotes($answer->answer_id);
+            $cnt = $answer->countVotes();
             if ($summ != 0) {
                 $x = $x + round((100 * $cnt) / $summ, 2);
             }else{

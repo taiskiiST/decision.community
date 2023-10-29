@@ -133,7 +133,7 @@ class Poll extends Model
 
         //return User::whereNotIn('id', $usersIdsThatVoted)->where('is_category', false)->get();
 
-        return Company::find(session('current_company')->id)->users()->whereNotIn('id', $usersIdsThatVoted)->where('permissions','LIKE','%governance%')->get();
+        return Company::find(session('current_company')->id)->users()->whereNotIn('users.id', $usersIdsThatVoted)->where('permissions','LIKE','%governance%')->get();
     }
 
     public function peopleThatDidNotVoteVoters(): Collection
@@ -141,9 +141,7 @@ class Poll extends Model
         $questions = $this->questions;
         $questions = $questions->pluck('id')->toArray();
         $usersIdsThatVoted = Vote::whereIn('question_id', $questions)->select('user_id')->get();
-
-        //return User::whereNotIn('id', $usersIdsThatVoted)->where('is_category', false)->get();
-        return Company::find(session('current_company')->id)->users()->whereNotIn('id', $usersIdsThatVoted)->where('permissions','LIKE','%voter%')->get();
+        return Company::find(session('current_company')->id)->users()->whereNotIn('users.id', $usersIdsThatVoted)->where('permissions','LIKE','%voter%')->get();
     }
 
     public function peopleThatVote(): Collection

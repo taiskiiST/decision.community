@@ -29,50 +29,11 @@
             color: #337AB7;
             content: "\2714";
         }
-
-        button {
-            background-color: transparent;
-            border: none;
-            outline: none;
-        }
         .on {
             color: #000;
         }
         .off {
             color: #ccc;
-        }
-        /*.star {*/
-        /*    font-size: 100%;*/
-        /*}*/
-    </style>
-@endsection
-
-@section('styles')
-    @parent
-
-    <style>
-        a {
-            text-decoration: none;
-            color:blue
-        }
-        ul {
-            padding:0;
-            list-style: none;
-        }
-        ul li{
-
-            padding:6px;
-        }
-        ul li:before {
-            padding-right:10px;
-            font-weight: bold;
-            color: #C0C0C0;
-            content: "\2714";
-            transition-duration: 0.5s;
-        }
-        ul li:hover:before {
-            color: #337AB7;
-            content: "\2714";
         }
 
         button {
@@ -81,15 +42,7 @@
             outline: none;
             cursor: pointer;
         }
-        .on {
-            color: #000;
-        }
-        .off {
-            color: #ccc;
-        }
-        /*.star {*/
-        /*    font-size: 100%;*/
-        /*}*/
+
     </style>
 @endsection
 
@@ -121,94 +74,19 @@
             </div>
             @endif
             @if ($poll->isSuggestedQuestion())
-                @if ($poll->questions()->first()->accepted)
-                    <div class="flex px-4 py-7 sm:px-8">
-                        <table>
-                            <th class="bg-green-200">
-                                Кворум набран! Результаты голосования по данному вопросу будут приняты к учету в обязательном порядке!
-                            </th>
-                        </table>
-                    </div>
+                @if ($poll->questions()->count() > 0)
+                    @if ($poll->questions()->first()->accepted)
+                        <div class="flex px-4 py-7 sm:px-8">
+                            <table>
+                                <th class="bg-green-200">
+                                    Кворум набран! Результаты голосования по данному вопросу будут приняты к учету в обязательном порядке!
+                                </th>
+                            </table>
+                        </div>
+                    @endif
                 @endif
             @endif
-            <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                    @foreach($poll->questions as $question)
-                        @if (!$poll->isReportDone())
-                            <label class="block text-lg text-black font-semibold mt-10 whitespace-wrap"><a href="{{route('poll.questions.view_question',[$question->id])}}" class="text-indigo-600 hover:text-indigo-900">{{$loop->index + 1}}. {!!$question->text!!}</a></label>
-                            <p hidden>{{$maxCountAnswer = 0}}</p>
-                            <table class="min-w-full divide-y divide-gray-200 border-b-2 border-gray-400 ">
-                                <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Вариант ответа
-                                    </th>
-                                    <th scope="col" class="relative text-center px-6 py-3">
-                                        Количество голосов
-                                    </th>
-                                    <th scope="col" class="relative text-center px-6 py-3">
-                                        В процентах
-                                    </th>
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                @foreach($question->answers as $answer)
-                                    @if ($answer->countVotes($answer->id) > $maxCountAnswer)
-                                        <p hidden>{{$maxCountAnswer = $answer->countVotes($answer->id)}}</p>
-                                    @endif
-                                @endforeach
-                                @foreach($question->answers as $answer)
-                                    <tr class="bg-white @if ($loop->odd) bg-gray-200 @endif">
-                                        <td class="px-6 py-4 whitespace-wrap text-left font-medium text-gray-900 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                            {{$answer->text}}
-                                        </td>
-
-                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                                {{$answer->countVotes($answer->id)}}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                            {{ $poll->potential_voters_number ? round($answer->countVotes($answer->id) / $poll->potential_voters_number, 4) * 100 : 0 }}%
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                <tr class="bg-white @if (!$loop->odd) bg-gray-200 @endif">
-                                    <td class="px-6 py-4 whitespace-wrap text-left font-bold text-gray-900">
-                                        ИТОГО
-                                    </td>
-
-                                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold">
-                                        {{$question->countVotesByQuestion($question->id)." из ".$poll->potential_voters_number}}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold">
-                                        {{ $question->countVotesByQuestion($question->id) && $poll->potential_voters_number ? round($question->countVotesByQuestion($question->id) / $poll->potential_voters_number, 4) * 100 : 0 }}%
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        @else
-                            <div class="text-center">
-                                <div class="text-left">
-                                    <label class="block text-lg text-black font-semibold mt-10 whitespace-wrap"><a href="{{route('poll.questions.view_question',[$question->id])}}" class="text-indigo-600 hover:text-indigo-900">{{$loop->index + 1}}. {!!$question->text!!}</a></label>
-                                </div>
-                                <div id="id_33" class="flex flex-nowrap inline-block overflow-visible justify-center">
-
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <div class="w-1/9 text-7xl">
-                                            <button type="button" class="@if( $i <= $question->middleAnswerThatAllUsersMarkOnReport() ) on @else off @endif index_{{$i}} middelAnswerQuestion_{{$question->middleAnswerThatAllUsersMarkOnReport()}}">
-                                                <span class="">★</span>
-                                            </button>
-                                        </div>
-                                    @endfor
-                                </div>
-                                <label class="italic"> Средняя оценка работы <b>{{$question->middleAnswerThatAllUsersMarkOnReport()}}</b> @if ($question->middleAnswerThatAllUsersMarkOnReport() == 1) балл@elseif($question->middleAnswerThatAllUsersMarkOnReport() == 5) баллов@else балла@endif!</label>
-                                <br />
-                                <label class="italic"> Проголосовано <b>{{$question->countVotesByQuestion($question->id)}}</b> из <b>{{$poll->potential_voters_number}}</b></label>
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
-            </div>
+                <div id="formattedTexQuestion"></div>
         </div>
     </div>
 
@@ -223,86 +101,10 @@
                 </div>
             </div>
             @endif
+                <p hidden>{{$maxCountAnswer = 0}}</p>
             <div class="py-2 align-middle min-w-full sm:px-1 lg:px-8">
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                    @foreach($poll->questions as $question)
-                        @if (!$poll->isReportDone())
-                    <label class="block text-lg text-black font-semibold mt-6 whitespace-wrap text-wrap">{{$loop->index + 1}}. {!!$question->text!!}</label>
-                    <table class="min-w-full divide-y divide-gray-200 ">
-                        <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-1 py-3 text-left text-xs font-medium text-gray-500 whitespace-wrap tracking-wider text-wrap">
-                                Вариант ответа
-                            </th>
-                            <th scope="col" class="px-1 py-3 text-left text-xs font-medium text-gray-500 whitespace-wrap tracking-wider text-wrap">
-                                Количество голосов
-                            </th>
-                            <th scope="col" class="px-1 py-3 text-left text-xs font-medium text-gray-500 whitespace-wrap tracking-wider text-wrap">
-                                В процентах
-                            </th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        @foreach($question->answers as $answer)
-                            <tr class="bg-white bg-gray-100 border-b border-gray-400">
-                                <td>
-                                    <div class="px-1 py-4 whitespace-wrap text-sm font-bold text-gray-900 text-center @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                        {{$answer->text}}
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                        {{$answer->countVotes($answer->id)}}
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="px-1 py-4 whitespace-nowrap text-center text-sm font-medium bg-gray-200 @if ($answer->countVotes($answer->id) == $maxCountAnswer) font-bold @endif">
-                                        {{$poll->potential_voters_number ? round($answer->countVotes($answer->id) / $poll->potential_voters_number, 4) * 100 : 0 }}%
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                            <tr class="bg-white bg-gray-100 border-b border-gray-400">
-                                <td>
-                                    <div class="px-1 py-4 whitespace-wrap text-sm font-bold text-gray-900 text-center">
-                                        ИТОГО
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="px-1 py-4 whitespace-nowrap font-bold text-center text-sm font-medium bg-gray-200">
-                                        {{$question->countVotesByQuestion($question->id)." из ".$poll->potential_voters_number}}
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="px-1 py-4 whitespace-nowrap font-bold text-center text-sm font-medium bg-gray-200">
-                                        {{$question->countVotesByQuestion($question->id) && $poll->potential_voters_number ? round($question->countVotesByQuestion($question->id) / $poll->potential_voters_number, 4) * 100 : 0 }}%
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                        @else
-                            <div class="text-center">
-                                <div class="text-left">
-                                    <label class="block text-lg text-black font-semibold mt-6 whitespace-wrap text-wrap">{{$loop->index + 1}}. {!!$question->text!!}</label>
-                                </div>
-                                <div id="id_33" class="flex flex-nowrap inline-block overflow-visible justify-center">
-
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <div class="w-1/9 text-7xl">
-                                            <button type="button" class="@if( $i <= $question->middleAnswerThatAllUsersMarkOnReport() ) on @else off @endif index_{{$i}} middelAnswerQuestion_{{$question->middleAnswerThatAllUsersMarkOnReport()}}">
-                                                <span class="">★</span>
-                                            </button>
-                                        </div>
-                                    @endfor
-                                </div>
-                                <label class="italic"> Средняя оценка работы <b>{{$question->middleAnswerThatAllUsersMarkOnReport()}}</b> @if ($question->middleAnswerThatAllUsersMarkOnReport() == 1) балл@elseif($question->middleAnswerThatAllUsersMarkOnReport() == 5) баллов@else балла@endif!</label>
-                                <br />
-                                <label class="italic"> Проголосовано <b>{{$question->countVotesByQuestion($question->id)}}</b> из <b>{{$poll->potential_voters_number}}</b></label>
-                            </div>
-                        @endif
-                    @endforeach
+                    <div id="formattedTexQuestionMobile"></div>
                 </div>
             </div>
         </div>
@@ -352,6 +154,8 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.228/pdf.min.js"></script>
+<script src="{!! mix('/js/FormattedTexQuestion.js') !!}"></script>
+<script src="{!! mix('/js/FormattedTexQuestionMobile.js') !!}"></script>
 <script>
     var _PDF_DOC,
         _CURRENT_PAGE,

@@ -18,6 +18,8 @@ use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Imagick;
+
 
 class PollsController extends Controller
 {
@@ -460,21 +462,21 @@ class PollsController extends Controller
             $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText('Проголосовало');
             $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText('Проголосовало %');
             foreach ($question->answers()->get() as $answer) {
-                if ($max_voters < $answer->countVotes($answer->id)) {
-                    $max_voters = $answer->countVotes($answer->id);
+                if ($max_voters < $answer->countVotes()) {
+                    $max_voters = $answer->countVotes();
                 }
             }
             foreach ($question->answers()->get() as $answer) {
                 $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
-                if ($max_voters == $answer->countVotes($answer->id)) {
+                if ($max_voters == $answer->countVotes()) {
                     $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText($count_answer_blank, ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
                     $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText($answer->text, ['bold' => TRUE], ['valign' => 'center']);
-                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($answer->countVotes($answer->id), ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
+                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($answer->countVotes(), ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
                     $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText($answer->percentOfQuestions($question->id, $answer->id) . "%", ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
                 } else {
                     $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText($count_answer_blank, '', ['align' => 'center', 'spaceAfter' => 150]);
                     $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText($answer->text, '', ['valign' => 'center']);
-                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($answer->countVotes($answer->id), '', ['align' => 'center', 'spaceAfter' => 150]);
+                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($answer->countVotes(), '', ['align' => 'center', 'spaceAfter' => 150]);
                     $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText($answer->percentOfQuestions($question->id, $answer->id) . "%", '', ['align' => 'center', 'spaceAfter' => 150]);
                 }
                 ++$count_answer_blank;
@@ -680,7 +682,7 @@ class PollsController extends Controller
                 $new_array_answer = [
                     'num_answer'                => $count_answer,
                     'answer_text'               => $answer->text,
-                    'answer_countVotes'         => $answer->countVotes($answer->id),
+                    'answer_countVotes'         => $answer->countVotes(),
                     'answer_percentOfQuestions' => $answer->percentOfQuestions($question->id, $answer->id),
                 ];
                 ++$count_answer;
@@ -1095,18 +1097,37 @@ class PollsController extends Controller
     {
         $question_hash_speakers = [];
         $question_hash_files = [];
+        $file_hash = [];
+        $question_hash_num_files = [];
+        $question_answers = [];
         foreach ($poll->questions()->get() as $question){
             $question_hash_speakers [$question->id] = $question->speakers()->get();
             $question_hash_files [$question->id] = $question->question_files;
-            //dd($question->question_files);
+            $question_answers[$question->id] = $question->answers;
+            foreach ($question_hash_files [$question->id] as $file){
+                if(strpos(Storage::url($file->path_to_file), '.pdf') !== false ) {
+                    //dd(base_path().'/app/public/'.$file->path_to_file);
+                    ///var/www/berezka/storage/app/public/storage/42/79
+                    $image = new Imagick();
+                    $image->pingImage(base_path().'/storage/app/public/'.$file->path_to_file);
+                    $file_hash[$file->id] = $image->getNumberImages();
+                    for ($i = 1; $i <= $file_hash[$file->id];$i++ ){
+                        $question_hash_num_files[$question->id][$file->id][] = $i;
+                    }
+                }
+            }
         }
-
         \JavaScript::put([
             'questions'     => $poll->questions,
             'is_admin'      => auth()->user()->isAdmin(),
             'users'         => Company::find(session('current_company')->id)->users()->get(),
             'question_hash_speakers' => $question_hash_speakers,
             'question_hash_files' => $question_hash_files,
+            'display_mode' => true,
+            'can_vote'      => auth()->user()->canVote(),
+            'question_answers'      => $question_answers,
+            'file_hash' => $file_hash,
+            'question_hash_num_files' => $question_hash_num_files,
         ]);
         return view('polls.display', [
             'poll'        => $poll,
@@ -1127,27 +1148,85 @@ class PollsController extends Controller
     {
         if ($poll->isReportDone()) {
             foreach ($poll->questions as $question) {
-                $ratings[] = $question->answerThatUserVote(auth()->user()) ? $question->answerThatUserVote(auth()->user()) : 0;
+                $ratings[] = $question->answerThatUserVote( auth()->user() )  ? $question->answerThatUserVote( auth()->user() ): 0 ;
                 foreach ($question->answers()->get() as $answer) {
                     $answers[$question->id][] = $answer;
                 }
             }
-            //dd($poll->questions->count());
+
             if ($poll->questions->count() == 0) {
                 $ratings = '';
                 $answers = '';
             }
+
+            //dd($ratings);
+
+            $question_hash_speakers = [];
+            $question_hash_files = [];
+            foreach ($poll->questions()->get() as $question){
+                $question_hash_speakers [$question->id] = $question->speakers()->get();
+                $question_hash_files [$question->id] = $question->question_files;
+            }
+
             \JavaScript::put([
-                'questions'         => $poll->questions,
+                'questions'     => $poll->questions,
+                'is_admin'      => auth()->user()->isAdmin(),
+                'users'         => Company::find(session('current_company')->id)->users()->get(),
+                'question_hash_speakers' => $question_hash_speakers,
+                'question_hash_files' => $question_hash_files,
+                'display_mode' => false,
+                'can_vote'      => auth()->user()->canVote(),
                 'ratings_questions' => $ratings,
                 'answers'           => $answers,
+                'isReportDone' => $poll->isReportDone()
             ]);
-            return view('polls.display_report', [
+
+            return view('polls.display', [
                 'poll'        => $poll,
                 'displayMode' => false,
                 'users'       => Company::find(session('current_company')->id)->users()->get(),
             ]);
         } else {
+            $question_hash_speakers = [];
+            $question_hash_files = [];
+            $file_hash = [];
+            $question_answers = [];
+            $question_hash_num_files = [];
+            $answers = [];
+            foreach ($poll->questions as $question){
+                $question_hash_speakers [$question->id] = $question->speakers;
+                $question_hash_files [$question->id] = $question->question_files;
+                $question_hash_num_files [$question->id] = 1;
+                $question_answers [$question->id] = $question->answers;
+                foreach ($question_hash_files [$question->id] as $file){
+                    $image = new Imagick();
+                    $image->pingImage(base_path().'/storage/app/public/'.$file->path_to_file);
+                    $file_hash[$file->id] = $image->getNumberImages();
+                }
+                foreach ($question->answers()->get() as $answer) {
+                    $answers[$question->id][] = $answer;
+                }
+            }
+
+            if ($poll->questions->count() == 0) {
+                $answers = '';
+            }
+            //dd($question_answers);
+            \JavaScript::put([
+                'questions'     => $poll->questions,
+                'is_admin'      => auth()->user()->isAdmin(),
+                'users'         => Company::find(session('current_company')->id)->users()->get(),
+                'question_hash_speakers' => $question_hash_speakers,
+                'question_hash_files' => $question_hash_files,
+                'display_mode' => false,
+                'can_vote'      => auth()->user()->canVote(),
+                'question_answers'      => $question_answers,
+                'file_hash' => $file_hash,
+                'question_hash_num_files' => $question_hash_num_files,
+                'isReportDone' => $poll->isReportDone(),
+                'answers' => $answers
+            ]);
+
             return view('polls.display', [
                 'poll'        => $poll,
                 'displayMode' => false,
@@ -1416,7 +1495,7 @@ class PollsController extends Controller
 
     public function endVote(Poll $poll)
     {
-        $potentialVotersNumber = $poll->company->potentialVotersNumber();
+        $potentialVotersNumber = $poll->isGovernanceMeeting() ? $poll->company->potentialVotersNumberGovernance() : $poll->company->potentialVotersNumber();
 
         if (!$poll->finished) {
             $poll->update([
@@ -1443,6 +1522,35 @@ class PollsController extends Controller
      */
     public function results(Poll $poll)
     {
+        $countByQuestion = [];
+        $answers = [];
+        $countVotedForAnswer = [];
+        $middleAnswerThatAllUsersMarkOnReport = [];
+        $questionMaxCountVotes = [];
+        foreach ($poll->questions as $question) {
+            $countByQuestion[$question->id] = $question->countVotesByQuestion();
+            $maxCountVotes = 0;
+            foreach ($question->answers()->get() as $answer) {
+                $answers[$question->id][] = $answer;
+                if ($answer->countVotes() > $maxCountVotes){
+                    $maxCountVotes = $answer->countVotes();
+                }
+                $countVotedForAnswer[$answer->id] = $answer->countVotes();
+                $middleAnswerThatAllUsersMarkOnReport [$question->id] = $question->middleAnswerThatAllUsersMarkOnReport();
+            }
+            $questionMaxCountVotes[$question->id] = $maxCountVotes;
+        }
+
+        \JavaScript::put([
+            'questions'     => $poll->questions()->get(),
+            'poll_report_done' => $poll->isReportDone(),
+            'answers' => $answers,
+            'countVotedForAnswer' => $countVotedForAnswer,
+            'poll' => $poll,
+            'countByQuestion' => $countByQuestion,
+            'middleAnswerThatAllUsersMarkOnReport' => $middleAnswerThatAllUsersMarkOnReport,
+            'questionMaxCountVotes' => $questionMaxCountVotes
+        ]);
         return view('polls.results', [
             'poll'   => $poll,
             'quorum' => $poll->potential_voters_number,
@@ -1507,13 +1615,14 @@ class PollsController extends Controller
                 ) {
                     $answerId = $parameters["question_{$question->id}"];
                     $answer = Answer::find($answerId);
-
+                    //dd($parameters, 'param 2');
                     if (!$answer) {
                         continue;
                     }
                     $user->vote($question, $answer);
                 } else {
                     if ($poll->isReportDone()) {
+                        //dd($parameters, 'param 1');
                         $answerId = $parameters["question_{$question->id}"];
                         $answer = Answer::find($answerId);
 
@@ -1538,10 +1647,10 @@ class PollsController extends Controller
             }
 
             $poll->refresh();
-
-            return view('polls.results', [
-                'poll'   => $poll,
-            ]);
+            return redirect()->route('poll.results', [$poll->id]);
+//            return view('polls.results', [
+//                'poll'   => $poll,
+//            ]);
         } else {
             if ($anonymous) {
                 foreach ($poll->questions as $question) {

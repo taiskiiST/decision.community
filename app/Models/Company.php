@@ -27,4 +27,11 @@ class Company extends Model
     {
         return $this->users()->where('permissions', 'LIKE', '%' . Permission::VOTE . '%')->count();
     }
+
+    public function potentialVotersNumberGovernance(): int
+    {
+        return $this->users()->where('permissions', 'LIKE', '%' . Permission::VOTE . '%')
+            ->where('permissions', 'LIKE', '%' . Permission::GOVERNANCE . '%')
+            ->count();
+    }
 }

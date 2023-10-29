@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {render} from "react-dom";
 
 const {questions, ratings_questions, answers} = window.TSN || {};
 
@@ -18,7 +17,6 @@ const StarRating = () => {
                 return (
                     <div key={"key_"+index_question} id={"id_"+questions[index_question].id} className={(index_question == 0)? "flex flex-nowrap inline-block overflow-visible justify-center" : "flex flex-nowrap inline-block overflow-visible justify-center hidden"}>
                         {[...Array(5)].map((star, index) => {
-                        index += 1;
                         return (
                             <div key={"div_"+index_question + "_" + index} className={"w-1/9 text-7xl"}>
                                 <button
@@ -45,6 +43,14 @@ const StarRating = () => {
                                     onClick={() => setRating( (oldValue) => {
                                         const newValue = [...oldValue]
                                         newValue[index_question] = index;
+                                        $('.submit-button').removeClass('hidden');
+                                        window.scrollBy({
+                                            top: 500,
+                                            behavior: 'smooth'
+                                        });
+
+                                        $(".submit-button").flash(7500, 10);
+
                                         return newValue;
                                     })}
                                     onMouseEnter={() => setHover( (oldValue) => {
@@ -72,7 +78,5 @@ const StarRating = () => {
         </div>
     );
 };
-
-render(<StarRating />, document.getElementById('RatingStars'));
 
 export default StarRating;

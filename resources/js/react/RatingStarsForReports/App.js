@@ -1,5 +1,6 @@
-import StarRating from "./StarRating";
-import "./App.css";
+import React from 'react';
+import { render } from 'react-dom';
+import StarRating from './StarRating';
 
 const App = () => {
     return (
@@ -8,5 +9,7 @@ const App = () => {
         </div>
     );
 };
+
+render(<App />, document.getElementById('RatingStars'));
 
 export default App;

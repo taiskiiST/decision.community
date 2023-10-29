@@ -23,9 +23,9 @@ class Answer extends Model
         return $this->hasMany(AnonymousVote::class);
     }
 
-    public function countVotes($answer_id)
+    public function countVotes()
     {
-        $vote = Vote::where('answer_id', '=', $answer_id)->count();
+        $vote = Vote::where('answer_id', '=', $this->id)->count();
         return $vote;
     }
     public function countVotesAnonymous($answer_id)
@@ -45,7 +45,7 @@ class Answer extends Model
         $question = Question::find($question_id);
         $answer = Answer::find($answer_id);
         $summ = $question->countQuestionsAll($question);
-        $cnt = $answer->countVotes($answer_id);
+        $cnt = $answer->countVotes();
         if ($summ != 0) {
             $x = round((100 * $cnt) / $summ, 2);
         }else{

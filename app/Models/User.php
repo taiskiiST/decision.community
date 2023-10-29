@@ -211,7 +211,7 @@ class User extends Authenticatable
 
         DB::transaction(function () use ($question, $answer, &$out) {
             $question->poll->update([
-                'potential_voters_number' => $question->poll->company->potentialVotersNumber()
+                'potential_voters_number' => $question->poll->isGovernanceMeeting() ? $question->poll->company->potentialVotersNumberGovernance() : $question->poll->company->potentialVotersNumber()
             ]);
 
             $out = $this->votes()->updateOrCreate([

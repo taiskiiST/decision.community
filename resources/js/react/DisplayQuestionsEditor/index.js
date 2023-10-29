@@ -1,12 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import DisplayQuestionEditor from './DisplayQuestionEditor';
+import DisplayQuestionEditor from "./DisplayQuestionEditor";
 
-const App = () => (
-    <DisplayQuestionEditor />
-);
+const App = () => {
+    return (
+        <div className="App">
+            <DisplayQuestionEditor />
+        </div>
+    );
+};
 
-ReactDOM.render(
-    <App />,
-    document.getElementById('displayQuestionsEditor')
-);
+export default App;

@@ -238,6 +238,16 @@ class QuestionsController extends Controller
         ]);
     }
 
+    public function getQuestion()
+    {
+        //dd();
+        $question_id = request('question_id');
+        if (empty($question_id)) {
+            return collect();
+        }
+        return Question::find($question_id);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

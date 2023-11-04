@@ -97,7 +97,7 @@ Route::group(['middleware' => ['auth', 'can:access-app']], function () {
     Route::post('/searchQuestions', [QuestionsController::class, 'searchQuestions'])->name('poll.questions.search_questions');
 
     Route::post('/polls/{poll}/question/{question}/public/', [QuestionsController::class, 'publicQuestion'])->name('question.public');
-
+    Route::get('/question/getQuestion', [QuestionsController::class, 'getQuestion'])->name('get.question');
     //Route::get('/polls/{poll}/questions/add', [QuestionsController::class, 'add'])->name('poll.questions.add');
 
     Route::get('/profile', [UsersController::class, 'indexProfile'])->name('users.profile');

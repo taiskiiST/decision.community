@@ -10,7 +10,9 @@ import { pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import './StylePDF.css';
+import axios from 'axios';
 import StarRating from "../RatingStarsForReports/StarRating";
+import {v4 as uuidv4} from "uuid";
 
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -18,9 +20,13 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     import.meta.url,
 ).toString();
 
-const { questions, is_admin, users, question_hash_speakers, question_hash_files, display_mode, can_vote, file_hash, isReportDone, ratings_questions, answers} = window.TSN || {};
+const {  is_admin, users, question_hash_speakers, question_hash_files, display_mode, can_vote, file_hash, isReportDone,
+    ratings_questions, answers, question_first, count_questions, question_list_id} = window.TSN || {};
 
 const DisplayQuestionEditor = () => {
+    const [currentQuestionId, setCurrentQuestionId] = useState(question_first.id);
+    const [currentQuestion, setCurrentQuestion] = useState(question_first);
+    const [indexQuestion, setIndexQuestion] = useState(0);
     const [ratings, setRating] = useState(ratings_questions);
     const [hover, setHover] = useState([...Array(5)]);
     useEffect(() => {
@@ -28,15 +34,12 @@ const DisplayQuestionEditor = () => {
     }, [""]);
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
-    const editorStateText = questions.map ( (question) => {
-        if ( Array.from(question['text'])[0] == '{' ){
-            return EditorState.createWithContent(convertFromRaw(JSON.parse(question['text'])));
-        }else{
-            return EditorState.createWithText((question['text']));
-        }
-    });
-    const [editorAllStateText, setEditor] = useState(editorStateText);
 
+    const [editorAllStateText, setEditor] = useState(
+        Array.from(currentQuestion['text'])[0] == '{' ?
+        EditorState.createWithContent(convertFromRaw(JSON.parse(currentQuestion['text'])))
+        :  EditorState.createWithText((currentQuestion['text']))
+    );
     function onDocumentLoadSuccess({ numPages }) {
         setNumPages(numPages);
     }
@@ -88,31 +91,43 @@ const DisplayQuestionEditor = () => {
         let current = current_id.replace("nav_", "class_");
 
         let htmlElements = document.getElementsByClassName(current);
-        let next_loop_id = 0;
-        for (let htmlElement of htmlElements) {
-            htmlElement.classList.remove(["border-indigo-500"]);
-            htmlElement.classList.remove(["text-indigo-600"]);
-            htmlElement.classList.add(["hidden"]);
-            next_loop_id = Number(htmlElement.getAttribute('name').replace("nav_loop_", "")) + 1;
-        }
-        let next_id = document.getElementsByName("nav_loop_" + next_loop_id)[0].id
-        next_id = next_id.replace("nav_", "");
+         let next_loop_id = 0;
+         for (let htmlElement of htmlElements) {
+            // htmlElement.classList.remove(["border-indigo-500"]);
+            // htmlElement.classList.remove(["text-indigo-600"]);
+            // htmlElement.classList.add(["hidden"]);
+             next_loop_id = Number(htmlElement.getAttribute('name').replace("nav_loop_", "")) + 1;
+         }
+        let next_id = question_list_id [next_loop_id];
 
-        let htmlElementsNext = document.getElementsByClassName('class_' + next_id);
-        for (let htmlElementNext of htmlElementsNext) {
-            htmlElementNext.classList.remove(["hidden"]);
-            htmlElementNext.classList.add(["border-indigo-500"]);
-            htmlElementNext.classList.add(["text-indigo-600"]);
-        }
+        // let htmlElementsNext = document.getElementsByClassName('class_' + next_id);
+        // for (let htmlElementNext of htmlElementsNext) {
+        //     htmlElementNext.classList.remove(["hidden"]);
+        //     htmlElementNext.classList.add(["border-indigo-500"]);
+        //     htmlElementNext.classList.add(["text-indigo-600"]);
+        // }
 
-        document.getElementById('container_question_' + current_id.replace("nav_", "")).classList.add('hidden');
-        if (document.getElementById('id_' + current_id.replace("nav_", ""))) {
-            document.getElementById('id_' + current_id.replace("nav_", "")).classList.add('hidden');
-        }
-        document.getElementById('container_question_' + next_id).classList.remove('hidden');
-        if (document.getElementById('id_' + next_id)) {
-            document.getElementById('id_' + next_id).classList.remove('hidden');
-        }
+
+
+        // document.getElementById('container_question_' + current_id.replace("nav_", "")).classList.add('hidden');
+        // if (document.getElementById('id_' + current_id.replace("nav_", ""))) {
+            // document.getElementById('id_' + current_id.replace("nav_", "")).classList.add('hidden');
+        // }
+        // console.log(question_list_id);
+        // console.log(next_id);
+        setCurrentQuestionId(next_id);
+        getQuestion(currentQuestionId);
+
+
+
+
+        //console.log('next_id', next_id);
+        // document.getElementById('container_question_' + next_id).classList.remove('hidden');
+        // if (document.getElementById('id_' + next_id)) {
+        //     document.getElementById('id_' + next_id).classList.remove('hidden');
+        // }
+
+
 
         let value_next = document.getElementsByClassName('next')[0].getAttribute('value');
         if (next_loop_id == value_next){
@@ -142,34 +157,40 @@ const DisplayQuestionEditor = () => {
         let current_id = current.replace("nav_", "");
 
         current = current.replace("nav_", "class_");
-        $('.'+ current).removeClass("border-indigo-500 text-indigo-600");
-        $('.'+ current).addClass("hidden");
+        // $('.'+ current).removeClass("border-indigo-500 text-indigo-600");
+        // $('.'+ current).addClass("hidden");
 
         let name_curr = $('.' + current).attr("name");
         let current_loop_id = name_curr.replace("nav_loop_", "");
 
         let prev_loop_id = Number(current_loop_id) - 1;
 
-        let prev_id = document.getElementsByName("nav_loop_" + prev_loop_id)[0].id
-        prev_id = prev_id.replace("nav_", "");
+        let prev_id = question_list_id [prev_loop_id];
 
-        $('.class_' + prev_id ).removeClass("hidden");
-        $('.class_' + prev_id ).addClass("border-indigo-500 text-indigo-600");
+        // let prev_id = document.getElementsByName("nav_loop_" + prev_loop_id)[0].id
+        // prev_id = prev_id.replace("nav_", "");
+
+        setCurrentQuestionId(prev_id);
+        getQuestion(currentQuestionId);
+        setIndexQuestion(indexQuestion - 1);
+
+        // $('.class_' + prev_id ).removeClass("hidden");
+        // $('.class_' + prev_id ).addClass("border-indigo-500 text-indigo-600");
 
         // $("#question_" + current_id).addClass('hidden');
         // $("#question_" + prev_id ).removeClass('hidden');
 
-        $("#container_question_" + current_id).addClass('hidden');
-        if ($("#id_" + current_id)) {
-            $("#id_" + current_id).addClass('hidden');
-        }
-        $("#container_question_" + prev_id ).removeClass('hidden');
-        if ($("#id_" + prev_id )){
-            $("#id_" + prev_id ).removeClass('hidden');
-        }
+        // $("#container_question_" + current_id).addClass('hidden');
+        // if ($("#id_" + current_id)) {
+        //     $("#id_" + current_id).addClass('hidden');
+        // }
+        // $("#container_question_" + prev_id ).removeClass('hidden');
+        // if ($("#id_" + prev_id )){
+        //     $("#id_" + prev_id ).removeClass('hidden');
+        // }
 
-        name_curr = $('.class_' + prev_id).attr("name");
-        prev_id = name_curr.replace("nav_loop_", "");
+        // name_curr = $('.class_' + prev_id).attr("name");
+        // prev_id = name_curr.replace("nav_loop_", "");
 
         if (prev_id == 1){
             $(".prev").addClass('hidden');
@@ -179,6 +200,26 @@ const DisplayQuestionEditor = () => {
             $(".next").removeClass('hidden');
         }
     }
+
+    const getQuestion = async (currentQuestionId) => {
+        try {
+            const result = await axios.get('/question/getQuestion', {
+                params: {
+                    question_id: currentQuestionId
+                },
+            });
+            const { data } = result;
+
+            setCurrentQuestion(data);
+            setEditor(Array.from(currentQuestion['text'])[0] == '{' ?
+                EditorState.createWithContent(convertFromRaw(JSON.parse(currentQuestion['text'])))
+                :  EditorState.createWithText((currentQuestion['text'])));
+            setIndexQuestion(indexQuestion + 1);
+
+        } catch (error) {
+            console.log('e', error);
+        }
+    };
 
     return (
         <div >
@@ -196,26 +237,32 @@ const DisplayQuestionEditor = () => {
                     </button>
                 </div>
                 <div className="flex">
-                    {questions.map ( (question, index) => {
-                      return  <button id={`nav_${question.id}`}
-                                className={`${index == 0 
-                                    ? 'border-indigo-500 text-indigo-600 class_' + question.id + ' border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none' 
-                                    : 'hidden class_' + question.id +                            ' border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none'} 
-                                    `}
-                                type="button"
-                                      key={index}
-                                name={`nav_loop_${index + 1}`}>
-                            {index + 1} <span > / {questions.length} </span>
-                        </button>
-                    } ) }
+                    {/*{questions.map ( (question, index) => {*/}
+                    {/*  return  <button id={`nav_${question.id}`}*/}
+                    {/*            className={`${index == 0 */}
+                    {/*                ? 'border-indigo-500 text-indigo-600 class_' + question.id + ' border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none' */}
+                    {/*                : 'hidden class_' + question.id +                            ' border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none'} */}
+                    {/*                `}*/}
+                    {/*            type="button"*/}
+                    {/*                  key={index}*/}
+                    {/*            name={`nav_loop_${index + 1}`}>*/}
+                    {/*        {index + 1} <span > / {questions.length} </span>*/}
+                    {/*    </button>*/}
+                    {/*} ) }*/}
+                    <button id={`nav_${currentQuestionId}`}
+                            className={`border-indigo-500 text-indigo-600 class_${currentQuestionId} border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none`}
+                            type="button"
+                            name={`nav_loop_${indexQuestion}`}>
+                        {indexQuestion + 1} <span > / {count_questions} </span>
+                    </button>
                 </div>
 
                 <div className="-mt-px w-0 flex-1 flex justify-end">
-                    <button className={`${questions.length == 1
+                    <button className={`${count_questions == 1
                         ? 'hidden border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 next outline-none focus:outline-none'
                         : 'border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 next outline-none focus:outline-none'} 
                                     `}
-                            value={questions.length}
+                            value={count_questions}
                             onClick={onHandleClickNext}
                             type="button">
                         Следующий
@@ -226,28 +273,28 @@ const DisplayQuestionEditor = () => {
                 </div>
             </nav>
 
-            {questions.map ( (question, index) => {
-                if (is_admin) {
-                    return (<div className={`mt-10 sm:mt-0 ${index == 0 ? '' : 'hidden'}`}
-                                 id={`container_question_${question.id}`} key={index}>
+
+
+            <div className={`mt-10 sm:mt-0`}
+                                 id={`container_question_${currentQuestionId}`}>
                             <div className="p-3 md:col-span-2">
-                                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 p-5">
+                                { is_admin && <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 p-5">
                                     <div>
                                         <div>Выступающие</div>
                                         <div>
-                                            <select name={`speaker${question.id}[]`}
+                                            <select name={`speaker${currentQuestionId}[]`}
                                                     className="mt-1 block w-full py-1 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-600 sm:text-sm"
                                                     required multiple
                                                     defaultValue={users.map ( (user) => {
-                                                        if (question_hash_speakers[question.id]){
-                                                            if (question_hash_speakers [question.id].length > 0) {
-                                                                if (~question_hash_speakers [question.id][0].users_speaker_id.indexOf(user.id)) {
+                                                        if (question_hash_speakers[currentQuestionId]){
+                                                            if (question_hash_speakers [currentQuestionId].length > 0) {
+                                                                if (~question_hash_speakers [currentQuestionId][0].users_speaker_id.indexOf(user.id)) {
                                                                     return user.id
                                                                 }
                                                             }
                                                         }
                                                     } )}
-                                                    id={`select_speaker_question_${question.id}`}
+                                                    id={`select_speaker_question_${currentQuestionId}`}
                                                     noValidate
                                             >
                                                 {users.map ( (user) => {
@@ -256,17 +303,17 @@ const DisplayQuestionEditor = () => {
                                             </select>
                                         </div>
                                     </div>
-                                </div>
+                                </div>}
 
 
-                                <div className={`bg-white shadow overflow-hidden sm:rounded-lg`} id={`question_${question.id}`}>
+                                <div className={`bg-white shadow overflow-hidden sm:rounded-lg`} id={`question_${currentQuestionId}`}>
                                     <div className="px-4 py-5 sm:px-6">
                                         <h3 className="text-lg leading-6 font-medium text-gray-900">
-                                            {index + 1})
+                                            {indexQuestion + 1})
                                             <Editor
-                                                name={`question_text_${index}`}
-                                                id={`question_text_${index}`}
-                                                defaultEditorState={editorAllStateText[index]}
+                                                name={`question_text_${indexQuestion}`}
+                                                id={`question_text_${indexQuestion}`}
+                                                defaultEditorState={editorAllStateText}
                                                 toolbarClassName="rdw-storybook-toolbar"
                                                 wrapperClassName="rdw-storybook-wrapper"
                                                 editorClassName="rdw-storybook-editor"
@@ -284,8 +331,8 @@ const DisplayQuestionEditor = () => {
 
                                 <div className="px-4 py-5 sm:px-6">
                                     <h3 className="text-lg leading-6 font-medium text-gray-900">
-                                        {question_hash_files[question.id].map( (file, index_map) => (
-                                                <div key={question.id + index_map}>
+                                        {question_hash_files[currentQuestionId].map( (file, index_map) => (
+                                                <div key={currentQuestionId + index_map}>
                                                     <p className={`${index_map !== 0 ? 'pt-10' : ''}`} >Описание: {file.text_for_file}</p>
                                                     { (file.path_to_file.indexOf('.pdf') >= 0) &&
                                                         <div>
@@ -342,12 +389,12 @@ const DisplayQuestionEditor = () => {
                             {!display_mode && can_vote && !isReportDone && <div>
                                 <fieldset>
                                     <div className="bg-white rounded-md -space-y-px">
-                                        {answers[question.id].map((answer, index_map) => {
+                                        {answers[currentQuestionId].map((answer, index_map) => {
                                             return <div key={index_map}>
                                                 <label
                                                     className="border-gray-200 rounded-tl-md rounded-tr-md relative border p-4 flex cursor-pointer">
                                                     <input type="radio"
-                                                           name={`question_${question.id}`}
+                                                           name={`question_${currentQuestionId}`}
                                                            value={answer.id}
                                                            className="h-4 w-4 mt-0.5 cursor-pointer text-indigo-600 border-gray-300 focus:ring-indigo-500 input-radio"
                                                            aria-labelledby="privacy-setting-0-label"
@@ -369,27 +416,27 @@ const DisplayQuestionEditor = () => {
                             }
                             {!display_mode && can_vote && isReportDone && <div>
                                 <fieldset>
-                                    <div key={"key_"+ index} id={"id_"+questions[index].id} className="flex flex-nowrap inline-block overflow-visible justify-center" >
+                                    <div id={"id_"+ currentQuestionId} className="flex flex-nowrap inline-block overflow-visible justify-center" >
                                         {[...Array(5)].map((star, index_map) => {
                                             index_map += 1;
                                             return (
-                                                <div key={"div_"+index + "_" + index_map} className={"w-1/9 text-7xl"}>
+                                                <div className={"w-1/9 text-7xl"} key={index_map}>
                                                     <button
                                                         type="button"
-                                                        key={index + "_" + index_map}
+
                                                         className={
-                                                            (index != 0) ?
-                                                                index_map <= ( (hover[index] || ( (hover[index] && ratings[index]) || ratings[index] )) )
+                                                            (indexQuestion != 0) ?
+                                                                index_map <= ( (hover[indexQuestion] || ( (hover[indexQuestion] && ratings[indexQuestion]) || ratings[indexQuestion] )) )
                                                                     ? "on index_" + index_map
                                                                     : "off index_" + index_map
                                                                 :
                                                                 index_map <=
-                                                                ( index_map <=( (hover[index] || ( (hover[index] && ratings[index]) || ratings[index] )) )
-                                                                        ? ( (hover[index] || ( (hover[index] && ratings[index]) || ratings[index] )) )
+                                                                ( index_map <=( (hover[indexQuestion] || ( (hover[indexQuestion] && ratings[indexQuestion]) || ratings[indexQuestion] )) )
+                                                                        ? ( (hover[indexQuestion] || ( (hover[indexQuestion] && ratings[indexQuestion]) || ratings[indexQuestion] )) )
                                                                         :
-                                                                        (index_map > ( (ratings[index] && ( (hover[index] || ratings[index]) && hover[index] )) ) ) ?
-                                                                            ( (ratings[index] && ( (hover[index] || ratings[index]) && hover[index] )) )
-                                                                            : ratings[index]
+                                                                        (index_map > ( (ratings[indexQuestion] && ( (hover[indexQuestion] || ratings[indexQuestion]) && hover[indexQuestion] )) ) ) ?
+                                                                            ( (ratings[indexQuestion] && ( (hover[indexQuestion] || ratings[indexQuestion]) && hover[indexQuestion] )) )
+                                                                            : ratings[indexQuestion]
                                                                 )
                                                                     ? "on index_" + index_map
                                                                     : "off index_" + index_map
@@ -397,7 +444,7 @@ const DisplayQuestionEditor = () => {
 
                                                         onClick={() => setRating( (oldValue) => {
                                                             const newValue = [...oldValue]
-                                                            newValue[index] = index_map;
+                                                            newValue[indexQuestion] = index_map;
                                                             $('.submit-button').removeClass('hidden');
                                                             window.scrollBy({
                                                                 top: 500,
@@ -410,12 +457,12 @@ const DisplayQuestionEditor = () => {
                                                         })}
                                                         onMouseEnter={() => setHover( (oldValue) => {
                                                             const newValue = [...oldValue]
-                                                            newValue[index] = index_map;
+                                                            newValue[indexQuestion] = index_map;
                                                             return newValue;
                                                         }   )}
                                                         onMouseLeave={() => setHover( (oldValue) => {
                                                             const newValue = [...oldValue]
-                                                            newValue[index] = ratings[index];
+                                                            newValue[indexQuestion] = ratings[indexQuestion];
                                                             return newValue;
                                                         }        )}
 
@@ -425,15 +472,12 @@ const DisplayQuestionEditor = () => {
                                                 </div>
                                             );
                                         } )}
-                                        <input id={"rating_" + questions[index].id} name={"question_" + questions[index].id} hidden  value={(ratings[index] == 0) ? '0': answers[questions[index].id][ratings[index] -1 ].id } onChange={() => {}}/>
+                                        <input id={"rating_" + currentQuestionId} name={"question_" + currentQuestionId} hidden  value={(ratings[indexQuestion] == 0) ? '0': answers[currentQuestionId][ratings[indexQuestion] -1 ].id } onChange={() => {}}/>
                                     </div>
                                 </fieldset>
                             </div>
                             }
                         </div>
-                    )
-                }
-            })}
 
             <br/>
             <nav className="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0">
@@ -453,26 +497,32 @@ const DisplayQuestionEditor = () => {
                     </button>
                 </div>
                 <div className="flex">
-                    {questions.map ( (question, index) => {
-                        return <button id={`nav_${question.id}`}
-                                       className={`${index == 0
-                                           ? 'class_' + question.id + ' border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none'
-                                           : 'hidden class_' + question.id + ' border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none'} 
-                                    `}
-                                type="button" key={index}
-                                name={`nav_loop_${index + 1}`}>
-                            {index + 1} <span > / {questions.length} </span>
-                        </button>
-                    } ) }
+                    {/*{questions.map ( (question, index) => {*/}
+                    {/*    return <button id={`nav_${question.id}`}*/}
+                    {/*                   className={`${index == 0*/}
+                    {/*                       ? 'class_' + question.id + ' border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none'*/}
+                    {/*                       : 'hidden class_' + question.id + ' border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none'} */}
+                    {/*                `}*/}
+                    {/*            type="button" key={index}*/}
+                    {/*            name={`nav_loop_${index + 1}`}>*/}
+                    {/*        {index + 1} <span > / {questions.length} </span>*/}
+                    {/*    </button>*/}
+                    {/*} ) }*/}
+                    <button id={`nav_${currentQuestionId}`}
+                            className={`class_${currentQuestionId} border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium nav-action outline-none focus:outline-none`}
+                            type="button"
+                            name={`nav_loop_${indexQuestion}`}>
+                        {indexQuestion + 1} <span > / {count_questions} </span>
+                    </button>
                 </div>
 
                 <div className="-mt-px w-0 flex-1 flex justify-end">
                     <button
-                        className={`${questions.length == 1
+                        className={`${count_questions == 1
                             ? 'hidden border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 next outline-none focus:outline-none'
                             : 'border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 next outline-none focus:outline-none'} 
                                     `}
-                        value={questions.length}
+                        value={count_questions}
                         onClick={onHandleClickNext}
                         type="button">
                         Следующий

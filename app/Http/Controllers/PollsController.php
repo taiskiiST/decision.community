@@ -1147,7 +1147,9 @@ class PollsController extends Controller
     public function display(Poll $poll)
     {
         if ($poll->isReportDone()) {
+            $question_list_id = [];
             foreach ($poll->questions as $question) {
+                $question_list_id [] = $question->id;
                 $ratings[] = $question->answerThatUserVote( auth()->user() )  ? $question->answerThatUserVote( auth()->user() ): 0 ;
                 foreach ($question->answers()->get() as $answer) {
                     $answers[$question->id][] = $answer;
@@ -1168,8 +1170,12 @@ class PollsController extends Controller
                 $question_hash_files [$question->id] = $question->question_files;
             }
 
+
             \JavaScript::put([
                 'questions'     => $poll->questions,
+                'count_questions'     => $poll->questions->count(),
+                'question_first'     => $poll->questions->first(),
+                'question_list_id' => $question_list_id,
                 'is_admin'      => auth()->user()->isAdmin(),
                 'users'         => Company::find(session('current_company')->id)->users()->get(),
                 'question_hash_speakers' => $question_hash_speakers,
@@ -1193,11 +1199,13 @@ class PollsController extends Controller
             $question_answers = [];
             $question_hash_num_files = [];
             $answers = [];
+            $question_list_id = [];
             foreach ($poll->questions as $question){
                 $question_hash_speakers [$question->id] = $question->speakers;
                 $question_hash_files [$question->id] = $question->question_files;
                 $question_hash_num_files [$question->id] = 1;
                 $question_answers [$question->id] = $question->answers;
+                $question_list_id [] = $question->id;
                 foreach ($question_hash_files [$question->id] as $file){
                     $image = new Imagick();
                     $image->pingImage(base_path().'/storage/app/public/'.$file->path_to_file);
@@ -1214,6 +1222,9 @@ class PollsController extends Controller
             //dd($question_answers);
             \JavaScript::put([
                 'questions'     => $poll->questions,
+                'count_questions'     => $poll->questions->count(),
+                'question_first'     => $poll->questions->first(),
+                'question_list_id' => $question_list_id,
                 'is_admin'      => auth()->user()->isAdmin(),
                 'users'         => Company::find(session('current_company')->id)->users()->get(),
                 'question_hash_speakers' => $question_hash_speakers,

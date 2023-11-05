@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AnonymousUser;
 use App\Models\Answer;
 use App\Models\Company;
 use App\Models\Item;
@@ -11,15 +10,11 @@ use App\Models\Permission;
 use App\Models\Poll;
 use App\Models\Position;
 use App\Models\Question;
-use App\Models\Speaker;
 use App\Models\TypeOfPoll;
 use App\Models\User;
-use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-use Imagick;
-
 
 class PollsController extends Controller
 {
@@ -40,7 +35,7 @@ class PollsController extends Controller
     {
         //$company = Company::where('uri','LIKE', session('subdomain'))->first();
 
-        if(!session('current_company')){
+        if (!session('current_company')) {
             Auth::logout();
             $this->authorizeResource(Poll::class, 'poll');
         }
@@ -829,7 +824,7 @@ class PollsController extends Controller
         $poll->delete();
         return redirect()->route('polls.index', [
             'polls'   => Poll::where('company_id', session('current_company')->id)->get(),
-            'poll_id' => '0'
+            'poll_id' => '0',
             //'users' => User::where('company_id', session('current_company')->id)->get(),
             //'siteTitle' => session('current_company')->title
         ]);
@@ -1045,6 +1040,8 @@ class PollsController extends Controller
 
         }
 
+        $poll->reSortQuestions();
+
         if (!isset($parameters['SuggestedQuestion'])) {
             $question->update([
                 'suggest' => 0,
@@ -1095,45 +1092,20 @@ class PollsController extends Controller
     //// polls/7
     public function show(Poll $poll)
     {
-        $question_hash_speakers = [];
-        $question_hash_files = [];
-        $file_hash = [];
-        $question_hash_num_files = [];
-        $question_answers = [];
-        foreach ($poll->questions()->get() as $question){
-            $question_hash_speakers [$question->id] = $question->speakers()->get();
-            $question_hash_files [$question->id] = $question->question_files;
-            $question_answers[$question->id] = $question->answers;
-            foreach ($question_hash_files [$question->id] as $file){
-                if(strpos(Storage::url($file->path_to_file), '.pdf') !== false ) {
-                    //dd(base_path().'/app/public/'.$file->path_to_file);
-                    ///var/www/berezka/storage/app/public/storage/42/79
-                    $image = new Imagick();
-                    $image->pingImage(base_path().'/storage/app/public/'.$file->path_to_file);
-                    $file_hash[$file->id] = $image->getNumberImages();
-                    for ($i = 1; $i <= $file_hash[$file->id];$i++ ){
-                        $question_hash_num_files[$question->id][$file->id][] = $i;
-                    }
-                }
-            }
-        }
+        $displayMode = true;
+
         \JavaScript::put([
-            'questions'     => $poll->questions,
-            'is_admin'      => auth()->user()->isAdmin(),
-            'users'         => Company::find(session('current_company')->id)->users()->get(),
-            'question_hash_speakers' => $question_hash_speakers,
-            'question_hash_files' => $question_hash_files,
-            'display_mode' => true,
-            'can_vote'      => auth()->user()->canVote(),
-            'question_answers'      => $question_answers,
-            'file_hash' => $file_hash,
-            'question_hash_num_files' => $question_hash_num_files,
+            'questionsCount' => $poll->questions->count(),
+            'displayMode'    => $displayMode,
+            'canVote'        => auth()->user()->canVote(),
+            'pollId'         => $poll->id,
+            'isTypeReport'   => $poll->isReportDone(),
+            'voteUrl'        => route('poll.submit', ['poll' => $poll]),
         ]);
+
         return view('polls.display', [
             'poll'        => $poll,
-            'displayMode' => true,
-            'quorum'      => '',
-            'users'       => Company::find(session('current_company')->id)->users()->get(),
+            'displayMode' => $displayMode,
         ]);
     }
 
@@ -1146,113 +1118,22 @@ class PollsController extends Controller
      */
     public function display(Poll $poll)
     {
-        if ($poll->isReportDone()) {
-            $question_list_id = [];
-            foreach ($poll->questions as $question) {
-                $question_list_id [] = $question->id;
-                $ratings[] = $question->answerThatUserVote( auth()->user() )  ? $question->answerThatUserVote( auth()->user() ): 0 ;
-                foreach ($question->answers()->get() as $answer) {
-                    $answers[$question->id][] = $answer;
-                }
-            }
+        $displayMode = false;
 
-            if ($poll->questions->count() == 0) {
-                $ratings = '';
-                $answers = '';
-            }
-
-            //dd($ratings);
-
-            $question_hash_speakers = [];
-            $question_hash_files = [];
-            foreach ($poll->questions()->get() as $question){
-                $question_hash_speakers [$question->id] = $question->speakers()->get();
-                $question_hash_files [$question->id] = $question->question_files;
-            }
-
-
-            \JavaScript::put([
-                'questions'     => $poll->questions,
-                'count_questions'     => $poll->questions->count(),
-                'question_first'     => $poll->questions->first(),
-                'question_list_id' => $question_list_id,
-                'is_admin'      => auth()->user()->isAdmin(),
-                'users'         => Company::find(session('current_company')->id)->users()->get(),
-                'question_hash_speakers' => $question_hash_speakers,
-                'question_hash_files' => $question_hash_files,
-                'display_mode' => false,
-                'can_vote'      => auth()->user()->canVote(),
-                'ratings_questions' => $ratings,
-                'answers'           => $answers,
-                'isReportDone' => $poll->isReportDone()
-            ]);
-
-            return view('polls.display', [
-                'poll'        => $poll,
-                'displayMode' => false,
-                'users'       => Company::find(session('current_company')->id)->users()->get(),
-            ]);
-        } else {
-            $question_hash_speakers = [];
-            $question_hash_files = [];
-            $file_hash = [];
-            $question_answers = [];
-            $question_hash_num_files = [];
-            $answers = [];
-            $question_list_id = [];
-            foreach ($poll->questions as $question){
-                $question_hash_speakers [$question->id] = $question->speakers;
-                $question_hash_files [$question->id] = $question->question_files;
-                $question_hash_num_files [$question->id] = 1;
-                $question_answers [$question->id] = $question->answers;
-                $question_list_id [] = $question->id;
-                foreach ($question_hash_files [$question->id] as $file){
-                    $image = new Imagick();
-                    $image->pingImage(base_path().'/storage/app/public/'.$file->path_to_file);
-                    $file_hash[$file->id] = $image->getNumberImages();
-                }
-                foreach ($question->answers()->get() as $answer) {
-                    $answers[$question->id][] = $answer;
-                }
-            }
-
-            if ($poll->questions->count() == 0) {
-                $answers = '';
-            }
-            //dd($question_answers);
-            \JavaScript::put([
-                'questions'     => $poll->questions,
-                'count_questions'     => $poll->questions->count(),
-                'question_first'     => $poll->questions->first(),
-                'question_list_id' => $question_list_id,
-                'is_admin'      => auth()->user()->isAdmin(),
-                'users'         => Company::find(session('current_company')->id)->users()->get(),
-                'question_hash_speakers' => $question_hash_speakers,
-                'question_hash_files' => $question_hash_files,
-                'display_mode' => false,
-                'can_vote'      => auth()->user()->canVote(),
-                'question_answers'      => $question_answers,
-                'file_hash' => $file_hash,
-                'question_hash_num_files' => $question_hash_num_files,
-                'isReportDone' => $poll->isReportDone(),
-                'answers' => $answers
-            ]);
-
-            return view('polls.display', [
-                'poll'        => $poll,
-                'displayMode' => false,
-                'users'       => Company::find(session('current_company')->id)->users()->get(),
-            ]);
-        }
-    }
-
-    public function display_report(Poll $poll)
-    {
-
-        return view('polls.display_report', [
-            'poll'  => $poll,
-            'users' => Company::find(session('current_company')->id)->users()->get(),
+        \JavaScript::put([
+            'questionsCount' => $poll->questions->count(),
+            'displayMode'    => $displayMode,
+            'canVote'        => auth()->user()->canVote(),
+            'pollId'         => $poll->id,
+            'isTypeReport'   => $poll->isReportDone(),
+            'voteUrl'        => route('poll.submit', ['poll' => $poll]),
         ]);
+
+        return view('polls.display', [
+            'poll'        => $poll,
+            'displayMode' => $displayMode,
+        ]);
+
     }
 
     public function start(Poll $poll)
@@ -1300,12 +1181,11 @@ class PollsController extends Controller
         }
         $out = [];
 
-        if($poll->isGovernanceMeeting()){
+        if ($poll->isGovernanceMeeting()) {
             $out = $poll->peopleThatDidNotVoteGovernance();
-        }else{
+        } else {
             $out = $poll->peopleThatDidNotVoteVoters();
         }
-
 
         $str = '<table class=\'min-w-full divide-y divide-gray-200\'>';
         $str .= '<thead class=\'bg-gray-50\'>
@@ -1543,7 +1423,7 @@ class PollsController extends Controller
             $maxCountVotes = 0;
             foreach ($question->answers()->get() as $answer) {
                 $answers[$question->id][] = $answer;
-                if ($answer->countVotes() > $maxCountVotes){
+                if ($answer->countVotes() > $maxCountVotes) {
                     $maxCountVotes = $answer->countVotes();
                 }
                 $countVotedForAnswer[$answer->id] = $answer->countVotes();
@@ -1553,14 +1433,14 @@ class PollsController extends Controller
         }
 
         \JavaScript::put([
-            'questions'     => $poll->questions()->get(),
-            'poll_report_done' => $poll->isReportDone(),
-            'answers' => $answers,
-            'countVotedForAnswer' => $countVotedForAnswer,
-            'poll' => $poll,
-            'countByQuestion' => $countByQuestion,
+            'questions'                            => $poll->questions()->get(),
+            'poll_report_done'                     => $poll->isReportDone(),
+            'answers'                              => $answers,
+            'countVotedForAnswer'                  => $countVotedForAnswer,
+            'poll'                                 => $poll,
+            'countByQuestion'                      => $countByQuestion,
             'middleAnswerThatAllUsersMarkOnReport' => $middleAnswerThatAllUsersMarkOnReport,
-            'questionMaxCountVotes' => $questionMaxCountVotes
+            'questionMaxCountVotes'                => $questionMaxCountVotes,
         ]);
         return view('polls.results', [
             'poll'   => $poll,
@@ -1589,117 +1469,72 @@ class PollsController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param \Illuminate\Http\Request $request
      * @param \App\Models\Poll $poll
      *
-     * @return \Illuminate\Http\Response
+     * @return string[]
      */
     public function submit(Request $request, Poll $poll)
     {
-        $anonymous = false;
+        /** @var \App\Models\User $user */
         $user = auth()->user();
 
-        if ($request->private_poll) {
-            $user = AnonymousUser::create();//['company_id' => session('current_company')->id]);
-            $anonymous = true;
+        $pollQuestionsCount = $poll->questions->count();
+        $isPollRegular = !$poll->isReportDone();
+
+        if ($user->votedInPoll($poll) && $isPollRegular) {
+            return [
+                'errorMessage' => 'Вы уже проголосовали по данному вопросу!',
+            ];
         }
 
-        foreach ($poll->questions as $question) {
-            $rules["question_{$question->id}"] = $poll->isReportDone() ? 'required' : 'required|exists:answers,id';
-            if (!empty($request->input('speakers' . $question->id))) {
-                $list = implode(',', $request->input('speakers' . $question->id));
-                Speaker::updateOrCreate([
-                    'question_id' => $question->id,
-                ],
-                    [
-                        'users_speaker_id' => $list,
-                    ]
-                );
+        $votes = request('votes');
+        if (empty($votes)) {
+            return [
+                'errorMessage' => 'Ошибка данных',
+            ];
+        }
+
+        $votesCount = count($votes);
+
+        if ($isPollRegular && $pollQuestionsCount !== $votesCount) {
+            return [
+                'errorMessage' => 'Вы ответили не на все вопросы',
+            ];
+        }
+
+        foreach ($votes as $questionId => $answerId) {
+            $question = Question::find($questionId);
+            if (!$question) {
+                return [
+                    'errorMessage' => 'Вопрос не найден',
+                ];
+            }
+
+            $answer = Answer::find($answerId);
+            if (!$answer) {
+                return [
+                    'errorMessage' => 'Ответ не найден',
+                ];
+            }
+
+            $user->vote($question, $answer);
+        }
+
+        if ($poll->isSuggestedQuestion()) {
+            $count_all_voters = $poll->potential_voters_number;
+
+            if (round($count_all_voters / 2, 0, PHP_ROUND_HALF_UP) <= $poll->peopleThatVote()->count()) {
+                $poll->questions()->first()->update([
+                    'accepted' => true,
+                ]);
             }
         }
 
-        $parameters = $this->validate($request, $rules);
-
-        if (!$anonymous) {
-            foreach ($poll->questions as $question) {
-                if (!Vote::where('question_id', '=', $question->id)
-                         ->where('user_id', '=', $user->id)->count()
-                ) {
-                    $answerId = $parameters["question_{$question->id}"];
-                    $answer = Answer::find($answerId);
-                    //dd($parameters, 'param 2');
-                    if (!$answer) {
-                        continue;
-                    }
-                    $user->vote($question, $answer);
-                } else {
-                    if ($poll->isReportDone()) {
-                        //dd($parameters, 'param 1');
-                        $answerId = $parameters["question_{$question->id}"];
-                        $answer = Answer::find($answerId);
-
-                        if (!$answer) {
-                            continue;
-                        }
-                        $user->vote($question, $answer);
-                    } else {
-                        return redirect()->route('poll.display', [$poll->id])
-                                         ->withErrors("Вы уже проголосовали по данному вопросу!");
-                    }
-                }
-            }
-            if ($poll->isSuggestedQuestion()) {
-                $count_all_voters = $poll->potential_voters_number;
-                //$count_all_voters = User::where('permissions', 'LIKE', '%'.Permission::VOTE.'%')->count();
-                if (round($count_all_voters / 2, 0, PHP_ROUND_HALF_UP) <= $poll->peopleThatVote()->count()) {
-                    $poll->questions()->first()->update([
-                        'accepted' => true,
-                    ]);
-                }
-            }
-
-            $poll->refresh();
-            return redirect()->route('poll.results', [$poll->id]);
-//            return view('polls.results', [
-//                'poll'   => $poll,
-//            ]);
-        } else {
-            if ($anonymous) {
-                foreach ($poll->questions as $question) {
-                    $answerId = $parameters["question_{$question->id}"];
-                    $answer = Answer::find($answerId);
-                    if (!$answer) {
-                        continue;
-                    }
-                    $user->vote($question, $answer);
-                    auth()->user()->vote($question, $answer);
-                }
-            } else {
-                foreach ($poll->questions as $question) {
-                    if (!Vote::where('question_id', '=', $question->id)
-                             ->where('user_id', '=', $user->id)->count()
-                    ) {
-                        $answerId = $parameters["question_{$question->id}"];
-                        $answer = Answer::find($answerId);
-                        if (!$answer) {
-                            continue;
-                        }
-                        $user->vote($question, $answer);
-                        $user_anonymous = AnonymousUser::create();//['company_id' => session('current_company')->id]);
-                        $user_anonymous->vote($question, $answer);
-                    } else {
-                        return redirect()->route('poll.display', [$poll->id])
-                                         ->withErrors("Вы уже проголосовали по данному вопросу!");
-                    }
-                }
-            }
-
-            $poll->refresh();
-
-            return redirect()->route('poll.results.public', [
-                'poll'   => $poll,
-            ]);
-        }
-
+        return [
+            'success' => true,
+            'message' => 'Успех!'
+        ];
     }
 
     /**
@@ -1719,15 +1554,15 @@ class PollsController extends Controller
         }
 
         \JavaScript::put([
-            'poll'          => $poll->id,
-            'csrf_token'    => csrf_token(),
-            'file_protocol' => $poll->protocol ? $poll->protocol : '',
-            'is_admin'      => auth()->user()->isAdmin(),
-            'error'         => $error,
-            'questions'     => $poll->questions,
+            'poll'                  => $poll->id,
+            'csrf_token'            => csrf_token(),
+            'file_protocol'         => $poll->protocol ? $poll->protocol : '',
+            'is_admin'              => auth()->user()->isAdmin(),
+            'error'                 => $error,
+            'questions'             => $poll->questions,
             'cnt_files_in_question' => $cnt_files_in_question,
-            'poll_finished' => $poll->voteFinished(),
-            'poll_full'          => $poll,
+            'poll_finished'         => $poll->voteFinished(),
+            'poll_full'             => $poll,
         ]);
 
         return view('polls.update', [
@@ -1744,14 +1579,14 @@ class PollsController extends Controller
             $cnt_files_in_question = [];
         }
         \JavaScript::put([
-            'poll'          => $poll->id,
-            'csrf_token'    => csrf_token(),
-            'file_protocol' => $poll->protocol ? $poll->protocol : '',
-            'is_admin'      => auth()->user()->isAdmin(),
-            'questions'     => $poll->questions,
+            'poll'                  => $poll->id,
+            'csrf_token'            => csrf_token(),
+            'file_protocol'         => $poll->protocol ? $poll->protocol : '',
+            'is_admin'              => auth()->user()->isAdmin(),
+            'questions'             => $poll->questions,
             'cnt_files_in_question' => $cnt_files_in_question,
-            'poll_finished' => $poll->voteFinished(),
-            'poll_full'          => $poll,
+            'poll_finished'         => $poll->voteFinished(),
+            'poll_full'             => $poll,
 
         ]);
 

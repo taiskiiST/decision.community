@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Poll;
 use App\Models\Question;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class QuestionsController extends Controller
@@ -240,12 +242,18 @@ class QuestionsController extends Controller
 
     public function getQuestion()
     {
-        //dd();
-        $question_id = request('question_id');
-        if (empty($question_id)) {
-            return collect();
-        }
-        return Question::find($question_id);
+        $question = Question
+            ::where('poll_id', request('pollId'))
+            ->where('position_in_poll', request('positionInPoll'))
+            ->with('answers')
+            ->with('question_files')
+            ->first();
+
+        $vote = auth()->user()->votes->whereIn('question_id', $question->id)->first();
+
+        $question->userVotedAnswerId = $vote ? $vote->answer_id : null;
+
+        return $question;
     }
 
     /**
@@ -328,16 +336,34 @@ class QuestionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param \App\Models\Poll $poll
      * @param \App\Models\Question $question
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Poll $poll, Question $question)
+    public function destroy(Poll $poll, Question $question): RedirectResponse
     {
+        try {
+            DB::transaction(function () use ($question) {
+                /** @var Poll $poll */
+                $poll = $question->poll;
+
+                $question->delete();
+
+                $poll->reSortQuestions();
+            });
+        } catch (\Throwable $e) {
+            logger()->error(__METHOD__ . " - could not remove a question with id $question->id");
+
+            return redirect()->route('poll.edit', [
+                'poll' => $poll,
+            ]);
+        }
+
         foreach ($question->question_files()->get() as $file) {
             Storage::disk('public')->delete($file->path_to_file);
         }
-        $question->delete();
+
         return redirect()->route('poll.edit', [
             'poll' => $poll,
         ]);
@@ -349,9 +375,13 @@ class QuestionsController extends Controller
         foreach ($question->question_files()->get() as $file) {
             Storage::disk('public')->delete($file->path_to_file);
         }
+
         $poll = Poll::find($question->poll_id);
+
         $question->delete();
+
         $poll->delete();
+
         return redirect()->route('poll.questions.view_suggested_questions');
     }
 }

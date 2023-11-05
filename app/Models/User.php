@@ -87,14 +87,17 @@ class User extends Authenticatable
     {
         return $this->isAdmin() || in_array(Permission::MANAGE_ITEMS, explode(',', $this->permissions));
     }
+
     public function isManageItems(): bool
     {
         return in_array(Permission::MANAGE_ITEMS, explode(',', $this->permissions));
     }
+
     public function isAccess(): bool
     {
         return in_array(Permission::ACCESS, explode(',', $this->permissions));
     }
+
     /**
      * @return bool
      */
@@ -102,10 +105,12 @@ class User extends Authenticatable
     {
         return in_array(Permission::GOVERNANCE, explode(',', $this->permissions));
     }
+
     public function canGovernance(): bool
     {
         return $this->isAdmin() || in_array(Permission::GOVERNANCE, explode(',', $this->permissions));
     }
+
     /**
      * @return bool
      */
@@ -113,10 +118,12 @@ class User extends Authenticatable
     {
         return $this->isAdmin() || in_array(Permission::VOTE, explode(',', $this->permissions));
     }
+
     public function isVote(): bool
     {
         return in_array(Permission::VOTE, explode(',', $this->permissions));
     }
+
     public function isHavePermission($permission): bool
     {
         return in_array($permission, explode(',', $this->permissions));
@@ -124,8 +131,8 @@ class User extends Authenticatable
 
     public function isHaveCompany($company): bool
     {
-        foreach($this->companies()->get() as $cmp){
-            if ($cmp->id == $company->id){
+        foreach ($this->companies()->get() as $cmp) {
+            if ($cmp->id == $company->id) {
                 return true;
             }
         }
@@ -137,7 +144,7 @@ class User extends Authenticatable
     {
         if (isset($this->hasOne(Position::class, 'id', 'position_id')->get()[0])) {
             return $this->hasOne(Position::class, 'id', 'position_id')->get()[0]->position;
-        }else{
+        } else {
             return '';
         }
 
@@ -147,7 +154,7 @@ class User extends Authenticatable
     {
         if (isset($this->hasOne(UsersAdditionalFields::class, 'id', 'additional_id')->get()[0])) {
             return $this->hasOne(UsersAdditionalFields::class, 'id', 'additional_id')->get()[0]->ownership;
-        }else{
+        } else {
             return '';
         }
 
@@ -157,7 +164,7 @@ class User extends Authenticatable
     {
         if (isset($this->hasOne(UsersAdditionalFields::class, 'id', 'additional_id')->get()[0])) {
             return $this->hasOne(UsersAdditionalFields::class, 'id', 'additional_id')->get()[0]->job;
-        }else{
+        } else {
             return '';
         }
 
@@ -172,7 +179,6 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Company::class);
     }
-
 
     /**
      * @param int|null $parentId
@@ -211,23 +217,31 @@ class User extends Authenticatable
 
         DB::transaction(function () use ($question, $answer, &$out) {
             $question->poll->update([
-                'potential_voters_number' => $question->poll->isGovernanceMeeting() ? $question->poll->company->potentialVotersNumberGovernance() : $question->poll->company->potentialVotersNumber()
+                'potential_voters_number' => $question->poll->isGovernanceMeeting() ? $question->poll->company->potentialVotersNumberGovernance() : $question->poll->company->potentialVotersNumber(),
             ]);
 
             $out = $this->votes()->updateOrCreate([
                 'question_id' => $question->id,
-                'user_id' => $this->id
+                'user_id'     => $this->id,
             ], [
-                'answer_id' => $answer->id,
+                'answer_id'   => $answer->id,
                 'question_id' => $question->id,
-                'user_id' => $this->id
+                'user_id'     => $this->id,
             ]);
         });
 
         return $out;
     }
 
-    public function id(){
+    public function votedInPoll(Poll $poll): bool
+    {
+        return Vote::where('user_id', $this->id)
+                   ->whereIn('question_id', $poll->questions->pluck('id'))
+                   ->count() !== 0;
+    }
+
+    public function id()
+    {
         return $this->id();
     }
 }

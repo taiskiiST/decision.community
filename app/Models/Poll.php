@@ -112,6 +112,17 @@ class Poll extends Model
         return Poll::where('id', $this->id)->delete();
     }
 
+    public function reSortQuestions(): void
+    {
+        $position = 1;
+
+        $this->questions()->orderBy('id')->get()->each(function (Question $question) use (&$position) {
+            $question->update([
+                'position_in_poll' => $position++
+            ]);
+        });
+    }
+
     /**
      * @return \Illuminate\Support\Collection
      */

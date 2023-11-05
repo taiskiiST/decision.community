@@ -64,31 +64,11 @@
 
     @if (auth()->user() ? auth() && auth()->user()->canVote()|| auth()->user()->isAccess() : '' )
         @if (auth()->user()->isAccess() || (!$poll->finished && !$poll->authUserVote() && !$poll->isGovernanceMeeting() || $displayMode) || $poll->isGovernanceMeeting() && auth()->user()->isGovernance() )
-            {!! Form::open(['route' => ['poll.submit', ['poll' => $poll] ], 'method' => 'POST']) !!}
-
             <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
                 <div class="text-center"><span style="font-size: x-large;"><b>{{$poll->name}}</b></span></div>
 
-                <br/>
-
                 <div id="displayQuestionsEditor"> </div>
-
-                <div class="inline-flex flex-row w-full place-content-between">
-                    <div class="px-4 py-3 sm:px-6">
-                        <button type="button" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hidden submit-button"
-                       id="button_submit">
-                            Проголосовать!
-                        </button>
-                    </div>
-                    <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
-                        <a href="/polls"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                        id="button_cancel">
-                               @if ($displayMode || !auth()->user()->isAccess()) Назад @else Отмена @endif
-                            </button></a>
-                    </div>
-                </div>
             </div>
-            {!! Form::close() !!}
         @else
             @if ($poll->isGovernanceMeeting() && !auth()->user()->isGovernance())
                 <div class="bg-gray-50">
@@ -153,27 +133,6 @@
                 return true
             }
         );
-
-        window.addEventListener('beforeunload', function () {
-            if (document.location.pathname.includes("display") ) {
-                if (!$("#button_submit").hasClass('submit_done') && !$("#button_submit").hasClass('submit_no')) {
-                    // Отменяем поведение по умолчанию
-                    event.preventDefault()
-
-                    // Chrome требует наличия returnValue
-                    event.returnValue = ''
-                }
-                if ($("#button_submit").hasClass('submit_no')) {
-                    // Отменяем поведение по умолчанию
-                    event.preventDefault()
-
-                    // Chrome требует наличия returnValue
-                    event.returnValue = ''
-                    $("#button_submit").removeClass("submit_no");
-                }
-            }
-
-        })
 
         $("#button_cancel").click(
             function () {

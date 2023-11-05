@@ -34,6 +34,8 @@ const Paginator = ({
     indexQuestion,
     onHandleClickNext,
     nextButtonDisabled,
+    votes,
+    questionId
 }) => (
     <nav className="flex items-center justify-between px-4 sm:px-0">
         <div className="-mt-px flex w-0 flex-1">
@@ -46,6 +48,8 @@ const Paginator = ({
         <QuestionPosition
             position={indexQuestion}
             questionsCount={questionsCount}
+            votes={votes}
+            questionId={questionId}
         />
 
         <div className="-mt-px flex w-0 flex-1 justify-end">
@@ -108,9 +112,10 @@ const NextButton = ({ disabled, onClick }) => (
     </button>
 );
 
-const QuestionPosition = ({ position, questionsCount }) => (
-    <button
-        className="nav-action inline-flex items-center border-t-2 border-indigo-500 px-4 pt-4 text-sm font-medium text-indigo-600 outline-none focus:outline-none"
+const QuestionPosition = ({ position, questionsCount, votes, questionId }) => (
+    <button className={`nav-action inline-flex items-center border-t-2 border-indigo-500 px-4 pt-4 text-sm font-medium text-indigo-600 outline-none focus:outline-none ${
+        questionId && votes[questionId] ? 'bg-green-200' : ''
+        }`}
         type="button"
     >
         {position} <span> / {questionsCount} </span>
@@ -213,12 +218,12 @@ const DisplayQuestionEditor = () => {
             });
         } catch (e) {
             console.log('e', e);
-            toast.error('Ошибка сохранения.');
+            toast.error('Ошибка сохранения результатов голосования.');
 
             return;
         }
 
-        toast.success('Всё получилось!');
+        toast.success('Результаты голосования сохранены!');
 
         window.location = '/polls';
     };
@@ -235,6 +240,8 @@ const DisplayQuestionEditor = () => {
                 onHandleClickPrev={onHandleClickPrev}
                 nextButtonDisabled={nextButtonDisabled}
                 onHandleClickNext={onHandleClickNext}
+                votes={votes ? votes : null}
+                questionId={currentQuestionId ? currentQuestionId : null}
             />
 
             <div
@@ -290,6 +297,8 @@ const DisplayQuestionEditor = () => {
                     onHandleClickPrev={onHandleClickPrev}
                     nextButtonDisabled={nextButtonDisabled}
                     onHandleClickNext={onHandleClickNext}
+                    votes={votes ? votes : null}
+                    questionId={currentQuestionId ? currentQuestionId : null}
                 />
             </div>
 
@@ -300,7 +309,7 @@ const DisplayQuestionEditor = () => {
                     onClick={() => {
                         if (
                             confirm(
-                                'Вы уверены, что хотите окончить голосование?',
+                                'Вы уверены, что хотите прервать голосование?',
                             )
                         )
                             window.location = '/polls';
@@ -314,7 +323,7 @@ const DisplayQuestionEditor = () => {
                     className="rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:bg-gray-600"
                     disabled={voteButtonDisabled}
                     onClick={() =>
-                        confirm('Сохранить результаты?') && onVoteButtonClick()
+                        confirm('Подтверждение окончания голосования') && onVoteButtonClick()
                     }
                 >
                     Проголосовать

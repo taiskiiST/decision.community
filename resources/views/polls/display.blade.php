@@ -42,9 +42,11 @@
         .off {
             color: #ccc;
         }
-        /*.star {*/
-        /*    font-size: 100%;*/
-        /*}*/
+        .react-pdf__Page__canvas {
+            margin: 0 auto;
+            width: 100% !important;
+            height: 100% !important;
+        }
     </style>
 @endsection
 

@@ -53,7 +53,7 @@ const Paginator = ({
 );
 
 const ImageViewer = ({ file }) => (
-    <div className="w-128">
+    <div className="w-3/4">
         <img src={`/storage/${file.path_to_file}`} alt="Document picture" />
     </div>
 );
@@ -78,7 +78,7 @@ const PDFViewer = ({ file }) => {
                 file={`/storage/${file.path_to_file}`}
                 onLoadSuccess={({ numPages }) => setPagesCount(numPages)}
             >
-                <Page pageNumber={currentPage} renderTextLayer={false} />
+                <Page pageNumber={currentPage} renderTextLayer={false} renderAnnotationLayer={false}/>
             </Document>
 
             <Paginator

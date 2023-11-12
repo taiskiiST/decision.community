@@ -1,7 +1,7 @@
 {
     "/js/app.js": "/js/app.js?id=a379062c681d165ec0a6bc8a8f14b47a",
-    "/js/ManageItems.js": "/js/ManageItems.js?id=b3fb3af6b30d0b575b81559e234e0096",
-    "/js/AddQuestionsToPoll.js": "/js/AddQuestionsToPoll.js?id=f117e5ccc655346ccafe1a42b2f9c26a",
+    "/js/ManageItems.js": "/js/ManageItems.js?id=ccc3a3a0af7cfc0a82649c13f1e8a553",
+    "/js/AddQuestionsToPoll.js": "/js/AddQuestionsToPoll.js?id=3d279b0dca9c13b5014eea4c62746168",
     "/js/AddProtocolToPoll.js": "/js/AddProtocolToPoll.js?id=b8327651c61be393dbded419358a95d1",
     "/js/ManageUsers.js": "/js/ManageUsers.js?id=a0bf2d963cd57c9cdc79737c414ce242",
     "/js/RatingStarsForReports.js": "/js/RatingStarsForReports.js?id=96a1dd6e5f8db15db5424f28f0d7dc93",
@@ -10,14 +10,14 @@
     "/js/GlobalSearchQuestionsSmallScreen.js": "/js/GlobalSearchQuestionsSmallScreen.js?id=f3341efc83f4638a718d47ece10a10cb",
     "/js/PreviewTextQuestion.js": "/js/PreviewTextQuestion.js?id=8d6c283ca6d0088261e623388784b7f3",
     "/js/ViewQuestion.js": "/js/ViewQuestion.js?id=0d458130d334e026dfd5a3f38f37872d",
-    "/js/DisplayQuestionsEditor.js": "/js/DisplayQuestionsEditor.js?id=189f9fae1f42c79f42d547e11282a33a",
+    "/js/DisplayQuestionsEditor.js": "/js/DisplayQuestionsEditor.js?id=f6546eb6f528007c911072e1a1e37cba",
     "/js/LandingMainPage.js": "/js/LandingMainPage.js?id=8e3a1f179a2384adcb93a732233cec4e",
     "/js/FormattedTexQuestion.js": "/js/FormattedTexQuestion.js?id=01bcb358babdae35ad62032f8208730f",
     "/js/FormattedTexQuestionMobile.js": "/js/FormattedTexQuestionMobile.js?id=93b8303eb3de16132346e7894056a957",
     "/js/PreviewTextQuestionMobile.js": "/js/PreviewTextQuestionMobile.js?id=38b485e1f82e5b378bf88765674a27bc",
     "/js/manifest.js": "/js/manifest.js?id=a69f2036f7d595f6a119a6217382bd3b",
     "/css/app.css": "/css/app.css?id=c4f43187cd162d0ae7369fb249d1f393",
-    "/css/tailwind.css": "/css/tailwind.css?id=1e0b05ba8153a7b2ec82fcb59785e89f",
+    "/css/tailwind.css": "/css/tailwind.css?id=09c11d9d56c8000f30b3fc18c755ec78",
     "/js/vendor.js": "/js/vendor.js?id=e926c289daf668dfd71efac8a636ea49",
     "/css/antd.css": "/css/antd.css?id=c2c69468dff41332a8656cc1cf98ff9a"
 }

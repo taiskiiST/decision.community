@@ -32,7 +32,6 @@ function SearchQuestionsSmallScreen() {
         setSearchResults(results);
     }, [searchTerm]);
 
-    //console.log(searchResults.length);
     return (
         <div className="relative w-64">
             <div>
@@ -71,7 +70,7 @@ function SearchQuestionsSmallScreen() {
             <div className="absolute z-50 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="min-w-full py-2 align-middle sm:px-1 lg:px-8">
                     <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
-                        {searchTerm && searchResults.length && (
+                        {searchTerm && searchResults.length > 0 && (
                             <table className="flex min-w-full flex-col divide-y divide-gray-200">
                                 <tbody>
                                     {searchResults.map((question, index) => (
@@ -152,6 +151,7 @@ function SearchQuestionsSmallScreen() {
                                 </tbody>
                             </table>
                         )}
+
                         {searchTerm && !searchResults.length && (
                             <div className="whitespace-wrap bg-white px-6 py-4 text-sm font-medium text-gray-900">
                                 Ничего не найдено!

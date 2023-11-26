@@ -6,10 +6,10 @@
     @parent
 
     <style>
-        a {
-            text-decoration: none;
-            color:blue
-        }
+        /*a {*/
+        /*    text-decoration: none;*/
+        /*    color:blue*/
+        /*}*/
         ul {
             padding:0;
             list-style: none;
@@ -42,7 +42,12 @@
             outline: none;
             cursor: pointer;
         }
-
+        /*.DraftEditor-editorContainer {*/
+        /*    background-color:#eb2f96;*/
+        /*    border-left:.1px solid transparent;*/
+        /*    position:relative;*/
+        /*    z-index:1*/
+        /*}*/
     </style>
 @endsection
 
@@ -61,7 +66,7 @@
 
 <div class="p-2">
     <!-- This example requires Tailwind CSS v2.0+ -->
-    <label class="block text-lg text-black font-bold whitespace-wrap">Результаты по {{$poll->name}}</label>
+    <label class="block text-lg text-black font-bold whitespace-wrap text-wrap">Результаты по {{$poll->name}}</label>
     <div class="flex flex-col hidden lg:-mt-px xl:flex">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
             @if(auth()->user()->isAdmin())

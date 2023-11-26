@@ -218,7 +218,7 @@
                         <table class="min-w-full divide-y divide-gray-200 ">
                             <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-1 py-3 text-left whitespace-wrap text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-1 py-3 text-left whitespace-wrap text-wrap text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Название проводимого голосования
                                 </th>
 
@@ -232,7 +232,7 @@
                                         <div class="px-1 py-1 whitespace-nowrap text-sm font-bold text-gray-900 text-center">
                                             {{ $loop_cnt_sml +1 }}
                                         </div>
-                                        <div class="px-1 py-1 whitespace-wrap text-xs  font-bold text-gray-900 text-center">
+                                        <div class="px-1 py-1 whitespace-wrap text-xs text-wrap font-bold text-gray-900 text-center">
                                             @if ($poll->isPublicMeeting()) <div>Принятие решений членами сообщества</div>@endif
                                             @if ($poll->isGovernanceMeeting()) <div>Принятие решений членами правления</div>@endif
 
@@ -259,16 +259,16 @@
 
                                         @if (!$poll->isInformationPost())
                                             @if (! $poll->voteFinished() )
-                                                <div class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-green-600 bg-gray-200">
+                                                <div class="px-6 py-4 whitespace-nowrap text-left text-wrap text-sm font-medium text-green-600 bg-gray-200">
                                                     <span class="text-green-600">@if (! $poll->voteStart() )Голосование еще не началось@elseГолосование активно@endif</span>
                                                 </div>
                                             @else
-                                                <div class="px-6 py-4 whitespace-wrap text-left text-sm font-medium text-red-600 bg-gray-200">
+                                                <div class="px-6 py-4 whitespace-wrap text-wrap text-left text-sm font-medium text-red-600 bg-gray-200">
                                                     Голосование окончено {{date_create($poll->finished)->format('d-m-Y H:i:s')}}
                                                 </div>
                                             @endif
                                         @else
-                                            <div class="px-6 py-4 whitespace-wrap text-left text-sm font-medium text-red-600 bg-gray-200">
+                                            <div class="px-6 py-4 whitespace-wrap text-wrap  text-left text-sm font-medium text-red-600 bg-gray-200">
                                                 Голосование не доступно
                                             </div>
                                         @endif

@@ -22,10 +22,11 @@ const ViewQuestionMobile = () => {
                 {questions.map( (question, index) => {
                     if(!poll_report_done){
                     return (
-                        <div key={index}>
-                            <label className="block text-lg text-black font-semibold mt-6 whitespace-wrap text-wrap">
+                        <div key={index} className="whitespace-pre-line">
+                            <label className="block text-lg font-semibold mt-6 whitespace-wrap text-wrap">
                                 <a href={`/polls/view/question/${question.id}/`}
-                                   className="text-indigo-600 hover:text-indigo-900">
+                                   // className="text-indigo-600 hover:text-indigo-900"
+                                >
                                     {index + 1}. <Editor
                                     name={`question_text_${index}`}
                                     id={`question_text_${index}`}
@@ -116,10 +117,10 @@ const ViewQuestionMobile = () => {
                         return (
                         <div className="text-center" key={index}>
                             <div className="text-left">
-                                <label className="block text-lg text-black font-semibold mt-6 whitespace-wrap text-wrap">
+                                <label className="block text-lg font-semibold mt-6 text-wrap">
                                     <a
                                         href={`/polls/view/question/${question.id}/`}
-                                        className="text-indigo-600 hover:text-indigo-900"
+                                       // className="text-indigo-600 hover:text-indigo-900"
                                     >
                                         {index + 1}.
                                         <Editor

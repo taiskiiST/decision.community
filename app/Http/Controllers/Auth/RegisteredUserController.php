@@ -55,10 +55,9 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
         Auth::login($user);
 
-        //return view('polls.index');
         $company = Company::find($request->company_id);
-        $request->session()->put('current_company', $company);
         $company->users()->save($user);
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 }

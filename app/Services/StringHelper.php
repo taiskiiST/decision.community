@@ -19,4 +19,10 @@ class StringHelper
 
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
     }
+
+    public function isJson($string) {
+        json_decode($string);
+
+        return json_last_error() === JSON_ERROR_NONE;
+    }
 }

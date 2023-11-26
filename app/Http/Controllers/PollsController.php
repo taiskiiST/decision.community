@@ -33,17 +33,18 @@ class PollsController extends Controller
      */
     public function index()
     {
-        //$company = Company::where('uri','LIKE', session('subdomain'))->first();
+        $company = Company::current();
 
-        if (!session('current_company')) {
+        if (!$company) {
             Auth::logout();
-            $this->authorizeResource(Poll::class, 'poll');
+
+            return redirect('home');
         }
 
         return view('polls.index', [
-            'polls'     => Poll::where('company_id', session('current_company')->id)->get(),
-            'users'     => Company::find(session('current_company')->id)->users()->get()->pluck('name', 'id'),
-            'siteTitle' => session('current_company')->title,
+            'polls'     => $company->polls,
+            'users'     => $company->users->pluck('name', 'id'),
+            'siteTitle' => $company->title,
         ]);
     }
 

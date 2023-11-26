@@ -56,7 +56,7 @@
                                             @if ($poll->isInformationPost()) <div class="text-xs font-bold">Информационный пост</div>@endif
 
                                             @if (auth()->user()->isAdmin())
-                                                <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
+                                                <div><a href={{ route('poll.requisites', ['poll' => $poll->id]) }}>{{ $poll->name }}</a></div>
                                             @else
                                                 @if( $poll->isSuggestedQuestion())
                                                     @if ( $poll->questions()->get()->count() )

@@ -11,6 +11,7 @@
     @auth
         <livewire:nav-component />
     @endauth
+
     @guest
       @yield('guest-nav')
     @endguest

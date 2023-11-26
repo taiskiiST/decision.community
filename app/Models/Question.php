@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Services\StringHelper;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @property mixed id
@@ -127,4 +128,28 @@ class Question extends Model
         return $summ;
     }
 
+    public function scopePublic(): Builder
+    {
+        return $this->where('public', true);
+    }
+
+    public function succinctText(): string
+    {
+        if (!app(StringHelper::class)->isJson($this->text)) {
+            return $this->text;
+        }
+
+        $decoded = json_decode($this->text, true);
+
+        if (empty($decoded)) {
+            return '';
+        }
+
+        $blocks = $decoded['blocks'];
+        if (!is_array($blocks) || count($blocks) === 0) {
+            return '';
+        }
+
+        return $decoded['blocks'][0]['text'];
+    }
 }

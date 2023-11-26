@@ -28,7 +28,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         View::share('all_questions', Question::all());
-        $all_questions = Question::all();
+        $all_questions = Question::all()->transform(function (Question $question) {
+            $question->text = $question->succinctText();
+
+            return $question;
+        });
+
         foreach ($all_questions as $question){
             $cnt_files_in_question [$question->id] = $question->question_files()->count();
         }

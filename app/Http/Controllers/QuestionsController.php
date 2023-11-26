@@ -135,24 +135,16 @@ class QuestionsController extends Controller
         }
     }
 
-//    public function viewPublicQuestions()
-//    {
-////        if(!session('current_company')){
-////            return redirect()->route('polls.index');
-////        }
-//        dd(Route::);
-//        $public_questions = Question::where('public', 1)->where('company_id',session('current_company')->id)->get();
-//        return view('questions.public_questions', [
-//            'public_questions' => $public_questions
-//        ]);
-//
-//    }
+    public function viewPublicQuestions()
+    {
+        return view('questions.public_questions', [
+            'public_questions' => Company::current()->getPublicQuestions()
+        ]);
+
+    }
 
     public function viewSuggestedQuestions()
     {
-        if (!session('current_company')) {
-            return redirect()->route('polls.index');
-        }
         $suggested_questions = Question::where('suggest', 1)->where('company_id', session('current_company')->id)->get();
         foreach ($suggested_questions as $question) {
             $cnt_files_in_question [$question->id] = $question->question_files()->count();

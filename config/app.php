@@ -123,6 +123,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'first-level-domain' => env('FIRST_LEVEL_DOMAIN'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

@@ -44,11 +44,7 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
         $request->authenticate();
-
         $request->session()->regenerate();
-
-        $company = Company::find($request->company_id);
-        $request->session()->put('current_company', $company);
 
         return redirect()->intended(route('polls.index'));
     }

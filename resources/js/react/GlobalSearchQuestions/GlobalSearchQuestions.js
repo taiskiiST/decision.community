@@ -22,16 +22,19 @@ function SearchQuestionsFullScreen() {
             return;
         }
 
-        const results = all_questions.filter(
-            (question) =>
-                question.text.toLowerCase().includes(searchTerm) ||
+        const results = all_questions.filter((question) => {
+            const searchTermLowerCased = searchTerm.toLowerCase();
+
+            return (
+                question.text.toLowerCase().includes(searchTermLowerCased) ||
                 itemsNameHash[question.author]
                     .toLowerCase()
-                    .includes(searchTerm) ||
+                    .includes(searchTermLowerCased) ||
                 itemsPollNameHash[question.poll_id]
                     .toLowerCase()
-                    .includes(searchTerm),
-        );
+                    .includes(searchTermLowerCased)
+            );
+        });
         setSearchResults(results);
     }, [searchTerm]);
 

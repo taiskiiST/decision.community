@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -18,6 +19,10 @@ class Controller extends BaseController
 
     public function main()
     {
-        return view('main');
+        $company = Company::current();
+
+        return view($company->mainView(), [
+            'companyName' => $company->name
+        ]);
     }
 }

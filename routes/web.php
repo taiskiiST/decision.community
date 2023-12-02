@@ -31,13 +31,15 @@ Route::get('/', [HomeController::class, 'index'])
      ->name('home');
 
 Route::get('/404', [Controller::class, 'view404'])->name('404');
-Route::get('/main', [Controller::class, 'main'])->name('main');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
 Route::group(['middleware' => 'check.company'], function () {
     require __DIR__ . '/auth.php';
+
+    Route::get('/main', [Controller::class, 'main'])->name('main');
 
     Route::get('polls/view/public/questions', [QuestionsController::class, 'viewPublicQuestions'])->name('questions.view-public-questions');
 

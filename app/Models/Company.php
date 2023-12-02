@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
+/**
+ * @property mixed $uri
+ */
 class Company extends Model
 {
     use HasFactory;
@@ -39,6 +42,15 @@ class Company extends Model
         }
 
         return $company;
+    }
+
+    public function mainView(): string
+    {
+        if (!view()->exists("main/$this->uri")) {
+            return 'main';
+        }
+
+        return "main/$this->uri";
     }
 
     public function potentialVotersNumber(): int

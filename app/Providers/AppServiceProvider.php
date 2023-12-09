@@ -29,8 +29,8 @@ class AppServiceProvider extends ServiceProvider
     {
         View::share('all_questions', Question::all());
         $all_questions = Question::all()->transform(function (Question $question) {
+            //$question->text = mb_convert_encoding($question->succinctText(), 'windows-1251', 'utf-8');
             $question->text = $question->succinctText();
-
             return $question;
         });
 

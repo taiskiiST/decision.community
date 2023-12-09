@@ -25,11 +25,7 @@
 
                         <div id="searchQuestionsFullScreen"></div>
 
-                        <div class="flex flex-col">
-                            <div class="text-base font-medium leading-none text-white">{{ auth()->user()->name }}, {{ auth()->user()->address }}</div>
 
-                            <div class="text-sm font-medium leading-none text-gray-400 mt-1">{{ auth()->user()->email }}</div>
-                        </div>
 {{--                        <div class="flex flex-col">--}}
 {{--                            <div class="text-base font-medium leading-none text-white">Долг: 1 000 руб</div>--}}
 {{--                            <div class="text-sm font-medium leading-none text-gray-400 mt-1">Оплатить</div>--}}
@@ -56,7 +52,11 @@
 
 {{--            </div>--}}
             @if (auth()->user()->canVote())
-            <div class="hidden md:block xl:inline-flex">
+            <div class="hidden md:hidden xl:inline-flex">
+                <div class="items-baseline space-x-4 text-center mt-3">
+                    <div class="text-base font-medium leading-none text-white">{{ auth()->user()->name }}</div>
+                    <div class="text-sm font-medium leading-none text-gray-400 mt-1">{{ auth()->user()->address }}, {{ auth()->user()->email }}</div>
+                </div>
                 <div>
                     <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::SUGGESTED_POLL])}}">
                         @csrf
@@ -69,11 +69,32 @@
                     </form>
                 </div>
             </div>
+            <div class="xl:hidden">
+                <div>
+                    <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::SUGGESTED_POLL])}}">
+                        @csrf
+                        <a href="#"
+                           onclick="event.preventDefault();
+                                                        this.closest('form').submit();"
+                           class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                            {{ __('Вопрос к рассмотрению') }}
+                        </a>
+                    </form>
+                </div>
+            </div>
             @endif
-            <div class="hidden md:block xl:inline-flex">
+            <div class="hidden md:hidden xl:inline-flex">
                 <div>
                     <a href="{{route('poll.questions.view_suggested_questions')}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                         Список предложенных вопросов
+                    </a>
+                </div>
+            </div>
+
+            <div class="xl:hidden">
+                <div>
+                    <a href="{{route('poll.questions.view_suggested_questions')}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Предложенные вопросы
                     </a>
                 </div>
             </div>
@@ -126,7 +147,7 @@
             </a>
         </div>
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#" class="nav-menu-link nav-menu-link-not-current">Товары и услуги</a>
+                <p class="nav-menu-link text-white font-medium">Товары и услуги</p>
                 <div class="flex flex-col pl-5">
                     <a href="{{ route('items.index') }}" class="nav-menu-link {{ in_array($currentRouteName, ['items.index']) ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Товары и услуги</a>
                 </div>
@@ -135,7 +156,7 @@
                     <a href="{{ route('items-tree') }}" class="nav-tab {{ $currentRouteName === 'items-tree' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Редактор товаров и услуг</a>
                 </div>
             @endif
-                <a href="#" class="nav-menu-link nav-menu-link-not-current">Голосование и документы</a>
+                <p class="nav-menu-link  text-white font-medium">Голосование и документы</p>
             <div class="flex flex-col pl-5">
                 <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
             </div>
@@ -155,7 +176,7 @@
                 </a>
             </div>
             @if (auth()->user()->isAdmin())
-                <a href="#" class="nav-menu-link nav-menu-link-not-current">Администрирование</a>
+                <p class="nav-menu-link  text-white font-medium">Администрирование</p>
                 <div class="flex flex-col pl-5">
                     <a href="{{ route('users.governance') }}" class="nav-tab {{ $currentRouteName === 'users.governance' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>
                 </div>

@@ -20,6 +20,7 @@ class Controller extends BaseController
     public function main()
     {
         $company = Company::current();
+
         return view($company->mainView(), [
             'companyName' => $company->title,
             'companyDescription' => $company->description,

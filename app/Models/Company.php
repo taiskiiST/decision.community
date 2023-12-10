@@ -15,6 +15,11 @@ class Company extends Model
 {
     use HasFactory;
 
+    public static function existingURIs(): Collection
+    {
+        return Company::select('uri')->get()->pluck('uri');
+    }
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\DevController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ItemsTreeController;
@@ -35,6 +36,8 @@ Route::get('/404', [Controller::class, 'view404'])->name('404');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/companies/get-existing-uris', [CompaniesController::class, 'getExistingURIs'])->name('companies.get-existing-uris');
 
 Route::group(['middleware' => 'check.company'], function () {
     require __DIR__ . '/auth.php';

@@ -69,19 +69,7 @@
                     </form>
                 </div>
             </div>
-            <div class="xl:hidden">
-                <div>
-                    <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::SUGGESTED_POLL])}}">
-                        @csrf
-                        <a href="#"
-                           onclick="event.preventDefault();
-                                                        this.closest('form').submit();"
-                           class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                            {{ __('Вопрос к рассмотрению') }}
-                        </a>
-                    </form>
-                </div>
-            </div>
+
             @endif
             <div class="hidden md:hidden xl:inline-flex">
                 <div>
@@ -92,11 +80,7 @@
             </div>
 
             <div class="xl:hidden">
-                <div>
-                    <a href="{{route('poll.questions.view_suggested_questions')}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Предложенные вопросы
-                    </a>
-                </div>
+                <div class="text-base font-medium leading-none text-white">{{ auth()->user()->name }}</div>
             </div>
 
             <div class="-mr-2 flex  space-x-4">

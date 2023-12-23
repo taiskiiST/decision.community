@@ -68,6 +68,10 @@ mix.js('resources/js/app.js', 'public/js')
         'resources/js/react/OrganizationCreateForm/index.js',
         'public/js/OrganizationCreateForm.js',
     )
+    .js(
+        'resources/js/react/ChildrenAndParentsInformation/index.js',
+        'public/js/ChildrenAndParentsInformation.js',
+    )
     .react()
     .sass('resources/sass/app.scss', 'public/css')
     .copy('node_modules/antd/dist/antd.css', 'public/css')

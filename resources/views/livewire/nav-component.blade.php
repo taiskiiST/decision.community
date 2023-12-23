@@ -79,9 +79,9 @@
                 </div>
             </div>
 
-            <div class="xl:hidden">
-                <div class="text-base font-medium leading-none text-white">{{ auth()->user()->name }}</div>
-            </div>
+{{--            <div class="xl:hidden">--}}
+{{--                <div class="text-base font-medium leading-none text-white">{{ auth()->user()->name }}</div>--}}
+{{--            </div>--}}
 
             <div class="-mr-2 flex  space-x-4">
                 <div class="relative w-60  md:hidden">

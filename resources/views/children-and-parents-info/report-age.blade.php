@@ -41,6 +41,20 @@
                                 <p class="hidden">{{$loop_cnt += 1}}</p>
                             @endforeach
                             </tbody>
+                            <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="relative px-6 py-3 text-center">
+                                    <span class="sr-only">Действия</span>
+                                </th>
+                                <th scope="col" class="relative px-6 py-3 text-wrap text-center">
+                                    Всего
+                                </th>
+                                <th scope="col" class="relative px-6 py-3 text-center">
+                                    {{$total_count_children}}
+                                </th>
+                            </tr>
+                            </thead>
+
                         </table>
                     </div>
                 </div>

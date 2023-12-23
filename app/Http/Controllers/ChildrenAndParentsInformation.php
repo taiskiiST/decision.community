@@ -125,7 +125,8 @@ class ChildrenAndParentsInformation extends Controller
         }
         return view('children-and-parents-info.report-age',
             [
-                'age_by_group' => $ageByGroup
+                'age_by_group' => $ageByGroup,
+                'total_count_children' => ChildrenInformation::all()->count()
             ]);
     }
     public function ageCalculator($newformat){

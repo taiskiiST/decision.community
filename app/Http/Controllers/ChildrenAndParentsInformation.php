@@ -94,6 +94,40 @@ class ChildrenAndParentsInformation extends Controller
             ]);
     }
 
+    public function reportAge()
+    {
+        $informations = [];
+        $children = ChildrenInformation::all();
+        foreach ($children as $child){
+            //$information['address'][] = $child->parent()->get()[0]->address;
+            $time = strtotime($child->date_of_birthday);
+            $newformat = date('d.m.Y',$time);
+            $informations['age'][] = $this->ageCalculator($newformat);
+        }
+        $ageArr = [];
+        for($i=0;$i<19;$i++){
+            foreach ($informations['age'] as $information){
+                if ($i == $information){
+                    if (isset ($ageArr[$i]) ){
+                        $ageArr[$i] += 1;
+                    }else{
+                        $ageArr[$i] = 1;
+                    }
+                }
+            }
+        }
+        $ageByGroup = [];
+        $cnt = 0;
+        foreach ($ageArr as $age => $count_age){
+            $ageByGroup[$cnt]['group_age'] = $age;
+            $ageByGroup[$cnt]['count_of_group_age'] = $count_age;
+            $cnt++;
+        }
+        return view('children-and-parents-info.report-age',
+            [
+                'age_by_group' => $ageByGroup
+            ]);
+    }
     public function ageCalculator($newformat){
         //explode the date to get month, day and year
         $birthDate = explode(".", $newformat);

@@ -32,7 +32,7 @@
                                         {{ $loop_cnt + 1 }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-center">
-                                        <div class="text-xs">{{$group_age['group_age']}} @if ($group_age['group_age'] = 1) год @else @if ($group_age['group_age'] > 1 && $group_age['group_age'] < 5) года @else лет @endif </div>
+                                        <div class="text-xs">{{$group_age['group_age']}} @if ($group_age['group_age'] = 1) год @else @if ($group_age['group_age'] > 1 && $group_age['group_age'] < 5) года @else лет @endif @endif </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-center">
                                         <div class="text-xs">{{$group_age['count_of_group_age']}}</div>

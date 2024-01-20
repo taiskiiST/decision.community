@@ -61,10 +61,10 @@ Route::group(['middleware' => 'check.company'], function () {
 
     Route::get('/check-parent/', [ChildrenAndParentsInformation::class, 'checkParent'])->name('check-parent');
     Route::get('/report-school/', [ChildrenAndParentsInformation::class, 'schoolReport'])->name('school-report');
+    Route::get('/children-report-age', [ChildrenAndParentsInformation::class, 'reportAge'])->name('children-report-age');
 
     Route::group(['middleware' => ['auth', 'can:access-app']], function () {
         Route::get('/children-report', [ChildrenAndParentsInformation::class, 'report'])->name('children-report');
-        Route::get('/children-report-age', [ChildrenAndParentsInformation::class, 'reportAge'])->name('children-report-age');
 
         Route::get('/register', [PollsController::class, 'index'])->name('polls.register');
 

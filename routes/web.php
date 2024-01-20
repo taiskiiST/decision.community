@@ -55,6 +55,13 @@ Route::group(['middleware' => 'check.company'], function () {
     Route::post('/children-and-parents-information-submit/', [ChildrenAndParentsInformation::class, 'submit'])->name('children-and-parents-information-submit');
     Route::get('/children-and-parents-information-done/', [ChildrenAndParentsInformation::class, 'done'])->name('children-and-parents-information-done');
 
+    Route::get('/children-and-parents-information-school/', [ChildrenAndParentsInformation::class, 'indexSchool'])->name('children-and-parents-information-school');
+    Route::post('/children-and-parents-information-school-submit/', [ChildrenAndParentsInformation::class, 'submitSchool'])->name('children-and-parents-information-school-submit');
+    Route::get('/children-and-parents-information-school-done/', [ChildrenAndParentsInformation::class, 'doneSchool'])->name('children-and-parents-information-school-done');
+
+    Route::get('/check-parent/', [ChildrenAndParentsInformation::class, 'checkParent'])->name('check-parent');
+    Route::get('/report-school/', [ChildrenAndParentsInformation::class, 'schoolReport'])->name('school-report');
+
     Route::group(['middleware' => ['auth', 'can:access-app']], function () {
         Route::get('/children-report', [ChildrenAndParentsInformation::class, 'report'])->name('children-report');
         Route::get('/children-report-age', [ChildrenAndParentsInformation::class, 'reportAge'])->name('children-report-age');

@@ -10,7 +10,7 @@ const CHILDREN_SEX_WOMAN = 'Жен';
 const {
     csrf_token
 } = window.TSN || {};
-const ChildrenAndParentsInformation = () => {
+const ChildrenAndParentsInformationSchool = () => {
 
     const childrenArr = [{
         id: uuidv4(),
@@ -137,6 +137,10 @@ const ChildrenAndParentsInformation = () => {
         validateChildren(newChild);
     };
 
+    const onSchoolInformationEdit = (e) => {
+
+    };
+
     const onChildAdd= (e) => {
         const newChildren = children;
         newChildren.push(
@@ -166,7 +170,7 @@ const ChildrenAndParentsInformation = () => {
         <div className="container px-4">
             <form
                 id="form_id"
-                action="/children-and-parents-information-submit"
+                action="/children-and-parents-information-school-submit"
                 method="POST"
             >
                 <input type="hidden" name="_token" value={csrf_token} />
@@ -220,14 +224,14 @@ const ChildrenAndParentsInformation = () => {
 
                 <div className="col-span-6 sm:col-span-3 mt-5 border-t-8 border-dotted border-gray-400">
                     <h1 className="text-lg leading-6 font-bold text-gray-900 text-center mt-3">
-                        Данные детей
+                        Данные детей и школы
                     </h1>
 
                     {children.map(
                         (child, index) => (
                             <div key={`child_${index}`} className="col-span-6 sm:col-span-3 mt-2 border-t-4 border-gray-400">
                                 <div className="inline-flex flex-row w-full">
-                                    <label htmlFor='child_name' className="mt-3 block text-sm font-medium text-gray-700">Введите полное ФИО ребенка</label>
+                                    <label htmlFor={`child-name-${index}`} className="mt-3 block text-sm font-medium text-gray-700">Введите полное ФИО ребенка</label>
                                     <div className="flex-row-reverse contents" >
                                         {(index != 0) && <button className="ml-auto text-red-800" type="button" onClick={onDelChild}>
                                             <svg id={child.id} className="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -247,7 +251,7 @@ const ChildrenAndParentsInformation = () => {
                                 />
 
                                 <div className="inline-flex flex-row w-full">
-                                    <label htmlFor='child_sex' className="mt-3 block text-sm font-medium text-gray-700">Укажите пол ребенка</label>
+                                    <label htmlFor={`child-sex-${index}`} className="mt-3 block text-sm font-medium text-gray-700">Укажите пол ребенка</label>
                                     <div className="mx-2">
                                         {child.sex !== CHILDREN_SEX_WOMAN && (
                                             <select
@@ -275,7 +279,7 @@ const ChildrenAndParentsInformation = () => {
                                 </div>
 
                                 <div className="inline-flex flex-row w-full">
-                                    <label htmlFor='child_date_of_birthday' className="mt-3 block text-sm font-medium text-gray-700">Введите дату рождения ребенка</label>
+                                    <label htmlFor={`date-birthday-${index}`} className="mt-3 block text-sm font-medium text-gray-700">Введите дату рождения ребенка</label>
                                     <DebounceInput
                                         className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                                         type="date"
@@ -286,6 +290,60 @@ const ChildrenAndParentsInformation = () => {
                                         required={true}
                                     />
                                 </div>
+
+
+                                <div className="inline-flex flex-row w-full">
+                                    <label htmlFor={`school-name-${index}`} className="mt-3 block text-sm font-medium text-gray-700">Введите название или номер школы (садика)</label>
+                                </div>
+                                <DebounceInput
+                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                                    type="text"
+                                    debounceTimeout={700}
+                                    onChange={onSchoolInformationEdit}
+                                    value=""
+                                    name={`school-name-${index}`}
+                                    required={true}
+                                />
+
+                                <div className="inline-flex flex-row w-full">
+                                    <label htmlFor={`school-address-${index}`} className="mt-3 block text-sm font-medium text-gray-700">Введите адрес школы (садика)</label>
+                                </div>
+                                <DebounceInput
+                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                                    type="text"
+                                    debounceTimeout={700}
+                                    onChange={onSchoolInformationEdit}
+                                    value=""
+                                    name={`school-address-${index}`}
+                                    required={true}
+                                />
+
+                                <div className="inline-flex flex-row w-full">
+                                    <label htmlFor={`school-time-to-${index}`} className="mt-3 block text-sm font-medium text-gray-700">Введите по какому графику и ко скольки по времени вы возете ребенка в школу (садик)</label>
+                                </div>
+                                <DebounceInput
+                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                                    type="text"
+                                    debounceTimeout={700}
+                                    onChange={onSchoolInformationEdit}
+                                    value=""
+                                    name={`school-time-to-${index}`}
+                                    required={true}
+                                />
+
+                                <div className="inline-flex flex-row w-full">
+                                    <label htmlFor={`school-time-from-${index}`} className="mt-3 block text-sm font-medium text-gray-700">Введите по какому графику и в какое временя вы забираете ребенка из школы (садика)</label>
+                                </div>
+                                <DebounceInput
+                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                                    type="text"
+                                    debounceTimeout={700}
+                                    onChange={onSchoolInformationEdit}
+                                    value=""
+                                    name={`school-time-from-${index}`}
+                                    required={true}
+                                />
+
                             </div>
                         ),
                     )}
@@ -305,11 +363,8 @@ const ChildrenAndParentsInformation = () => {
                 <div className="inline-flex w-full flex-row place-content-center">
                     <div className="bg-gray-50 px-4 py-3  sm:px-6">
                             <button
-                                disabled={
-                                    validationResult.status !== CHILDREN_CHECK_VALID
-                                }
                                 type="submit"
-                                className={`justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${validationResult.class}`}
+                                className="justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 bg-green-600 hover:bg-green-700"
                             >
                                 Отправить данные
                             </button>
@@ -320,4 +375,4 @@ const ChildrenAndParentsInformation = () => {
     );
 };
 
-export default ChildrenAndParentsInformation;
+export default ChildrenAndParentsInformationSchool;

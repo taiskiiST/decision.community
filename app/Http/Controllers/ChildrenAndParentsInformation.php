@@ -192,7 +192,7 @@ class ChildrenAndParentsInformation extends Controller
     public function schoolReport(Request $request)
     {
         $inputs = $request->input();
-        $parent = ParentInformation::all()->where('phone',"LIKE", $inputs['phone'])->first();
+        $parent = ParentInformation::all()->where('phone',"LIKE", $inputs['phone'])->where('school_information','1')->first();
 
         if ($parent){
             $informations = [];

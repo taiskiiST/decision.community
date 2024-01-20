@@ -32,7 +32,11 @@
                                         {{ $loop_cnt + 1 }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-center">
-                                        <div class="text-xs">{{$age}} лет</div>
+                                        <div class="text-xs">{{$age}}
+                                            @if ($age == 1) год @endif
+                                            @if ($age > 1 && $age < 5) года @endif
+                                            @if ($age >= 5 || $age == 0) лет @endif
+                                        </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-center">
                                     <table class="min-w-full divide-y divide-gray-200 ">

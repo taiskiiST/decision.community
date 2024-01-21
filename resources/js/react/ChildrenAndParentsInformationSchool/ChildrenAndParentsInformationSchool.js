@@ -49,16 +49,16 @@ const ChildrenAndParentsInformationSchool = () => {
         }
     };
     const validateParent = () => {
-        if ( (document.getElementById('parent_name') && document.getElementById('parent_name').value.length > 0) &&
-            (document.getElementById('parent_relationship') && document.getElementById('parent_relationship').value.length > 0) &&
-            (document.getElementById('parent_address') && document.getElementById('parent_address').value.length > 0) &&
-            (document.getElementById('parent_phone') && document.getElementById('parent_phone').value.length > 0) ) {
-            setValidFlagParent (true );
-            globalValidate(validFlagChild, true);
-        }else {
-            setValidFlagParent (false);
-            globalValidate(validFlagChild, false);
-        }
+        // if ( (document.getElementById('parent_name') && document.getElementById('parent_name').value.length > 0) &&
+        //     (document.getElementById('parent_relationship') && document.getElementById('parent_relationship').value.length > 0) &&
+        //     (document.getElementById('parent_address') && document.getElementById('parent_address').value.length > 0) &&
+        //     (document.getElementById('parent_phone') && document.getElementById('parent_phone').value.length > 0) ) {
+        //     setValidFlagParent (true );
+        //     globalValidate(validFlagChild, true);
+        // }else {
+        //     setValidFlagParent (false);
+        //     globalValidate(validFlagChild, false);
+        // }
     };
 
     const globalValidate = (validFlagChild, validFlagParent) => {
@@ -80,69 +80,70 @@ const ChildrenAndParentsInformationSchool = () => {
     }
 
     const onChildNameChange = (e) => {
-        const newChildId = e.target.id;
-        const newChildName = e.target.value;
-
-        const newChild = children.map((child, index) => {
-            return index == newChildId
-                ? {
-                    ...child,
-                    name: newChildName
-                }
-                : child;
-
-        });
-
-        setChildren(newChild);
-
-
-       validateChildren(newChild);
+       //  const newChildId = e.target.id;
+       //  const newChildName = e.target.value;
+       //
+       //  const newChild = children.map((child, index) => {
+       //      return index == newChildId
+       //          ? {
+       //              ...child,
+       //              name: newChildName
+       //          }
+       //          : child;
+       //
+       //  });
+       //
+       //  setChildren(newChild);
+       //
+       //
+       // validateChildren(newChild);
 
     };
 
     const onChildSexChange = (e) => {
-        const newChildId = e.target.id;
-        const newChildSex = e.target.value;
-
-        const newChild = children.map((child, index) => {
-            return index == newChildId
-                ? {
-                    ...child,
-                    sex: newChildSex
-                }
-                : child;
-
-        });
-
-        setChildren(newChild);
+        // const newChildId = e.target.id;
+        // const newChildSex = e.target.value;
+        //
+        // const newChild = children.map((child, index) => {
+        //     return index == newChildId
+        //         ? {
+        //             ...child,
+        //             sex: newChildSex
+        //         }
+        //         : child;
+        //
+        // });
+        //
+        // setChildren(newChild);
 
     };
 
     const onChildDateOfBirthdayChange = (e) => {
-        const newChildId = e.target.id;
-        const newChildDateOfBirthday = e.target.value;
-
-        const newChild = children.map((child, index) => {
-            return index == newChildId
-                ? {
-                    ...child,
-                    date_of_birthday: newChildDateOfBirthday
-                }
-                : child;
-
-        });
-
-        setChildren(newChild);
-
-        validateChildren(newChild);
+        // const newChildId = e.target.id;
+        // const newChildDateOfBirthday = e.target.value;
+        //
+        // const newChild = children.map((child, index) => {
+        //     return index == newChildId
+        //         ? {
+        //             ...child,
+        //             date_of_birthday: newChildDateOfBirthday
+        //         }
+        //         : child;
+        //
+        // });
+        //
+        // setChildren(newChild);
+        //
+        // validateChildren(newChild);
     };
 
     const onSchoolInformationEdit = (e) => {
 
     };
 
-    const onChildAdd= (e) => {
+    const onChildAdd = (e) => {
         const newChildren = children;
+        console.log(children);
         newChildren.push(
             {
                 id: uuidv4(),
@@ -248,6 +249,7 @@ const ChildrenAndParentsInformationSchool = () => {
                                     value={child.name}
                                     name={`child-name-${index}`}
                                     required={true}
+                                    id={`child-name-${index}`}
                                 />
 
                                 <div className="inline-flex flex-row w-full">
@@ -259,6 +261,7 @@ const ChildrenAndParentsInformationSchool = () => {
                                                 className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                                                 onChange={onChildSexChange}
                                                 defaultValue='мужской'
+                                                id={`child-sex-${index}`}
                                             >
                                                 <option value='мужской'>Муж</option>
                                                 <option value='женский'>Жен</option>
@@ -270,6 +273,7 @@ const ChildrenAndParentsInformationSchool = () => {
                                                 className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                                                 onChange={onChildSexChange}
                                                 defaultValue='женский'
+                                                id={`child-sex-${index}`}
                                             >
                                                 <option value='мужской'>Муж</option>
                                                 <option value='женский'>Жен</option>
@@ -287,6 +291,7 @@ const ChildrenAndParentsInformationSchool = () => {
                                         onChange={onChildDateOfBirthdayChange}
                                         value={child.date_of_birthday}
                                         name={`date-birthday-${index}`}
+                                        id={`date-birthday-${index}`}
                                         required={true}
                                     />
                                 </div>
@@ -302,6 +307,7 @@ const ChildrenAndParentsInformationSchool = () => {
                                     onChange={onSchoolInformationEdit}
                                     value=""
                                     name={`school-name-${index}`}
+                                    id={`school-name-${index}`}
                                     required={true}
                                 />
 
@@ -315,6 +321,7 @@ const ChildrenAndParentsInformationSchool = () => {
                                     onChange={onSchoolInformationEdit}
                                     value=""
                                     name={`school-address-${index}`}
+                                    id={`school-address-${index}`}
                                     required={true}
                                 />
 
@@ -328,6 +335,7 @@ const ChildrenAndParentsInformationSchool = () => {
                                     onChange={onSchoolInformationEdit}
                                     value=""
                                     name={`school-time-to-${index}`}
+                                    id={`school-time-to-${index}`}
                                     required={true}
                                 />
 
@@ -341,6 +349,7 @@ const ChildrenAndParentsInformationSchool = () => {
                                     onChange={onSchoolInformationEdit}
                                     value=""
                                     name={`school-time-from-${index}`}
+                                    id={`school-time-from-${index}`}
                                     required={true}
                                 />
 

@@ -219,7 +219,7 @@ class ChildrenAndParentsInformation extends Controller
                     }
                 }
             }
-            //dd($ageArr);
+            ksort($ageArr);
             return view('children-and-parents-info.school-report',
                 [
                     'age_by_group' => $ageArr,

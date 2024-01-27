@@ -46,6 +46,18 @@
                                                 Номер
                                             </th>
                                             <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
+                                                Название учебного заведения
+                                            </th>
+                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
+                                                Адрес заведения
+                                            </th>
+                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
+                                                График и время туда
+                                            </th>
+                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
+                                                График и время обратно
+                                            </th>
+                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
                                                 ФИО родителя
                                             </th>
                                             <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
@@ -63,18 +75,7 @@
                                             <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
                                                 Пол
                                             </th>
-                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
-                                                Название учебного заведения
-                                            </th>
-                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
-                                                Адрес заведения
-                                            </th>
-                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
-                                                График и время туда
-                                            </th>
-                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
-                                                График и время обратно
-                                            </th>
+
                                         </thead>
                                         <p hidden="true">{{$loop_out = $loop->odd}}</p>
                                         @foreach($children as $child_age)

@@ -208,16 +208,17 @@ class ChildrenAndParentsInformation extends Controller
                     foreach ($informations[$child->id] as $age) {
                         $parent_of_child = $child->parent()->first();
                         if ($i == $age) {
+                            $ageArr[$i][$child->id][] = $child->school_name;
+                            $ageArr[$i][$child->id][] = $child->school_address;
+                            $ageArr[$i][$child->id][] = $child->school_time_to;
+                            $ageArr[$i][$child->id][] = $child->school_time_from;
                             $ageArr[$i][$child->id][] = $parent_of_child->full_name;
                             $ageArr[$i][$child->id][] = $parent_of_child->relationship;
                             $ageArr[$i][$child->id][] = $parent_of_child->address;
                             $ageArr[$i][$child->id][] = $parent_of_child->phone;
                             $ageArr[$i][$child->id][] = $child->full_name;
                             $ageArr[$i][$child->id][] = $child->sex;
-                            $ageArr[$i][$child->id][] = $child->school_name;
-                            $ageArr[$i][$child->id][] = $child->school_address;
-                            $ageArr[$i][$child->id][] = $child->school_time_to;
-                            $ageArr[$i][$child->id][] = $child->school_time_from;
+
                         }
                     }
                 }

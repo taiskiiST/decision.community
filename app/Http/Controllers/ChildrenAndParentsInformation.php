@@ -227,12 +227,51 @@ class ChildrenAndParentsInformation extends Controller
             return view('children-and-parents-info.school-report',
                 [
                     'age_by_group' => $ageArr,
+                    'phone' => $inputs['phone'],
                     'total_count_children' => ChildrenInformation::all()->where('school_name','<>','')->count()
                 ]);
         }else {
             return redirect()->route('check-parent')->withErrors('Данный номер телефона не найден!');
         }
     }
+
+    public function schoolReportBySchool(Request $request)
+    {
+        $inputs = $request->input();
+        $parent = ParentInformation::all()->where('phone',"LIKE", $inputs['phone'])->where('school_information','1')->first();
+        if ($parent){
+            $schoolArr = [];
+            $children_group_by_school = ChildrenInformation::all()->where('school_name','<>','')->groupBy(['school_name']);
+            foreach ($children_group_by_school as $name_school => $school_children){
+                foreach ($school_children as $child){
+                    $parent_of_child = $child->parent()->first();
+                    $ageArr[$name_school.', '.$child->school_address][$child->id][] = $child->school_time_to;
+                    $ageArr[$name_school.', '.$child->school_address][$child->id][] = $child->school_time_from;
+                    $ageArr[$name_school.', '.$child->school_address][$child->id][] = $parent_of_child->full_name;
+                    $ageArr[$name_school.', '.$child->school_address][$child->id][] = $parent_of_child->relationship;
+                    $ageArr[$name_school.', '.$child->school_address][$child->id][] = $parent_of_child->address;
+                    $ageArr[$name_school.', '.$child->school_address][$child->id][] = $parent_of_child->phone;
+                    $ageArr[$name_school.', '.$child->school_address][$child->id][] = $child->full_name;
+                    $ageArr[$name_school.', '.$child->school_address][$child->id][] = $child->sex;
+                    $time = strtotime($child->date_of_birthday);
+                    $newformat = date('d.m.Y',$time);
+                    $ageArr[$name_school.', '.$child->school_address][$child->id][] = $this->ageCalculator($newformat);
+                }
+            }
+
+
+            ksort($ageArr);
+            return view('children-and-parents-info.school-report-by-school',
+                [
+                    'age_by_group' => $ageArr,
+                    'phone' => $inputs['phone'],
+                    'total_count_children' => ChildrenInformation::all()->where('school_name','<>','')->count()
+                ]);
+        }else {
+            return redirect()->route('check-parent')->withErrors('Данный номер телефона не найден!');
+        }
+    }
+
     public function ageCalculator($newformat){
         $tz  = new DateTimeZone('Europe/Brussels');
         $age = DateTime::createFromFormat('d.m.Y', $newformat, $tz)

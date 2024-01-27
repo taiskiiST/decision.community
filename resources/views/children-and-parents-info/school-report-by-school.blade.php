@@ -10,11 +10,11 @@
                 <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                     <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                         <p class="hidden">{{$loop_cnt = 0}}</p>
-                        <a href="/report-school-by-school/?phone={{$phone}}">
+                        <a href="/report-school/?phone={{$phone}}">
                             <button class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border
                             border-transparent text-base text-center font-medium rounded-md text-white
                             bg-indigo-600 hover:bg-indigo-700">
-                                Сформировать отчет с группировкой по школам
+                                Сформировать отчет с группировкой по возрасту детей
                             </button>
                         </a>
                         <table class="min-w-full divide-y divide-gray-200 ">
@@ -24,7 +24,7 @@
                                     №
                                 </th>
                                 <th scope="col" class="relative px-3 py-3 text-wrap text-center">
-                                    Группа возраста
+                                    Школа, адрес
                                 </th>
                                 <th scope="col" class="relative px-8 py-3 text-center">
                                     Список детей и родителей
@@ -39,10 +39,8 @@
                                         {{ $loop_cnt + 1 }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-center">
-                                        <div class="text-xs">{{$age}}
-                                            @if ($age == 1) год @endif
-                                            @if ($age > 1 && $age < 5) года @endif
-                                            @if ($age >= 5 || $age == 0) лет @endif
+                                        <div class="text-xs">
+                                            {{$age }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900 text-center">
@@ -51,12 +49,6 @@
                                         <thead>
                                             <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
                                                 Номер
-                                            </th>
-                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
-                                                Название учебного заведения
-                                            </th>
-                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
-                                                Адрес заведения
                                             </th>
                                             <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
                                                 График и время туда
@@ -81,6 +73,9 @@
                                             </th>
                                             <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
                                                 Пол
+                                            </th>
+                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
+                                                Возраст ребенка
                                             </th>
 
                                         </thead>

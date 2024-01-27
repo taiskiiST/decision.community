@@ -61,6 +61,7 @@ Route::group(['middleware' => 'check.company'], function () {
 
     Route::get('/check-parent/', [ChildrenAndParentsInformation::class, 'checkParent'])->name('check-parent');
     Route::get('/report-school/', [ChildrenAndParentsInformation::class, 'schoolReport'])->name('school-report');
+    Route::get('/report-school-by-school/', [ChildrenAndParentsInformation::class, 'schoolReportBySchool'])->name('school-report-by-school');
     Route::get('/children-report-age', [ChildrenAndParentsInformation::class, 'reportAge'])->name('children-report-age');
 
     Route::group(['middleware' => ['auth', 'can:access-app']], function () {

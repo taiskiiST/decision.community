@@ -35,7 +35,7 @@ const Paginator = ({
     onHandleClickNext,
     nextButtonDisabled,
     votes,
-    questionId
+    questionId,
 }) => (
     <nav className="flex items-center justify-between px-4 sm:px-0">
         <div className="-mt-px flex w-0 flex-1">
@@ -113,8 +113,9 @@ const NextButton = ({ disabled, onClick }) => (
 );
 
 const QuestionPosition = ({ position, questionsCount, votes, questionId }) => (
-    <button className={`nav-action inline-flex items-center border-t-2 border-indigo-500 px-4 pt-4 text-sm font-medium text-indigo-600 outline-none focus:outline-none ${
-        questionId && votes[questionId] ? 'bg-green-200' : ''
+    <button
+        className={`nav-action inline-flex items-center border-t-2 border-indigo-500 px-4 pt-4 text-sm font-medium text-indigo-600 outline-none focus:outline-none ${
+            questionId && votes[questionId] ? 'bg-green-200' : ''
         }`}
         type="button"
     >
@@ -265,8 +266,11 @@ const DisplayQuestionEditor = () => {
                                     toolbarStyle={{
                                         display: 'none',
                                     }}
-                                    editorStyle={{
-                                        disabled: 'true',
+                                    readOnly
+                                    toolbar={{
+                                        link: {
+                                            showOpenOptionOnHover: false,
+                                        },
                                     }}
                                 />
                             </h3>
@@ -323,7 +327,8 @@ const DisplayQuestionEditor = () => {
                     className="rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:bg-gray-600"
                     disabled={voteButtonDisabled}
                     onClick={() =>
-                        confirm('Подтверждение окончания голосования') && onVoteButtonClick()
+                        confirm('Подтверждение окончания голосования') &&
+                        onVoteButtonClick()
                     }
                 >
                     Проголосовать

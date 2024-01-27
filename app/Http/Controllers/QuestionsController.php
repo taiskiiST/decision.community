@@ -111,7 +111,7 @@ class QuestionsController extends Controller
             return redirect()->route('polls.index');
         }
         \JavaScript::put([
-            'question'             => isset($question)
+            'question' => isset($question)
                 ? $question
                 : '',
 
@@ -138,20 +138,29 @@ class QuestionsController extends Controller
     public function viewPublicQuestions()
     {
         return view('questions.public_questions', [
-            'public_questions' => Company::current()->getPublicQuestions()
+            'public_questions' => Company::current()->getPublicQuestions(),
         ]);
 
     }
 
     public function viewSuggestedQuestions()
     {
-        $suggested_questions = Question::where('suggest', 1)->where('company_id', session('current_company')->id)->get();
+        $suggested_questions = Question::where('suggest', 1)
+                                       ->where('company_id', session('current_company')->id)
+                                       ->get()
+                                       ->transform(function (Question $question) {
+                                           $question->text = $question->succinctText();
+                                           return $question;
+                                       });
+
         foreach ($suggested_questions as $question) {
             $cnt_files_in_question [$question->id] = $question->question_files()->count();
         }
+
         foreach ($suggested_questions as $question) {
             $hashUserVoteQuestions [$question->id] = Poll::find($question->poll_id)->authUserVote();
         }
+
         if ($suggested_questions->count() == 0) {
             $cnt_files_in_question = [];
             $hashUserVoteQuestions = [];

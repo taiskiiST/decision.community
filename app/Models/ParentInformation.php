@@ -16,4 +16,5 @@ class ParentInformation extends Model
     {
         return $this->hasMany(ChildrenInformation::class, 'parents_id');
     }
+
 }

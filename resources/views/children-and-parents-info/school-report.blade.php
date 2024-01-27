@@ -46,7 +46,19 @@
                                                 Номер
                                             </th>
                                             <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
-                                                ФИО
+                                                ФИО родителя
+                                            </th>
+                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
+                                                Степень родства
+                                            </th>
+                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
+                                                Адрес родителя
+                                            </th>
+                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
+                                                Контакт родителя
+                                            </th>
+                                            <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
+                                                ФИО ребенка
                                             </th>
                                             <th class="border-2" style="@if ($loop->odd) border-color: rgb(255 255 255) @endif ">
                                                 Пол

@@ -73,7 +73,7 @@ Route::group(['middleware' => 'check.company'], function () {
         Route::post('/polls/{poll}/submit', [PollsController::class, 'submit'])->name('poll.submit');
         Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('poll.results');
         Route::post('/polls/create/{type_of_poll}', [PollsController::class, 'create'])->name('poll.create');
-        Route::get('/polls/{poll}/edit/{error?}', [PollsController::class, 'edit'])->name('poll.edit');
+        Route::post('/polls/{poll}/edit/{error?}', [PollsController::class, 'edit'])->name('poll.edit');
         Route::post('/polls/{poll}/generateProtocol', [PollsController::class, 'generateProtocolWithOutTemplate'])->name('poll.generateProtocol');
         Route::post('/polls/{poll}/generateBlank', [PollsController::class, 'generateBlankWithOutTemplate'])->name('poll.generateBlank');
         Route::post('/polls/{poll}/generateBlankWithAnswers', [PollsController::class, 'generateBlankWithAnswersWithOutTemplate'])->name('poll.generateBlankWithAnswers');

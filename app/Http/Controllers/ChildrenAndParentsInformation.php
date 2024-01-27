@@ -193,7 +193,6 @@ class ChildrenAndParentsInformation extends Controller
     {
         $inputs = $request->input();
         $parent = ParentInformation::all()->where('phone',"LIKE", $inputs['phone'])->where('school_information','1')->first();
-
         if ($parent){
             $informations = [];
             $children = ChildrenInformation::all()->where('school_name','<>','');
@@ -207,9 +206,13 @@ class ChildrenAndParentsInformation extends Controller
             foreach ($children as $child) {
                 for ($i = 0; $i < 19; $i++) {
                     foreach ($informations[$child->id] as $age) {
+                        $parent_of_child = $child->parent()->first();
                         if ($i == $age) {
+                            $ageArr[$i][$child->id][] = $parent_of_child->full_name;
+                            $ageArr[$i][$child->id][] = $parent_of_child->relationship;
+                            $ageArr[$i][$child->id][] = $parent_of_child->address;
+                            $ageArr[$i][$child->id][] = $parent_of_child->phone;
                             $ageArr[$i][$child->id][] = $child->full_name;
-                            //$ageArr[$i][$child->id][] = $child->date_of_birthday;
                             $ageArr[$i][$child->id][] = $child->sex;
                             $ageArr[$i][$child->id][] = $child->school_name;
                             $ageArr[$i][$child->id][] = $child->school_address;

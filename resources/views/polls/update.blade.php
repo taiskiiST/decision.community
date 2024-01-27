@@ -32,7 +32,7 @@
         <div class="inline-flex flex-row w-full place-content-between">
             @if (auth()->user()->canManageItems())
             <div class="px-4 py-3 sm:px-6">
-                <form method="GET" action="{{route('poll.questions.create',[$poll->id])}}">
+                <form method="POST" action="{{route('poll.questions.create',[$poll->id])}}">
                     @csrf
                     <button type="submit" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white @if ( !$poll->voteFinished() ) bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 submit-button  @else bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-50 submit-button @endif "
                        onclick="event.preventDefault();

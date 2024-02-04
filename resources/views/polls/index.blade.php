@@ -151,7 +151,7 @@
                                                         <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
                                                         <a href="{{route('poll.delete',[$poll->id])}}"
                                                            onclick="event.preventDefault();
-                                                           if (confirm('Вы уверены, что хотите удалить свой вопрос?') ){
+                                                           if (confirm('Вы уверены, что хотите удалить свой вопрос?') ) {
                                                         this.closest('form').submit();}" class="text-indigo-600 hover:text-indigo-900">
                                                             {{ __('Удалить') }}
                                                         </a>

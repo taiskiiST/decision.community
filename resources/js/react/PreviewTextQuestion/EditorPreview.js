@@ -13,24 +13,6 @@ const {
     poll_finished,
 } = window.TSN || {};
 
-function onHandelClickPollFinish(event) {
-    event.preventDefault();
-    event.target.parentElement.submit();
-}
-
-function onHandelClickPollStart(event) {
-    event.preventDefault();
-    event.target.parentElement.submit();
-}
-function onHandelClickQuestionPublic(event) {
-    event.preventDefault();
-    event.target.parentElement.submit();
-}
-
-function onHandelClickQuestionDelete(event) {
-    event.preventDefault();
-    event.target.parentElement.submit();
-}
 class EditorPreview extends React.Component {
     constructor(props) {
         super(props);
@@ -97,13 +79,12 @@ class EditorPreview extends React.Component {
                                             name="_token"
                                             value={csrf_token}
                                         />
-                                        <a
-                                            href={`/polls/${poll_full.id}/end/`}
-                                            onClick={onHandelClickPollFinish}
+                                        <button
+                                            type="submit"
                                             className="text-green-600 hover:text-green-900"
                                         >
                                             Окончить голосование
-                                        </a>
+                                        </button>
                                     </form>
                                 </th>
                             )}
@@ -118,13 +99,12 @@ class EditorPreview extends React.Component {
                                             name="_token"
                                             value={csrf_token}
                                         />
-                                        <a
-                                            href={`/polls/${poll_full.id}/end/`}
-                                            onClick={onHandelClickPollStart}
+                                        <button
+                                            type="submit"
                                             className="text-red-600 hover:text-red-900"
                                         >
                                             Возобновить голосование
-                                        </a>
+                                        </button>
                                     </form>
                                 </th>
                             )}
@@ -181,11 +161,8 @@ class EditorPreview extends React.Component {
                                                 value={question.id}
                                                 type="hidden"
                                             />
-                                            <a
-                                                href={`/polls/${poll_full.id}/question/${question.id}/public/`}
-                                                onClick={
-                                                    onHandelClickQuestionPublic
-                                                }
+                                            <button
+                                                type="submit"
                                                 className="text-indigo-600 hover:text-indigo-900"
                                             >
                                                 {`${
@@ -193,7 +170,7 @@ class EditorPreview extends React.Component {
                                                         ? 'Да'
                                                         : 'Нет'
                                                 }`}
-                                            </a>
+                                            </button>
                                         </form>
                                     )}
                                     {!is_admin && question.public ? 'Да' : ''}
@@ -245,15 +222,12 @@ class EditorPreview extends React.Component {
                                                     value={question.id}
                                                     type="hidden"
                                                 />
-                                                <a
-                                                    href={`/polls/${poll_full.id}/question/${question.id}/delete/`}
-                                                    onClick={
-                                                        onHandelClickQuestionDelete
-                                                    }
+                                                <button
+                                                    type="submit"
                                                     className="text-indigo-600 hover:text-indigo-900"
                                                 >
                                                     Удалить вопрос
-                                                </a>
+                                                </button>
                                             </form>
                                         )}
                                         {poll_finished && (

@@ -70,7 +70,7 @@ Route::group(['middleware' => 'check.company'], function () {
         Route::get('/register', [PollsController::class, 'index'])->name('polls.register');
 
         Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
-        Route::get('/polls/{poll}/start', [PollsController::class, 'start'])->name('poll.start');
+        Route::patch('/polls/{poll}/start', [PollsController::class, 'start'])->name('poll.start');
         Route::post('/polls/{poll}/submit', [PollsController::class, 'submit'])->name('poll.submit');
         Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('poll.results');
         Route::post('/polls/create/{type_of_poll}', [PollsController::class, 'create'])->name('poll.create');

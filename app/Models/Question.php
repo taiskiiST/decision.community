@@ -128,9 +128,9 @@ class Question extends Model
         return $summ;
     }
 
-    public function scopePublic(): Builder
+    public function scopePublic(Builder $query): Builder
     {
-        return $this->where('public', true);
+        return $query->where('public', true);
     }
 
     public function succinctText(): string

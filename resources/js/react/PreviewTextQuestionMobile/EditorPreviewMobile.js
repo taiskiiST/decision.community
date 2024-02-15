@@ -37,7 +37,7 @@ class EditorPreviewMobile extends React.Component {
         e.preventDefault();
 
         try {
-            await client.post(`/polls/${poll_full.id}/end/`);
+            await client.post(`/polls/${poll_full.id}/end`);
 
             toast.success('Статус голосования успешно изменён.');
 

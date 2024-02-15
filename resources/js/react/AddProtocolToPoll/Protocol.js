@@ -126,13 +126,14 @@ if (document.querySelector('#pdf-next')) {
     });
 }
 
-$(document).ready(function () {
-    if (document.querySelector('#show-pdf-button')) {
-        document.querySelector('#show-pdf-button').style.display = 'none';
-        value = document.querySelector('#show-pdf-button').value;
-        showPDF(value);
-    }
-});
+typeof window.jQuery === 'function' &&
+    $(document).ready(function () {
+        if (document.querySelector('#show-pdf-button')) {
+            document.querySelector('#show-pdf-button').style.display = 'none';
+            value = document.querySelector('#show-pdf-button').value;
+            showPDF(value);
+        }
+    });
 
 class Protocol extends React.Component {
     constructor(props) {

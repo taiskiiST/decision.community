@@ -126,7 +126,7 @@ if (document.querySelector('#pdf-next')) {
     });
 }
 
-typeof window.jQuery === 'function' &&
+if (typeof window.jQuery === 'function') {
     $(document).ready(function () {
         if (document.querySelector('#show-pdf-button')) {
             document.querySelector('#show-pdf-button').style.display = 'none';
@@ -134,6 +134,7 @@ typeof window.jQuery === 'function' &&
             showPDF(value);
         }
     });
+}
 
 class Protocol extends React.Component {
     constructor(props) {

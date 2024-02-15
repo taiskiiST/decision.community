@@ -55,7 +55,9 @@
 
 @section('scripts')
     @parent()
-    <script src="{!! mix('/js/AddProtocolToPoll.js') !!}"></script>
+    @if ($poll->voteFinished() && auth()->user()->isAdmin())
+        <script src="{!! mix('/js/AddProtocolToPoll.js') !!}"></script>
+    @endif
     <script src="{!! mix('/js/PreviewTextQuestion.js') !!}"></script>
     <script src="{!! mix('/js/PreviewTextQuestionMobile.js') !!}"></script>
 @endsection

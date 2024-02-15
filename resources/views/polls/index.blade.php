@@ -69,7 +69,7 @@
 
                                             @if( $poll->isSuggestedQuestion())
                                                 @if ( $poll->questions()->get()->count() )
-                                                    <div class="text-xs font-bold">Автор вопроса: {{$users[$poll->questions()->first()->author] }}</div>
+                                                    <div class="text-xs font-bold">Автор вопроса: {{$users[$poll->questions()->first()->author] ?? '' }}</div>
                                                 @endif
                                             @endif
                                         </td>
@@ -252,7 +252,7 @@
                                             @endif
                                             @if( $poll->isSuggestedQuestion())
                                                 @if ( $poll->questions()->get()->count() )
-                                                    <div class="text-xs font-bold">Автор вопроса: {{$users[$poll->questions()->first()->author] }}</div>
+                                                    <div class="text-xs font-bold">Автор вопроса: {{$users[$poll->questions()->first()->author] ?? '' }}</div>
                                                 @endif
                                             @endif
                                         </div>

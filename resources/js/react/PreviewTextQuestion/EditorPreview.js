@@ -87,10 +87,7 @@ class EditorPreview extends React.Component {
                             )}
                             {is_admin && (
                                 <th scope="col" className="relative px-6 py-3">
-                                    <form
-                                        onSubmit={this.togglePollState}
-                                        action={`/polls/${poll_full.id}/end/`}
-                                    >
+                                    <form onSubmit={this.togglePollState}>
                                         <button
                                             type="submit"
                                             className={`${

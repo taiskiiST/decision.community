@@ -70,10 +70,7 @@ class EditorPreviewMobile extends React.Component {
                             )}
                             {is_admin && (
                                 <th scope="col" className="relative px-1 py-3">
-                                    <form
-                                        onSubmit={this.togglePollState}
-                                        action={`/polls/${poll_full.id}/end/`}
-                                    >
+                                    <form onSubmit={this.togglePollState}>
                                         <button
                                             type="submit"
                                             className={`whitespace-wrap text-wrap ${

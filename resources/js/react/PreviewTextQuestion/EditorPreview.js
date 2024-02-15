@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { EditorState } from 'draft-js';
 import { convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { client } from '../../shared/axios';
+import { toast } from 'react-toastify';
 
 const {
     poll_full,
@@ -30,6 +32,21 @@ class EditorPreview extends React.Component {
             editorAllStateText: editorStateText,
         };
     }
+
+    async togglePollState(e) {
+        e.preventDefault();
+
+        try {
+            await client.post(`/polls/${poll_full.id}/end/`);
+
+            toast.success('Статус голосования успешно изменён.');
+
+            window.location.reload();
+        } catch (e) {
+            toast.error('Ошибка изменения статуса голосования.');
+        }
+    }
+
     render() {
         //console.log(poll);
         return (
@@ -68,42 +85,25 @@ class EditorPreview extends React.Component {
                                     </span>
                                 </th>
                             )}
-                            {is_admin && !poll_finished && (
+                            {is_admin && (
                                 <th scope="col" className="relative px-6 py-3">
                                     <form
-                                        method="POST"
+                                        onSubmit={this.togglePollState}
                                         action={`/polls/${poll_full.id}/end/`}
                                     >
-                                        <input
-                                            type="hidden"
-                                            name="_token"
-                                            value={csrf_token}
-                                        />
                                         <button
                                             type="submit"
-                                            className="text-green-600 hover:text-green-900"
+                                            className={`${
+                                                poll_finished
+                                                    ? 'text-red-600 hover:text-red-900'
+                                                    : 'text-green-600 hover:text-green-900'
+                                            }`}
                                         >
-                                            Окончить голосование
-                                        </button>
-                                    </form>
-                                </th>
-                            )}
-                            {is_admin && poll_finished && (
-                                <th scope="col" className="relative px-6 py-3">
-                                    <form
-                                        method="POST"
-                                        action={`/polls/${poll_full.id}/end/`}
-                                    >
-                                        <input
-                                            type="hidden"
-                                            name="_token"
-                                            value={csrf_token}
-                                        />
-                                        <button
-                                            type="submit"
-                                            className="text-red-600 hover:text-red-900"
-                                        >
-                                            Возобновить голосование
+                                            {`${
+                                                poll_finished
+                                                    ? 'Возобновить'
+                                                    : 'Окончить'
+                                            } голосование`}
                                         </button>
                                     </form>
                                 </th>

@@ -972,7 +972,7 @@ class Question extends React.Component {
                                                         htmlFor="QuestionPublic"
                                                         className="ml-2 block text-sm text-gray-900"
                                                     >
-                                                        Окончеть режим
+                                                        Окончить режим
                                                         редактирования (PS Если
                                                         вы ставите галочку, то
                                                         после подтверждения

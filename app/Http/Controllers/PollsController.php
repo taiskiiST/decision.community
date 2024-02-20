@@ -1504,6 +1504,12 @@ class PollsController extends Controller
             ];
         }
 
+        if ($poll->isGovernanceMeeting() && !$user->isGovernance()) {
+            return [
+                'errorMessage' => 'Невозможно проголосовать - Вы не являетесь членом правления'
+            ];
+        }
+
         foreach ($votes as $questionId => $answerId) {
             $question = Question::find($questionId);
             if (!$question) {

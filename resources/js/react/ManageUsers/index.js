@@ -3,14 +3,8 @@ import { render } from 'react-dom';
 import Highlighter from 'react-highlight-words';
 import { Listbox, Transition } from '@headlessui/react';
 
-const {
-    users,
-    csrf_token,
-    companies,
-    current_company,
-    isSuperAdmin,
-    hash_company_users,
-} = window.TSN || {};
+const { users, csrf_token, companies, current_company, isSuperAdmin } =
+    window.TSN || {};
 
 function Users() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -18,14 +12,18 @@ function Users() {
     const [onFilterName, setFilterName] = useState(1);
     const [onFilterAddress, setFilterAddress] = useState(0);
 
-    const [selected, setSelected] = useState(current_company);
+    const [filterCompany, setFilterCompany] = useState(current_company);
 
     const handleChangeUsersFilter = (event) => {
         setSearchTerm(event.target.value);
     };
 
     useEffect(() => {
-        const results = users.filter((person) => {
+        const filteredUsers = users.filter((person) => {
+            if (!person.companies_ids.includes(Number(filterCompany.id))) {
+                return false;
+            }
+
             const searchTermLowerCased = searchTerm.toLowerCase();
 
             return (
@@ -48,8 +46,11 @@ function Users() {
                     person.address.toLowerCase().includes(searchTermLowerCased))
             );
         });
-        setSearchResults(results);
-    }, [searchTerm]);
+
+        sortUsers(filteredUsers);
+
+        setSearchResults(filteredUsers);
+    }, [searchTerm, filterCompany]);
 
     const handleClickNameSort = (event) => {
         setFilterName(onFilterName ? 0 : 1);
@@ -63,17 +64,6 @@ function Users() {
             );
         }
     };
-    useEffect(() => {
-        if (onFilterName) {
-            setSearchResults(
-                searchResults.sort((a, b) => (a.name > b.name ? 1 : -1)),
-            );
-        } else {
-            setSearchResults(
-                searchResults.sort((a, b) => (a.name < b.name ? 1 : -1)),
-            );
-        }
-    }, [onFilterName]);
 
     const handleClickAddressSort = (event) => {
         setFilterAddress(onFilterAddress ? 0 : 1);
@@ -88,17 +78,19 @@ function Users() {
         }
     };
 
-    useEffect(() => {
-        if (onFilterAddress) {
-            setSearchResults(
-                searchResults.sort((a, b) => (a.address > b.address ? 1 : -1)),
-            );
+    const sortUsers = (users) => {
+        if (onFilterName) {
+            users.sort((a, b) => (a.name > b.name ? 1 : -1));
         } else {
-            setSearchResults(
-                searchResults.sort((a, b) => (a.address < b.address ? 1 : -1)),
-            );
+            users.sort((a, b) => (a.name < b.name ? 1 : -1));
         }
-    }, [onFilterAddress]);
+
+        if (onFilterAddress) {
+            users.sort((a, b) => (a.address > b.address ? 1 : -1));
+        } else {
+            users.sort((a, b) => (a.address < b.address ? 1 : -1));
+        }
+    };
 
     function handleClickUpdate(event) {
         event.preventDefault();
@@ -113,14 +105,6 @@ function Users() {
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ');
     }
-
-    useEffect(() => {
-        const results = hash_company_users[selected.id];
-        // .filter(person =>
-        //     String(person.company_id) === String(selected.id)
-        // )
-        setSearchResults(results);
-    }, [selected]);
 
     return (
         <div className="p-2">
@@ -158,7 +142,10 @@ function Users() {
                     </div>
                     <div className="relative w-80 px-8 py-3">
                         {isSuperAdmin && (
-                            <Listbox value={selected} onChange={setSelected}>
+                            <Listbox
+                                value={filterCompany}
+                                onChange={setFilterCompany}
+                            >
                                 {({ open }) => (
                                     <>
                                         {/*<Listbox.Label className="block text-sm font-medium text-gray-700">Выберете компанию</Listbox.Label>*/}
@@ -166,7 +153,7 @@ function Users() {
                                             <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
                                                 <span className="flex items-center">
                                                     <span className="ml-3 block truncate">
-                                                        {selected.title}
+                                                        {filterCompany.title}
                                                     </span>
                                                 </span>
                                                 <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2"></span>
@@ -197,14 +184,14 @@ function Users() {
                                                                 value={company}
                                                             >
                                                                 {({
-                                                                    selected,
+                                                                    filterCompany,
                                                                     active,
                                                                 }) => (
                                                                     <>
                                                                         <div className="flex items-center">
                                                                             <span
                                                                                 className={classNames(
-                                                                                    selected
+                                                                                    filterCompany
                                                                                         ? 'font-semibold'
                                                                                         : 'font-normal',
                                                                                     'ml-3 block truncate',
@@ -216,7 +203,7 @@ function Users() {
                                                                             </span>
                                                                         </div>
 
-                                                                        {selected ? (
+                                                                        {filterCompany ? (
                                                                             <span
                                                                                 className={classNames(
                                                                                     active
@@ -514,7 +501,10 @@ function Users() {
                     </div>
                     <div className="relative w-80 px-8 py-3">
                         {isSuperAdmin && (
-                            <Listbox value={selected} onChange={setSelected}>
+                            <Listbox
+                                value={filterCompany}
+                                onChange={setFilterCompany}
+                            >
                                 {({ open }) => (
                                     <>
                                         {/*<Listbox.Label className="block text-sm font-medium text-gray-700">Выберете компанию</Listbox.Label>*/}
@@ -522,7 +512,7 @@ function Users() {
                                             <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
                                                 <span className="flex items-center">
                                                     <span className="ml-3 block truncate">
-                                                        {selected.title}
+                                                        {filterCompany.title}
                                                     </span>
                                                 </span>
                                                 <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2"></span>
@@ -553,14 +543,14 @@ function Users() {
                                                                 value={company}
                                                             >
                                                                 {({
-                                                                    selected,
+                                                                    filterCompany,
                                                                     active,
                                                                 }) => (
                                                                     <>
                                                                         <div className="flex items-center">
                                                                             <span
                                                                                 className={classNames(
-                                                                                    selected
+                                                                                    filterCompany
                                                                                         ? 'font-semibold'
                                                                                         : 'font-normal',
                                                                                     'ml-3 block truncate',
@@ -572,7 +562,7 @@ function Users() {
                                                                             </span>
                                                                         </div>
 
-                                                                        {selected ? (
+                                                                        {filterCompany ? (
                                                                             <span
                                                                                 className={classNames(
                                                                                     active

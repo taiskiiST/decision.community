@@ -48,43 +48,44 @@ class UsersController extends Controller
         $cnt = 0;
         $index = 0;
         $users_new = [];
-        foreach ($users as $user_prepare) {
+        /** @var User $user */
+        foreach ($users as $user) {
             $users_new[$index]['num'] = $cnt++;
-            $users_new[$index]['id'] = $user_prepare->id;
-            $users_new[$index]['name'] = $user_prepare->name;
-            $users_new[$index]['address'] = $user_prepare->address;
-            $users_new[$index]['phone'] = $user_prepare->phone;
-            $users_new[$index]['email'] = $user_prepare->email;
-            $users_new[$index]['position'] = $user_prepare->position();
+            $users_new[$index]['id'] = $user->id;
+            $users_new[$index]['name'] = $user->name;
+            $users_new[$index]['address'] = $user->address;
+            $users_new[$index]['phone'] = $user->phone;
+            $users_new[$index]['email'] = $user->email;
+            $users_new[$index]['position'] = $user->position();
             $users_new[$index]['permissions'] = '';
-            $users_new[$index]['permissions'] = $user_prepare->isAdmin() ? 'Администратор' : '';
+            $users_new[$index]['permissions'] = $user->isAdmin() ? 'Администратор' : '';
 
             if (empty($users_new[$index]['permissions'])) {
-                $users_new[$index]['permissions'] .= $user_prepare->isVote() ? "Допущен к голосованию" : "";
+                $users_new[$index]['permissions'] .= $user->isVote() ? "Допущен к голосованию" : "";
             } else {
-                $users_new[$index]['permissions'] .= $user_prepare->isVote() ? "=Допущен к голосованию" : "";
+                $users_new[$index]['permissions'] .= $user->isVote() ? "=Допущен к голосованию" : "";
             }
             if (empty($users_new[$index]['permissions'])) {
-                $users_new[$index]['permissions'] .= $user_prepare->isGovernance() ? "Член правления" : "";
+                $users_new[$index]['permissions'] .= $user->isGovernance() ? "Член правления" : "";
             } else {
-                $users_new[$index]['permissions'] .= $user_prepare->isGovernance() ? "=Член правления" : "";
+                $users_new[$index]['permissions'] .= $user->isGovernance() ? "=Член правления" : "";
             }
             if (empty($users_new[$index]['permissions'])) {
-                $users_new[$index]['permissions'] .= $user_prepare->isManageItems() ? "Модератор" : "";
+                $users_new[$index]['permissions'] .= $user->isManageItems() ? "Модератор" : "";
             } else {
-                $users_new[$index]['permissions'] .= $user_prepare->isManageItems() ? "=Модератор" : "";
+                $users_new[$index]['permissions'] .= $user->isManageItems() ? "=Модератор" : "";
             }
             if (empty($users_new[$index]['permissions'])) {
-                $users_new[$index]['permissions'] .= $user_prepare->isAccess() ? "Допущен к сайту" : "";
+                $users_new[$index]['permissions'] .= $user->isAccess() ? "Допущен к сайту" : "";
             } else {
-                $users_new[$index]['permissions'] .= $user_prepare->isAccess() ? "=Допущен к сайту" : "";
+                $users_new[$index]['permissions'] .= $user->isAccess() ? "=Допущен к сайту" : "";
             }
             if (empty($users_new[$index]['permissions'])) {
-                $users_new[$index]['permissions'] .= $user_prepare->isSuperAdmin() ? "Супер Администратор" : "";
+                $users_new[$index]['permissions'] .= $user->isSuperAdmin() ? "Супер Администратор" : "";
             } else {
-                $users_new[$index]['permissions'] .= $user_prepare->isSuperAdmin() ? "=Супер Администратор" : "";
+                $users_new[$index]['permissions'] .= $user->isSuperAdmin() ? "=Супер Администратор" : "";
             }
-            $users_new[$index]['company_id'] = $user_prepare->company_id;
+            $users_new[$index]['companies_ids'] = $user->companiesIds()->values();
 
             $index++;
         }
@@ -92,7 +93,7 @@ class UsersController extends Controller
         $users_new = $this->array_orderby($users_new, 'address', SORT_ASC);
 
         $index = 0;
-        foreach ($users_new as $user) {
+        foreach ($users_new as $_) {
             $users_new[$index]['permissions'] = explode('=', $users_new[$index]['permissions']);
             $index++;
         }
@@ -129,7 +130,6 @@ class UsersController extends Controller
             $users = User::all();
         }
         $users_new = $this->prepareUsersForReact($users);
-        $hash_company_users = $this->companyUsers();
         $companies = Company::all();
         $companies->push(['id' => 0, 'title' => 'Не закрепленные']);
         //dd($companies);
@@ -137,7 +137,6 @@ class UsersController extends Controller
             'users'              => $users_new,
             'csrf_token'         => csrf_token(),
             'companies'          => $companies,
-            'hash_company_users' => $hash_company_users,
             'current_company'    => session('current_company'),
             'isSuperAdmin'       => auth()->user()->isSuperAdmin() ? true : false,
         ]);
@@ -501,7 +500,6 @@ class UsersController extends Controller
             $users = User::all();
         }
         $users_new = $this->prepareUsersForReact($users);
-        $hash_company_users = $this->companyUsers();
 
         $companies = Company::all();
         $companies->push(['id' => 0, 'title' => 'Не закрепленные']);
@@ -510,7 +508,6 @@ class UsersController extends Controller
             'users'              => $users_new,
             'csrf_token'         => csrf_token(),
             'companies'          => $companies,
-            'hash_company_users' => $hash_company_users,
             'current_company'    => session('current_company'),
             'isSuperAdmin'       => auth()->user()->isSuperAdmin() ? true : false,
         ]);
@@ -530,12 +527,10 @@ class UsersController extends Controller
             $users = User::all();
         }
         $users = $this->prepareUsersForReact($users);
-        $hash_company_users = $this->companyUsers();
         \JavaScript::put([
             'users'              => $users,
             'csrf_token'         => csrf_token(),
             'companies'          => Company::all(),
-            'hash_company_users' => $hash_company_users,
             'current_company'    => session('current_company'),
             'isSuperAdmin'       => auth()->user()->isSuperAdmin() ? true : false,
         ]);

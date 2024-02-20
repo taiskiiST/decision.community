@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as SymphonyResponse;
 
@@ -21,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response as SymphonyResponse;
  * @property string permissions
  * @property mixed name
  * @property mixed email
+ * @property mixed $companies
  * @package App\Models
  */
 class User extends Authenticatable
@@ -178,6 +177,11 @@ class User extends Authenticatable
     public function companies()
     {
         return $this->belongsToMany(Company::class);
+    }
+
+    public function companiesIds(): Collection
+    {
+        return $this->companies->pluck('id', 'id');
     }
 
     /**

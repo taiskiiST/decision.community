@@ -1,5 +1,6 @@
 @extends('layouts.app', [
     'headerName' => "Опрос {$poll->name}",
+    'pageTitle' => $poll->name
 ])
 
 @section('styles')

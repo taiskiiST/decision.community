@@ -1,5 +1,6 @@
 @extends('layouts.app', [
     'headerName' => "Подробный разбор вопроса",
+    'pageTitle' => $poll->name
 ])
 @section('styles')
     @parent

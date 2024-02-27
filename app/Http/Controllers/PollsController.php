@@ -1119,6 +1119,10 @@ class PollsController extends Controller
      */
     public function display(Poll $poll)
     {
+        if (!$poll->voteStarted()) {
+            abort(403, 'Голосование ещё не началось');
+        }
+
         $displayMode = false;
 
         \JavaScript::put([
@@ -1507,6 +1511,12 @@ class PollsController extends Controller
         if ($poll->isGovernanceMeeting() && !$user->isGovernance()) {
             return [
                 'errorMessage' => 'Невозможно проголосовать - Вы не являетесь членом правления'
+            ];
+        }
+
+        if (!$poll->voteStarted()) {
+            return [
+                'errorMessage' => 'Голосование ещё не началось'
             ];
         }
 

@@ -183,7 +183,7 @@ class Poll extends Model
             return false;
     }
 
-    public function voteStart () : bool
+    public function voteStarted() : bool
     {
         if ($this->start)
             return true;

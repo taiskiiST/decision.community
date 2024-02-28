@@ -167,9 +167,15 @@ class Poll extends Model
     public function authUserVote () : bool
     {
         $user = auth()->user();
-        $questions = $this->questions;
-        $questions = $questions->pluck('id')->toArray();
-        if (!$questions)  return false;
+        if (!$user) {
+            return false;
+        }
+
+        $questions = $this->questions->pluck('id')->toArray();;
+        if (!$questions) {
+            return false;
+        }
+
         if (Vote::where('question_id', $questions[0])->where('user_id', $user->id)->get()->count() > 0 )
             return true;
         else

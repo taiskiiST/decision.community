@@ -165,7 +165,7 @@ class QuestionsController extends Controller
             $cnt_files_in_question = [];
             $hashUserVoteQuestions = [];
         }
-        //dd($hashUserVoteQuestions);
+
         \JavaScript::put([
             'csrf_token'            => csrf_token(),
             'itemsNameHash'         => Company::find(session('current_company')->id)->users()->get()->pluck('name', 'id'),
@@ -173,7 +173,7 @@ class QuestionsController extends Controller
             'itemsPollFinishedHash' => Poll::where('company_id', session('current_company')->id)->get()->pluck('finished', 'id'),
             'suggested_questions'   => $suggested_questions,
             'hasOwnQuestions'       => Question::hasOwnQuestions($suggested_questions),
-            'authUserId'            => auth()->user()->id,
+            'authUserId'            => auth()->user()?->id,
             'cnt_files_in_question' => $cnt_files_in_question,
             'isAuthUserVote'        => $hashUserVoteQuestions,
         ]);

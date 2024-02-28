@@ -58,8 +58,13 @@ class Question extends Model
 
     static function hasOwnQuestions($questions)
     {
+        $user = auth()->user();
+        if (!$user) {
+            return false;
+        }
+
         foreach ($questions as $question){
-            if ($question->author == auth()->user()->id){
+            if ($question->author == $user->id) {
                 return true;
             }
 

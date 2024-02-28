@@ -25,11 +25,11 @@ function SearchQuestionsSmallScreen() {
             return (
                 question.text.toLowerCase().includes(searchTermLowerCased) ||
                 itemsNameHash[question.author]
-                    .toLowerCase()
-                    .includes(searchTermLowerCased) ||
+                    ?.toLowerCase()
+                    ?.includes(searchTermLowerCased) ||
                 itemsPollNameHash[question.poll_id]
-                    .toLowerCase()
-                    .includes(searchTermLowerCased)
+                    ?.toLowerCase()
+                    ?.includes(searchTermLowerCased)
             );
         });
         setSearchResults(results);

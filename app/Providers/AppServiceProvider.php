@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Company;
 use App\Models\Poll;
 use App\Models\Question;
 use App\Models\User;
@@ -27,19 +28,25 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::share('all_questions', Question::all());
-        $all_questions = Question::all()->transform(function (Question $question) {
-            //$question->text = mb_convert_encoding($question->succinctText(), 'windows-1251', 'utf-8');
-            $question->text = $question->succinctText();
-            return $question;
-        });
+        $allQuestions = [];
+        $cnt_files_in_question = [];
+        $company = Company::getCompanyBySubDomain();
+        if ($company) {
+            $allQuestions = $company->questions->transform(function (Question $question) {
+                $question->text = $question->succinctText();
 
-        foreach ($all_questions as $question){
-            $cnt_files_in_question [$question->id] = $question->question_files()->count();
+                return $question;
+            });
+
+            foreach ($allQuestions as $question){
+                $cnt_files_in_question[$question->id] = $question->question_files()->count();
+            }
         }
 
+        View::share('all_questions', $allQuestions);
+
         \JavaScript::put([
-            'all_questions' => $all_questions,
+            'all_questions' => $allQuestions,
             'itemsNameHash'   => User::all()->pluck('name', 'id'),
             'itemsPollNameHash'   => Poll::all()->pluck('name', 'id'),
             'cnt_files_in_question' => $cnt_files_in_question

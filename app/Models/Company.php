@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 /**
@@ -47,6 +48,13 @@ class Company extends Model
         }
 
         return $company;
+    }
+
+    public static function getCompanyBySubDomain(): ?Company
+    {
+        $subdomain = Arr::first(explode('.', request()->getHost()));
+
+        return Company::where('uri', $subdomain)->first();
     }
 
     public function mainView(): string

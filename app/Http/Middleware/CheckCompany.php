@@ -19,9 +19,7 @@ class CheckCompany
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        $subdomain = Arr::first(explode('.', request()->getHost()));
-
-        $company = Company::where('uri', $subdomain)->first();
+        $company = Company::getCompanyBySubDomain();
         if (!$company) {
             abort(404);
         }

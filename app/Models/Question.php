@@ -72,6 +72,11 @@ class Question extends Model
         return false;
     }
 
+    public function belongsToCompany(Company $company): bool
+    {
+        return $this->company_id === $company->id;
+    }
+
     public function poll(): HasOne
     {
         return $this->HasOne(Poll::class,'id','poll_id');

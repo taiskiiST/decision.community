@@ -107,32 +107,42 @@ class QuestionsController extends Controller
 
     public function viewQuestion(Question $question, $search = '')
     {
-        if (!session('current_company') && !$question->public) {
+        $company = session('current_company');
+
+        // If the question is private then the company is required.
+        if (!$question->public && !$company) {
             return redirect()->route('polls.index');
         }
+
+        // If the question is private then it has to belong to the current company.
+        if (!$question->public && !$question->belongsToCompany($company)) {
+            return redirect()->route('polls.index');
+        }
+
         \JavaScript::put([
             'question' => isset($question)
                 ? $question
                 : '',
 
         ]);
+
         if ($question->public) {
             return view('questions.view_question', [
                 'question' => $question,
                 'poll'     => $question->poll()->get()->first(),
                 'search'   => $search ? $search : '',
             ]);
-        } else {
-            if (auth()->user()) {
-                return view('questions.view_question', [
-                    'question' => $question,
-                    'poll'     => $question->poll()->get()->first(),
-                    'search'   => $search ? $search : '',
-                ]);
-            } else {
-                return redirect()->route('login');
-            }
         }
+
+        if (auth()->user()) {
+            return view('questions.view_question', [
+                'question' => $question,
+                'poll'     => $question->poll()->get()->first(),
+                'search'   => $search ? $search : '',
+            ]);
+        }
+
+        return redirect()->route('login');
     }
 
     public function viewPublicQuestions()

@@ -101,14 +101,14 @@ Route::group(['middleware' => 'check.company'], function () {
 
         Route::get('/polls/{poll}/questions/{id_question?}/{error?}', [QuestionsController::class, 'index'])->name('poll.questions.index');
         Route::get('/polls/{poll}/questions/create', [QuestionsController::class, 'create'])->name('poll.questions.create');
-        Route::post('/polls/{poll}/question/{question}/delete/', [QuestionsController::class, 'destroy'])->name('question.delete');
-        Route::post('/question_suggested/{question}/delete/', [QuestionsController::class, 'destroy_suggested'])->name('question_suggested.delete');
+        Route::post('/polls/{poll}/question/{question}/delete', [QuestionsController::class, 'destroy'])->name('question.delete');
+        Route::post('/question_suggested/{question}/delete', [QuestionsController::class, 'destroy_suggested'])->name('question_suggested.delete');
         Route::post('/polls/{poll}/questions/add', [PollsController::class, 'addQuestion'])->name('poll.addQuestion');
 
         Route::get('/polls/search/question/{search?}', [QuestionsController::class, 'searchQuestion'])->name('poll.questions.search_question');
         Route::post('/searchQuestions', [QuestionsController::class, 'searchQuestions'])->name('poll.questions.search_questions');
 
-        Route::post('/polls/{poll}/question/{question}/public/', [QuestionsController::class, 'publicQuestion'])->name('question.public');
+        Route::post('/polls/{poll}/question/{question}/public', [QuestionsController::class, 'publicQuestion'])->name('question.public');
         Route::get('/question/getQuestion', [QuestionsController::class, 'getQuestion'])->name('get.question');
 
         Route::get('/profile', [UsersController::class, 'indexProfile'])->name('users.profile');

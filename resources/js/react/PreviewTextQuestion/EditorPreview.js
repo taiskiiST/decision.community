@@ -146,7 +146,7 @@ class EditorPreview extends React.Component {
                                     {is_admin && (
                                         <form
                                             method="POST"
-                                            action={`/polls/${poll_full.id}/question/${question.id}/public/`}
+                                            action={`/polls/${poll_full.id}/question/${question.id}/public`}
                                         >
                                             <input
                                                 type="hidden"
@@ -207,7 +207,7 @@ class EditorPreview extends React.Component {
                                         {!poll_finished && (
                                             <form
                                                 method="POST"
-                                                action={`/polls/${poll_full.id}/question/${question.id}/delete/`}
+                                                action={`/polls/${poll_full.id}/question/${question.id}/delete`}
                                             >
                                                 <input
                                                     type="hidden"

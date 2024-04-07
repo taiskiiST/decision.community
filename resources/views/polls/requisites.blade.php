@@ -9,7 +9,10 @@
                 <div>
                     <label class="px-1 py-4 block text-lg text-black font-semibold text-wrap">Обновление основных реквизитов голосования</label>
                 </div>
-                <div>
+
+
+
+                <div class="px-1 py-4 sm:px-6 ">
                  @if ($poll->start)
                     @if ($poll->potential_voters_number)
                         <div class="inline-flex flex-row w-full place-content-between">

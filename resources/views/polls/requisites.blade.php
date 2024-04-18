@@ -19,9 +19,9 @@
                         </div>
                     @endif
                  @else
-                        <form method="patch" action="{{ route('poll.start',[$poll->id]) }}">
+                        <form method="POST" action="{{ route('poll.start',[$poll->id]) }}">
                             @csrf
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            @method('PATCH')
                             <input name="start" value="{{$poll->id}}" type="hidden"/>
                             <button type="submit"
                                     class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"

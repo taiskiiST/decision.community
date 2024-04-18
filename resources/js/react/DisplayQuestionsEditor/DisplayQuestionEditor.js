@@ -9,9 +9,18 @@ import 'react-pdf/dist/esm/Page/TextLayer.css';
 import { isJson } from '../../shared/helpers';
 import Answers from './Answers';
 import DocumentViewer from './DocumentViewer';
+import ResultsTable from './ResultsTable';
+import ResultsStars from './ResultsStars';
 
-const { voteUrl, pollId, questionsCount, displayMode, canVote, isTypeReport } =
-    window.TSN || {};
+const {
+    voteUrl,
+    pollId,
+    questionsCount,
+    displayMode,
+    canVote,
+    isTypeReport,
+    initialQuestionPosition,
+} = window.TSN || {};
 
 const getEditorState = (question) => {
     if (!question) {
@@ -202,7 +211,9 @@ const DisplayQuestionEditor = () => {
 
     const getNextQuestion = async () => {
         await getQuestion(
-            currentQuestion ? currentQuestion.position_in_poll + 1 : 1,
+            currentQuestion
+                ? currentQuestion.position_in_poll + 1
+                : initialQuestionPosition,
         );
     };
 
@@ -232,6 +243,9 @@ const DisplayQuestionEditor = () => {
     if (!currentQuestion) {
         return null;
     }
+
+    const displayResultsTable = !isTypeReport && displayMode && currentQuestion;
+    const displayResultsStars = isTypeReport && displayMode && currentQuestion;
 
     return (
         <div>
@@ -294,6 +308,18 @@ const DisplayQuestionEditor = () => {
                 )}
             </div>
 
+            {displayResultsTable && (
+                <div className="mt-3">
+                    <ResultsTable question={currentQuestion} />
+                </div>
+            )}
+
+            {displayResultsStars && (
+                <div className="mt-3">
+                    <ResultsStars question={currentQuestion} />
+                </div>
+            )}
+
             <div className="mt-3">
                 <Paginator
                     indexQuestion={indexQuestion}
@@ -322,17 +348,19 @@ const DisplayQuestionEditor = () => {
                     Отмена
                 </button>
 
-                <button
-                    type="button"
-                    className="rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:bg-gray-600"
-                    disabled={voteButtonDisabled}
-                    onClick={() =>
-                        confirm('Подтверждение окончания голосования') &&
-                        onVoteButtonClick()
-                    }
-                >
-                    Проголосовать
-                </button>
+                {!displayMode && (
+                    <button
+                        type="button"
+                        className="rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:bg-gray-600"
+                        disabled={voteButtonDisabled}
+                        onClick={() =>
+                            confirm('Подтверждение окончания голосования') &&
+                            onVoteButtonClick()
+                        }
+                    >
+                        Проголосовать
+                    </button>
+                )}
             </div>
         </div>
     );

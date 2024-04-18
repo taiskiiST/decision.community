@@ -38,7 +38,7 @@
             cursor: pointer;
         }
         .on {
-            color: #000;
+            color: #faaf00;
         }
         .off {
             color: #ccc;

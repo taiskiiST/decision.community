@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property mixed id
+ * @property mixed $votesNumber
  */
 class Answer extends Model
 {

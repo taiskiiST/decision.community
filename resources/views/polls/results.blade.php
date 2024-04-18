@@ -30,7 +30,7 @@
             content: "\2714";
         }
         .on {
-            color: #000;
+            color: #faaf00;
         }
         .off {
             color: #ccc;

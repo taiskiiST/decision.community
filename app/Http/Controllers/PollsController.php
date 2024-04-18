@@ -1095,13 +1095,16 @@ class PollsController extends Controller
     {
         $displayMode = true;
 
+        $question = $poll->questions()->where('id', request('question_id'))->first();
+
         \JavaScript::put([
-            'questionsCount' => $poll->questions->count(),
-            'displayMode'    => $displayMode,
-            'canVote'        => auth()->user()->canVote(),
-            'pollId'         => $poll->id,
-            'isTypeReport'   => $poll->isReportDone(),
-            'voteUrl'        => route('poll.submit', ['poll' => $poll]),
+            'questionsCount'          => $poll->questions->count(),
+            'displayMode'             => $displayMode,
+            'canVote'                 => auth()->user()->canVote(),
+            'pollId'                  => $poll->id,
+            'isTypeReport'            => $poll->isReportDone(),
+            'voteUrl'                 => route('poll.submit', ['poll' => $poll]),
+            'initialQuestionPosition' => $question ? $question->position_in_poll : 1,
         ]);
 
         return view('polls.display', [
@@ -1132,6 +1135,7 @@ class PollsController extends Controller
             'pollId'         => $poll->id,
             'isTypeReport'   => $poll->isReportDone(),
             'voteUrl'        => route('poll.submit', ['poll' => $poll]),
+            'initialQuestionPosition' => 1,
         ]);
 
         return view('polls.display', [

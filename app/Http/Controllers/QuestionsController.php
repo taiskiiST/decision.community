@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
 use App\Models\Company;
 use App\Models\Poll;
 use App\Models\Question;
@@ -119,28 +120,26 @@ class QuestionsController extends Controller
             return redirect()->route('polls.index');
         }
 
-        \JavaScript::put([
-            'question' => isset($question)
-                ? $question
-                : '',
+        if ($question->public || auth()->user()) {
+            $displayMode = true;
+            $poll = $question->poll;
 
+            \JavaScript::put([
+                'questionsCount'          => $poll->questions->count(),
+                'displayMode'             => $displayMode,
+                'canVote'                 => auth()->user()->canVote(),
+                'pollId'                  => $poll->id,
+                'isTypeReport'            => $poll->isReportDone(),
+                'voteUrl'                 => route('poll.submit', ['poll' => $poll]),
+                'initialQuestionPosition' => $question->position_in_poll,
+            ]);
+        }
+
+        return view('polls.display', [
+            'poll'        => $poll,
+            'displayMode' => $displayMode,
         ]);
 
-        if ($question->public) {
-            return view('questions.view_question', [
-                'question' => $question,
-                'poll'     => $question->poll()->get()->first(),
-                'search'   => $search ? $search : '',
-            ]);
-        }
-
-        if (auth()->user()) {
-            return view('questions.view_question', [
-                'question' => $question,
-                'poll'     => $question->poll()->get()->first(),
-                'search'   => $search ? $search : '',
-            ]);
-        }
 
         return redirect()->route('login');
     }
@@ -260,9 +259,21 @@ class QuestionsController extends Controller
             ->with('question_files')
             ->first();
 
+        if (!$question) {
+            return null;
+        }
+
         $vote = auth()->user()->votes->whereIn('question_id', $question->id)->first();
 
         $question->userVotedAnswerId = $vote ? $vote->answer_id : null;
+        $question->votersNumber = $question->countVotesByQuestion();
+        $question->potentialVotersNumber = $question->poll->potential_voters_number;
+
+        $question->answers->each(function (Answer $answer) {
+            $answer->votesNumber = $answer->countVotes();
+        });
+
+        $question->averageGrade = $question->middleAnswerThatAllUsersMarkOnReport();
 
         return $question;
     }

@@ -915,13 +915,20 @@ class PollsController extends Controller
                     ]);
                     $question_text_id = $question->id;
                 } else {
-                    $question = $poll->questions()->updateOrInsert(
-                        ['id' => $question_text_id, 'poll_id' => $poll->id, 'author' => auth()->user()->id],
-                        [
-                            'text'       => $value,
-                            'company_id' => session('current_company')->id,
-                        ]
-                    );
+                    try {
+                        $question = $poll->questions()->updateOrInsert(
+                            ['id' => $question_text_id, 'poll_id' => $poll->id, 'author' => auth()->user()->id],
+                            [
+                                'text'       => $value,
+                                'company_id' => session('current_company')->id,
+                            ]
+                        );
+                    }catch (\Throwable $e) {
+                        \Log::error($e);
+                        return redirect()->route('poll.questions.index',
+                            ['poll' => $poll->id, 'id_question' => $question->id, 'error'=> 'Нельзя менять данные другого автора!']);
+                    }
+
                     $question = Question::find($question_text_id);
                 }
             }

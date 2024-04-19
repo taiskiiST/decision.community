@@ -669,7 +669,7 @@ class Question extends React.Component {
             }),
             this.validateForm,
         );
-        console.log('this.state.fileUploads', this.state.fileUploads);
+        //console.log('this.state.fileUploads', this.state.fileUploads);
     };
 
     handleAnswerInput = (e) => {

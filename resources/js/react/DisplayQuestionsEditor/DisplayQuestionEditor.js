@@ -138,8 +138,12 @@ const QuestionFiles = ({ questionFiles }) =>
             <p className={`${index_map !== 0 ? 'pt-10' : ''}`}>
                 Описание: {file.text_for_file}
             </p>
-
+            <p className='text-right'>
+                <a href={`/storage/${file.path_to_file}`} download>Скачать файл</a>
+            </p>
             <DocumentViewer file={file} />
+
+            <hr />
         </div>
     ));
 

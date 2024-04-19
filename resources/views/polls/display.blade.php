@@ -64,9 +64,14 @@
             </ul>
         </div>
     @endif
+    @if (auth()->user()
+                    ?  auth() && auth()->user()->canVote() || auth()->user()->isAccess()
+                    : '' || $displayMode)
 
-    @if (auth()->user() ? auth() && auth()->user()->canVote()|| auth()->user()->isAccess() : '' )
-        @if (auth()->user()->isAccess() || (!$poll->finished && !$poll->authUserVote() && !$poll->isGovernanceMeeting() || $displayMode) || $poll->isGovernanceMeeting() && auth()->user()->isGovernance() )
+
+        @if (auth()->user() && auth()->user()->isAccess() ||
+                (!$poll->finished && !$poll->authUserVote() && !$poll->isGovernanceMeeting() || $displayMode) ||
+                $poll->isGovernanceMeeting() && auth()->user()->isGovernance() )
             <div class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
                 <div class="text-center"><span style="font-size: x-large;"><b>{{$poll->name}}</b></span></div>
 

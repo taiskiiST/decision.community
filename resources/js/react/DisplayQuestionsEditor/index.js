@@ -14,4 +14,7 @@ const App = () => {
     );
 };
 
-render(<App />, document.getElementById('displayQuestionsEditor'));
+const element = document.getElementById('displayQuestionsEditor');
+if (element) {
+    render(<App />, element);
+}

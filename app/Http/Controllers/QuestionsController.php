@@ -134,13 +134,12 @@ class QuestionsController extends Controller
                 'voteUrl'                 => route('poll.submit', ['poll' => $poll]),
                 'initialQuestionPosition' => $question->position_in_poll,
             ]);
+
+            return view('polls.display', [
+                'poll'        => $poll,
+                'displayMode' => $displayMode,
+            ]);
         }
-
-        return view('polls.display', [
-            'poll'        => $poll,
-            'displayMode' => $displayMode,
-        ]);
-
 
         return redirect()->route('login');
     }

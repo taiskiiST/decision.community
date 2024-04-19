@@ -263,7 +263,10 @@ class QuestionsController extends Controller
             return null;
         }
 
-        $vote = auth()->user()->votes->whereIn('question_id', $question->id)->first();
+        $vote = null;
+        if (auth()->user()) {
+            $vote = auth()->user()->votes->whereIn('question_id', $question->id)->first();
+        }
 
         $question->userVotedAnswerId = $vote ? $vote->answer_id : null;
         $question->votersNumber = $question->countVotesByQuestion();

@@ -64,6 +64,8 @@ Route::group(['middleware' => 'check.company'], function () {
     Route::get('/report-school-by-school/', [ChildrenAndParentsInformation::class, 'schoolReportBySchool'])->name('school-report-by-school');
     Route::get('/children-report-age', [ChildrenAndParentsInformation::class, 'reportAge'])->name('children-report-age');
 
+    Route::get('/question/getQuestion', [QuestionsController::class, 'getQuestion'])->name('get.question');
+
     Route::group(['middleware' => ['auth', 'can:access-app']], function () {
         Route::get('/children-report', [ChildrenAndParentsInformation::class, 'report'])->name('children-report');
 
@@ -109,7 +111,7 @@ Route::group(['middleware' => 'check.company'], function () {
         Route::post('/searchQuestions', [QuestionsController::class, 'searchQuestions'])->name('poll.questions.search_questions');
 
         Route::post('/polls/{poll}/question/{question}/public', [QuestionsController::class, 'publicQuestion'])->name('question.public');
-        Route::get('/question/getQuestion', [QuestionsController::class, 'getQuestion'])->name('get.question');
+
 
         Route::get('/profile', [UsersController::class, 'indexProfile'])->name('users.profile');
         Route::get('/profile-update', [UsersController::class, 'updateProfile'])->name('users.profile.update');

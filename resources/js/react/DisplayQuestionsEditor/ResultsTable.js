@@ -58,7 +58,7 @@ const ResultsTable = ({ question }) => {
                                 {index + 1}
                             </td>
                             <td
-                                className={`whitespace-nowrap px-3 py-4 text-sm text-gray-500 ${
+                                className={`whitespace-nowrap px-3 py-4 text-sm text-gray-900 ${
                                     answer.id === answerIdWithMaxVotes
                                         ? 'font-bold'
                                         : 'font-medium'
@@ -67,7 +67,7 @@ const ResultsTable = ({ question }) => {
                                 {answer.text}
                             </td>
                             <td
-                                className={`whitespace-nowrap px-3 py-4 text-sm text-gray-500 ${
+                                className={`whitespace-nowrap px-3 py-4 text-sm text-gray-900 ${
                                     answer.id === answerIdWithMaxVotes
                                         ? 'font-bold'
                                         : 'font-medium'
@@ -76,7 +76,7 @@ const ResultsTable = ({ question }) => {
                                 {answer.votesNumber}
                             </td>
                             <td
-                                className={`whitespace-nowrap px-3 py-4 text-sm text-gray-500 ${
+                                className={`whitespace-nowrap px-3 py-4 text-sm text-gray-900 ${
                                     answer.id === answerIdWithMaxVotes
                                         ? 'font-bold'
                                         : 'font-medium'

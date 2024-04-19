@@ -123,11 +123,12 @@ class QuestionsController extends Controller
         if ($question->public || auth()->user()) {
             $displayMode = true;
             $poll = $question->poll;
+            $user = auth()->user();
 
             \JavaScript::put([
                 'questionsCount'          => $poll->questions->count(),
                 'displayMode'             => $displayMode,
-                'canVote'                 => auth()->user()->canVote(),
+                'canVote'                 => $user ? $user->canVote() : false,
                 'pollId'                  => $poll->id,
                 'isTypeReport'            => $poll->isReportDone(),
                 'voteUrl'                 => route('poll.submit', ['poll' => $poll]),

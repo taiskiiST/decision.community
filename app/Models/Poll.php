@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * @property mixed id
+ * @property TypeOfPoll $typeOfPoll
  */
 class Poll extends Model
 {
@@ -37,42 +38,32 @@ class Poll extends Model
 
     public function isPublicMeeting(): bool
     {
-        return ($this->getTypeOfPoll() == TypeOfPoll::PUBLIC_MEETING) ? true : false;
+        return $this->typeOfPoll->isPublicMeeting();
     }
 
     public function isGovernanceMeeting(): bool
     {
-        return ($this->getTypeOfPoll() == TypeOfPoll::GOVERNANCE_MEETING) ? true : false;
+        return $this->typeOfPoll->isGovernanceMeeting();
     }
 
     public function isReportDone(): bool
     {
-        return ($this->getTypeOfPoll() == TypeOfPoll::REPORT_DONE) ? true : false;
+        return $this->typeOfPoll->isReport();
     }
 
     public function isSuggestedQuestion(): bool
     {
-        return ($this->getTypeOfPoll() == TypeOfPoll::SUGGESTED_POLL) ? true : false;
+        return $this->typeOfPoll->isSuggestedPoll();
     }
 
     public function isInformationPost(): bool
     {
-        return ($this->getTypeOfPoll() == TypeOfPoll::INFORMATION_POST) ? true : false;
+        return $this->typeOfPoll->isInformationPost();
     }
 
-//    public function isVoteForTSN(): bool
-//    {
-//        return ($this->getTypeOfPoll() == TypeOfPoll::VOTE_FOR_TSN) ? true : false;
-//    }
-
-//    public function isPublicVote(): bool
-//    {
-//        return ($this->getTypeOfPoll() == TypeOfPoll::PUBLIC_VOTE) ? true : false;
-//    }
-
-    public function getTypeOfPoll()
+    public function typeOfPoll(): BelongsTo
     {
-        return $this->hasOne(TypeOfPoll::class, 'id', 'type_of_poll')->get()[0]->type_of_poll;
+        return $this->belongsTo(TypeOfPoll::class, 'type_of_poll', 'id');
     }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

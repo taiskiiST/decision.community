@@ -19,6 +19,7 @@ const {
     displayMode,
     canVote,
     isTypeReport,
+    isInformationPost,
     initialQuestionPosition,
 } = window.TSN || {};
 
@@ -248,7 +249,7 @@ const DisplayQuestionEditor = () => {
         return null;
     }
 
-    const displayResultsTable = !isTypeReport && displayMode && currentQuestion;
+    const displayResultsTable = !isTypeReport && !isInformationPost && displayMode && currentQuestion;
     const displayResultsStars = isTypeReport && displayMode && currentQuestion;
 
     return (

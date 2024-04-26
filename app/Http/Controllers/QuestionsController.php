@@ -131,6 +131,7 @@ class QuestionsController extends Controller
                 'canVote'                 => $user ? $user->canVote() : false,
                 'pollId'                  => $poll->id,
                 'isTypeReport'            => $poll->isReportDone(),
+                'isInformationPost'       => $poll->isInformationPost(),
                 'voteUrl'                 => route('poll.submit', ['poll' => $poll]),
                 'initialQuestionPosition' => $question->position_in_poll,
             ]);

@@ -50,42 +50,9 @@ class PollsController extends Controller
 
     public function create(Request $request)
     {
-        switch ($request->type_of_poll) {
-            case TypeOfPoll::PUBLIC_MEETING:
-            {
-                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll', '=', TypeOfPoll::PUBLIC_MEETING)->get();
-                break;
-            }
-            case TypeOfPoll::GOVERNANCE_MEETING:
-            {
-                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll', '=', TypeOfPoll::GOVERNANCE_MEETING)->get();
-                break;
-            }
-            case TypeOfPoll::SUGGESTED_POLL:
-            {
-                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll', '=', TypeOfPoll::SUGGESTED_POLL)->get();
-                break;
-            }
-//            case TypeOfPoll::VOTE_FOR_TSN: {
-//                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::VOTE_FOR_TSN)->get();
-//                break;
-//            }
-//            case TypeOfPoll::PUBLIC_VOTE: {
-//                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll','=',TypeOfPoll::PUBLIC_VOTE)->get();
-//                break;
-//            }
-            case TypeOfPoll::REPORT_DONE:
-            {
-                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll', '=', TypeOfPoll::REPORT_DONE)->get();
-                break;
-            }
-            case TypeOfPoll::INFORMATION_POST:
-            {
-                $type_of_poll = TypeOfPoll::select('id')->where('type_of_poll', '=', TypeOfPoll::INFORMATION_POST)->get();
-                break;
-            }
-        }
-        return view('polls.create', ['type_of_poll' => $type_of_poll[0]->id]);
+        $typeOfPoll = TypeOfPoll::find($request->type_of_poll);
+
+        return view('polls.create', ['type_of_poll' => $typeOfPoll->id]);
     }
 
     public function delProtocol(Request $request)
@@ -1110,6 +1077,7 @@ class PollsController extends Controller
             'canVote'                 => auth()->user()->canVote(),
             'pollId'                  => $poll->id,
             'isTypeReport'            => $poll->isReportDone(),
+            'isInformationPost'       => $poll->isInformationPost(),
             'voteUrl'                 => route('poll.submit', ['poll' => $poll]),
             'initialQuestionPosition' => $question ? $question->position_in_poll : 1,
         ]);
@@ -1136,12 +1104,13 @@ class PollsController extends Controller
         $displayMode = false;
 
         \JavaScript::put([
-            'questionsCount' => $poll->questions->count(),
-            'displayMode'    => $displayMode,
-            'canVote'        => auth()->user()->canVote(),
-            'pollId'         => $poll->id,
-            'isTypeReport'   => $poll->isReportDone(),
-            'voteUrl'        => route('poll.submit', ['poll' => $poll]),
+            'questionsCount'    => $poll->questions->count(),
+            'displayMode'       => $displayMode,
+            'canVote'           => auth()->user()->canVote(),
+            'pollId'            => $poll->id,
+            'isTypeReport'      => $poll->isReportDone(),
+            'isInformationPost' => $poll->isInformationPost(),
+            'voteUrl'           => route('poll.submit', ['poll' => $poll]),
             'initialQuestionPosition' => 1,
         ]);
 

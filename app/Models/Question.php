@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property mixed id
+ * @property mixed $public
  */
 class Question extends Model
 {
@@ -136,6 +137,11 @@ class Question extends Model
         }
 
         return $summ;
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->public;
     }
 
     public function scopePublic(Builder $query): Builder

@@ -252,6 +252,7 @@ class QuestionsController extends Controller
 
     public function getQuestion()
     {
+        /** @var Question $question */
         $question = Question
             ::where('poll_id', request('pollId'))
             ->where('position_in_poll', request('positionInPoll'))
@@ -259,7 +260,7 @@ class QuestionsController extends Controller
             ->with('question_files')
             ->first();
 
-        if (!$question) {
+        if (!$question->isPublic() && !auth()->user()) {
             return null;
         }
 

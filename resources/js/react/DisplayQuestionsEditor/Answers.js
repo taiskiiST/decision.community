@@ -35,7 +35,7 @@ const RegularAnswers = ({ question, votes, onAnswerClick }) => (
     </fieldset>
 );
 
-const RatingAnswers = ({ question, votes, onAnswerClick }) => {
+const   RatingAnswers = ({ question, votes, onAnswerClick }) => {
     const currentAnswerId = votes[question.id] || question.userVotedAnswerId;
     let currentValue = 0;
 

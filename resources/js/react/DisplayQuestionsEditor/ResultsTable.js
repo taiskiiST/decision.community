@@ -58,7 +58,7 @@ const ResultsTable = ({ question }) => {
                                 {index + 1}
                             </td>
                             <td
-                                className={`whitespace-nowrap px-3 py-4 text-sm text-gray-900 ${
+                                className={`whitespace-wrap px-3 py-4 text-sm text-gray-900 ${
                                     answer.id === answerIdWithMaxVotes
                                         ? 'font-bold'
                                         : 'font-medium'

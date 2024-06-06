@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { client } from '../../shared/axios';
 import { DebounceInput } from 'react-debounce-input';
+import ContactInfo from './ContactInfo';
 
 const { FETCH_EXISTING_SUBDOMAINS_URL } = window.TSN || {};
 
@@ -11,7 +12,11 @@ const SUB_DOMAIN_INVALID = 3;
 
 const Form = () => {
     const [subDomain, setSubDomain] = useState('');
-    const [validationResult, setValidationResult] = useState({
+    const [companyTitle, setCompanyTitle] = useState('');
+    const [clientName, setClientName] = useState('');
+    const [phone, setPhone] = useState('');
+
+    const [domainValidationResult, setDomainValidationResult] = useState({
         status: SUB_DOMAIN_NOT_CHECKED,
         text: '',
         class: '',
@@ -37,7 +42,7 @@ const Form = () => {
     }, []);
 
     const validateSubdomain = (subDomain, existingSubDomains) => {
-        const includes = existingSubDomains.includes(subDomain);
+        const includes = existingSubDomains.includes(subDomain.trim());
 
         if (includes)
             return {
@@ -46,7 +51,7 @@ const Form = () => {
                 status: SUB_DOMAIN_IN_USE,
             };
 
-        const valid = !!subDomain.match(/^[a-z0-9_\-]*$/);
+        const valid = !!subDomain.trim().match(/^[a-z0-9_\-]+$/);
 
         if (valid) {
             return {
@@ -63,16 +68,59 @@ const Form = () => {
         };
     };
 
+    const validateCompanyTitle = () => {
+        return !!companyTitle.trim().match(/^[a-zA-Zа-яА-Я\s0-9]*$/);
+    };
+
+    const validateClientName = () => {
+        return !!clientName.trim().match(/^[a-zA-Zа-яА-Я\s]*$/);
+    };
+
+    const validatePhone = () => {
+        return !!phone.trim().match(/(?:\+|\d)[\d\-\(\) ]{9,}\d/g);
+    };
+
     const onSubDomainChange = (e) => {
         const newSubDomain = e.target.value;
         setSubDomain(newSubDomain);
 
-        setValidationResult(
+        setDomainValidationResult(
             validateSubdomain(newSubDomain, existingSubDomains),
         );
     };
 
-    const subDomainChecked = validationResult.status !== SUB_DOMAIN_NOT_CHECKED;
+    const onCompanyTitleChange = (e) => {
+        const newCompanyTitle = e.target.value;
+
+        setCompanyTitle(newCompanyTitle);
+    };
+
+    const onClientNameChange = (e) => {
+        const newClientName = e.target.value;
+
+        setClientName(newClientName);
+    };
+
+    const onPhoneChange = (e) => {
+        const newPhone = e.target.value;
+
+        setPhone(newPhone);
+    };
+
+    const isSubDomainChecked =
+        domainValidationResult.status !== SUB_DOMAIN_NOT_CHECKED;
+    const isSubDomainValid =
+        subDomain && domainValidationResult.status === SUB_DOMAIN_FREE;
+
+    const isCompanyTitleValid = validateCompanyTitle();
+    const isClientNameValid = validateClientName();
+    const isPhoneValid = validatePhone();
+
+    const createButtonEnabled =
+        isSubDomainValid &&
+        isCompanyTitleValid &&
+        isClientNameValid &&
+        isPhoneValid;
 
     return (
         <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -99,25 +147,36 @@ const Form = () => {
                                 value={subDomain}
                                 id="subDomain"
                                 lang="en"
-                                pattern="[\u0400-\u04ff]{3,30}"
                             />
 
-                            {subDomainChecked && (
+                            {isSubDomainChecked && (
                                 <p
-                                    className={`mt-2 text-sm ${validationResult.class}`}
+                                    className={`mt-2 text-sm ${domainValidationResult.class}`}
                                 >
-                                    {validationResult.text}
+                                    {domainValidationResult.text}
                                 </p>
                             )}
                         </div>
+
+                        {isSubDomainValid && (
+                            <ContactInfo
+                                companyTitle={companyTitle}
+                                isCompanyTitleValid={isCompanyTitleValid}
+                                onCompanyTitleChange={onCompanyTitleChange}
+                                clientName={clientName}
+                                isClientNameValid={isClientNameValid}
+                                onClientNameChange={onClientNameChange}
+                                phone={phone}
+                                isPhoneValid={isPhoneValid}
+                                onPhoneChange={onPhoneChange}
+                            />
+                        )}
 
                         <div>
                             <button
                                 type="button"
                                 className="flex w-full justify-center rounded-md bg-brand-yellow px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brand-yellow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-yellow"
-                                disabled={
-                                    validationResult.status !== SUB_DOMAIN_FREE
-                                }
+                                disabled={!createButtonEnabled}
                             >
                                 Создать
                             </button>

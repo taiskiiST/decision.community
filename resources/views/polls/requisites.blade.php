@@ -7,9 +7,24 @@
         <div class="p-3 md:col-span-2">
             <div>
                 <div>
-                    <label class="px-1 py-4 block text-lg text-black font-semibold text-wrap">Обновление основных реквизитов голосования</label>
+                    <label class="px-1 py-4 block text-lg text-black font-semibold text-wrap">Обновление основных реквизитов опроса</label>
                 </div>
 
+                <div id="StartEndPoll"></div>
+
+
+
+                <div class="px-1 py-4 sm:px-6 ">
+                    <label class="px-1 py-4 block text-xl text-black font-semibold text-wrap">Выберите формат под протокол</label>
+                    <select name="form_protocol"
+                            class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            required>
+                        <option value="1" selected>Ведение протокола не требуется</option>
+                        <option value="2">Очная форма</option>
+                        <option value="3">Очно-заочная форма</option>
+                        <option value="4">Заочная форма</option>
+                    </select>
+                </div>
 
 
                 <div class="px-1 py-4 sm:px-6 ">
@@ -248,13 +263,18 @@
         </div>
 
         <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
-            <a href="/polls">
+            <a href="/polls/{{$poll->id}}/edit">
                 <button type="button"
                         class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                    Назад
+                    Назад к опросу
                 </button>
             </a>
         </div>
     </div>
     </div>
+@endsection
+
+@section('scripts')
+    @parent()
+    <script src="{!! mix('/js/StartEndPoll.js') !!}"></script>
 @endsection

@@ -55,16 +55,12 @@
                                             @if ($poll->isReportDone()) <div class="text-xs font-bold">Отчет по проделанной работе</div>@endif
                                             @if ($poll->isInformationPost()) <div class="text-xs font-bold">Информационный пост</div>@endif
 
-                                            @if (auth()->user()->isAdmin())
-                                                <div><a href={{ route('poll.requisites', ['poll' => $poll->id]) }}>{{ $poll->name }}</a></div>
-                                            @else
-                                                @if( $poll->isSuggestedQuestion())
-                                                    @if ( $poll->questions()->get()->count() )
-                                                        <div>Тема вопроса: {{ $poll->name }}</div>
-                                                    @endif
-                                                @else
-                                                    <div>{{ $poll->name }}</div>
+                                            @if( $poll->isSuggestedQuestion())
+                                                @if ( $poll->questions()->get()->count() )
+                                                    <div>Тема вопроса: {{ $poll->name }}</div>
                                                 @endif
+                                            @else
+                                                <div>{{ $poll->name }}</div>
                                             @endif
 
                                             @if( $poll->isSuggestedQuestion())
@@ -243,17 +239,14 @@
                                             @if ($poll->isReportDone()) <div>Отчет по проделанной работе</div>@endif
                                             @if ($poll->isInformationPost()) <div>Информационный пост</div>@endif
 
-                                            @if (auth()->user()->isAdmin())
-                                                <div><a href={{route("poll.requisites",['poll'=>$poll->id])}}>{{ $poll->name }}</a></div>
-                                            @else
-                                                @if( $poll->isSuggestedQuestion())
-                                                    @if ( $poll->questions()->get()->count() )
-                                                        <div>Тема вопроса: {{ $poll->name }}</div>
-                                                    @endif
-                                                @else
-                                                    <div>{{ $poll->name }}</div>
+                                            @if( $poll->isSuggestedQuestion())
+                                                @if ( $poll->questions()->get()->count() )
+                                                    <div>Тема вопроса: {{ $poll->name }}</div>
                                                 @endif
+                                            @else
+                                                <div>{{ $poll->name }}</div>
                                             @endif
+
                                             @if( $poll->isSuggestedQuestion())
                                                 @if ( $poll->questions()->get()->count() )
                                                     <div class="text-xs font-bold">Автор вопроса: {{$users[$poll->questions()->first()->author] ?? '' }}</div>

@@ -68,24 +68,22 @@ class EditorPreviewMobile extends React.Component {
                                     </span>
                                 </th>
                             )}
+                            {!poll_finished && (
+                                <th scope="col" className="relative px-6 py-3">
+                                    <span className="text-green-600">
+                                        Голосование ещё не началось
+                                    </span>
+                                </th>
+                            )}
                             {is_admin && (
                                 <th scope="col" className="relative px-1 py-3">
-                                    <form onSubmit={this.togglePollState}>
-                                        <button
-                                            type="submit"
-                                            className={`whitespace-wrap text-wrap ${
-                                                poll_finished
-                                                    ? 'text-red-600 hover:text-red-900'
-                                                    : 'text-green-600 hover:text-green-900'
-                                            }`}
-                                        >
-                                            {`${
-                                                poll_finished
-                                                    ? 'Возобновить'
-                                                    : 'Окончить'
-                                            } голосование`}
-                                        </button>
-                                    </form>
+                                    <a href={`http://berezka.berezka.test/polls/${poll_full.id}/requisites`}
+                                       className="inline-flex items-center px-4 py-2 border
+                                       border-transparent text-sm font-medium rounded-md shadow-sm
+                                       text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none
+                                       focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 submit-button">
+                                        Настройки опроса
+                                    </a>
                                 </th>
                             )}
                         </tr>

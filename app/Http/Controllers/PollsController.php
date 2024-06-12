@@ -1597,7 +1597,14 @@ class PollsController extends Controller
         if (!session('current_company')) {
             return redirect()->route('polls.index');
         }
-        //dd(Organizer::all());
+        \JavaScript::put([
+            'poll'                  => $poll->id,
+            'csrf_token'            => csrf_token(),
+            'is_admin'              => auth()->user()->isAdmin(),
+            'poll_finished'         => $poll->voteFinished(),
+            'poll_full'             => $poll,
+
+        ]);
         return view('polls.requisites', [
             'poll'       => $poll,
             'error'      => '',

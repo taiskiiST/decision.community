@@ -76,6 +76,10 @@ mix.js('resources/js/app.js', 'public/js')
         'resources/js/react/ChildrenAndParentsInformationSchool/index.js',
         'public/js/ChildrenAndParentsInformationSchool.js',
     )
+    .js(
+        'resources/js/react/StartEndPoll/index.js',
+        'public/js/StartEndPoll.js',
+    )
     .react()
     .sass('resources/sass/app.scss', 'public/css')
     .copy('node_modules/antd/dist/antd.css', 'public/css')

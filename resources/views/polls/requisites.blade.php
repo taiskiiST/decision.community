@@ -37,7 +37,7 @@
                         </div>
                     @endif
                  @else
-                        <form method="POST" action="{{ route('poll.start',[$poll->id]) }}">
+                        <form method="POST" action="{{ route('poll.start',[$poll->id,0]) }}">
                             @csrf
                             @method('PATCH')
                             <input name="start" value="{{$poll->id}}" type="hidden"/>

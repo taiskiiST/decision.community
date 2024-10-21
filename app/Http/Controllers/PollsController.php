@@ -12,9 +12,11 @@ use App\Models\Position;
 use App\Models\Question;
 use App\Models\TypeOfPoll;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Ramsey\Uuid\Type\Integer;
 
 class PollsController extends Controller
 {
@@ -1121,13 +1123,48 @@ class PollsController extends Controller
 
     }
 
-    public function start(Poll $poll)
+    public function start(Poll $poll, $start)
     {
-        if ($poll->id) {
+        date_default_timezone_set ('Europe/Moscow'); //locate!
+        if ($start){
             $poll->update([
-                'start' => date('Y-m-d H:i:s'),
+                'start' => date("Y-m-d H:i:s", $start/1000)
+            ]);
+        }else{
+            $poll->update([
+                'start' => null,
             ]);
         }
+
+        return redirect()->route('poll.requisites', [
+            'poll' => $poll,
+        ]);
+    }
+
+    public function endVote(Poll $poll, $end)
+    {
+        $potentialVotersNumber = $poll->isGovernanceMeeting() ? $poll->company->potentialVotersNumberGovernance() : $poll->company->potentialVotersNumber();
+
+        date_default_timezone_set ('Europe/Moscow'); //locate!
+        if (!$poll->finished) {
+            $poll->update([
+                'finished'                => date("Y-m-d H:i:s", intdiv ($end,1000)),
+                'potential_voters_number' => $potentialVotersNumber,
+            ]);
+        } else {
+            if ($end){
+                $poll->update([
+                    'finished' => date("Y-m-d H:i:s", intdiv ($end,1000)),
+                    'potential_voters_number' => $potentialVotersNumber,
+                ]);
+            }else{
+                $poll->update([
+                    'finished' => null,
+                    'potential_voters_number' => 0,
+                ]);
+            }
+        }
+
         return redirect()->route('poll.requisites', [
             'poll' => $poll,
         ]);
@@ -1369,26 +1406,6 @@ class PollsController extends Controller
         ]);
     }
 
-    public function endVote(Poll $poll)
-    {
-        $potentialVotersNumber = $poll->isGovernanceMeeting() ? $poll->company->potentialVotersNumberGovernance() : $poll->company->potentialVotersNumber();
-
-        if (!$poll->finished) {
-            $poll->update([
-                'finished'                => date('Y-m-d H:i:s'),
-                'potential_voters_number' => $potentialVotersNumber,
-            ]);
-        } else {
-            $poll->update([
-                'finished' => null,
-            ]);
-        }
-
-        return redirect()->route('poll.edit', [
-            'poll' => $poll,
-        ]);
-    }
-
     /**
      * Display the specified resource.
      *
@@ -1559,7 +1576,8 @@ class PollsController extends Controller
             'questions'             => $poll->questions,
             'cnt_files_in_question' => $cnt_files_in_question,
             'poll_finished'         => $poll->voteFinished(),
-            'poll_full'             => $poll,
+            'poll_start'            => $poll->voteStarted(),
+            'poll_full'             => $poll
         ]);
 
         return view('polls.update', [
@@ -1584,7 +1602,7 @@ class PollsController extends Controller
             'cnt_files_in_question' => $cnt_files_in_question,
             'poll_finished'         => $poll->voteFinished(),
             'poll_full'             => $poll,
-
+            'uri'                   => env('APP_URL'),
         ]);
 
         return view('polls.update', [

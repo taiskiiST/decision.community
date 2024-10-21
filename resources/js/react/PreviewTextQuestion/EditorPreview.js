@@ -13,6 +13,7 @@ const {
     questions,
     is_admin,
     poll_finished,
+    poll_start
 } = window.TSN || {};
 
 class EditorPreview extends React.Component {
@@ -85,7 +86,14 @@ class EditorPreview extends React.Component {
                                     </span>
                                 </th>
                             )}
-                            {!poll_finished && (
+                            {!poll_finished && poll_start && (
+                                <th scope="col" className="relative px-6 py-3">
+                                    <span className="text-green-600">
+                                        Голосование началось
+                                    </span>
+                                </th>
+                            )}
+                            {!poll_finished && !poll_start && (
                                 <th scope="col" className="relative px-6 py-3">
                                     <span className="text-green-600">
                                         Голосование ещё не началось
@@ -94,7 +102,7 @@ class EditorPreview extends React.Component {
                             )}
                             {is_admin && (
                                 <th scope="col" className="relative px-6 py-3">
-                                    <a href={`http://berezka.berezka.test/polls/${poll_full.id}/requisites`}
+                                    <a href={`/polls/${poll_full.id}/requisites`}
                                        className="inline-flex items-center px-4 py-2 border
                                        border-transparent text-sm font-medium rounded-md shadow-sm
                                        text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none

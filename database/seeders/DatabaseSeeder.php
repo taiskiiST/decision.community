@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
 
         Company::create([
             'uri' => 'berezka',
-            'title' => 'Берёзка'
+            'title' => 'Берёзка',
+            'description' => 'ТНС'
         ]);
 
         $this->call(UsersSeeder::class);

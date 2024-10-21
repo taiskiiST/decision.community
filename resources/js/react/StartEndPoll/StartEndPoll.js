@@ -1,7 +1,6 @@
 import React from 'react';
 import { client } from '../../shared/axios';
 import { toast } from 'react-toastify';
-import {convertFromRaw, EditorState} from "draft-js";
 
 const {
     poll_full,
@@ -17,7 +16,7 @@ class StartEndPoll extends React.Component {
                 {
                     num : 1,
                     title : 'Запланировать начало',
-                    dateStamp : null
+                    dateStamp : ''
                 },
                 {
                     num : 2,
@@ -29,6 +28,7 @@ class StartEndPoll extends React.Component {
 
         this.handleStart = this.handleStart.bind(this);
     }
+
     handleStart = (e) => {
         const strVar = this.state.startVariable.map((strVar)=>{
             if (strVar.num = e.target.value){
@@ -39,8 +39,17 @@ class StartEndPoll extends React.Component {
     }
     async togglePollStartState(e) {
         e.preventDefault();
+        var $date_start = 0;
+
+        if (document.getElementById('date_start').value){
+            $date_start = new Date(document.getElementById('date_start').value);
+            $date_start = $date_start.getTime();
+        }
+
         try {
-            await client.post(`/polls/${poll_full.id}/start`);
+            //await client.post(`/polls/${poll_full.id}/start`);
+
+            await client.post(`/polls/${poll_full.id}/start/${$date_start}`);
 
             toast.success('Статус голосования успешно изменён.');
 
@@ -51,8 +60,16 @@ class StartEndPoll extends React.Component {
     }
     async togglePollEndState(e) {
         e.preventDefault();
+        var $date_end = 0;
+
+        if (document.getElementById('date_end').value){
+            $date_end = new Date(document.getElementById('date_end').value);
+            $date_end = $date_end.getTime();
+        }
+        //console.log('date_end - ', $date_end);
         try {
-            await client.post(`/polls/${poll_full.id}/end`);
+            //await client.post(`/polls/${poll_full.id}/end`);
+            await client.post(`/polls/${poll_full.id}/end/${$date_end}`);
 
             toast.success('Статус голосования успешно изменён.');
 
@@ -75,22 +92,18 @@ class StartEndPoll extends React.Component {
 
                     {!poll_full.start && !poll_full.finished && <b> не начато </b> }
                 </div>
-                <div className="flex flex-row px-4">
+                <div className="flex flex-row px-4 items-center">
                     <div>
-                        <select name="start_poll"
-                                className="mt-1 block py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                required onChange={this.handleStart} >
-                            {this.state.startVariable.map( (strVar, key) => {
-                                return <option key={key} value={strVar.num}>{strVar.title}</option>
-                            } )}
-                        </select>
+                        <label>
+                            Установить дату начала (изменить/удалить дату начала)
+                        </label>
                     </div>
                     <div>
-                        <input type="datetime-local" defaultValue={poll_full.start ??  Date.now() } />
+                        <input type="datetime-local" id="date_start" defaultValue={poll_full.start ??  Date.now() } />
                     </div>
                     <div>
                         <button type="button"
-                                id="StartButton"
+                                //id="StartButton"
                                 className="justify-end py-2 px-4 border border-transparent
                                 text-sm font-medium text-white shadow-sm rounded-md bg-green-600
                                 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2
@@ -98,17 +111,12 @@ class StartEndPoll extends React.Component {
                                 onClick={this.togglePollStartState}>Установить</button>
                     </div>
                 </div>
-                <div className="flex flex-row px-4">
+                <div className="flex flex-row px-4 items-center">
                     <div>
-                        <select name="end_poll"
-                                className="mt-1 block py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                required>
-                            <option value="Запланировать окончание" defaultValue>Запланировать окончание</option>
-                            <option value="Уставноить дату окончания (изменить/удалить дату окончания)">Уставноить дату окончания (изменить/удалить дату окончания)</option>
-                        </select>
+                        <label>Уставноить дату окончания (изменить/удалить дату окончания)</label>
                     </div>
                     <div>
-                        <input type="datetime-local" defaultValue={poll_full.finished ??  Date.now() } />
+                        <input type="datetime-local" id="date_end" defaultValue={poll_full.finished ??  Date.now() } />
                     </div>
                     <div>
                         <button type="button"

@@ -25,6 +25,8 @@ class AuthenticatedSessionController extends Controller
                 $company_id = Company::where('uri', $usi_str)->first()->id;
             }
         }
+//        dd('HTTP_HOST - '. $_SERVER['HTTP_HOST'].', APP_URI - '.$_ENV['APP_URI']);
+//        dd(str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ));
         // TODO: check company before using 'id'
         if ($company_id) {
             return view('auth.login', [

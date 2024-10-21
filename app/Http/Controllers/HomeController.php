@@ -9,7 +9,9 @@ class HomeController {
 
     public function index()
     {
+        //dd(request()->getHost());
         $domain = Arr::first(explode('.', request()->getHost()));
+       // dd($domain);
         if ($domain === config('app.first-level-domain')) {
             \JavaScript::put([
                 'FETCH_EXISTING_SUBDOMAINS_URL' => route('companies.get-existing-uris'),
@@ -19,6 +21,7 @@ class HomeController {
         }
 
         $company = Company::where('uri', $domain)->first();
+
         if (!$company) {
             abort(404);
         }

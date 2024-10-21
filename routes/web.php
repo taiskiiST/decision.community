@@ -72,7 +72,7 @@ Route::group(['middleware' => 'check.company'], function () {
         Route::get('/register', [PollsController::class, 'index'])->name('polls.register');
 
         Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
-        Route::post('/polls/{poll}/start', [PollsController::class, 'start'])->name('poll.start');
+        Route::post('/polls/{poll}/start/{start}', [PollsController::class, 'start'])->name('poll.start');
         Route::post('/polls/{poll}/submit', [PollsController::class, 'submit'])->name('poll.submit');
         Route::get('/polls/{poll}/results', [PollsController::class, 'results'])->name('poll.results');
         Route::post('/polls/create/{type_of_poll}', [PollsController::class, 'create'])->name('poll.create');
@@ -84,7 +84,7 @@ Route::group(['middleware' => 'check.company'], function () {
         Route::get('/polls/{poll}/delProtocol', [PollsController::class, 'delProtocol'])->name('poll.delProtocol');
         Route::post('/polls/delete/{poll}', [PollsController::class, 'delete'])->name('poll.delete');
         Route::post('/polls/store', [PollsController::class, 'store'])->name('poll.store');
-        Route::post('/polls/{poll}/end', [PollsController::class, 'endVote'])->name('poll.endVote');
+        Route::post('/polls/{poll}/end/{end}', [PollsController::class, 'endVote'])->name('poll.endVote');
         Route::get('/polls/{poll}/agenda/public', [PollsController::class, 'agenda'])->name('poll.agenda');
 
         Route::get('/polls/{poll}/requisites/', [PollsController::class, 'requisites'])->name('poll.requisites');

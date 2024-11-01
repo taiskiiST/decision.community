@@ -79,6 +79,14 @@ class PollsController extends Controller
         $html = preg_replace($search, "", $html);
         $search = '/<a.*?<\/a>/';
         $html = preg_replace($search, "", $html);
+
+        $search = '/{/';
+        preg_match($search, $html, $matches, PREG_OFFSET_CAPTURE);
+        if ($matches && $matches[0][1] == 0){
+            $new_arr = json_decode($html, true);
+            $html = $new_arr['blocks']['0']['text'];
+        }
+
         return $html;
     }
 
@@ -301,9 +309,9 @@ class PollsController extends Controller
         if (Organizer::where('poll_id', $poll->id)->get()->isNotEmpty()) {
             $organizers = Organizer::where('poll_id', $poll->id)->get()[0];
         } else {
-            return redirect()->route('poll.results', [
-                'poll' => $poll,
-            ])->withErrors("Не назначены организаторы мероприятия!");
+//            return redirect()->route('poll.results', [
+//                'poll' => $poll,
+//            ])->withErrors("Не назначены организаторы мероприятия!");
         }
 
         $section->addText("ПРОТОКОЛ №" . $num_protocol, ['size' => 18, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
@@ -312,7 +320,7 @@ class PollsController extends Controller
         $section->addText("х.Ленинаван", '', ['spaceBefore' => 10, 'align' => 'right']);
         $section->addText("Присутствовали: список прилагается", '', ['spaceBefore' => 10, 'align' => 'left']);
 
-        $invited = explode(',', $organizers->users_invited_id);
+        $invited =  []; //explode(',', $organizers->users_invited_id);
         $srt_name_invited = '';
         foreach ($invited as $key => $invite) {
             if (!empty($invite)) {
@@ -364,9 +372,9 @@ class PollsController extends Controller
         $section->addTextBreak();
         $section->addText("Постановили избрать:", '', ['spaceBefore' => 10, 'align' => 'left', 'bold' => TRUE]);
 
-        $section->addText("Председателем собрания - " . User::find($organizers->user_chairman_id)->name, '', ['spaceBefore' => 10, 'align' => 'left']);
-        $section->addText("Секретарем собрания - " . User::find($organizers->user_secretary_id)->name, '', ['spaceBefore' => 10, 'align' => 'left']);
-        $section->addText("Ответственный за подсчет голосов - " . User::find($organizers->user_counter_votes_id)->name, '', ['spaceBefore' => 10, 'align' => 'left']);
+//        $section->addText("Председателем собрания - " . User::find($organizers->user_chairman_id)->name, '', ['spaceBefore' => 10, 'align' => 'left']);
+//        $section->addText("Секретарем собрания - " . User::find($organizers->user_secretary_id)->name, '', ['spaceBefore' => 10, 'align' => 'left']);
+//        $section->addText("Ответственный за подсчет голосов - " . User::find($organizers->user_counter_votes_id)->name, '', ['spaceBefore' => 10, 'align' => 'left']);
         $section->addTextBreak();
         $section->addText("Голосовали всего: " . $poll->peopleThatVote()->count() . ", За - " . $poll->peopleThatVote()->count() . " Против - 0, Воздержались - 0.", '', ['spaceBefore' => 10, 'align' => 'left']);
         $section->addTextBreak();
@@ -378,8 +386,9 @@ class PollsController extends Controller
         $count_question = 1;
         \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
         foreach ($poll->questions()->get() as $question) {
-            $html = "По " . $count_question . " вопросу " . $question->text;
-            $html = $this->delTags($html);
+            $html = $this->delTags($question->text);
+            $html = "По " . $count_question . " вопросу " . $html;
+            //$html = $this->delTags($html);
             $textlines = explode("<br />", $html);
             $textrun = $section->addTextRun();
             $textrun->addText(array_shift($textlines));
@@ -525,7 +534,7 @@ class PollsController extends Controller
         $str_path = 'storage/app/public/storage/' . $poll->id . '/ProtocolNew.docx';
         $objWriter->save(base_path($str_path));
         $poll->update([
-            'protocol_doc' => '/storage/' . $poll->id . '/ProtocolNew.docx',
+            'protocol_doc' => 'storage/' . $poll->id . '/ProtocolNew.docx',
         ]);
         return redirect()->route('poll.requisites', [
             'poll' => $poll,

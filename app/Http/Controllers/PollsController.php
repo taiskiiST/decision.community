@@ -198,7 +198,7 @@ class PollsController extends Controller
         $properties->setCreated(mktime(0, 0, 0, 4, 17, 2022));
         $properties->setModified(mktime(0, 0, 0, 4, 17, 2022));
         $properties->setSubject('Голосование');
-        $properties->setKeywords('голсование');
+        $properties->setKeywords('голосование');
 
         $sectionStyle = [
             'orientation'        => 'portrait',
@@ -212,10 +212,11 @@ class PollsController extends Controller
         ];
         $section = $phpWord->addSection($sectionStyle);
         $parStyle = ['spaceBefore' => 10];
+        $section->addText("Бланк для голосования", ['size' => 25, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
+        $section->addText($_ENV['APP_NAME'], ['size' => 25, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
+        $section->addText(date("d.m.Y"), '', ['spaceBefore' => 10, 'align' => 'right']);
         foreach ($poll->peopleThatVote() as $user) {
-            $section->addText("Бланк для голосования", ['size' => 25, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
-            $section->addText($_ENV['APP_NAME'], ['size' => 25, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
-            $section->addText(date("d.m.Y"), '', ['spaceBefore' => 10, 'align' => 'right']);
+
             $section->addText(htmlspecialchars($poll->name), '', $parStyle);
             $section->addText("Бланк для голосования для члена " . $_ENV['APP_NAME'] . ": " . $user->name, '', $parStyle);
             $section->addText(PHP_EOL);
@@ -260,7 +261,7 @@ class PollsController extends Controller
         $objWriter->save(base_path($str_path));
 
         $poll->update([
-            'blank_with_answers_doc' => '/storage/' . $poll->id . '/BlankNewWithAnswers.docx',
+            'blank_with_answers_doc' => 'storage/' . $poll->id . '/BlankNewWithAnswers.docx',
         ]);
         return redirect()->route('poll.requisites', [
             'poll' => $poll,

@@ -212,8 +212,7 @@ class PollsController extends Controller
         ];
         $section = $phpWord->addSection($sectionStyle);
         $parStyle = ['spaceBefore' => 10];
-        $section->addText("Бланк
-        ования", ['size' => 25, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
+        $section->addText("Бланк для голосования", ['size' => 25, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
         $section->addText($_ENV['APP_NAME'], ['size' => 25, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
         $section->addText(date("d.m.Y"), '', ['spaceBefore' => 10, 'align' => 'right']);
         foreach ($poll->peopleThatVote() as $user) {

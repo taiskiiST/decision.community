@@ -212,7 +212,8 @@ class PollsController extends Controller
         ];
         $section = $phpWord->addSection($sectionStyle);
         $parStyle = ['spaceBefore' => 10];
-        $section->addText("Бланк для голосования", ['size' => 25, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
+        $section->addText("Бланк
+        ования", ['size' => 25, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
         $section->addText($_ENV['APP_NAME'], ['size' => 25, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
         $section->addText(date("d.m.Y"), '', ['spaceBefore' => 10, 'align' => 'right']);
         foreach ($poll->peopleThatVote() as $user) {
@@ -501,12 +502,14 @@ class PollsController extends Controller
         $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
         $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText('№', '', ['align' => 'center', 'spaceAfter' => 150]);
         $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(300), ['valign' => 'center'])->addText('ФИО');
-        $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText('Подпись');
+        $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(300), ['valign' => 'center'])->addText('Адрес');
+        $cell4 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText('Подпись');
         foreach ($poll->peopleThatVote() as $user) {
             $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
             $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText($count_users, '', ['align' => 'center', 'spaceAfter' => 150]);
             $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(300), ['valign' => 'center'])->addText($user->name, '', ['valign' => 'center']);
-            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'bottom'])->addText('', '', ['align' => 'center', 'spaceAfter' => 150]);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(300), ['valign' => 'center'])->addText($user->address, '', ['valign' => 'center']);
+            $cell4 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'bottom'])->addText('Не требуется в соответствии с п.8.11 Устава ТСН', '', ['align' => 'center', 'spaceAfter' => 150]);
             ++$count_users;
         }
         $section->addTextBreak();

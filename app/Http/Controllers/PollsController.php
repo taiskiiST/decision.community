@@ -502,13 +502,13 @@ class PollsController extends Controller
         $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText('№', '', ['align' => 'center', 'spaceAfter' => 150]);
         $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText('ФИО');
         $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText('Адрес');
-        $cell4 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText('Подпись');
+        $cell4 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(200), ['valign' => 'center'])->addText('Подпись');
         foreach ($poll->peopleThatVote() as $user) {
             $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
             $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText($count_users, '', ['align' => 'center', 'spaceAfter' => 150]);
             $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText($user->name, '', ['valign' => 'center']);
             $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText($user->address, '', ['valign' => 'center']);
-            $cell4 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'bottom'])->addText('Не требуется в соответствии с п.8.11 Устава ТСН', '', ['align' => 'center', 'spaceAfter' => 150]);
+            $cell4 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(200), ['valign' => 'bottom'])->addText('Не требуется в соответствии с п.8.11 Устава ТСН', '', ['align' => 'center', 'spaceAfter' => 150]);
             ++$count_users;
         }
         $section->addTextBreak();

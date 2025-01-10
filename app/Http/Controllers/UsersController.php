@@ -462,7 +462,18 @@ class UsersController extends Controller
                 ]
             );
             //dd($parameters);
-            foreach ($parameters['companies'] as $company_id) {
+            if (isset ($parameters['companies'])){
+                foreach ($parameters['companies'] as $company_id) {
+                    Company::find($company_id)->users()->save($user);
+                }
+            }else{
+                $company_id = 0;
+                if(str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ) ){
+                    $usi_str = str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] );
+                    if (Company::where('uri', $usi_str)->count() > 0){
+                        $company_id = Company::where('uri', $usi_str)->first()->id;
+                    }
+                }
                 Company::find($company_id)->users()->save($user);
             }
         } else {

@@ -447,20 +447,20 @@ class PollsController extends Controller
                     $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText($count_answer_blank, ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
                     $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText($answer->text, ['bold' => TRUE], ['valign' => 'center']);
                     $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($answer->countVotes(), ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
-                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText($answer->percentOfQuestions($question->id, $answer->id) . "%", ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
+                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText(round(($answer->countVotes() / $poll->company->potentialVotersNumber())*100,2) . "%", ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
                 } else {
                     $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText($count_answer_blank, '', ['align' => 'center', 'spaceAfter' => 150]);
                     $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText($answer->text, '', ['valign' => 'center']);
                     $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($answer->countVotes(), '', ['align' => 'center', 'spaceAfter' => 150]);
-                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText($answer->percentOfQuestions($question->id, $answer->id) . "%", '', ['align' => 'center', 'spaceAfter' => 150]);
+                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText(round(($answer->countVotes() / $poll->company->potentialVotersNumber())*100,2) . "%", '', ['align' => 'center', 'spaceAfter' => 150]);
                 }
                 ++$count_answer_blank;
             }
             $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
             $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText('', '', ['align' => 'center', 'spaceAfter' => 150]);
             $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText('ИТОГО', '', ['align' => 'center']);
-            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($poll->peopleThatVote()->count(), '', ['align' => 'center']);
-            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText('100%', '', ['align' => 'center']);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($poll->peopleThatVote()->count().' из '.$poll->company->potentialVotersNumber(), '', ['align' => 'center']);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText(round(($poll->peopleThatVote()->count() / $poll->company->potentialVotersNumber())*100,2), '', ['align' => 'center']);
             $section->addText("********************************************************************", '', $parStyle);
         }
         $dt_end = new \DateTime();

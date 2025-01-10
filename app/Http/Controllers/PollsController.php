@@ -460,7 +460,7 @@ class PollsController extends Controller
             $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText('', '', ['align' => 'center', 'spaceAfter' => 150]);
             $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText('ИТОГО', '', ['align' => 'center']);
             $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($poll->peopleThatVote()->count().' из '.$poll->company->potentialVotersNumber(), '', ['align' => 'center']);
-            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText(round(($poll->peopleThatVote()->count() / $poll->company->potentialVotersNumber())*100,2), '', ['align' => 'center']);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText(round(($poll->peopleThatVote()->count() / $poll->company->potentialVotersNumber())*100,2). "%", '', ['align' => 'center']);
             $section->addText("********************************************************************", '', $parStyle);
         }
         $dt_end = new \DateTime();

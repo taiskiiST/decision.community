@@ -14,6 +14,11 @@ use Illuminate\Support\Collection;
  */
 class Company extends Model
 {
+    protected $fillable = [
+        'uri',
+        'title',
+    ];
+
     use HasFactory;
 
     public static function existingURIs(): Collection

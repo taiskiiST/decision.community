@@ -39,6 +39,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/companies/get-existing-uris', [CompaniesController::class, 'getExistingURIs'])->name('companies.get-existing-uris');
+Route::get('/users/get-existing-emails', [UsersController::class, 'getExistingEmails'])->name('users.get-existing-emails');
+Route::get('/users/get-existing-phones', [UsersController::class, 'getExistingPhones'])->name('users.get-existing-phones');
+Route::post('/companies/registration', [CompaniesController::class, 'createCompany'])->name('companies.registration');
 
 Route::group(['middleware' => 'check.company'], function () {
     require __DIR__ . '/auth.php';

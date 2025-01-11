@@ -248,4 +248,13 @@ class User extends Authenticatable
     {
         return $this->id();
     }
+
+    public static function existingEmails(): Collection
+    {
+        return User::select('email')->get()->pluck('email');
+    }
+    public static function existingPhones(): Collection
+    {
+        return User::select('phone')->get()->pluck('phone');
+    }
 }

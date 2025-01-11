@@ -15,6 +15,10 @@ class HomeController {
         if ($domain === config('app.first-level-domain')) {
             \JavaScript::put([
                 'FETCH_EXISTING_SUBDOMAINS_URL' => route('companies.get-existing-uris'),
+                'regCompanyUrl' => route('companies.registration'),
+                'getExistEmailsUrl' => route('users.get-existing-emails'),
+                'getExistPhonesUrl' =>  route('users.get-existing-phones'),
+                'csrf_token'    => csrf_token(),
             ]);
 
             return view('home.index');

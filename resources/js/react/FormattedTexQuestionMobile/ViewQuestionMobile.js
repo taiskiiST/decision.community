@@ -13,6 +13,8 @@ const {
     countByQuestion,
     middleAnswerThatAllUsersMarkOnReport,
     questionMaxCountVotes,
+    countWeightsVotedForAnswer,
+    countWeightsByQuestion
 } = window.TSN || {};
 
 const ViewQuestionMobile = () => {
@@ -95,7 +97,7 @@ const ViewQuestionMobile = () => {
                                                     >
                                                         <td>
                                                             <div
-                                                                className={`whitespace-wrap px-1 py-4 text-center text-sm font-bold text-gray-900 ${
+                                                                className={`whitespace-wrap px-1 py-4 text-center text-sm text-gray-900 ${
                                                                     countVotedForAnswer[
                                                                         answer
                                                                             .id
@@ -105,7 +107,7 @@ const ViewQuestionMobile = () => {
                                                                             .id
                                                                     ]
                                                                         ? 'font-bold'
-                                                                        : ''
+                                                                        : 'font-medium'
                                                                 }`}
                                                             >
                                                                 {answer.text}
@@ -113,7 +115,7 @@ const ViewQuestionMobile = () => {
                                                         </td>
                                                         <td>
                                                             <div
-                                                                className={`whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm font-medium  
+                                                                className={`whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm  
                                                     ${
                                                         countVotedForAnswer[
                                                             answer.id
@@ -122,20 +124,22 @@ const ViewQuestionMobile = () => {
                                                             question.id
                                                         ]
                                                             ? 'font-bold'
-                                                            : ''
+                                                            : 'font-medium'
                                                     }`}
                                                             >
-                                                                {
-                                                                    countVotedForAnswer[
-                                                                        answer
-                                                                            .id
-                                                                    ]
-                                                                }
+                                                                {countWeightsVotedForAnswer[answer.id]
+                                                                    ?(
+                                                                        countWeightsVotedForAnswer[
+                                                                            answer
+                                                                                .id
+                                                                            ]
+                                                                    ).toFixed(2)
+                                                                    : 0}
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div
-                                                                className={`whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm font-medium
+                                                                className={`whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm 
                                                     ${
                                                         countVotedForAnswer[
                                                             answer.id
@@ -144,12 +148,12 @@ const ViewQuestionMobile = () => {
                                                             question.id
                                                         ]
                                                             ? 'font-bold'
-                                                            : ''
+                                                            : 'font-medium'
                                                     }`}
                                                             >
                                                                 {poll.potential_voters_number
                                                                     ? (
-                                                                          (countVotedForAnswer[
+                                                                          (countWeightsVotedForAnswer[
                                                                               answer
                                                                                   .id
                                                                           ] /
@@ -174,11 +178,11 @@ const ViewQuestionMobile = () => {
                                             </td>
 
                                             <td>
-                                                <div className="whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm font-bold font-medium">
+                                                <div className="whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm font-bold">
                                                     {
-                                                        countByQuestion[
+                                                        (countWeightsByQuestion[
                                                             question.id
-                                                        ]
+                                                            ]).toFixed(2)
                                                     }{' '}
                                                     из{' '}
                                                     {
@@ -187,13 +191,13 @@ const ViewQuestionMobile = () => {
                                                 </div>
                                             </td>
                                             <td>
-                                                <div className="whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm font-bold font-medium">
-                                                    {countByQuestion[
+                                                <div className="whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm font-bold">
+                                                    {countWeightsByQuestion[
                                                         question.id
                                                     ] &&
                                                     poll.potential_voters_number
                                                         ? (
-                                                              (countByQuestion[
+                                                              (countWeightsByQuestion[
                                                                   question.id
                                                               ] /
                                                                   poll.potential_voters_number) *

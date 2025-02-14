@@ -29,6 +29,23 @@ class Answer extends Model
         $vote = Vote::where('answer_id', '=', $this->id)->count();
         return $vote;
     }
+
+    public function countVotesWeight(int $typeOfRight)
+    {
+        $weights = 0;
+        $votes = Vote::where('answer_id', '=', $this->id)->get();
+        $company = Company::find(session('current_company')->id);
+        if (! $votes->isEmpty()) {
+            foreach ($votes as $vote) {
+                $rights = $company->users()->find($vote->user_id)->rights()->get();
+                foreach ($rights as $right){
+                    if ($right->type_of_right == $typeOfRight)
+                        $weights += $right->weight * $right->number_of_share;
+                }
+            }
+        }
+        return $weights;
+    }
     public function countVotesAnonymous($answer_id)
     {
         $vote = AnonymousVote::where('answer_id', '=', $answer_id)->count();

@@ -31,6 +31,9 @@
                                     <th scope="col" class="relative px-6 py-3">
                                         <span class="sr-only">Действия</span>
                                     </th>
+                                    <th scope="col" class="relative px-6 py-3">
+                                        <span class="sr-only">Действия</span>
+                                    </th>
                                 </tr>
                             </thead>
 
@@ -44,7 +47,7 @@
                                             @endif
                                         @endif
                                     @endif
-                                    <tr class="bg-white @if ($loop->odd) bg-gray-200 @endif">
+                                    <tr class="@if ($loop->odd) bg-white @else bg-gray-200 @endif">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                             {{ $loop_cnt + 1 }}
                                         </td>
@@ -131,38 +134,19 @@
                                             </td>
                                         @endif
                                         <!-- show.blade.php -->
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="{{ $poll->path() }}" class="text-indigo-600 hover:text-indigo-900">Просмотр</a>
-                                        </td>
 
                                         @if (auth()->user()->canManageItems())
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <a href="{{route('poll.edit',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
                                             </td>
                                         @else
-                                            @if ($poll->ownPollAuthor())
-                                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                                    <form method="POST" action="{{ route('poll.delete',[$poll->id]) }}">
-                                                        @csrf
-                                                        <input name="del_poll" value="{{$poll->id}}" type="hidden"/>
-                                                        <a href="{{route('poll.delete',[$poll->id])}}"
-                                                           onclick="event.preventDefault();
-                                                           if (confirm('Вы уверены, что хотите удалить свой вопрос?') ) {
-                                                                this.closest('form').submit();}"
-                                                           class="text-indigo-600 hover:text-indigo-900">
-                                                            {{ __('Удалить') }}
-                                                        </a>
-                                                    </form>
+                                            @if( $poll->isSuggestedQuestion())
+                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 </td>
                                             @else
-                                                @if( $poll->isSuggestedQuestion())
-                                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    </td>
-                                                @else
-                                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                        <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр списком</a>
-                                                    </td>
-                                                @endif
+                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                    <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр повестки</a>
+                                                </td>
                                             @endif
                                         @endif
 
@@ -177,7 +161,7 @@
                                             </td>
                                         @endif
 
-                                        @if (auth()->user()->canManageItems() && !$poll->voteFinished())
+                                        @if ( (auth()->user()->canManageItems() || ($poll->ownPollAuthor() && auth()->user()->canVote()) ) && !$poll->voteFinished())
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <form method="POST" action="{{ route('poll.delete',[$poll->id]) }}">
                                                     @csrf
@@ -295,38 +279,29 @@
                                         @endif
 
                                     <!-- show.blade.php -->
-                                        @if (!$poll->isInformationPost())
-                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
-                                                <a href="{{ $poll->path() }}" class="text-indigo-600 hover:text-indigo-900">Просмотр</a>
-                                            </div>
-                                        @else
-                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <a href="{{ $poll->path() }}" class="text-indigo-600 hover:text-indigo-900">Просмотр</a>
-                                            </div>
-                                        @endif
 
                                         @if (auth()->user()->canManageItems() )
-                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium @if( $poll->isInformationPost()) bg-gray-200 @endif">
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium @if( ! $poll->isInformationPost()) bg-gray-200 @endif">
                                                 <a href="{{route('poll.edit',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
                                             </div>
                                         @else
                                             @if( $poll->isSuggestedQuestion())
 
                                             @else
-                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium @if( $poll->isInformationPost()) bg-gray-200 @endif">
-                                                    <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр списком</a>
+                                                <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium @if( ! $poll->isInformationPost()) bg-gray-200 @endif">
+                                                    <a href="{{route('poll.agenda',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Просмотр повестки</a>
                                                 </div>
                                             @endif
                                         @endif
 
                                         @if (!$poll->isInformationPost())
-                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium  @if( !$poll->isInformationPost()) bg-gray-200 @endif">
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium  @if( $poll->isInformationPost()) bg-gray-200 @endif">
                                                 <a href="{{route('poll.results',[$poll->id])}}" class="text-indigo-600 hover:text-indigo-900">Результаты</a>
                                             </div>
                                         @endif
 
                                         @if (auth()->user()->canManageItems() && !$poll->voteFinished() || $poll->ownPollAuthor())
-                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
                                                 <form method="POST" action="{{ route('poll.delete',[$poll->id]) }}">
                                                     @csrf
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -340,7 +315,7 @@
                                                 </form>
                                             </div>
                                         @elseif (auth()->user()->canManageItems() && $poll->voteFinished())
-                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium bg-gray-200">
                                                 <a href="#" class="disabled">Удалить</a>
                                             </div>
                                         @endif

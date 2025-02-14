@@ -13,6 +13,7 @@ const {
     questions,
     is_admin,
     poll_finished,
+    poll_start
 } = window.TSN || {};
 
 class EditorPreviewMobile extends React.Component {

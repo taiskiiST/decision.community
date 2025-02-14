@@ -11,6 +11,7 @@ use App\Models\Poll;
 use App\Models\Position;
 use App\Models\Question;
 use App\Models\TypeOfPoll;
+use App\Models\TypeOfRight;
 use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
@@ -1155,7 +1156,9 @@ class PollsController extends Controller
 
     public function endVote(Poll $poll, $end)
     {
-        $potentialVotersNumber = $poll->isGovernanceMeeting() ? $poll->company->potentialVotersNumberGovernance() : $poll->company->potentialVotersNumber();
+        $potentialVotersNumber = $poll->isGovernanceMeeting()
+            ? $poll->company->potentialWeightVotersNumberGovernance(TypeOfRight::UPON_OWNERSHIP) //$poll->company->potentialVotersNumberGovernance()
+            : $poll->company->potentialWeightVotersNumber(TypeOfRight::UPON_OWNERSHIP); //$poll->company->potentialVotersNumber();
 
         date_default_timezone_set ('Europe/Moscow'); //locate!
         if (!$poll->finished) {
@@ -1432,8 +1435,10 @@ class PollsController extends Controller
         $countVotedForAnswer = [];
         $middleAnswerThatAllUsersMarkOnReport = [];
         $questionMaxCountVotes = [];
+        $countWeightsVotedForAnswer = [];
         foreach ($poll->questions as $question) {
             $countByQuestion[$question->id] = $question->countVotesByQuestion();
+            $countWeightsByQuestion[$question->id] = $question->countWeightVotesByQuestion(TypeOfRight::UPON_OWNERSHIP);
             $maxCountVotes = 0;
             foreach ($question->answers()->get() as $answer) {
                 $answers[$question->id][] = $answer;
@@ -1441,6 +1446,7 @@ class PollsController extends Controller
                     $maxCountVotes = $answer->countVotes();
                 }
                 $countVotedForAnswer[$answer->id] = $answer->countVotes();
+                $countWeightsVotedForAnswer[$answer->id] = $answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP);
                 $middleAnswerThatAllUsersMarkOnReport [$question->id] = $question->middleAnswerThatAllUsersMarkOnReport();
             }
             $questionMaxCountVotes[$question->id] = $maxCountVotes;
@@ -1455,6 +1461,8 @@ class PollsController extends Controller
             'countByQuestion'                      => $countByQuestion,
             'middleAnswerThatAllUsersMarkOnReport' => $middleAnswerThatAllUsersMarkOnReport,
             'questionMaxCountVotes'                => $questionMaxCountVotes,
+            'countWeightsVotedForAnswer'           => $countWeightsVotedForAnswer,
+            'countWeightsByQuestion'               => $countWeightsByQuestion
         ]);
         return view('polls.results', [
             'poll'   => $poll,

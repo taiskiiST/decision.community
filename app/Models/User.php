@@ -179,6 +179,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Company::class);
     }
 
+    public function rights()
+    {
+        return $this->belongsToMany(Right::class);
+    }
+
     public function companiesIds(): Collection
     {
         return $this->companies->pluck('id', 'id');
@@ -221,7 +226,9 @@ class User extends Authenticatable
 
         DB::transaction(function () use ($question, $answer, &$out) {
             $question->poll->update([
-                'potential_voters_number' => $question->poll->isGovernanceMeeting() ? $question->poll->company->potentialVotersNumberGovernance() : $question->poll->company->potentialVotersNumber(),
+                'potential_voters_number' => $question->poll->isGovernanceMeeting()
+                    ? $question->poll->company->potentialWeightVotersNumberGovernance(TypeOfRight::UPON_OWNERSHIP) //$question->poll->company->potentialVotersNumberGovernance()
+                    : $question->poll->company->potentialWeightVotersNumber(TypeOfRight::UPON_OWNERSHIP), //$question->poll->company->potentialVotersNumber(),
             ]);
 
             $out = $this->votes()->updateOrCreate([

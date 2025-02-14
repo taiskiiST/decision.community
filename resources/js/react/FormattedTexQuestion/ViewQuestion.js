@@ -13,6 +13,8 @@ const {
     countByQuestion,
     middleAnswerThatAllUsersMarkOnReport,
     questionMaxCountVotes,
+    countWeightsVotedForAnswer,
+    countWeightsByQuestion
 } = window.TSN || {};
 
 const ViewQuestion = () => {
@@ -90,15 +92,15 @@ const ViewQuestion = () => {
                                             (answer, index) => {
                                                 return (
                                                     <tr
-                                                        className={`bg-white ${
+                                                        className={`${
                                                             index % 2 != 0
-                                                                ? 'bg-gray-200'
-                                                                : ''
+                                                                ? 'bg-white'
+                                                                : 'bg-gray-200'
                                                         }`}
                                                         key={index}
                                                     >
                                                         <td
-                                                            className={`whitespace-wrap px-6 py-4 text-left font-medium text-gray-900 ${
+                                                            className={`whitespace-wrap px-6 py-4 text-left text-gray-900 ${
                                                                 countVotedForAnswer[
                                                                     answer.id
                                                                 ] ==
@@ -106,13 +108,13 @@ const ViewQuestion = () => {
                                                                     question.id
                                                                 ]
                                                                     ? 'font-bold'
-                                                                    : ''
+                                                                    : 'font-medium'
                                                             }`}
                                                         >
                                                             {answer.text}
                                                         </td>
                                                         <td
-                                                            className={`whitespace-wrap px-6 py-4 text-center font-medium text-gray-900 
+                                                            className={`whitespace-wrap px-6 py-4 text-center text-gray-900 
                                                     ${
                                                         countVotedForAnswer[
                                                             answer.id
@@ -121,17 +123,21 @@ const ViewQuestion = () => {
                                                             question.id
                                                         ]
                                                             ? 'font-bold'
-                                                            : ''
+                                                            : 'font-medium'
                                                     }`}
                                                         >
-                                                            {
-                                                                countVotedForAnswer[
-                                                                    answer.id
-                                                                ]
-                                                            }
+
+                                                            {countWeightsVotedForAnswer[answer.id]
+                                                                ?(
+                                                                    countWeightsVotedForAnswer[
+                                                                            answer
+                                                                                .id
+                                                                            ]
+                                                                ).toFixed(2)
+                                                                : 0}
                                                         </td>
                                                         <td
-                                                            className={`whitespace-wrap px-6 py-4 text-center font-medium text-gray-900 
+                                                            className={`whitespace-wrap px-6 py-4 text-center text-gray-900 
                                                     ${
                                                         countVotedForAnswer[
                                                             answer.id
@@ -140,12 +146,12 @@ const ViewQuestion = () => {
                                                             question.id
                                                         ]
                                                             ? 'font-bold'
-                                                            : ''
+                                                            : 'font-medium'
                                                     }`}
                                                         >
                                                             {poll.potential_voters_number
                                                                 ? (
-                                                                      (countVotedForAnswer[
+                                                                      (countWeightsVotedForAnswer[
                                                                           answer
                                                                               .id
                                                                       ] /
@@ -160,10 +166,10 @@ const ViewQuestion = () => {
                                         )}
 
                                         <tr
-                                            className={`bg-white ${
+                                            className={`${
                                                 index % 2 != 0
-                                                    ? 'bg-gray-200'
-                                                    : ''
+                                                    ? 'bg-white'
+                                                    : 'bg-gray-200'
                                             }`}
                                         >
                                             <td className="whitespace-wrap px-6 py-4 text-left font-bold text-gray-900">
@@ -171,15 +177,17 @@ const ViewQuestion = () => {
                                             </td>
 
                                             <td className="whitespace-nowrap px-6 py-4 text-center text-sm font-bold">
-                                                {countByQuestion[question.id]}{' '}
+                                                {(countWeightsByQuestion[
+                                                    question.id
+                                                    ]).toFixed(2)}{' '}
                                                 из{' '}
                                                 {poll.potential_voters_number}
                                             </td>
                                             <td className="whitespace-nowrap px-6 py-4 text-center text-sm font-bold">
-                                                {countByQuestion[question.id] &&
+                                                {countWeightsByQuestion[question.id] &&
                                                 poll.potential_voters_number
                                                     ? (
-                                                          (countByQuestion[
+                                                          (countWeightsByQuestion[
                                                               question.id
                                                           ] /
                                                               poll.potential_voters_number) *

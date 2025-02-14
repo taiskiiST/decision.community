@@ -63,19 +63,24 @@ class EditorPreview extends React.Component {
                             </th>
                             <th
                                 scope="col"
-                                className="whitespace-wrap relative px-6 py-3"
+                                className="whitespace-wrap relative px-6 py-3 text-left"
                             >
                                 {poll_full.name}
                             </th>
-                            <th scope="col" className="relative px-6 py-3">
+                            <th scope="col" className="relative px-6 py-3 text-left">
                                 Количествой файлов
                             </th>
                             {is_admin && (
-                                <th scope="col" className="relative px-6 py-3">
+                                <th scope="col" className="relative px-6 py-3 text-left">
                                     Доступен всем
                                 </th>
                             )}
-                            <th scope="col" className="relative px-6 py-3">
+                            {!is_admin && (
+                                <th scope="col" className="relative px-6 py-3">
+
+                                </th>
+                            )}
+                            <th scope="col" className="relative px-6 py-3 text-left">
                                 Детали
                             </th>
                             {poll_finished && (

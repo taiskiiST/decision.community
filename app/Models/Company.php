@@ -76,10 +76,40 @@ class Company extends Model
         return $this->users()->where('permissions', 'LIKE', '%' . Permission::VOTE . '%')->count();
     }
 
+    public function potentialWeightVotersNumber(int $typeOfRight): int
+    {
+        $weights = 0;
+        $users_can_vote = $this->users()->where('permissions', 'LIKE', '%' . Permission::VOTE . '%')->get();
+        foreach ($users_can_vote as $user){
+            $rights = $user->rights()->get();
+            foreach ($rights as $right){
+                if ($right->type_of_right == $typeOfRight)
+                    $weights += $right->weight * $right->number_of_share;
+            }
+        }
+        return $weights;
+    }
+
     public function potentialVotersNumberGovernance(): int
     {
         return $this->users()->where('permissions', 'LIKE', '%' . Permission::VOTE . '%')
             ->where('permissions', 'LIKE', '%' . Permission::GOVERNANCE . '%')
             ->count();
+    }
+
+    public function potentialWeightVotersNumberGovernance(int $typeOfRight): int
+    {
+        $weights = 0;
+        $users_governance_can_vote = $this->users()->where('permissions', 'LIKE', '%' . Permission::VOTE . '%')
+            ->where('permissions', 'LIKE', '%' . Permission::GOVERNANCE . '%')
+            ->get();
+        foreach ($users_governance_can_vote as $user){
+            $rights = $user->rights()->get();
+            foreach ($rights as $right){
+                if ($right->type_of_right == $typeOfRight)
+                    $weights += $right->weight * $right->number_of_share;
+            }
+        }
+        return $weights;
     }
 }

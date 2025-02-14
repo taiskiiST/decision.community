@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ChildrenAndParentsInformation;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\DevController;
@@ -72,7 +73,7 @@ Route::group(['middleware' => 'check.company'], function () {
     Route::group(['middleware' => ['auth', 'can:access-app']], function () {
         Route::get('/children-report', [ChildrenAndParentsInformation::class, 'report'])->name('children-report');
 
-        Route::get('/register', [PollsController::class, 'index'])->name('polls.register');
+        //Route::get('/register', [PollsController::class, 'index'])->name('polls.register');
 
         Route::get('/polls/{poll}/display', [PollsController::class, 'display'])->name('poll.display');
         Route::post('/polls/{poll}/start/{start}', [PollsController::class, 'start'])->name('poll.start');

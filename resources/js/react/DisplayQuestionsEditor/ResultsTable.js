@@ -20,25 +20,25 @@ const ResultsTable = ({ question }) => {
                 <tr>
                     <th
                         scope="col"
-                        className="whitespace-wrap text-wrap px-1 py-3 text-left text-xs font-medium tracking-wider text-gray-500"
+                        className="whitespace-wrap text-wrap px-1 py-3 text-center text-xs font-medium tracking-wider text-gray-500"
                     >
                         №
                     </th>
                     <th
                         scope="col"
-                        className="whitespace-wrap text-wrap px-1 py-3 text-left text-xs font-medium tracking-wider text-gray-500"
+                        className="whitespace-wrap text-wrap px-1 py-3 text-center text-xs font-medium tracking-wider text-gray-500"
                     >
                         Вариант ответа
                     </th>
                     <th
                         scope="col"
-                        className="whitespace-wrap text-wrap px-1 py-3 text-left text-xs font-medium tracking-wider text-gray-500"
+                        className="whitespace-wrap text-wrap px-1 py-3 text-center text-xs font-medium tracking-wider text-gray-500"
                     >
                         Количество голосов
                     </th>
                     <th
                         scope="col"
-                        className="whitespace-wrap text-wrap px-1 py-3 text-left text-xs font-medium tracking-wider text-gray-500"
+                        className="whitespace-wrap text-wrap px-1 py-3 text-center text-xs font-medium tracking-wider text-gray-500"
                     >
                         В процентах
                     </th>
@@ -50,7 +50,7 @@ const ResultsTable = ({ question }) => {
                         <tr key={answer.id} className="even:bg-gray-50">
                             <td >
                                 <div
-                                    className={`whitespace-nowrap px-1 py-4 text-center text-sm font-medium  
+                                    className={`whitespace-nowrap px-1 py-4 text-center text-sm  
                                                     ${
                                         answer.id === answerIdWithMaxVotes
                                             ? 'font-bold'
@@ -75,19 +75,23 @@ const ResultsTable = ({ question }) => {
                             </td>
                             <td>
                                 <div
-                                    className={`whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm font-medium  
+                                    className={`whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm  
                                                     ${
                                         answer.id === answerIdWithMaxVotes
                                             ? 'font-bold'
                                             : 'font-medium'
                                     }`}
                                 >
-                                    {answer.votesNumber}
+                                    {answer.votesNumber
+                                        ? (
+                                            answer.votesNumber
+                                        ).toFixed(2)
+                                        : 0}
                                 </div>
                             </td>
                             <td>
                                 <div
-                                    className={`whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm font-medium  
+                                    className={`whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm  
                                                     ${
                                         answer.id === answerIdWithMaxVotes
                                             ? 'font-bold'
@@ -116,12 +120,17 @@ const ResultsTable = ({ question }) => {
                             </div>
                         </td>
                         <td>
-                            <div className="whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm font-bold font-medium">
-                                {`${votersNumber} из ${potentialVotersNumber}`}
+                            <div className="whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm font-bold">
+                                {votersNumber
+                                    ? (
+                                        votersNumber
+                                    ).toFixed(2)
+                                    : 0} {' '}
+                                из {potentialVotersNumber}
                             </div>
                         </td>
                         <td>
-                            <div className="whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm font-bold font-medium">
+                            <div className="whitespace-nowrap bg-gray-200 px-1 py-4 text-center text-sm font-bold">
                                 {potentialVotersNumber > 0
                                     ? Math.round(
                                     (votersNumber / potentialVotersNumber) *

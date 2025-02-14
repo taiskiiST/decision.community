@@ -6,6 +6,7 @@ use App\Models\Answer;
 use App\Models\Company;
 use App\Models\Poll;
 use App\Models\Question;
+use App\Models\TypeOfRight;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -271,11 +272,13 @@ class QuestionsController extends Controller
         }
 
         $question->userVotedAnswerId = $vote ? $vote->answer_id : null;
-        $question->votersNumber = $question->countVotesByQuestion();
+        //$question->votersNumber = $question->countVotesByQuestion();
+        $question->votersNumber = $question->countWeightVotesByQuestion(TypeOfRight::UPON_OWNERSHIP);
         $question->potentialVotersNumber = $question->poll->potential_voters_number;
 
         $question->answers->each(function (Answer $answer) {
-            $answer->votesNumber = $answer->countVotes();
+            //$answer->votesNumber = $answer->countVotes();
+            $answer->votesNumber = $answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP);
         });
 
         $question->averageGrade = $question->middleAnswerThatAllUsersMarkOnReport();

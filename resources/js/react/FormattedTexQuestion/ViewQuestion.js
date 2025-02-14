@@ -179,7 +179,8 @@ const ViewQuestion = () => {
                                             <td className="whitespace-nowrap px-6 py-4 text-center text-sm font-bold">
                                                 {(countWeightsByQuestion[
                                                     question.id
-                                                    ]).toFixed(2)}{' '}
+                                                    ]).toFixed(2)
+                                                }{' '}
                                                 из{' '}
                                                 {poll.potential_voters_number}
                                             </td>

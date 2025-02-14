@@ -308,6 +308,7 @@ class PollsController extends Controller
 
         $num_protocol = Poll::where('type_of_poll', $poll->type_of_poll)->count() + 1;
 
+
         if (Organizer::where('poll_id', $poll->id)->get()->isNotEmpty()) {
             $organizers = Organizer::where('poll_id', $poll->id)->get()[0];
         } else {
@@ -315,8 +316,8 @@ class PollsController extends Controller
 //                'poll' => $poll,
 //            ])->withErrors("Не назначены организаторы мероприятия!");
         }
-
-        $section->addText("ПРОТОКОЛ №" . $num_protocol, ['size' => 18, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
+        $name_type_of_poll = $poll->typeOfPoll()->get()->first()->type_of_poll;
+        $section->addText("ПРОТОКОЛ ".mb_strtoupper($name_type_of_poll)." №" . $num_protocol, ['size' => 18, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
         $section->addText($poll->name, ['size' => 18, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
         $section->addText("От " . date("d.m.Y"), '', ['spaceBefore' => 10, 'align' => 'left']);
         $section->addText("х.Ленинаван", '', ['spaceBefore' => 10, 'align' => 'right']);
@@ -331,8 +332,10 @@ class PollsController extends Controller
         }
         $srt_name_invited = substr($srt_name_invited, 0, -2);
         $section->addText("Из числа приглашенных: " . $srt_name_invited, '', ['spaceBefore' => 10, 'align' => 'left']);
+        $section->addText("Администратор: Третьяков Сергей Владимирович", '', ['spaceBefore' => 10, 'align' => 'left']);
 
-        $count_all_voters = $poll->company->potentialVotersNumber();
+        //$count_all_voters = $poll->company->potentialVotersNumber();
+        $count_all_voters = $poll->company->potentialWeightVotersNumber(TypeOfRight::UPON_OWNERSHIP);
 //        if(round($count_all_voters/2,0,PHP_ROUND_HALF_UP) > $qourum->count_of_voting_current ){
         $form_protocol = 'заочной';
         $is_forum = 'не набран';
@@ -340,13 +343,13 @@ class PollsController extends Controller
 //            $form_protocol = 'очная';
 //            $is_forum = 'имеется';
         //}
-        if (round($count_all_voters / 2, 0, PHP_ROUND_HALF_UP) > $poll->peopleThatVote()->count()) {
-            $yes_no = 'не ';
+        if (round($count_all_voters / 2, 0, PHP_ROUND_HALF_UP) > $poll->weightPeopleThatVote(TypeOfRight::UPON_OWNERSHIP)) {
+            $yes_no = 'не';
         } else {
             $yes_no = '';
         }
 
-        $section->addText("Форма проведения Общего Собрания Членов " . $_ENV['APP_NAME'] . ": " . $form_protocol, '', ['spaceBefore' => 10, 'align' => 'left']);
+        $section->addText("Форма проведения ".$name_type_of_poll ." : " . $form_protocol, '', ['spaceBefore' => 10, 'align' => 'left']);
         $section->addTextBreak();
         $section->addText("ПОВЕСТКА ДНЯ:", ['size' => 18, 'bold' => TRUE], ['spaceBefore' => 10, 'align' => 'center']);
 
@@ -367,22 +370,24 @@ class PollsController extends Controller
         }
         $section->addText("********************************************************************", '', ['spaceBefore' => 10]);
         $section->addText("Слушали:", ['bold' => TRUE]);
-        $section->addText("Третьякова Сергея Владимировича. Для ведения собрания необходимо убедиться в наличие кворума и избрать председательствующего и секретаря собрания.", '', ['spaceBefore' => 10]);
+        $section->addText("Для принятия решений по повестке собрания необходимо наличие кворума. На основании принятых ранее решений определены председательствующий, секретарь собрания, ответственного за подсчетом голосов и администратор.", '', ['spaceBefore' => 10]);
+        $section->addText("Председатель собрания - ", '', ['spaceBefore' => 10]);
+        $section->addText("Секретарь собрания – ", '', ['spaceBefore' => 10]);
+        $section->addText("Ответственный за подсчет голосов – ", '', ['spaceBefore' => 10]);
+        $section->addText("Администратор – ", '', ['spaceBefore' => 10]);
+        $section->addText("Собрание будет проводиться в ".$form_protocol." форме.", '', ['spaceBefore' => 10]);
         $section->addTextBreak();
 
-        $section->addText("По списку Членов " . $_ENV['APP_NAME'] . " на собрании из " . $count_all_voters . " проголосовало " . $poll->peopleThatVote()->count() . "  - кворум " . $is_forum . "! Собрание будет проводиться в " . $form_protocol . " форме. В голосовании в " . $form_protocol . " форме приняли участие " . $poll->peopleThatVote()->count() . " членов ТСН! Собрание " . $yes_no . "легитимно и " . $yes_no . "правомочно принимать решения по вопросам повестки дня.", '', ['spaceBefore' => 10]);
+        $section->addText("В голосовании в заочной форме приняли участие " . $count_all_voters . " проголосовало " . $poll->weightPeopleThatVote(TypeOfRight::UPON_OWNERSHIP)." кворум ".$yes_no." набран! Собрание ".$yes_no." легитимно и ".$yes_no." правомочно принимать решения по вопросам повестки дня.", '', ['spaceBefore' => 10]);
         $section->addTextBreak();
-        $section->addText("Постановили избрать:", '', ['spaceBefore' => 10, 'align' => 'left', 'bold' => TRUE]);
 
 //        $section->addText("Председателем собрания - " . User::find($organizers->user_chairman_id)->name, '', ['spaceBefore' => 10, 'align' => 'left']);
 //        $section->addText("Секретарем собрания - " . User::find($organizers->user_secretary_id)->name, '', ['spaceBefore' => 10, 'align' => 'left']);
 //        $section->addText("Ответственный за подсчет голосов - " . User::find($organizers->user_counter_votes_id)->name, '', ['spaceBefore' => 10, 'align' => 'left']);
         $section->addTextBreak();
-        $section->addText("Голосовали всего: " . $poll->peopleThatVote()->count() . ", За - " . $poll->peopleThatVote()->count() . " Против - 0, Воздержались - 0.", '', ['spaceBefore' => 10, 'align' => 'left']);
-        $section->addTextBreak();
         $dt_start = new \DateTime();
         $dt_start->setTimestamp(strtotime($poll->start));
-        $section->addText("Секретарь объявил о начале собрания в " . date_format($dt_start, "d.m.Y, H:i:s") . " по Московскому времени.", '', ['spaceBefore' => 10, 'align' => 'left']);
+        $section->addText("Администратор объявил о начале собрания в " . date_format($dt_start, "d.m.Y, H:i:s") . " по Московскому времени.", '', ['spaceBefore' => 10, 'align' => 'left']);
         $section->addText("********************************************************************", '', ['spaceBefore' => 10]);
 
         $count_question = 1;
@@ -427,7 +432,7 @@ class PollsController extends Controller
                 $textrun->addText($line);
             }
             $section->addTextBreak();
-            $section->addText("Голосовали всего: " . $poll->peopleThatVote()->count(), '', ['spaceBefore' => 10, 'align' => 'left']);
+            $section->addText("Голосовали всего: " . $poll->weightPeopleThatVote(TypeOfRight::UPON_OWNERSHIP), ['bold' => TRUE], ['spaceBefore' => 10, 'align' => 'left']);
             $section->addTextBreak();
             $count_answer_blank = 1;
             $max_voters = 0;
@@ -438,37 +443,37 @@ class PollsController extends Controller
             $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText('Проголосовало');
             $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText('Проголосовало %');
             foreach ($question->answers()->get() as $answer) {
-                if ($max_voters < $answer->countVotes()) {
-                    $max_voters = $answer->countVotes();
+                if ($max_voters < $answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP)) {
+                    $max_voters = $answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP);
                 }
             }
             foreach ($question->answers()->get() as $answer) {
                 $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
-                if ($max_voters == $answer->countVotes()) {
+                if ($max_voters == $answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP)) {
                     $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText($count_answer_blank, ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
                     $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText($answer->text, ['bold' => TRUE], ['valign' => 'center']);
-                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($answer->countVotes(), ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
-                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText(round(($answer->countVotes() / $poll->company->potentialVotersNumber())*100,2) . "%", ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
+                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP), ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
+                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText(round(($answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP) / $poll->company->potentialWeightVotersNumber(TypeOfRight::UPON_OWNERSHIP))*100,2) . "%", ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
                 } else {
                     $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText($count_answer_blank, '', ['align' => 'center', 'spaceAfter' => 150]);
                     $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText($answer->text, '', ['valign' => 'center']);
-                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($answer->countVotes(), '', ['align' => 'center', 'spaceAfter' => 150]);
-                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText(round(($answer->countVotes() / $poll->company->potentialVotersNumber())*100,2) . "%", '', ['align' => 'center', 'spaceAfter' => 150]);
+                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP), '', ['align' => 'center', 'spaceAfter' => 150]);
+                    $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText(round(($answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP) / $poll->company->potentialWeightVotersNumber(TypeOfRight::UPON_OWNERSHIP))*100,2) . "%", '', ['align' => 'center', 'spaceAfter' => 150]);
                 }
                 ++$count_answer_blank;
             }
             $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
-            $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText('', '', ['align' => 'center', 'spaceAfter' => 150]);
-            $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText('ИТОГО', '', ['align' => 'center']);
-            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($poll->peopleThatVote()->count().' из '.$poll->company->potentialVotersNumber(), '', ['align' => 'center']);
-            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText(round(($poll->peopleThatVote()->count() / $poll->company->potentialVotersNumber())*100,2). "%", '', ['align' => 'center']);
+            $cell1 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), ['valign' => 'center'])->addText('', ['bold' => TRUE], ['align' => 'center', 'spaceAfter' => 150]);
+            $cell2 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(250), ['valign' => 'center'])->addText('ИТОГО', ['bold' => TRUE], ['align' => 'center']);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(150), ['valign' => 'center'])->addText($poll->weightPeopleThatVote(TypeOfRight::UPON_OWNERSHIP).' из '.$poll->company->potentialWeightVotersNumber(TypeOfRight::UPON_OWNERSHIP), ['bold' => TRUE], ['align' => 'center']);
+            $cell3 = $wordTable->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), ['valign' => 'center'])->addText(round(($poll->weightPeopleThatVote(TypeOfRight::UPON_OWNERSHIP) / $poll->company->potentialWeightVotersNumber(TypeOfRight::UPON_OWNERSHIP))*100,2). "%", ['bold' => TRUE], ['align' => 'center']);
             $section->addText("********************************************************************", '', $parStyle);
         }
         $dt_end = new \DateTime();
         $dt_end->setTimestamp(strtotime($poll->finished));
-        $section->addText("Председатель собрания объявил о закрытии Общего Собрания Членов " . $_ENV['APP_NAME'] . " в " . date_format($dt_end, "d.m.Y, H:i:s"), '', ['spaceBefore' => 10, 'align' => 'left']);
+        $section->addText("Администратор собрания объявил о закрытии ".$name_type_of_poll." в " . date_format($dt_end, "d.m.Y, H:i:s"), '', ['spaceBefore' => 10, 'align' => 'left']);
         $section->addTextBreak();
-        $section->addText("Настоящий протокол составлен в трех подлинных экземплярах.", '', ['spaceBefore' => 10, 'align' => 'left']);
+        $section->addText("Настоящий протокол составлен в электронной форме в соответствии с п 8.11 Устава ТСН.", '', ['spaceBefore' => 10, 'align' => 'left']);
         $section->addTextBreak();
 
         $count_users_with_positin = 1;

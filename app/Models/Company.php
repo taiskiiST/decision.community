@@ -76,7 +76,7 @@ class Company extends Model
         return $this->users()->where('permissions', 'LIKE', '%' . Permission::VOTE . '%')->count();
     }
 
-    public function potentialWeightVotersNumber(int $typeOfRight): int
+    public function potentialWeightVotersNumber(int $typeOfRight)
     {
         $weights = 0;
         $users_can_vote = $this->users()->where('permissions', 'LIKE', '%' . Permission::VOTE . '%')->get();
@@ -97,7 +97,7 @@ class Company extends Model
             ->count();
     }
 
-    public function potentialWeightVotersNumberGovernance(int $typeOfRight): int
+    public function potentialWeightVotersNumberGovernance(int $typeOfRight)
     {
         $weights = 0;
         $users_governance_can_vote = $this->users()->where('permissions', 'LIKE', '%' . Permission::VOTE . '%')

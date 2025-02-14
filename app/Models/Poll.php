@@ -155,6 +155,21 @@ class Poll extends Model
         return User::whereIN('id', $usersIdsThatVoted)->get();
     }
 
+    public function weightPeopleThatVote(int $typeOfRight)
+    {
+        $weights = 0;
+        $users = $this->peopleThatVote();
+        foreach ($users as $user){
+            $rights = $user->rights()->get();
+            foreach ($rights as $right){
+                if ($right->type_of_right == $typeOfRight) {
+                    $weights += $right->weight * $right->number_of_share;
+                }
+            }
+        }
+        return $weights;
+    }
+
     public function authUserVote () : bool
     {
         $user = auth()->user();

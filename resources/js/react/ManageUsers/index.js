@@ -232,235 +232,293 @@ function Users() {
                         <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
                             <table className="min-w-full divide-y divide-gray-200 ">
                                 <thead className="bg-gray-50">
-                                    <tr>
-                                        <th
-                                            scope="col"
+                                <tr>
+                                    <th
+                                        scope="col"
+                                        className="relative px-6 py-3 text-center"
+                                    >
+                                        №
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="relative px-6 py-3 text-center"
+                                    >
+                                        <button
+                                            onClick={handleClickNameSort}
+                                            className="text-indigo-600 hover:text-indigo-900"
+                                        >
+                                            ФИО
+                                        </button>
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="relative px-6 py-3 text-center"
+                                    >
+                                        <button
                                             className="relative px-6 py-3 text-center"
                                         >
-                                            №
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="relative px-6 py-3 text-center"
+                                            Право
+                                        </button>
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="relative px-6 py-3 text-center"
+                                    >
+                                        <button
+                                            onClick={handleClickAddressSort}
+                                            className="text-indigo-600 hover:text-indigo-900"
                                         >
-                                            <button
-                                                onClick={handleClickNameSort}
-                                                className="text-indigo-600 hover:text-indigo-900"
-                                            >
-                                                ФИО
-                                            </button>
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="relative px-6 py-3 text-center"
-                                        >
-                                            <button
-                                                onClick={handleClickAddressSort}
-                                                className="text-indigo-600 hover:text-indigo-900"
-                                            >
-                                                Адрес
-                                            </button>
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="relative px-6 py-3 text-center"
-                                        >
-                                            Телефон
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="relative px-6 py-3 text-center"
-                                        >
-                                            Электронный ящик
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="relative px-6 py-3 text-center"
-                                        >
-                                            Должность
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="relative px-6 py-3 text-center"
-                                        >
-                                            Права
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="relative px-6 py-3 text-center"
-                                            colSpan="2"
-                                        >
-                                            Действия
-                                        </th>
-                                    </tr>
+                                            Адрес
+                                        </button>
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="relative px-6 py-3 text-center"
+                                    >
+                                        Телефон
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="relative px-6 py-3 text-center"
+                                    >
+                                        Электронный ящик
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="relative px-6 py-3 text-center"
+                                    >
+                                        Должность
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="relative px-6 py-3 text-center"
+                                    >
+                                        Полномочия
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="relative px-6 py-3 text-center"
+                                        colSpan="2"
+                                    >
+                                        Действия
+                                    </th>
+                                </tr>
                                 </thead>
 
                                 <tbody>
-                                    {searchResults.map((user, index) => (
-                                        <tr
-                                            className={`bg-white ${
-                                                index % 2 === 0
-                                                    ? 'bg-gray-200'
-                                                    : ''
-                                            }`}
-                                            id={`${index}`}
-                                            key={`${index}`}
-                                        >
-                                            <td className="whitespace-nowrap px-6 py-4 text-center font-medium text-gray-900">
-                                                {index + 1}
-                                            </td>
-                                            <td className="whitespace-wrap text-wrap px-6 py-4 text-center font-medium text-gray-900">
-                                                {user.name && (
-                                                    <Highlighter
-                                                        highlightClassName="Highlight"
-                                                        searchWords={[
-                                                            searchTerm,
-                                                        ]}
-                                                        autoEscape={true}
-                                                        textToHighlight={
-                                                            user.name
-                                                        }
-                                                    />
-                                                )}
-                                            </td>
-                                            <td className="whitespace-wrap text-wrap px-6 py-4 text-center text-sm font-medium">
-                                                {user.address && (
-                                                    <Highlighter
-                                                        highlightClassName="Highlight"
-                                                        searchWords={[
-                                                            searchTerm,
-                                                        ]}
-                                                        autoEscape={true}
-                                                        textToHighlight={
-                                                            user.address
-                                                        }
-                                                    />
-                                                )}
-                                            </td>
-                                            <td className="whitespace-nowrap px-6 py-4 text-center text-sm font-medium">
-                                                {user.phone && (
-                                                    <Highlighter
-                                                        highlightClassName="Highlight"
-                                                        searchWords={[
-                                                            searchTerm,
-                                                        ]}
-                                                        autoEscape={true}
-                                                        textToHighlight={
-                                                            user.phone
-                                                        }
-                                                    />
-                                                )}
-                                            </td>
-                                            <td className="whitespace-nowrap px-6 py-4 text-center text-sm font-medium">
-                                                {user.email && (
-                                                    <Highlighter
-                                                        highlightClassName="Highlight"
-                                                        searchWords={[
-                                                            searchTerm,
-                                                        ]}
-                                                        autoEscape={true}
-                                                        textToHighlight={
-                                                            user.email
-                                                        }
-                                                    />
-                                                )}
-                                            </td>
-                                            <td className="whitespace-wrap text-wrap px-6 py-4 text-center text-sm font-medium">
-                                                {user.position && (
-                                                    <Highlighter
-                                                        highlightClassName="Highlight"
-                                                        searchWords={[
-                                                            searchTerm,
-                                                        ]}
-                                                        autoEscape={true}
-                                                        textToHighlight={
-                                                            user.position
-                                                        }
-                                                    />
-                                                )}
-                                            </td>
-                                            <td className="text-nowrap whitespace-nowrap px-6 py-4 text-center text-sm font-medium">
-                                                {user.permissions
-                                                    ? user.permissions.map(
-                                                          (
-                                                              permission,
-                                                              index,
-                                                          ) => (
-                                                              <div
-                                                                  key={`${index}`}
-                                                              >
-                                                                  <Highlighter
-                                                                      highlightClassName="Highlight"
-                                                                      searchWords={[
-                                                                          searchTerm,
-                                                                      ]}
-                                                                      autoEscape={
-                                                                          true
-                                                                      }
-                                                                      textToHighlight={
-                                                                          permission
-                                                                      }
-                                                                  />
-                                                              </div>
-                                                          ),
-                                                      )
-                                                    : ''}
-                                            </td>
-                                            <td className="whitespace-nowrap px-6 py-4 text-center text-sm font-medium">
-                                                <form
-                                                    method="POST"
-                                                    action="/manage/update"
+                                {searchResults.map((user, index) => (
+                                    <tr
+                                        className={`${
+                                            index % 2 === 0
+                                                ? 'bg-white'
+                                                : 'bg-gray-200'
+                                        }`}
+                                        id={`${index}`}
+                                        key={`${index}`}
+                                    >
+                                        <td className="whitespace-nowrap px-6 py-4 text-center font-medium text-gray-900">
+                                            {index + 1}
+                                        </td>
+                                        <td className="whitespace-wrap text-wrap px-6 py-4 text-center font-medium text-gray-900">
+                                            {user.name && (
+                                                <Highlighter
+                                                    highlightClassName="Highlight"
+                                                    searchWords={[
+                                                        searchTerm,
+                                                    ]}
+                                                    autoEscape={true}
+                                                    textToHighlight={
+                                                        user.name
+                                                    }
+                                                />
+                                            )}
+                                        </td>
+                                        <td className="text-nowrap whitespace-nowrap px-6 py-4 text-center font-medium text-gray-900">
+                                            {user.rights &&
+                                                user.rights.map((rights_user, index_rights) => (
+                                                    <tr className="border-b-2"  key={`${index_rights}`}>
+                                                        <Highlighter
+                                                            highlightClassName="Highlight"
+                                                            searchWords={[
+                                                                searchTerm,
+                                                            ]}
+                                                            autoEscape={true}
+                                                            textToHighlight={
+                                                                'Вес голоса: ' + rights_user.right_wight
+                                                            }
+                                                        /> <br/>
+                                                        <Highlighter
+                                                            highlightClassName="Highlight"
+                                                            searchWords={[
+                                                                searchTerm,
+                                                            ]}
+                                                            autoEscape={true}
+                                                            textToHighlight={
+                                                                'Название права: ' + rights_user.right_name
+                                                            }
+                                                        /> <br/>
+                                                        <Highlighter
+                                                            highlightClassName="Highlight"
+                                                            searchWords={[
+                                                                searchTerm,
+                                                            ]}
+                                                            autoEscape={true}
+                                                            textToHighlight={
+                                                                'Тип права: ' + rights_user.right_type
+                                                            }
+                                                        /> <br/>
+                                                        <Highlighter
+                                                            highlightClassName="Highlight"
+                                                            searchWords={[
+                                                                searchTerm,
+                                                            ]}
+                                                            autoEscape={true}
+                                                            textToHighlight={
+                                                                'Основание: ' + rights_user.right_grounds
+                                                            }
+                                                        /> <br/>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </td>
+                                        <td className="whitespace-wrap text-wrap px-6 py-4 text-center text-sm font-medium">
+                                            {user.address && (
+                                                <Highlighter
+                                                    highlightClassName="Highlight"
+                                                    searchWords={[
+                                                        searchTerm,
+                                                    ]}
+                                                    autoEscape={true}
+                                                    textToHighlight={
+                                                        user.address
+                                                    }
+                                                />
+                                            )}
+                                        </td>
+                                        <td className="whitespace-nowrap px-6 py-4 text-center text-sm font-medium">
+                                            {user.phone && (
+                                                <Highlighter
+                                                    highlightClassName="Highlight"
+                                                    searchWords={[
+                                                        searchTerm,
+                                                    ]}
+                                                    autoEscape={true}
+                                                    textToHighlight={
+                                                        user.phone
+                                                    }
+                                                />
+                                            )}
+                                        </td>
+                                        <td className="whitespace-nowrap px-6 py-4 text-center text-sm font-medium">
+                                            {user.email && (
+                                                <Highlighter
+                                                    highlightClassName="Highlight"
+                                                    searchWords={[
+                                                        searchTerm,
+                                                    ]}
+                                                    autoEscape={true}
+                                                    textToHighlight={
+                                                        user.email
+                                                    }
+                                                />
+                                            )}
+                                        </td>
+                                        <td className="whitespace-wrap text-wrap px-6 py-4 text-center text-sm font-medium">
+                                            {user.position && (
+                                                <Highlighter
+                                                    highlightClassName="Highlight"
+                                                    searchWords={[
+                                                        searchTerm,
+                                                    ]}
+                                                    autoEscape={true}
+                                                    textToHighlight={
+                                                        user.position
+                                                    }
+                                                />
+                                            )}
+                                        </td>
+                                        <td className="text-nowrap whitespace-nowrap px-6 py-4 text-center text-sm font-medium">
+                                            {user.permissions
+                                                ? user.permissions.map(
+                                                    (
+                                                        permission,
+                                                        index,
+                                                    ) => (
+                                                        <div
+                                                            key={`${index}`}
+                                                        >
+                                                            <Highlighter
+                                                                highlightClassName="Highlight"
+                                                                searchWords={[
+                                                                    searchTerm,
+                                                                ]}
+                                                                autoEscape={
+                                                                    true
+                                                                }
+                                                                textToHighlight={
+                                                                    permission
+                                                                }
+                                                            />
+                                                        </div>
+                                                    ),
+                                                )
+                                                : ''}
+                                        </td>
+                                        <td className="whitespace-nowrap px-6 py-4 text-center text-sm font-medium">
+                                            <form
+                                                method="POST"
+                                                action="/manage/update"
+                                            >
+                                                <input
+                                                    type="hidden"
+                                                    name="_token"
+                                                    value={`${csrf_token}`}
+                                                />
+                                                <input
+                                                    name="user_update"
+                                                    value={`${user.id}`}
+                                                    type="hidden"
+                                                />
+                                                <a
+                                                    href="/manage/update"
+                                                    onClick={
+                                                        handleClickUpdate
+                                                    }
+                                                    className="text-indigo-600 hover:text-indigo-900"
                                                 >
-                                                    <input
-                                                        type="hidden"
-                                                        name="_token"
-                                                        value={`${csrf_token}`}
-                                                    />
-                                                    <input
-                                                        name="user_update"
-                                                        value={`${user.id}`}
-                                                        type="hidden"
-                                                    />
-                                                    <a
-                                                        href="/manage/update"
-                                                        onClick={
-                                                            handleClickUpdate
-                                                        }
-                                                        className="text-indigo-600 hover:text-indigo-900"
-                                                    >
-                                                        Редактировать
-                                                    </a>
-                                                </form>
-                                            </td>
+                                                    Редактировать
+                                                </a>
+                                            </form>
+                                        </td>
 
-                                            <td className="whitespace-nowrap px-6 py-4 text-center text-sm font-medium">
-                                                <form
-                                                    method="POST"
-                                                    action="/manage/delete"
+                                        <td className="whitespace-nowrap px-6 py-4 text-center text-sm font-medium">
+                                            <form
+                                                method="POST"
+                                                action="/manage/delete"
+                                            >
+                                                <input
+                                                    type="hidden"
+                                                    name="_token"
+                                                    value={`${csrf_token}`}
+                                                />
+                                                <input
+                                                    name="user_del"
+                                                    value={`${user.id}`}
+                                                    type="hidden"
+                                                />
+                                                <a
+                                                    href="/manage/delete"
+                                                    onClick={
+                                                        handleClickDelete
+                                                    }
+                                                    className="text-indigo-600 hover:text-indigo-900"
                                                 >
-                                                    <input
-                                                        type="hidden"
-                                                        name="_token"
-                                                        value={`${csrf_token}`}
-                                                    />
-                                                    <input
-                                                        name="user_del"
-                                                        value={`${user.id}`}
-                                                        type="hidden"
-                                                    />
-                                                    <a
-                                                        href="/manage/delete"
-                                                        onClick={
-                                                            handleClickDelete
-                                                        }
-                                                        className="text-indigo-600 hover:text-indigo-900"
-                                                    >
-                                                        Удалить
-                                                    </a>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                                    Удалить
+                                                </a>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                ))}
                                 </tbody>
                             </table>
                         </div>
@@ -609,7 +667,8 @@ function Users() {
                                             key={`${index}`}
                                         >
                                             <td>
-                                                <div className="whitespace-wrap text-wrap bg-gray-200 px-6 py-4 text-center text-sm font-bold text-gray-900">
+                                                <div
+                                                    className="whitespace-wrap text-wrap bg-gray-200 px-6 py-4 text-center text-sm font-bold text-gray-900">
                                                     {index + 1}.{' '}
                                                     {user.name && (
                                                         <Highlighter
@@ -624,7 +683,57 @@ function Users() {
                                                         />
                                                     )}
                                                 </div>
-                                                <div className="whitespace-wrap px-6 py-4 text-right text-sm font-medium text-gray-900">
+                                                <div
+                                                    className="whitespace-wrap text-wrap px-6 py-4 text-center text-sm font-bold text-gray-900">
+                                                    {user.rights &&
+                                                        user.rights.map((rights_user, index_rights) => (
+                                                            <div className="border-b-2"  key={`${index_rights}`}>
+                                                                <Highlighter
+                                                                    highlightClassName="Highlight"
+                                                                    searchWords={[
+                                                                        searchTerm,
+                                                                    ]}
+                                                                    autoEscape={true}
+                                                                    textToHighlight={
+                                                                        'Вес голоса: ' + rights_user.right_wight
+                                                                    }
+                                                                /> <br/>
+                                                                <Highlighter
+                                                                    highlightClassName="Highlight"
+                                                                    searchWords={[
+                                                                        searchTerm,
+                                                                    ]}
+                                                                    autoEscape={true}
+                                                                    textToHighlight={
+                                                                        'Название права: ' + rights_user.right_name
+                                                                    }
+                                                                /> <br/>
+                                                                <Highlighter
+                                                                    highlightClassName="Highlight"
+                                                                    searchWords={[
+                                                                        searchTerm,
+                                                                    ]}
+                                                                    autoEscape={true}
+                                                                    textToHighlight={
+                                                                        'Тип права: ' + rights_user.right_type
+                                                                    }
+                                                                /> <br/>
+                                                                <Highlighter
+                                                                    highlightClassName="Highlight"
+                                                                    searchWords={[
+                                                                        searchTerm,
+                                                                    ]}
+                                                                    autoEscape={true}
+                                                                    textToHighlight={
+                                                                        'Основание: ' + rights_user.right_grounds
+                                                                    }
+                                                                /> <br/>
+                                                            </div>
+                                                        ))
+                                                    }
+                                                </div>
+                                                <div
+                                                    className="whitespace-wrap bg-gray-200 px-6 py-4 text-right text-sm font-medium text-gray-900">
                                                     {user.address && (
                                                         <Highlighter
                                                             highlightClassName="Highlight"
@@ -638,7 +747,8 @@ function Users() {
                                                         />
                                                     )}
                                                 </div>
-                                                <div className="whitespace-wrap px-6 py-4 text-right text-sm font-medium text-gray-900">
+                                                <div
+                                                    className="whitespace-wrap px-6 py-4 text-right text-sm font-medium text-gray-900">
                                                     {user.phone && (
                                                         <Highlighter
                                                             highlightClassName="Highlight"
@@ -652,7 +762,8 @@ function Users() {
                                                         />
                                                     )}
                                                 </div>
-                                                <div className="whitespace-wrap bg-gray-200 px-6 py-4 text-right text-sm font-medium text-gray-900">
+                                                <div
+                                                    className="whitespace-wrap bg-gray-200 px-6 py-4 text-right text-sm font-medium text-gray-900">
                                                     {user.email && (
                                                         <Highlighter
                                                             highlightClassName="Highlight"
@@ -666,7 +777,8 @@ function Users() {
                                                         />
                                                     )}
                                                 </div>
-                                                <div className="whitespace-wrap text-wrap px-6 py-4 text-right text-sm font-medium text-gray-900">
+                                                <div
+                                                    className="whitespace-wrap text-wrap px-6 py-4 text-right text-sm font-medium text-gray-900">
                                                     {user.position && (
                                                         <Highlighter
                                                             highlightClassName="Highlight"
@@ -680,34 +792,36 @@ function Users() {
                                                         />
                                                     )}
                                                 </div>
-                                                <div className="whitespace-wrap bg-gray-200 px-6 py-4 text-right text-sm font-medium">
+                                                <div
+                                                    className="whitespace-wrap bg-gray-200 px-6 py-4 text-right text-sm font-medium">
                                                     {user.permissions
                                                         ? user.permissions.map(
-                                                              (
-                                                                  permission,
-                                                                  index,
-                                                              ) => (
-                                                                  <div
-                                                                      key={`${index}`}
-                                                                  >
-                                                                      <Highlighter
-                                                                          highlightClassName="Highlight"
-                                                                          searchWords={[
-                                                                              searchTerm,
-                                                                          ]}
-                                                                          autoEscape={
-                                                                              true
-                                                                          }
-                                                                          textToHighlight={
-                                                                              permission
-                                                                          }
-                                                                      />
-                                                                  </div>
-                                                              ),
-                                                          )
+                                                            (
+                                                                permission,
+                                                                index,
+                                                            ) => (
+                                                                <div
+                                                                    key={`${index}`}
+                                                                >
+                                                                    <Highlighter
+                                                                        highlightClassName="Highlight"
+                                                                        searchWords={[
+                                                                            searchTerm,
+                                                                        ]}
+                                                                        autoEscape={
+                                                                            true
+                                                                        }
+                                                                        textToHighlight={
+                                                                            permission
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                            ),
+                                                        )
                                                         : ''}
                                                 </div>
-                                                <div className="whitespace-wrap px-6 py-4 text-right text-sm font-medium">
+                                                <div
+                                                    className="whitespace-wrap px-6 py-4 text-right text-sm font-medium">
                                                     <form
                                                         method="POST"
                                                         action="/manage/update"
@@ -733,7 +847,8 @@ function Users() {
                                                         </a>
                                                     </form>
                                                 </div>
-                                                <div className="whitespace-wrap px-6 py-4 text-right text-sm font-medium ">
+                                                <div
+                                                    className="whitespace-wrap bg-gray-200 px-6 py-4 text-right text-sm font-medium ">
                                                     <form
                                                         method="POST"
                                                         action="/manage/delete"
@@ -772,4 +887,4 @@ function Users() {
     );
 }
 
-render(<Users />, document.getElementById('users'));
+render(<Users/>, document.getElementById('users'));

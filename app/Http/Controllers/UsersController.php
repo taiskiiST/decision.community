@@ -55,6 +55,26 @@ class UsersController extends Controller
             $users_new[$index]['id'] = $user->id;
             $users_new[$index]['name'] = $user->name;
             $users_new[$index]['address'] = $user->address;
+            $rights = $user->rights()->get();
+            $index_rights = 0;
+            foreach ($rights as $right){
+                switch ($right->type_of_right){
+                    case 1:
+                        $users_new[$index]['rights'][$index_rights]['right_type'] = 'По праву собственности';
+                        break;
+                    case 2:
+                        $users_new[$index]['rights'][$index_rights]['right_type'] = 'По площади недвижимости';
+                        break;
+                    case 2:
+                        $users_new[$index]['rights'][$index_rights]['right_type'] = 'Мандат';
+                        break;
+                }
+                $users_new[$index]['rights'][$index_rights]['right_wight'] = $right->weight * $right->number_of_share;
+                $users_new[$index]['rights'][$index_rights]['right_name'] = $right->name;
+
+                $users_new[$index]['rights'][$index_rights]['right_grounds'] = $right->grounds;
+                $index_rights++;
+            }
             $users_new[$index]['phone'] = $user->phone;
             $users_new[$index]['email'] = $user->email;
             $users_new[$index]['position'] = $user->position();
@@ -98,7 +118,7 @@ class UsersController extends Controller
             $users_new[$index]['permissions'] = explode('=', $users_new[$index]['permissions']);
             $index++;
         }
-
+        //dd($users_new);
         return $users_new;
     }
 

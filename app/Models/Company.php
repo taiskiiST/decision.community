@@ -54,7 +54,6 @@ class Company extends Model
 
   public static function getCompanyBySubDomain(): ?Company
   {
-    return null;
     $subdomain = Arr::first(explode('.', request()->getHost()));
 
     return Company::where('uri', $subdomain)->first();

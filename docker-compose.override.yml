@@ -1,0 +1,6 @@
+services:
+  laravel.test:
+    extra_hosts:
+      - 'decision-community.lo:host-gateway'
+      - 'berezka.decision-community.lo:host-gateway'
+      - 'osinka.decision-community.lo:host-gateway'

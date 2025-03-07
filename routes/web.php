@@ -45,14 +45,17 @@ Route::get('/companies/get-existing-uris', [
   CompaniesController::class,
   'getExistingURIs',
 ])->name('companies.get-existing-uris');
+
 Route::get('/users/get-existing-emails', [
   UsersController::class,
   'getExistingEmails',
 ])->name('users.get-existing-emails');
+
 Route::get('/users/get-existing-phones', [
   UsersController::class,
   'getExistingPhones',
 ])->name('users.get-existing-phones');
+
 Route::post('/companies/registration', [
   CompaniesController::class,
   'createCompany',
@@ -82,10 +85,12 @@ Route::group(['middleware' => 'check.company'], function () {
     ChildrenAndParentsInformation::class,
     'index',
   ])->name('children-and-parents-information');
+
   Route::post('/children-and-parents-information-submit/', [
     ChildrenAndParentsInformation::class,
     'submit',
   ])->name('children-and-parents-information-submit');
+
   Route::get('/children-and-parents-information-done/', [
     ChildrenAndParentsInformation::class,
     'done',
@@ -95,10 +100,12 @@ Route::group(['middleware' => 'check.company'], function () {
     ChildrenAndParentsInformation::class,
     'indexSchool',
   ])->name('children-and-parents-information-school');
+
   Route::post('/children-and-parents-information-school-submit/', [
     ChildrenAndParentsInformation::class,
     'submitSchool',
   ])->name('children-and-parents-information-school-submit');
+
   Route::get('/children-and-parents-information-school-done/', [
     ChildrenAndParentsInformation::class,
     'doneSchool',
@@ -108,14 +115,17 @@ Route::group(['middleware' => 'check.company'], function () {
     ChildrenAndParentsInformation::class,
     'checkParent',
   ])->name('check-parent');
+
   Route::get('/report-school/', [
     ChildrenAndParentsInformation::class,
     'schoolReport',
   ])->name('school-report');
+
   Route::get('/report-school-by-school/', [
     ChildrenAndParentsInformation::class,
     'schoolReportBySchool',
   ])->name('school-report-by-school');
+
   Route::get('/children-report-age', [
     ChildrenAndParentsInformation::class,
     'reportAge',
@@ -138,10 +148,12 @@ Route::group(['middleware' => 'check.company'], function () {
       PollsController::class,
       'display',
     ])->name('poll.display');
+
     Route::post('/polls/{poll}/start/{start}', [
       PollsController::class,
       'start',
     ])->name('poll.start');
+
     Route::post('/polls/{poll}/submit', [
       PollsController::class,
       'submit',
@@ -150,45 +162,56 @@ Route::group(['middleware' => 'check.company'], function () {
       PollsController::class,
       'results',
     ])->name('poll.results');
+
     Route::post('/polls/create/{type_of_poll}', [
       PollsController::class,
       'create',
     ])->name('poll.create');
+
     Route::post('/polls/{poll}/edit/{error?}', [
       PollsController::class,
       'edit',
     ])->name('poll.edit');
+
     Route::post('/polls/{poll}/generateProtocol', [
       PollsController::class,
       'generateProtocolWithOutTemplate',
     ])->name('poll.generateProtocol');
+
     Route::post('/polls/{poll}/generateBlank', [
       PollsController::class,
       'generateBlankWithOutTemplate',
     ])->name('poll.generateBlank');
+
     Route::post('/polls/{poll}/generateBlankWithAnswers', [
       PollsController::class,
       'generateBlankWithAnswersWithOutTemplate',
     ])->name('poll.generateBlankWithAnswers');
+
     Route::post('/polls/{poll}/addProtocol', [
       PollsController::class,
       'addProtocol',
     ])->name('poll.addProtocol');
+
     Route::get('/polls/{poll}/delProtocol', [
       PollsController::class,
       'delProtocol',
     ])->name('poll.delProtocol');
+
     Route::post('/polls/delete/{poll}', [
       PollsController::class,
       'delete',
     ])->name('poll.delete');
+
     Route::post('/polls/store', [PollsController::class, 'store'])->name(
       'poll.store'
     );
+
     Route::post('/polls/{poll}/end/{end}', [
       PollsController::class,
       'endVote',
     ])->name('poll.endVote');
+
     Route::get('/polls/{poll}/agenda/public', [
       PollsController::class,
       'agenda',
@@ -198,14 +221,17 @@ Route::group(['middleware' => 'check.company'], function () {
       PollsController::class,
       'requisites',
     ])->name('poll.requisites');
+
     Route::get('/polls/{poll}/requisites/submitName', [
       PollsController::class,
       'requisitesSubmitName',
     ])->name('poll.requisites.submitName');
+
     Route::get('/polls/{poll}/requisites/submitOrganizers', [
       PollsController::class,
       'requisitesSubmitOrganizers',
     ])->name('poll.requisites.submitOrganizers');
+
     Route::get('/polls/{poll}/requisites/submitInvited', [
       PollsController::class,
       'requisitesSubmitInvited',
@@ -215,10 +241,12 @@ Route::group(['middleware' => 'check.company'], function () {
       PollsController::class,
       'display',
     ])->name('poll.display.public');
+
     Route::get('/polls/{poll}/results/public', [
       PollsController::class,
       'results',
     ])->name('poll.results.public');
+
     Route::post('/polls/{poll}/submit/public', [
       PollsController::class,
       'submit',
@@ -228,14 +256,17 @@ Route::group(['middleware' => 'check.company'], function () {
       PollsController::class,
       'report_voted',
     ])->name('poll.report_voted');
+
     Route::get('/polls/{poll}/report_dont_voted', [
       PollsController::class,
       'report_dont_voted',
     ])->name('poll.report_dont_voted');
+
     Route::get('/polls/{poll}/report', [
       PollsController::class,
       'report',
     ])->name('poll.report');
+
     Route::get('/polls/{poll}/results_list', [
       PollsController::class,
       'results_list',
@@ -245,18 +276,22 @@ Route::group(['middleware' => 'check.company'], function () {
       QuestionsController::class,
       'index',
     ])->name('poll.questions.index');
+
     Route::get('/polls/{poll}/questions/create', [
       QuestionsController::class,
       'create',
     ])->name('poll.questions.create');
+
     Route::post('/polls/{poll}/question/{question}/delete', [
       QuestionsController::class,
       'destroy',
     ])->name('question.delete');
+
     Route::post('/question_suggested/{question}/delete', [
       QuestionsController::class,
       'destroy_suggested',
     ])->name('question_suggested.delete');
+
     Route::post('/polls/{poll}/questions/add', [
       PollsController::class,
       'addQuestion',
@@ -266,6 +301,7 @@ Route::group(['middleware' => 'check.company'], function () {
       QuestionsController::class,
       'searchQuestion',
     ])->name('poll.questions.search_question');
+
     Route::post('/searchQuestions', [
       QuestionsController::class,
       'searchQuestions',
@@ -279,10 +315,12 @@ Route::group(['middleware' => 'check.company'], function () {
     Route::get('/profile', [UsersController::class, 'indexProfile'])->name(
       'users.profile'
     );
+
     Route::get('/profile-update', [
       UsersController::class,
       'updateProfile',
     ])->name('users.profile.update');
+
     Route::get('/profile-submit-update', [
       UsersController::class,
       'submitUpdateProfile',
@@ -291,54 +329,67 @@ Route::group(['middleware' => 'check.company'], function () {
     Route::get('/manage/users', [UsersController::class, 'index'])->name(
       'users.manage'
     );
+
     Route::get('/manage/add', [
       UsersController::class,
       'addOrUpdateForm',
     ])->name('users.add');
+
     Route::post('/manage/update', [
       UsersController::class,
       'addOrUpdateForm',
     ])->name('user.update');
+
     Route::post('/manage/delete', [UsersController::class, 'delete'])->name(
       'users.delete'
     );
+
     Route::post('/manage/addOrUpdate', [
       UsersController::class,
       'addOrUpdate',
     ])->name('users.addOrUpdate');
+
     Route::get('/governance', [UsersController::class, 'governance'])->name(
       'users.governance'
     );
+
     Route::get('/governance/manage', [
       UsersController::class,
       'governanceManage',
     ])->name('users.governance.manage');
+
     Route::get('/position/manage', [
       PositionsController::class,
       'positionManage',
     ])->name('position.manage');
+
     Route::post('/position/update', [
       PositionsController::class,
       'positionUpdate',
     ])->name('position.update');
+
     Route::post('/position/update/submit', [
       PositionsController::class,
       'positionUpdateSubmit',
     ])->name('position.update.submit');
+
     Route::post('/position/add', [
       PositionsController::class,
       'positionAdd',
     ])->name('position.add');
+
     Route::post('/position/add/submit', [
       PositionsController::class,
       'positionAddSubmit',
     ])->name('position.add.submit');
+
     Route::post('/position/delete', [
       PositionsController::class,
       'positionDelete',
     ])->name('position.delete');
 
     Route::resource('items', ItemsController::class);
+
     Route::get('/items/{item}/download', [
       ItemsController::class,
       'download',
@@ -367,46 +418,57 @@ Route::group(['middleware' => 'check.company'], function () {
       ItemsTreeController::class,
       'updateItemName',
     ])->name('items-tree.update-item-name');
+
     Route::put('/items-tree/updateItemPhone', [
       ItemsTreeController::class,
       'updateItemPhone',
     ])->name('items-tree.update-item-phone');
+
     Route::put('/items-tree/updateItemCost', [
       ItemsTreeController::class,
       'updateItemCost',
     ])->name('items-tree.update-item-cost');
+
     Route::put('/items-tree/updateItemDescription', [
       ItemsTreeController::class,
       'updateItemDescription',
     ])->name('items-tree.update-item-description');
+
     Route::put('/items-tree/updateItemAddress', [
       ItemsTreeController::class,
       'updateItemAddress',
     ])->name('items-tree.update-item-address');
+
     Route::put('/items-tree/updateItemElementary', [
       ItemsTreeController::class,
       'updateItemElementary',
     ])->name('items-tree.update-item-elementary');
+
     Route::put('/items-tree/updateItemCommitteeMembers', [
       ItemsTreeController::class,
       'updateItemCommitteeMembers',
     ])->name('items-tree.update-item-committee-members');
+
     Route::put('/items-tree/updateItemPresidiumMembers', [
       ItemsTreeController::class,
       'updateItemPresidiumMembers',
     ])->name('items-tree.update-item-presidium-members');
+
     Route::put('/items-tree/updateItemChairman', [
       ItemsTreeController::class,
       'updateItemChairman',
     ])->name('items-tree.update-item-chairman');
+
     Route::put('/items-tree/updateItemRevCommitteeMembers', [
       ItemsTreeController::class,
       'updateItemRevCommitteeMembers',
     ])->name('items-tree.update-item-rev-committee-members');
+
     Route::put('/items-tree/updateItemRevPresidiumMembers', [
       ItemsTreeController::class,
       'updateItemRevPresidiumMembers',
     ])->name('items-tree.update-item-rev-presidium-members');
+
     Route::put('/items-tree/updateItemRevChairman', [
       ItemsTreeController::class,
       'updateItemRevChairman',

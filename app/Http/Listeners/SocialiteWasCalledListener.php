@@ -11,10 +11,10 @@ use SocialiteProviders\Manager\SocialiteWasCalled;
  */
 interface SocialiteWasCalledListener
 {
-    /**
-     * @param \SocialiteProviders\Manager\SocialiteWasCalled $socialiteWasCalled
-     *
-     * @return mixed
-     */
-    public function handle(SocialiteWasCalled $socialiteWasCalled);
+  /**
+   * @param \SocialiteProviders\Manager\SocialiteWasCalled $socialiteWasCalled
+   *
+   * @return mixed
+   */
+  public function handle(SocialiteWasCalled $socialiteWasCalled);
 }

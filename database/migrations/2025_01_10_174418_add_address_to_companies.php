@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class AddAddressToCompanies extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('companies', function (Blueprint $table) {
-            $table->string('address')->after('title')->nullable();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('companies', function (Blueprint $table) {
+      $table->string('address')->after('title')->nullable();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('companies', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('companies', function (Blueprint $table) {
+      //
+    });
+  }
 }

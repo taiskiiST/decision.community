@@ -10,7 +10,6 @@
     "require": {
         "php": "^8.2",
         "ext-json": "*",
-        "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "gmostafa/php-graphql-client": "^1.8",
         "guzzlehttp/guzzle": "^7.0.1",

@@ -12,23 +12,23 @@ use Illuminate\Database\Seeder;
  */
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        $this->call(TypesOfPollsSeeder::class);
+  /**
+   * Seed the application's database.
+   *
+   * @return void
+   */
+  public function run()
+  {
+    $this->call(TypesOfPollsSeeder::class);
 
-        Company::create([
-            'uri' => 'berezka',
-            'title' => 'Берёзка',
-            'description' => 'ТНС'
-        ]);
+    Company::create([
+      'uri' => 'berezka',
+      'title' => 'Берёзка',
+      'description' => 'ТНС',
+    ]);
 
-        $this->call(UsersSeeder::class);
+    $this->call(UsersSeeder::class);
 
-        $this->call(PollSeeder::class);
-    }
+    $this->call(PollSeeder::class);
+  }
 }

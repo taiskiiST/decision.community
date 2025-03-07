@@ -15,11 +15,11 @@ use Illuminate\Http\Request;
  */
 class DevController extends Controller
 {
-    /**
-     *
-     */
-    public function index()
-    {
-        return 'a';
-    }
+  /**
+   *
+   */
+  public function index()
+  {
+    return 'a';
+  }
 }

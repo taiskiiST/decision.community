@@ -11,37 +11,38 @@ use Illuminate\Support\ServiceProvider;
  *
  * @package App\Providers
  */
-class RequestHelperServiceProvider extends ServiceProvider implements DeferrableProvider
+class RequestHelperServiceProvider extends ServiceProvider implements
+  DeferrableProvider
 {
-    /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->app->singleton(RequestHelper::class, function () {
-            return new RequestHelper();
-        });
-    }
+  /**
+   * Register services.
+   *
+   * @return void
+   */
+  public function register()
+  {
+    $this->app->singleton(RequestHelper::class, function () {
+      return new RequestHelper();
+    });
+  }
 
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
+  /**
+   * Bootstrap services.
+   *
+   * @return void
+   */
+  public function boot()
+  {
+    //
+  }
 
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [RequestHelper::class];
-    }
+  /**
+   * Get the services provided by the provider.
+   *
+   * @return array
+   */
+  public function provides()
+  {
+    return [RequestHelper::class];
+  }
 }

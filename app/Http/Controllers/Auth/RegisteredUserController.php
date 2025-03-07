@@ -15,49 +15,54 @@ use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        return view('auth.register', ['company' => Company::where('uri', str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ))->first()]);
-    }
+  /**
+   * Display the registration view.
+   *
+   * @return \Illuminate\View\View
+   */
+  public function create()
+  {
+    return view('auth.register', [
+      'company' => Company::where(
+        'uri',
+        str_replace('.' . $_ENV['APP_URI'], '', $_SERVER['HTTP_HOST'])
+      )->first(),
+    ]);
+  }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'phone' => 'required|string|max:10|unique:users',
-            'email' => 'nullable|string|email|max:255|unique:users',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+  /**
+   * Handle an incoming registration request.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\RedirectResponse
+   *
+   * @throws \Illuminate\Validation\ValidationException
+   */
+  public function store(Request $request)
+  {
+    $request->validate([
+      'name' => 'required|string|max:255',
+      'address' => 'required|string|max:255',
+      'phone' => 'required|string|max:10|unique:users',
+      'email' => 'nullable|string|email|max:255|unique:users',
+      'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'address' => $request->address,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'permissions' => 'access',
-            'password' => Hash::make($request->password),
-        ]);
+    $user = User::create([
+      'name' => $request->name,
+      'address' => $request->address,
+      'phone' => $request->phone,
+      'email' => $request->email,
+      'permissions' => 'access',
+      'password' => Hash::make($request->password),
+    ]);
 
-        event(new Registered($user));
-        Auth::login($user);
+    event(new Registered($user));
+    Auth::login($user);
 
-        $company = Company::find($request->company_id);
-        $company->users()->save($user);
+    $company = Company::find($request->company_id);
+    $company->users()->save($user);
 
-        return redirect()->intended(RouteServiceProvider::HOME);
-    }
+    return redirect()->intended(RouteServiceProvider::HOME);
+  }
 }

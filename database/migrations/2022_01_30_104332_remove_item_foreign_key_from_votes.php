@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class RemoveItemForeignKeyFromVotes extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('votes', function (Blueprint $table) {
-            $table->dropForeign('votes_item_id_foreign');
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('votes', function (Blueprint $table) {
+      $table->dropForeign('votes_item_id_foreign');
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('votes', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('votes', function (Blueprint $table) {
+      //
+    });
+  }
 }

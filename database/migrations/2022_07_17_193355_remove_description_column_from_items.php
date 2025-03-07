@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class RemoveDescriptionColumnFromItems extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('items', function (Blueprint $table) {
-            $table->dropColumn('description');
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('items', function (Blueprint $table) {
+      $table->dropColumn('description');
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('items', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('items', function (Blueprint $table) {
+      //
+    });
+  }
 }

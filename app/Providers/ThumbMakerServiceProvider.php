@@ -11,37 +11,38 @@ use Illuminate\Support\ServiceProvider;
  *
  * @package App\Providers
  */
-class ThumbMakerServiceProvider extends ServiceProvider implements DeferrableProvider
+class ThumbMakerServiceProvider extends ServiceProvider implements
+  DeferrableProvider
 {
-    /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->app->singleton(ThumbMaker::class, function () {
-            return new ThumbMaker();
-        });
-    }
+  /**
+   * Register services.
+   *
+   * @return void
+   */
+  public function register()
+  {
+    $this->app->singleton(ThumbMaker::class, function () {
+      return new ThumbMaker();
+    });
+  }
 
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
+  /**
+   * Bootstrap services.
+   *
+   * @return void
+   */
+  public function boot()
+  {
+    //
+  }
 
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [ThumbMaker::class];
-    }
+  /**
+   * Get the services provided by the provider.
+   *
+   * @return array
+   */
+  public function provides()
+  {
+    return [ThumbMaker::class];
+  }
 }

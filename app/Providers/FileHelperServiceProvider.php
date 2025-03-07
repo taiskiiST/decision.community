@@ -11,37 +11,38 @@ use Illuminate\Support\ServiceProvider;
  *
  * @package App\Providers
  */
-class FileHelperServiceProvider extends ServiceProvider implements DeferrableProvider
+class FileHelperServiceProvider extends ServiceProvider implements
+  DeferrableProvider
 {
-    /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->app->singleton(FileHelper::class, function () {
-            return new FileHelper();
-        });
-    }
+  /**
+   * Register services.
+   *
+   * @return void
+   */
+  public function register()
+  {
+    $this->app->singleton(FileHelper::class, function () {
+      return new FileHelper();
+    });
+  }
 
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
+  /**
+   * Bootstrap services.
+   *
+   * @return void
+   */
+  public function boot()
+  {
+    //
+  }
 
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [FileHelper::class];
-    }
+  /**
+   * Get the services provided by the provider.
+   *
+   * @return array
+   */
+  public function provides()
+  {
+    return [FileHelper::class];
+  }
 }

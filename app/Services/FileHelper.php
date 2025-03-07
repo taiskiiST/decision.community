@@ -11,16 +11,16 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class FileHelper
 {
-    /**
-     *
-     * @param \Symfony\Component\HttpFoundation\File\File $file
-     *
-     * @return string
-     */
-    public function getFileNameWithoutExtension(File $file): string
-    {
-        $fileInfo = pathinfo($file->getClientOriginalName());
+  /**
+   *
+   * @param \Symfony\Component\HttpFoundation\File\File $file
+   *
+   * @return string
+   */
+  public function getFileNameWithoutExtension(File $file): string
+  {
+    $fileInfo = pathinfo($file->getClientOriginalName());
 
-        return $fileInfo['filename'] ?? '';
-    }
+    return $fileInfo['filename'] ?? '';
+  }
 }

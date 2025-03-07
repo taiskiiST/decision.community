@@ -6,27 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 class AddAuthorToQuestions extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('questions', function (Blueprint $table) {
-            $table->foreignId('author')->after('suggest')->constrained('users')->cascadeOnDelete();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('questions', function (Blueprint $table) {
+      $table
+        ->foreignId('author')
+        ->after('suggest')
+        ->constrained('users')
+        ->cascadeOnDelete();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('questions', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('questions', function (Blueprint $table) {
+      //
+    });
+  }
 }

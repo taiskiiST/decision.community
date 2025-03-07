@@ -9,76 +9,77 @@ namespace App\Models;
  */
 class Permission
 {
-    const ACCESS              = 'access';
-    const ADMIN               = 'admin';
-    const SUPER_ADMIN         = 'super_admin';
-    const MANAGE_ITEMS        = 'manage-items';
-    const VOTE                = 'voter';
-    const GOVERNANCE          = 'governance';
+  const ACCESS = 'access';
+  const ADMIN = 'admin';
+  const SUPER_ADMIN = 'super_admin';
+  const MANAGE_ITEMS = 'manage-items';
+  const VOTE = 'voter';
+  const GOVERNANCE = 'governance';
 
-    const AVAILABLE_PERMISSIONS = [
-        self::ACCESS,
-        self::MANAGE_ITEMS,
-        self::VOTE
-    ];
+  const AVAILABLE_PERMISSIONS = [self::ACCESS, self::MANAGE_ITEMS, self::VOTE];
 
-    const ALL_PERMISSIONS = [
-        self::ACCESS,
-        self::MANAGE_ITEMS,
-        self::ADMIN,
-        self::VOTE,
-        self::GOVERNANCE,
-        self::SUPER_ADMIN,
-    ];
+  const ALL_PERMISSIONS = [
+    self::ACCESS,
+    self::MANAGE_ITEMS,
+    self::ADMIN,
+    self::VOTE,
+    self::GOVERNANCE,
+    self::SUPER_ADMIN,
+  ];
 
-    public static function allPermission()
-    {
-            return self::ALL_PERMISSIONS;
+  public static function allPermission()
+  {
+    return self::ALL_PERMISSIONS;
+  }
+
+  /**
+   * @param User $user
+   * @param string $permission
+   *
+   * @return User
+   */
+  public static function withdrawPermission(
+    User $user,
+    string $permission
+  ): User {
+    if (!in_array($permission, self::AVAILABLE_PERMISSIONS)) {
+      logger(__METHOD__ . " - unknown permission {$permission}");
+
+      return $user;
     }
 
-    /**
-     * @param User $user
-     * @param string $permission
-     *
-     * @return User
-     */
-    public static function withdrawPermission(User $user, string $permission): User
-    {
-        if (! in_array($permission, self::AVAILABLE_PERMISSIONS)) {
-            logger(__METHOD__ . " - unknown permission {$permission}");
+    $currentPermissions = explode(',', $user->permissions);
 
-            return $user;
-        }
+    $user->permissions = implode(
+      ',',
+      array_filter($currentPermissions, function ($p) use ($permission) {
+        return $p !== $permission;
+      })
+    );
 
-        $currentPermissions = explode(',', $user->permissions);
+    $user->save();
 
-        $user->permissions = implode(',' ,array_filter($currentPermissions, function ($p) use ($permission) {
-            return $p !== $permission;
-        }));
+    return $user;
+  }
 
-        $user->save();
+  /**
+   * @param User $user
+   * @param string $permission
+   *
+   * @return \App\Models\User
+   */
+  public static function assignPermission(User $user, string $permission): User
+  {
+    if (!in_array($permission, self::AVAILABLE_PERMISSIONS)) {
+      logger(__METHOD__ . " - unknown permission {$permission}");
 
-        return $user;
+      return $user;
     }
 
-    /**
-     * @param User $user
-     * @param string $permission
-     *
-     * @return \App\Models\User
-     */
-    public static function assignPermission(User $user, string $permission): User
-    {
-        if (! in_array($permission, self::AVAILABLE_PERMISSIONS)) {
-            logger(__METHOD__ . " - unknown permission {$permission}");
+    $user->permissions = $user->permissions . ',' . $permission;
 
-            return $user;
-        }
+    $user->save();
 
-        $user->permissions = $user->permissions . ',' . $permission;
-
-        $user->save();
-
-        return $user;
-    }
+    return $user;
+  }
 }

@@ -11,61 +11,61 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        $company_id = 0;
-        if(str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ) ){
-            $usi_str = str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] );
-            if (Company::where('uri', $usi_str)->count() > 0){
-                $company_id = Company::where('uri', $usi_str)->first()->id;
-            }
-        }
-//        dd('HTTP_HOST - '. $_SERVER['HTTP_HOST'].', APP_URI - '.$_ENV['APP_URI']);
-//        dd(str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ));
-        // TODO: check company before using 'id'
-        if ($company_id) {
-            return view('auth.login', [
-                    'company_id' => $company_id]
-            );
-        }else{
-            return view('404');
-        }
+  /**
+   * Display the login view.
+   *
+   * @return \Illuminate\View\View
+   */
+  public function create()
+  {
+    $company_id = 0;
+    if (str_replace('.' . $_ENV['APP_URI'], '', $_SERVER['HTTP_HOST'])) {
+      $usi_str = str_replace('.' . $_ENV['APP_URI'], '', $_SERVER['HTTP_HOST']);
+      if (Company::where('uri', $usi_str)->count() > 0) {
+        $company_id = Company::where('uri', $usi_str)->first()->id;
+      }
     }
-
-    /**
-     * Handle an incoming authentication request.
-     *
-     * @param  \App\Http\Requests\Auth\LoginRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(LoginRequest $request)
-    {
-        $request->authenticate();
-        $request->session()->regenerate();
-
-        return redirect()->intended(route('polls.index'));
+    //        dd('HTTP_HOST - '. $_SERVER['HTTP_HOST'].', APP_URI - '.$_ENV['APP_URI']);
+    //        dd(str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ));
+    // TODO: check company before using 'id'
+    if ($company_id) {
+      return view('auth.login', [
+        'company_id' => $company_id,
+      ]);
+    } else {
+      return view('404');
     }
+  }
 
-    /**
-     * Destroy an authenticated session.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy(Request $request)
-    {
-        Auth::guard('web')->logout();
+  /**
+   * Handle an incoming authentication request.
+   *
+   * @param  \App\Http\Requests\Auth\LoginRequest  $request
+   * @return \Illuminate\Http\RedirectResponse
+   */
+  public function store(LoginRequest $request)
+  {
+    $request->authenticate();
+    $request->session()->regenerate();
 
-        $request->session()->invalidate();
+    return redirect()->intended(route('polls.index'));
+  }
 
-        $request->session()->regenerateToken();
+  /**
+   * Destroy an authenticated session.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\RedirectResponse
+   */
+  public function destroy(Request $request)
+  {
+    Auth::guard('web')->logout();
 
-        //return redirect('/');
-        return redirect($request->uri_poll);
-    }
+    $request->session()->invalidate();
+
+    $request->session()->regenerateToken();
+
+    //return redirect('/');
+    return redirect($request->uri_poll);
+  }
 }

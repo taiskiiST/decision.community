@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class AddPublicToQuestions extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('questions', function (Blueprint $table) {
-            $table->boolean('public')->default(false)->after('text');
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('questions', function (Blueprint $table) {
+      $table->boolean('public')->default(false)->after('text');
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('questions', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('questions', function (Blueprint $table) {
+      //
+    });
+  }
 }

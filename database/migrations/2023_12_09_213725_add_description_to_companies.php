@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class AddDescriptionToCompanies extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('companies', function (Blueprint $table) {
-            $table->string('description')->after('title');
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('companies', function (Blueprint $table) {
+      $table->string('description')->after('title');
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('companies', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('companies', function (Blueprint $table) {
+      //
+    });
+  }
 }

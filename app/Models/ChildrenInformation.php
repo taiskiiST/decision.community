@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ChildrenInformation extends Model
 {
-    use HasFactory;
-    protected $guarded = [];
-    protected $table = 'children_information';
+  use HasFactory;
+  protected $guarded = [];
+  protected $table = 'children_information';
 
-    public function parent(): BelongsTo
-    {
-        return $this->belongsTo(ParentInformation::class,'parents_id');
-    }
+  public function parent(): BelongsTo
+  {
+    return $this->belongsTo(ParentInformation::class, 'parents_id');
+  }
 }

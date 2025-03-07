@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class QuestionFile extends Model
 {
-    use HasFactory;
-    protected $guarded = [];
-    protected $table = 'question_files';
+  use HasFactory;
+  protected $guarded = [];
+  protected $table = 'question_files';
 }

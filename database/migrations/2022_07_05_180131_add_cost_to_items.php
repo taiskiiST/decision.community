@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class AddCostToItems extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('items', function (Blueprint $table) {
-            $table->string('cost')->after('address')->nullable();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('items', function (Blueprint $table) {
+      $table->string('cost')->after('address')->nullable();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('items', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('items', function (Blueprint $table) {
+      //
+    });
+  }
 }

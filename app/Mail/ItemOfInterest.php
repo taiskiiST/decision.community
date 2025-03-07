@@ -15,35 +15,36 @@ use Illuminate\Queue\SerializesModels;
  */
 class ItemOfInterest extends Mailable
 {
-    use Queueable, SerializesModels;
+  use Queueable, SerializesModels;
 
-    public $item;
+  public $item;
 
-    public $user;
+  public $user;
 
-    /**
-     * Create a new message instance.
-     *
-     * @param \App\Models\Item $item
-     * @param \App\Models\User $user
-     */
-    public function __construct(Item $item, User $user)
-    {
-        $this->user = $user;
+  /**
+   * Create a new message instance.
+   *
+   * @param \App\Models\Item $item
+   * @param \App\Models\User $user
+   */
+  public function __construct(Item $item, User $user)
+  {
+    $this->user = $user;
 
-        $this->item = $item;
-    }
+    $this->item = $item;
+  }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
-    public function build()
-    {
-        $markdown = $this->markdown('emails.item-of-interest')
-            ->subject('On behalf of ' . $this->user->name . ': ' . $this->item->name);
+  /**
+   * Build the message.
+   *
+   * @return $this
+   */
+  public function build()
+  {
+    $markdown = $this->markdown('emails.item-of-interest')->subject(
+      'On behalf of ' . $this->user->name . ': ' . $this->item->name
+    );
 
-        return $markdown;
-    }
+    return $markdown;
+  }
 }

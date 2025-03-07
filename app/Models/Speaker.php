@@ -7,11 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Speaker extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillable = [
-        'question_id',
-        'users_speaker_id'
-    ];
-    protected $table = 'speakers';
+  protected $fillable = ['question_id', 'users_speaker_id'];
+  protected $table = 'speakers';
 }

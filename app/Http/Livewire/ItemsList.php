@@ -15,182 +15,194 @@ use Livewire\Component;
  */
 class ItemsList extends Component
 {
-    use AuthorizesRequests;
+  use AuthorizesRequests;
 
-    const SORT_BY_LATEST      = 'По новизне';
-    const SORT_ALPHABETICALLY = 'По алфавиту';
+  const SORT_BY_LATEST = 'По новизне';
+  const SORT_ALPHABETICALLY = 'По алфавиту';
 
-    public $search = '';
+  public $search = '';
 
-    public $sortBy = self::SORT_BY_LATEST;
+  public $sortBy = self::SORT_BY_LATEST;
 
-    public $items;
+  public $items;
 
-    public $isSortByDropdownOpen = false;
+  public $isSortByDropdownOpen = false;
 
-    public $isNewItemDropdownOpen = false;
+  public $isNewItemDropdownOpen = false;
 
-    public $isManageItemsModalOpen = false;
+  public $isManageItemsModalOpen = false;
 
-    public $successMessage = '';
+  public $successMessage = '';
 
-    public $itemTypeBeingAdded = '';
+  public $itemTypeBeingAdded = '';
 
-    public $currentCategory = null;
+  public $currentCategory = null;
 
-    public $parentCategories;
+  public $parentCategories;
 
-    public $isEmailItemModalOpen = false;
+  public $isEmailItemModalOpen = false;
 
-    protected $listeners = ['itemCreated', 'manageItemsModalCancelButtonClicked', 'emailItemModalCancelButtonClicked', 'itemEmailed'];
+  protected $listeners = [
+    'itemCreated',
+    'manageItemsModalCancelButtonClicked',
+    'emailItemModalCancelButtonClicked',
+    'itemEmailed',
+  ];
 
-    /**
-     * Triggered when the component is mounted.
-     *
-     * @param null $category
-     */
-    public function mount($category = null)
-    {
-        $this->currentCategory = $category;
+  /**
+   * Triggered when the component is mounted.
+   *
+   * @param null $category
+   */
+  public function mount($category = null)
+  {
+    $this->currentCategory = $category;
 
-        $this->parentCategories = new Collection();
+    $this->parentCategories = new Collection();
 
-        $this->fetchItems();
+    $this->fetchItems();
 
-        if (! $this->currentCategory) {
-            return;
-        }
-
-        $this->parentCategories = $this->currentCategory
-            ->getAllParents()
-            ->reverse();
-
+    if (!$this->currentCategory) {
+      return;
     }
 
-    /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function render()
-    {
-        return view('livewire.items-list');
-    }
+    $this->parentCategories = $this->currentCategory
+      ->getAllParents()
+      ->reverse();
+  }
 
-    /**
-     *
-     */
-    public function manageItemsModalCancelButtonClicked(): void
-    {
-        $this->isManageItemsModalOpen = false;
-    }
+  /**
+   * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+   */
+  public function render()
+  {
+    return view('livewire.items-list');
+  }
 
-    /**
-     *
-     */
-    public function emailItemModalCancelButtonClicked(): void
-    {
-        $this->isEmailItemModalOpen = false;
-    }
+  /**
+   *
+   */
+  public function manageItemsModalCancelButtonClicked(): void
+  {
+    $this->isManageItemsModalOpen = false;
+  }
 
-    /**
-     * Toggle the dropdown hidden/visible state.
-     */
-    public function toggleSortByDropdown()
-    {
-        $this->isSortByDropdownOpen = ! $this->isSortByDropdownOpen;
-    }
+  /**
+   *
+   */
+  public function emailItemModalCancelButtonClicked(): void
+  {
+    $this->isEmailItemModalOpen = false;
+  }
 
-    /**
-     * Toggle the dropdown hidden/visible state.
-     */
-    public function toggleNewItemDropdown()
-    {
-        $this->isNewItemDropdownOpen = ! $this->isNewItemDropdownOpen;
-    }
+  /**
+   * Toggle the dropdown hidden/visible state.
+   */
+  public function toggleSortByDropdown()
+  {
+    $this->isSortByDropdownOpen = !$this->isSortByDropdownOpen;
+  }
 
-    /**
-     * Triggered when the search box is updated.
-     */
-    public function updatedSearch()
-    {
-        $this->fetchItems();
-    }
+  /**
+   * Toggle the dropdown hidden/visible state.
+   */
+  public function toggleNewItemDropdown()
+  {
+    $this->isNewItemDropdownOpen = !$this->isNewItemDropdownOpen;
+  }
 
-    /**
-     * Triggered when the sort-by field is updated.
-     */
-    public function updatedSortBy()
-    {
-        $this->fetchItems();
-    }
+  /**
+   * Triggered when the search box is updated.
+   */
+  public function updatedSearch()
+  {
+    $this->fetchItems();
+  }
 
-    /**
-     * @param string $field
-     */
-    public function sortBy(string $field)
-    {
-        $this->sortBy = $field;
+  /**
+   * Triggered when the sort-by field is updated.
+   */
+  public function updatedSortBy()
+  {
+    $this->fetchItems();
+  }
 
-        $this->isSortByDropdownOpen = false;
+  /**
+   * @param string $field
+   */
+  public function sortBy(string $field)
+  {
+    $this->sortBy = $field;
 
-        $this->fetchItems();
-    }
+    $this->isSortByDropdownOpen = false;
 
-    /**
-     * @param string $itemType
-     */
-    public function addNewItemClicked(string $itemType)
-    {
-        $this->isNewItemDropdownOpen = false;
+    $this->fetchItems();
+  }
 
-        $this->isManageItemsModalOpen = true;
+  /**
+   * @param string $itemType
+   */
+  public function addNewItemClicked(string $itemType)
+  {
+    $this->isNewItemDropdownOpen = false;
 
-        $this->itemTypeBeingAdded = $itemType;
-    }
+    $this->isManageItemsModalOpen = true;
 
-    /**
-     *
-     */
-    public function itemCreated()
-    {
-        $this->isManageItemsModalOpen = false;
+    $this->itemTypeBeingAdded = $itemType;
+  }
 
-        $this->successMessage = 'New item has been successfully added!';
+  /**
+   *
+   */
+  public function itemCreated()
+  {
+    $this->isManageItemsModalOpen = false;
 
-        $this->fetchItems();
-    }
+    $this->successMessage = 'New item has been successfully added!';
 
-    /**
-     * @param $itemId
-     */
-    public function onEmailItemIconButtonClicked($itemId)
-    {
-        $this->isEmailItemModalOpen = true;
+    $this->fetchItems();
+  }
 
-        $this->emitTo('email-item-form', 'emailItemIconClicked', $itemId);
-    }
+  /**
+   * @param $itemId
+   */
+  public function onEmailItemIconButtonClicked($itemId)
+  {
+    $this->isEmailItemModalOpen = true;
 
-    /**
-     *
-     */
-    public function itemEmailed()
-    {
-        $this->isEmailItemModalOpen = false;
-    }
+    $this->emitTo('email-item-form', 'emailItemIconClicked', $itemId);
+  }
 
-    /**
-     * Fetch items from the db.
-     */
-    protected function fetchItems(): void
-    {
-        $doNotSetParentId = $this->search;
+  /**
+   *
+   */
+  public function itemEmailed()
+  {
+    $this->isEmailItemModalOpen = false;
+  }
 
-        $this->items = auth()->user()
-                             ->availableItems($doNotSetParentId ? -1 : ($this->currentCategory ? $this->currentCategory->id : null))
-                             ->where(function (Builder $builder) {
-                                 $builder->where('name', 'LIKE', "%$this->search%")
-                                 ->orWhere('address', 'LIKE', "%$this->search%");
-                             })
-                             ->sortBy($this->sortBy)
-                             ->get();
-    }
+  /**
+   * Fetch items from the db.
+   */
+  protected function fetchItems(): void
+  {
+    $doNotSetParentId = $this->search;
+
+    $this->items = auth()
+      ->user()
+      ->availableItems(
+        $doNotSetParentId
+          ? -1
+          : ($this->currentCategory
+            ? $this->currentCategory->id
+            : null)
+      )
+      ->where(function (Builder $builder) {
+        $builder
+          ->where('name', 'LIKE', "%$this->search%")
+          ->orWhere('address', 'LIKE', "%$this->search%");
+      })
+      ->sortBy($this->sortBy)
+      ->get();
+  }
 }

@@ -8,31 +8,35 @@ use Illuminate\Support\Facades\Schema;
 
 class AddPositionInPollToQuestions extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('questions', function (Blueprint $table) {
-            $table->unsignedSmallInteger('position_in_poll')->nullable()->default(null)->after('poll_id');
-        });
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('questions', function (Blueprint $table) {
+      $table
+        ->unsignedSmallInteger('position_in_poll')
+        ->nullable()
+        ->default(null)
+        ->after('poll_id');
+    });
 
-        Poll::all()->each(function (Poll $poll) {
-            $poll->reSortQuestions();
-        });
-    }
+    Poll::all()->each(function (Poll $poll) {
+      $poll->reSortQuestions();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('questions', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('questions', function (Blueprint $table) {
+      //
+    });
+  }
 }

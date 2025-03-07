@@ -10,20 +10,20 @@ use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+  use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function view404()
-    {
-        return view('404');
-    }
+  public function view404()
+  {
+    return view('404');
+  }
 
-    public function main()
-    {
-        $company = Company::current();
+  public function main()
+  {
+    $company = Company::current();
 
-        return view($company->mainView(), [
-            'companyName' => $company->title,
-            'companyDescription' => $company->description,
-        ]);
-    }
+    return view($company->mainView(), [
+      'companyName' => $company->title,
+      'companyDescription' => $company->description,
+    ]);
+  }
 }

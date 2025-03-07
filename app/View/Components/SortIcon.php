@@ -11,35 +11,35 @@ use Illuminate\View\Component;
  */
 class SortIcon extends Component
 {
-    public $field;
+  public $field;
 
-    public $sortField;
+  public $sortField;
 
-    public $sortAsc;
+  public $sortAsc;
 
-    /**
-     * Create a new component instance.
-     *
-     * @param $field
-     * @param $sortField
-     * @param $sortAsc
-     */
-    public function __construct($field, $sortField, $sortAsc)
-    {
-        $this->field = $field;
+  /**
+   * Create a new component instance.
+   *
+   * @param $field
+   * @param $sortField
+   * @param $sortAsc
+   */
+  public function __construct($field, $sortField, $sortAsc)
+  {
+    $this->field = $field;
 
-        $this->sortField = $sortField;
+    $this->sortField = $sortField;
 
-        $this->sortAsc = $sortAsc;
-    }
+    $this->sortAsc = $sortAsc;
+  }
 
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|string
-     */
-    public function render()
-    {
-        return view('components.sort-icon');
-    }
+  /**
+   * Get the view / contents that represent the component.
+   *
+   * @return \Illuminate\Contracts\View\View|string
+   */
+  public function render()
+  {
+    return view('components.sort-icon');
+  }
 }

@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class AddElementaryToItems extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('items', function (Blueprint $table) {
-            $table->boolean('elementary')->default(false)->after('pin');
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('items', function (Blueprint $table) {
+      $table->boolean('elementary')->default(false)->after('pin');
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('items', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('items', function (Blueprint $table) {
+      //
+    });
+  }
 }

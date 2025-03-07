@@ -11,10 +11,11 @@ use Illuminate\Support\Facades\App;
  */
 class RequestHelper
 {
-    /**
-     * @return string|string[]|null
-     */
-    public function shouldVerifySslCert() {
-        return !(App::isLocal() || App::runningUnitTests());
-    }
+  /**
+   * @return string|string[]|null
+   */
+  public function shouldVerifySslCert()
+  {
+    return !(App::isLocal() || App::runningUnitTests());
+  }
 }

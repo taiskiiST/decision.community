@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class AddDataIdToQuestionsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('questions', function (Blueprint $table) {
-            $table->unsignedInteger('file_id')->after('text')->nullable();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('questions', function (Blueprint $table) {
+      $table->unsignedInteger('file_id')->after('text')->nullable();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('questions', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('questions', function (Blueprint $table) {
+      //
+    });
+  }
 }

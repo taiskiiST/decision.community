@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class TypeOfRight extends Model
 {
-    use HasFactory;
-    const UPON_OWNERSHIP = 1;
-    const BY_AREA = 2;
-    const MANDATE = 3;
+  use HasFactory;
+  const UPON_OWNERSHIP = 1;
+  const BY_AREA = 2;
+  const MANDATE = 3;
 
-    protected $table = 'types_of_rights';
+  protected $table = 'types_of_rights';
 }

@@ -1,8 +1,7 @@
 <?php
 
 return [
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Class Namespace
     |--------------------------------------------------------------------------
@@ -15,9 +14,9 @@ return [
     |
     */
 
-    'class_namespace' => 'App\\Http\\Livewire',
+  'class_namespace' => 'App\\Http\\Livewire',
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | View Path
     |--------------------------------------------------------------------------
@@ -27,9 +26,9 @@ return [
     |
     */
 
-    'view_path' => resource_path('views/livewire'),
+  'view_path' => resource_path('views/livewire'),
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Livewire Assets URL
     |--------------------------------------------------------------------------
@@ -42,9 +41,9 @@ return [
     |
     */
 
-    'asset_url'  => null,
+  'asset_url' => null,
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Livewire Endpoint Middleware Group
     |--------------------------------------------------------------------------
@@ -55,9 +54,9 @@ return [
     |
     */
 
-    'middleware_group'  => 'web',
+  'middleware_group' => 'web',
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Livewire Temporary File Uploads Endpoint Configuration
     |--------------------------------------------------------------------------
@@ -69,19 +68,32 @@ return [
     |
     */
 
-    'temporary_file_upload' => [
-        'disk' => null,        // Example: 'local', 's3'              Default: 'default'
-        'rules' => ['required', 'file', 'max:61440'],       // Example: ['file', 'mimes:png,jpg']  Default: ['required', 'file', 'max:12288'] (12MB)
-        'directory' => null,   // Example: 'tmp'                      Default  'livewire-tmp'
-        'middleware' => null,  // Example: 'throttle:5,1'             Default: 'throttle:60,1'
-        'preview_mimes' => [   // Supported file types for temporary pre-signed file URLs.
-            'png', 'gif', 'bmp', 'svg', 'wav', 'mp4',
-            'mov', 'avi', 'wmv', 'mp3', 'm4a',
-            'jpeg', 'mpga', 'webp', 'wma',
-        ],
+  'temporary_file_upload' => [
+    'disk' => null, // Example: 'local', 's3'              Default: 'default'
+    'rules' => ['required', 'file', 'max:61440'], // Example: ['file', 'mimes:png,jpg']  Default: ['required', 'file', 'max:12288'] (12MB)
+    'directory' => null, // Example: 'tmp'                      Default  'livewire-tmp'
+    'middleware' => null, // Example: 'throttle:5,1'             Default: 'throttle:60,1'
+    'preview_mimes' => [
+      // Supported file types for temporary pre-signed file URLs.
+      'png',
+      'gif',
+      'bmp',
+      'svg',
+      'wav',
+      'mp4',
+      'mov',
+      'avi',
+      'wmv',
+      'mp3',
+      'm4a',
+      'jpeg',
+      'mpga',
+      'webp',
+      'wma',
     ],
+  ],
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Manifest File Path
     |--------------------------------------------------------------------------
@@ -95,6 +107,5 @@ return [
     |
     */
 
-    'manifest_path' => null,
-
+  'manifest_path' => null,
 ];

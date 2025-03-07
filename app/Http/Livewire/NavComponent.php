@@ -7,29 +7,29 @@ use Livewire\Component;
 
 class NavComponent extends Component
 {
-    public $isMenuOpen = false;
+  public $isMenuOpen = false;
 
-    public $isProfileDropdownOpen = false;
+  public $isProfileDropdownOpen = false;
 
-    public $currentRouteName;
+  public $currentRouteName;
 
-    public function mount()
-    {
-        $this->currentRouteName = Route::currentRouteName();
-    }
+  public function mount()
+  {
+    $this->currentRouteName = Route::currentRouteName();
+  }
 
-    public function toggleProfileDropdown()
-    {
-        $this->isProfileDropdownOpen = ! $this->isProfileDropdownOpen;
-    }
+  public function toggleProfileDropdown()
+  {
+    $this->isProfileDropdownOpen = !$this->isProfileDropdownOpen;
+  }
 
-    public function toggleMenu()
-    {
-        $this->isMenuOpen = ! $this->isMenuOpen;
-    }
+  public function toggleMenu()
+  {
+    $this->isMenuOpen = !$this->isMenuOpen;
+  }
 
-    public function render()
-    {
-        return view('livewire.nav-component');
-    }
+  public function render()
+  {
+    return view('livewire.nav-component');
+  }
 }

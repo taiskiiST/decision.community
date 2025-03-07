@@ -6,28 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 class RemoveCompanyIdFromUsers extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign('users_company_id_foreign');
-            $table->dropColumn('company_id');
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('users', function (Blueprint $table) {
+      $table->dropForeign('users_company_id_foreign');
+      $table->dropColumn('company_id');
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('users', function (Blueprint $table) {
+      //
+    });
+  }
 }

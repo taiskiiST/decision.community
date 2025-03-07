@@ -6,27 +6,32 @@ use Illuminate\Support\Facades\Schema;
 
 class AddPositionIdToUsersTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('position_id')->after('email')->nullable()->constrained('positions')->cascadeOnDelete();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('users', function (Blueprint $table) {
+      $table
+        ->foreignId('position_id')
+        ->after('email')
+        ->nullable()
+        ->constrained('positions')
+        ->cascadeOnDelete();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('users', function (Blueprint $table) {
+      //
+    });
+  }
 }

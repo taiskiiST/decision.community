@@ -7,29 +7,29 @@ use Illuminate\Support\Facades\Schema;
 
 class AddUserIdColumnToVotes extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Vote::where('id', '>', 0)->delete();
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Vote::where('id', '>', 0)->delete();
 
-        Schema::table('votes', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-        });
-    }
+    Schema::table('votes', function (Blueprint $table) {
+      $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('votes', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('votes', function (Blueprint $table) {
+      //
+    });
+  }
 }

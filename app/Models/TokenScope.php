@@ -9,5 +9,5 @@ namespace App\Models;
  */
 class TokenScope
 {
-    const INTERNAL_USE = 'internal-use';
+  const INTERNAL_USE = 'internal-use';
 }

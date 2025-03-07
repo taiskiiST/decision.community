@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class AddStartToPollsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('polls', function (Blueprint $table) {
-            $table->dateTime('start')->nullable()->after('name');
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('polls', function (Blueprint $table) {
+      $table->dateTime('start')->nullable()->after('name');
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('polls', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('polls', function (Blueprint $table) {
+      //
+    });
+  }
 }

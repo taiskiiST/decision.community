@@ -7,10 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AnonymousVote extends Model
 {
-    use HasFactory;
-    protected $fillable = [
-        'question_id',
-        'answer_id'
-    ];
-    protected $table = 'anonymous_votes';
+  use HasFactory;
+  protected $fillable = ['question_id', 'answer_id'];
+  protected $table = 'anonymous_votes';
 }

@@ -8,13 +8,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ParentInformation extends Model
 {
-    use HasFactory;
-    protected $guarded = [];
-    protected $table = 'parents_information';
+  use HasFactory;
+  protected $guarded = [];
+  protected $table = 'parents_information';
 
-    public function children(): HasMany
-    {
-        return $this->hasMany(ChildrenInformation::class, 'parents_id');
-    }
-
+  public function children(): HasMany
+  {
+    return $this->hasMany(ChildrenInformation::class, 'parents_id');
+  }
 }

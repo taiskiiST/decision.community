@@ -11,17 +11,17 @@ use App\Models\User;
  */
 interface AuthenticateUserListener
 {
-    /**
-     * @param \App\Models\User $user
-     *
-     * @return mixed
-     */
-    public function userHasLoggedIn(User $user);
+  /**
+   * @param \App\Models\User $user
+   *
+   * @return mixed
+   */
+  public function userHasLoggedIn(User $user);
 
-    /**
-     * @param string $message
-     *
-     * @return mixed
-     */
-    public function userFailedToLogIn(string $message);
+  /**
+   * @param string $message
+   *
+   * @return mixed
+   */
+  public function userFailedToLogIn(string $message);
 }

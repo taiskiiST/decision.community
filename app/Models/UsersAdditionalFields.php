@@ -7,14 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class UsersAdditionalFields extends Model
 {
-    use HasFactory;
-    protected $fillable = [
-        'ownership',
-        'job'
-    ];
+  use HasFactory;
+  protected $fillable = ['ownership', 'job'];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+  public function user()
+  {
+    return $this->belongsTo(User::class);
+  }
 }

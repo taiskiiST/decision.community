@@ -12,12 +12,15 @@ use SocialiteProviders\Manager\SocialiteWasCalled;
  */
 class ExtendSocialiteWithGuzzleOptions extends LaravelPassportExtendSocialite
 {
-    /**
-     * Execute the provider.
-     * @param SocialiteWasCalled $socialiteWasCalled
-     */
-    public function handle(SocialiteWasCalled $socialiteWasCalled)
-    {
-        $socialiteWasCalled->extendSocialite(config('auth.socialiteDriver'), ProviderWithGuzzleAdditionalKey::class);
-    }
+  /**
+   * Execute the provider.
+   * @param SocialiteWasCalled $socialiteWasCalled
+   */
+  public function handle(SocialiteWasCalled $socialiteWasCalled)
+  {
+    $socialiteWasCalled->extendSocialite(
+      config('auth.socialiteDriver'),
+      ProviderWithGuzzleAdditionalKey::class
+    );
+  }
 }

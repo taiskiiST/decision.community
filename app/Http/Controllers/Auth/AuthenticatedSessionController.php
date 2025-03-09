@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Company;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
@@ -18,19 +18,12 @@ class AuthenticatedSessionController extends Controller
    */
   public function create()
   {
-    $company_id = 0;
-    if (str_replace('.' . $_ENV['APP_URI'], '', $_SERVER['HTTP_HOST'])) {
-      $usi_str = str_replace('.' . $_ENV['APP_URI'], '', $_SERVER['HTTP_HOST']);
-      if (Company::where('uri', $usi_str)->count() > 0) {
-        $company_id = Company::where('uri', $usi_str)->first()->id;
-      }
-    }
-    //        dd('HTTP_HOST - '. $_SERVER['HTTP_HOST'].', APP_URI - '.$_ENV['APP_URI']);
-    //        dd(str_replace(".".$_ENV['APP_URI'], "", $_SERVER['HTTP_HOST'] ));
-    // TODO: check company before using 'id'
-    if ($company_id) {
+    $domain = Arr::first(explode('.', request()->getHost()));
+    $company = Company::where('uri', $domain)->first();
+
+    if ($company) {
       return view('auth.login', [
-        'company_id' => $company_id,
+        'company_id' => $company->id,
       ]);
     } else {
       return view('404');

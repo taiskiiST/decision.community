@@ -5,11 +5,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import EditorPreview from './EditorPreview';
 
 const App = () => (
-    <>
-        <EditorPreview />
+  <>
+    <EditorPreview />
 
-        <ToastContainer />
-    </>
+    <ToastContainer />
+  </>
 );
 
 ReactDOM.render(<App />, document.getElementById('PreviewTextQuestion'));

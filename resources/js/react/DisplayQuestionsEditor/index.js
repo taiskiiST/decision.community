@@ -5,16 +5,16 @@ import { render } from 'react-dom';
 import React from 'react';
 
 const App = () => {
-    return (
-        <div className="App tuta">
-            <DisplayQuestionEditor />
+  return (
+    <div className="App tuta">
+      <DisplayQuestionEditor />
 
-            <ToastContainer />
-        </div>
-    );
+      <ToastContainer />
+    </div>
+  );
 };
 
 const element = document.getElementById('displayQuestionsEditor');
 if (element) {
-    render(<App />, element);
+  render(<App />, element);
 }

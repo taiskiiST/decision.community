@@ -5,11 +5,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import StartEndPoll from './StartEndPoll';
 
 const App = () => (
-    <>
-        <StartEndPoll />
+  <>
+    <StartEndPoll />
 
-        <ToastContainer />
-    </>
+    <ToastContainer />
+  </>
 );
 
 ReactDOM.render(<App />, document.getElementById('StartEndPoll'));

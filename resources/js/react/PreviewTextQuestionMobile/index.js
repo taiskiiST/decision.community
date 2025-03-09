@@ -2,11 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import EditorPreviewMobile from './EditorPreviewMobile';
 
-const App = () => (
-    <EditorPreviewMobile />
-);
+const App = () => <EditorPreviewMobile />;
 
-ReactDOM.render(
-    <App />,
-    document.getElementById('PreviewTextQuestionMobile')
-);
+ReactDOM.render(<App />, document.getElementById('PreviewTextQuestionMobile'));

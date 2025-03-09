@@ -5,270 +5,271 @@ import { DebounceInput } from 'react-debounce-input';
 import Textarea from 'rc-textarea';
 
 const ItemsTable = ({
-    items,
-    onRemoveBtnClicked,
-    tableInputsDisabled,
-    onItemNameChange,
-    onItemPhoneChange,
-    onItemCostChange,
-    onItemDescriptionChange,
-    onItemAddressChange,
-    onItemThumbClicked,
-    onElementaryChange
+  items,
+  onRemoveBtnClicked,
+  tableInputsDisabled,
+  onItemNameChange,
+  onItemPhoneChange,
+  onItemCostChange,
+  onItemDescriptionChange,
+  onItemAddressChange,
+  onItemThumbClicked,
+  onElementaryChange,
 }) => {
-    const getItemTypeIcon = (item) => {
-        const { isCategory } = item;
+  const getItemTypeIcon = (item) => {
+    const { isCategory } = item;
 
-        if (isCategory) {
-            return (
-                <svg
-                    xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-1" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                </svg>
-            );
-        }
-
-        return (
-            <svg
-                xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-1" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
-                <path
-                    strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-            </svg>
-        );
-    };
+    if (isCategory) {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="ml-1 h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+          />
+        </svg>
+      );
+    }
 
     return (
-        <div className="flex flex-col">
-            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                    <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                            <tr>
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Имя
-                                </th>
-
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Тип
-                                </th>
-
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Телефон
-                                </th>
-
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Адрес
-                                </th>
-
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Цена
-                                </th>
-
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Описание
-                                </th>
-
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Первичная Орг.
-                                </th>
-
-                                <th scope="col" className="relative px-6 py-3">
-                                    <span className="sr-only">Edit</span>
-                                    {
-                                        tableInputsDisabled ?
-                                            <div className="flex justify-end"><BallTriangle className="h-4"/>
-                                            </div> : null
-                                    }
-                                </th>
-                            </tr>
-                            </thead>
-
-                            <tbody className="bg-white divide-y divide-gray-200">
-
-                            {
-                                items.map(item => (
-                                    <tr key={item.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="flex items-center">
-                                                <div className="flex-shrink-0 h-10 w-10">
-                                                    <button
-                                                        className="rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 hover:ring-2 hover:ring-indigo-500"
-                                                        type="button"
-                                                        onClick={() => onItemThumbClicked(item)}
-                                                    >
-                                                        <span className="sr-only">Update Item Thumb Menu</span>
-
-                                                        <img
-                                                            className="h-10 w-10 rounded-full" src={item.thumbUrl}
-                                                            alt="img"
-                                                        />
-                                                    </button>
-                                                </div>
-
-                                                <div className="ml-4 w-full">
-                                                    <div
-                                                        className="text-sm font-medium text-gray-900 w-full truncate"
-                                                    >
-                                                        <DebounceInput
-                                                            className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
-                                                            type="text"
-                                                            debounceTimeout={1000}
-                                                            onChange={e => onItemNameChange(item, e)}
-                                                            value={item.fullTitle}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                          <span
-                                              className="flex justify-center items-center text-gray-600 text-sm"
-                                          >
-                                              {getItemTypeIcon(item)}
-                                          </span>
-                                        </td>
-
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="ml-4 w-full">
-                                                <div
-                                                    className="text-sm font-medium text-gray-900 w-full truncate"
-                                                >
-                                                    <DebounceInput
-                                                        className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
-                                                        type="text"
-                                                        debounceTimeout={1000}
-                                                        onChange={e => onItemPhoneChange(item, e)}
-                                                        value={item.phone}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="ml-4 w-full">
-                                                <div
-                                                    className="text-sm font-medium text-gray-900 w-full truncate"
-                                                >
-                                                    <DebounceInput
-                                                        className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
-                                                        type="text"
-                                                        debounceTimeout={1000}
-                                                        onChange={e => onItemAddressChange(item, e)}
-                                                        value={item.address}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="ml-4 w-full">
-                                                <div
-                                                    className="text-sm font-medium text-gray-900 w-full truncate"
-                                                >
-                                                    <DebounceInput
-                                                        className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
-                                                        type="text"
-                                                        debounceTimeout={1000}
-                                                        onChange={e => onItemCostChange(item, e)}
-                                                        value={item.cost}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td className="px-6 py-4 whitespace-wrap">
-                                            <div className="ml-4 w-full">
-                                                <div
-                                                    className="text-sm font-medium text-gray-900 w-full truncate"
-                                                >
-
-                                                    <DebounceInput
-                                                        className="w-full border-none border-2 focus:outline-none focus:border-solid focus:ring-indigo-500 focus:border-indigo-500"
-                                                        element="textarea"
-                                                        debounceTimeout={1000}
-                                                        onChange={e => onItemDescriptionChange(item, e)}
-                                                        value={item.description}
-                                                    />
-
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                            <input
-                                                id="elementary" name="elementary" type="checkbox"
-                                                onChange={(e) => onElementaryChange(item.id, e.target.checked)}
-                                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                                value={item.elementary}
-                                                checked={!! item.elementary}
-                                                disabled={tableInputsDisabled}
-                                            />
-
-                                            <label
-                                                htmlFor="isEmployeeOnly" className="font-medium text-gray-700 sr-only"
-                                            >
-                                                Elementary
-                                            </label>
-                                        </td>
-
-                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <Popconfirm
-                                                title={`Удалить '${item.shortTitle}'?`}
-                                                onConfirm={() => onRemoveBtnClicked(item.id)}
-                                                okText="Да"
-                                                cancelText="Нет"
-                                                placement="topRight"
-                                            >
-                                                <a
-                                                    className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                                                    href="#"
-                                                >
-                                                    Удалить
-                                                </a>
-                                            </Popconfirm>
-                                        </td>
-                                    </tr>
-                                ))
-                            }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="ml-1 h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+        />
+      </svg>
     );
+  };
+
+  return (
+    <div className="flex flex-col">
+      <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Имя
+                  </th>
+
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Тип
+                  </th>
+
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Телефон
+                  </th>
+
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Адрес
+                  </th>
+
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Цена
+                  </th>
+
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Описание
+                  </th>
+
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Первичная Орг.
+                  </th>
+
+                  <th scope="col" className="relative px-6 py-3">
+                    <span className="sr-only">Edit</span>
+                    {tableInputsDisabled ? (
+                      <div className="flex justify-end">
+                        <BallTriangle className="h-4" />
+                      </div>
+                    ) : null}
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {items.map((item) => (
+                  <tr key={item.id}>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      <div className="flex items-center">
+                        <div className="h-10 w-10 flex-shrink-0">
+                          <button
+                            className="rounded-full hover:ring-2 hover:ring-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            type="button"
+                            onClick={() => onItemThumbClicked(item)}
+                          >
+                            <span className="sr-only">
+                              Update Item Thumb Menu
+                            </span>
+
+                            <img
+                              className="h-10 w-10 rounded-full"
+                              src={item.thumbUrl}
+                              alt="img"
+                            />
+                          </button>
+                        </div>
+
+                        <div className="ml-4 w-full">
+                          <div className="w-full truncate text-sm font-medium text-gray-900">
+                            <DebounceInput
+                              className="w-full border-2 border-none focus:border-solid focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+                              type="text"
+                              debounceTimeout={1000}
+                              onChange={(e) => onItemNameChange(item, e)}
+                              value={item.fullTitle}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="whitespace-nowrap px-6 py-4">
+                      <span className="flex items-center justify-center text-sm text-gray-600">
+                        {getItemTypeIcon(item)}
+                      </span>
+                    </td>
+
+                    <td className="whitespace-nowrap px-6 py-4">
+                      <div className="ml-4 w-full">
+                        <div className="w-full truncate text-sm font-medium text-gray-900">
+                          <DebounceInput
+                            className="w-full border-2 border-none focus:border-solid focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+                            type="text"
+                            debounceTimeout={1000}
+                            onChange={(e) => onItemPhoneChange(item, e)}
+                            value={item.phone}
+                          />
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="whitespace-nowrap px-6 py-4">
+                      <div className="ml-4 w-full">
+                        <div className="w-full truncate text-sm font-medium text-gray-900">
+                          <DebounceInput
+                            className="w-full border-2 border-none focus:border-solid focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+                            type="text"
+                            debounceTimeout={1000}
+                            onChange={(e) => onItemAddressChange(item, e)}
+                            value={item.address}
+                          />
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="whitespace-nowrap px-6 py-4">
+                      <div className="ml-4 w-full">
+                        <div className="w-full truncate text-sm font-medium text-gray-900">
+                          <DebounceInput
+                            className="w-full border-2 border-none focus:border-solid focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+                            type="text"
+                            debounceTimeout={1000}
+                            onChange={(e) => onItemCostChange(item, e)}
+                            value={item.cost}
+                          />
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="whitespace-wrap px-6 py-4">
+                      <div className="ml-4 w-full">
+                        <div className="w-full truncate text-sm font-medium text-gray-900">
+                          <DebounceInput
+                            className="w-full border-2 border-none focus:border-solid focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+                            element="textarea"
+                            debounceTimeout={1000}
+                            onChange={(e) => onItemDescriptionChange(item, e)}
+                            value={item.description}
+                          />
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500">
+                      <input
+                        id="elementary"
+                        name="elementary"
+                        type="checkbox"
+                        onChange={(e) =>
+                          onElementaryChange(item.id, e.target.checked)
+                        }
+                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        value={item.elementary}
+                        checked={!!item.elementary}
+                        disabled={tableInputsDisabled}
+                      />
+
+                      <label
+                        htmlFor="isEmployeeOnly"
+                        className="sr-only font-medium text-gray-700"
+                      >
+                        Elementary
+                      </label>
+                    </td>
+
+                    <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                      <Popconfirm
+                        title={`Удалить '${item.shortTitle}'?`}
+                        onConfirm={() => onRemoveBtnClicked(item.id)}
+                        okText="Да"
+                        cancelText="Нет"
+                        placement="topRight"
+                      >
+                        <a
+                          className="text-indigo-600 hover:text-indigo-900 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                          href="#"
+                        >
+                          Удалить
+                        </a>
+                      </Popconfirm>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default ItemsTable;

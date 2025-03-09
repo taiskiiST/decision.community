@@ -2,11 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ViewQuestion from './ViewQuestion';
 
-const App = () => (
-    <ViewQuestion />
-);
+const App = () => <ViewQuestion />;
 
-ReactDOM.render(
-    <App />,
-    document.getElementById('ViewQuestion')
-);
+ReactDOM.render(<App />, document.getElementById('ViewQuestion'));

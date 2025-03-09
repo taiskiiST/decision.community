@@ -7,42 +7,42 @@ import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.cs
 const { question } = window.TSN || {};
 
 class ViewQuestion extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            editorAllStateText:
-                Array.from(question['text'])[0] == '{'
-                    ? EditorState.createWithContent(
-                          convertFromRaw(JSON.parse(question['text'])),
-                      )
-                    : EditorState.createWithText(question['text']),
-        };
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      editorAllStateText:
+        Array.from(question['text'])[0] == '{'
+          ? EditorState.createWithContent(
+              convertFromRaw(JSON.parse(question['text'])),
+            )
+          : EditorState.createWithText(question['text']),
+    };
+  }
 
-    render() {
-        //console.log(poll);
-        return (
-            <>
-                <Editor
-                    name={`question_text_${question.id}`}
-                    id={`question_text_${question.id}`}
-                    defaultEditorState={this.state.editorAllStateText}
-                    toolbarClassName="rdw-storybook-toolbar"
-                    wrapperClassName="rdw-storybook-wrapper"
-                    editorClassName="rdw-storybook-editor"
-                    toolbarStyle={{
-                        display: 'none',
-                    }}
-                    readOnly
-                    toolbar={{
-                        link: {
-                            showOpenOptionOnHover: false,
-                        },
-                    }}
-                />
-            </>
-        );
-    }
+  render() {
+    //console.log(poll);
+    return (
+      <>
+        <Editor
+          name={`question_text_${question.id}`}
+          id={`question_text_${question.id}`}
+          defaultEditorState={this.state.editorAllStateText}
+          toolbarClassName="rdw-storybook-toolbar"
+          wrapperClassName="rdw-storybook-wrapper"
+          editorClassName="rdw-storybook-editor"
+          toolbarStyle={{
+            display: 'none',
+          }}
+          readOnly
+          toolbar={{
+            link: {
+              showOpenOptionOnHover: false,
+            },
+          }}
+        />
+      </>
+    );
+  }
 }
 
 export default ViewQuestion;

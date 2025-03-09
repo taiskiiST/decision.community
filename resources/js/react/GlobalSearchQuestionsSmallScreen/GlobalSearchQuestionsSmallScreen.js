@@ -19,6 +19,10 @@ function SearchQuestionsSmallScreen() {
     };
 
     useEffect(() => {
+        if (!all_questions) {
+            return;
+        }
+
         const results = all_questions.filter((question) => {
             const searchTermLowerCased = searchTerm.toLowerCase();
 

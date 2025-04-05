@@ -6,6 +6,8 @@ use App\Models\Company;
 use App\Models\Poll;
 use App\Models\Question;
 use App\Models\User;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 
@@ -28,7 +30,6 @@ class AppServiceProvider extends ServiceProvider
    */
   public function boot()
   {
-    return;
     $allQuestions = [];
     $cnt_files_in_question = [];
     $company = Company::getCompanyBySubDomain();
@@ -56,5 +57,10 @@ class AppServiceProvider extends ServiceProvider
       'itemsPollNameHash' => Poll::all()->pluck('name', 'id'),
       'cnt_files_in_question' => $cnt_files_in_question,
     ]);
+
+    // Add all routes that use Inertia
+    Blade::if('isInertiaRoute', function () {
+      return in_array(Route::currentRouteName(), ['entities.tree', 'entities.create']);
+    });
   }
 }

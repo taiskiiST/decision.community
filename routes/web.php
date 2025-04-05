@@ -11,6 +11,7 @@ use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PositionsController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\EntityController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -63,6 +64,14 @@ Route::post('/companies/registration', [
 
 Route::group(['middleware' => 'check.company'], function () {
   require __DIR__ . '/auth.php';
+
+  Route::get('/entities/tree', [EntityController::class, 'tree'])->name(
+    'entities.tree'
+  );
+  
+  Route::get('/entities/create', [EntityController::class, 'create'])->name(
+    'entities.create'
+  );
 
   Route::get('/main', [Controller::class, 'main'])->name('main');
 

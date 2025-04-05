@@ -17,16 +17,20 @@
     @endguest
 
     <header class="z-0 shadow">
-        <div class="relative overflow-hidden h-128 bg-indigo-800">
-            <img class="absolute left-0 top-0 w-full h-full object-cover h-auto opacity-50" src="/images/header.jpg" alt="Header Image" />
+        <div class="relative overflow-hidden bg-indigo-800 h-128">
+            <img class="absolute top-0 left-0 object-cover w-full h-auto h-full opacity-50" src="/images/header.jpg" alt="Header Image" />
         </div>
     </header>
 
     <main class="flex-1">
-        <div class="max-w-9xl mx-auto py-6 px-2 sm:px-6 lg:px-8">
-            <div class="relative -mt-118 h-auto bg-white px-0 shadow-xl">
+        <div class="px-2 py-6 mx-auto max-w-9xl sm:px-6 lg:px-8">
+            <div class="relative h-auto px-0 bg-white shadow-xl -mt-118">
                 <div id="AppendSectionDiv"><table id="AppendSectionTable"></table></div>
                 @yield('content')
+
+                @isInertiaRoute
+                    @inertia
+                @endisInertiaRoute
             </div>
         </div>
     </main>
@@ -42,6 +46,9 @@
 <script src="{{ mix('js/manifest.js') }} "></script>
 <script src="{{ mix('js/vendor.js') }}"></script>
 <script src="{{ mix('js/app.js') }}"></script>
+@isInertiaRoute
+  <script src="{{ mix('js/bootstrap-inertia.js') }}"></script>
+@endisInertiaRoute
 @yield('scripts')
 </body>
 </html>

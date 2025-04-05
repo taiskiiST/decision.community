@@ -13,6 +13,13 @@ class EntityController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
+  public function index()
+  {
+    return Inertia::render('Entity/List', [
+      'entities' => Entity::all(),
+    ]);
+  }
+
   public function tree()
   {
     return Inertia::render('Entity/Tree', [

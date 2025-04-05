@@ -60,7 +60,7 @@ class AppServiceProvider extends ServiceProvider
 
     // Add all routes that use Inertia
     Blade::if('isInertiaRoute', function () {
-      return in_array(Route::currentRouteName(), ['entities.tree', 'entities.create']);
+      return in_array(Route::currentRouteName(), ['entities.index', 'entities.tree', 'entities.create']);
     });
   }
 }

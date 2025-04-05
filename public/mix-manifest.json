@@ -1,6 +1,6 @@
 {
     "/js/app.js": "/js/app.js?id=5ff63a4a545723bf2beca159fdf931e5",
-    "/js/bootstrap-inertia.js": "/js/bootstrap-inertia.js?id=f301af54d1ea590deea33b05c9845380",
+    "/js/bootstrap-inertia.js": "/js/bootstrap-inertia.js?id=6ca8f73406942b928b4f0321d43a3644",
     "/js/ManageItems.js": "/js/ManageItems.js?id=b084ff5acb3c7cd08a3be8fbdb5e9e79",
     "/js/AddQuestionsToPoll.js": "/js/AddQuestionsToPoll.js?id=5a69f8698c87fdcd9e8d4f45bf30ce80",
     "/js/AddProtocolToPoll.js": "/js/AddProtocolToPoll.js?id=51fda5673fee78d00ee57bb2962c0c97",
@@ -22,6 +22,6 @@
     "/js/StartEndPoll.js": "/js/StartEndPoll.js?id=e3635da95d186e5e654073dcbb79a64e",
     "/js/manifest.js": "/js/manifest.js?id=f5ddbb5981dc55a25164f427a3ec5bf1",
     "/css/app.css": "/css/app.css?id=2d50d6464e4391d6b4e07bd88ac5af0c",
-    "/css/tailwind.css": "/css/tailwind.css?id=61d09b0284f16cd33fddfdbb156274e9",
+    "/css/tailwind.css": "/css/tailwind.css?id=51aacbc879f44623feb50ec6afc6e869",
     "/js/vendor.js": "/js/vendor.js?id=9888f0756bcc41ff7291da198b2b9eb6"
 }

@@ -65,6 +65,10 @@ Route::post('/companies/registration', [
 Route::group(['middleware' => 'check.company'], function () {
   require __DIR__ . '/auth.php';
 
+  Route::get('/entities', [EntityController::class, 'index'])->name(
+    'entities.index'
+  );
+
   Route::get('/entities/tree', [EntityController::class, 'tree'])->name(
     'entities.tree'
   );

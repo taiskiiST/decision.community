@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('entities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parent_id')->references('id')->on('entities');
-            $table->foreignId('copmany_id')->references('id')->on('companies');
-            $table->boolean('is_group');
+            $table->foreignId('parent_id')->nullable()->references('id')->on('entities');
+            $table->foreignId('company_id')->references('id')->on('companies');
             $table->string('name');
             $table->string('thumb');
+            $table->string('phone');
             $table->timestamps();
         });
     }

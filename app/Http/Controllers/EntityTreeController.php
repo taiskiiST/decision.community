@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Entity;
 use App\Models\Company;
 use App\Models\User;
+use App\Models\Poll;
 use App\Services\FileHelper;
 use App\Services\StringHelper;
 use App\Services\ThumbMaker;
@@ -19,7 +20,7 @@ class EntityTreeController extends Controller
 
     $currentCompany = Company::current();
     if (!$currentCompany) {
-      return new Collection();;
+      return new Collection();
     }
 
     return $entity->getDirectChildrenBelongingToCompany($currentCompany);
@@ -71,8 +72,8 @@ class EntityTreeController extends Controller
       $originalImagePath = $file->store('tmp/', 'local');
       $removeOriginalFile = true;
     } else {
-      $fileNameNoExtension = 'default_Entity_image';
-      $originalImagePath = 'default_Entity_image.jpg';
+      $fileNameNoExtension = 'default_entity_image';
+      $originalImagePath = 'default_entity_image.jpg';
 
       $removeOriginalFile = false;
     }
@@ -136,11 +137,7 @@ class EntityTreeController extends Controller
   {
     $this->authorize('view', $entity);
 
-    $currentCompany = Company::current();
-    if (!$currentCompany) {
-      return new Collection();;
-    }
-
+    // Show only current company users?
     return $entity->users()->get();
   }
 
@@ -166,5 +163,28 @@ class EntityTreeController extends Controller
     return [
       'detachInfo' => $detachInfo,
     ];
+  }
+
+  public function getPolls(Entity $entity)
+  {
+    $this->authorize('view', $entity);
+
+    $entityParents = $entity->getAllParents();
+
+    $out = collect();
+    foreach ([$entity, ...$entityParents] as $ent) {
+      $polls = $ent->polls()->get();
+      if ($polls->count()) {
+        $out->push(...$polls);
+      }
+    }
+
+    return $out->transform(function (Poll $poll) {
+      $poll->blank_with_answers_doc_url = $poll->blank_with_answers_doc
+        ? Storage::url($poll->blank_with_answers_doc)
+        : '';
+
+      return $poll;
+    });
   }
 }

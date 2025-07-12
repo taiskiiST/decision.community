@@ -5,13 +5,31 @@ import { EntitiesMap, EntityTreeNode, Entity } from 'types/types';
 import { message } from 'antd';
 import TreeWrapper from './TreeWrapper';
 import { prepareEntity, mapToTree, clickedInsideContextMenu } from './helpers';
-import { getEntityChildren, detachEntityFromCompany } from '../entities-requests';
+import {
+  getEntityChildren,
+  detachEntityFromCompany,
+} from '../entities-requests';
 import AddEntityModal from './AddEntityModal';
 import UsersTable from './UsersTable';
+import PollsTable from './PollsTable';
+
 
 type EntitiesTreeProps = {
   entities: Entity[];
 };
+
+const INFO_TABLE_TYPES = [
+  {
+    label: 'Пользователи',
+    value: 'users',
+  },
+  {
+    label: 'Голосования',
+    value: 'polls',
+  },
+] as const;
+
+type InfoTableType = (typeof INFO_TABLE_TYPES)[number]['value'];
 
 const App: React.FC<EntitiesTreeProps> = ({ entities }) => {
   const [entitiesByKeys, setEntitiesByKeys] = useState<EntitiesMap>(
@@ -26,6 +44,7 @@ const App: React.FC<EntitiesTreeProps> = ({ entities }) => {
 
   const [selectedEntityId, setSelectedEntityId] = useState<number | null>(null);
   const [isEntityModalOpen, setIsEntityModalOpen] = useState<boolean>(false);
+  const [infoTableType, setInfoTableType] = useState<InfoTableType>('users');
 
   const treeData = mapToTree(entitiesByKeys);
 
@@ -215,6 +234,28 @@ const App: React.FC<EntitiesTreeProps> = ({ entities }) => {
       {/* Tree */}
       <div className="w-full p-1 min-w-72 md:w-72">
         <div className="mb-2">
+          <label
+            htmlFor="country"
+            className="block font-medium text-gray-900 text-sm/6"
+          >
+            Таблица
+          </label>
+
+          <select
+            id="tableTypeSelect"
+            value={infoTableType}
+            onChange={(e) => setInfoTableType(e.target.value as InfoTableType)}
+            className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+          >
+            {INFO_TABLE_TYPES.map((infoTableType) => (
+              <option key={infoTableType.value} value={infoTableType.value}>
+                {infoTableType.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="mb-2">
           <button
             type="button"
             className="inline-flex items-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -255,7 +296,13 @@ const App: React.FC<EntitiesTreeProps> = ({ entities }) => {
       {selectedEntityId && (
         <div className="min-h-full p-1 overflow-hidden md:flex-grow">
           <div className="md:block">
-            <UsersTable entityId={selectedEntityId} />
+            {infoTableType === 'users' && (
+              <UsersTable entityId={selectedEntityId} />
+            )}
+
+            {infoTableType === 'polls' && (
+              <PollsTable entityId={selectedEntityId} />
+            )}
           </div>
         </div>
       )}

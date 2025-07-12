@@ -3,15 +3,15 @@
 namespace Database\Seeders;
 
 use App\Models\Entity;
-use App\Models\User;
+use App\Models\Poll;
 use Illuminate\Database\Seeder;
 
 /**
- * Class EntityUsersSeeder
+ * Class EntityPollSeeder
  *
  * @package Database\Seeders
  */
-class EntityUsersSeeder extends Seeder
+class EntityPollSeeder extends Seeder
 {
   /**
    * Run the database seeds.
@@ -21,10 +21,10 @@ class EntityUsersSeeder extends Seeder
   public function run()
   {
     $entities = Entity::all();
-    $users = User::all();
+    $polls = Poll::all();
 
-    foreach ($users as $user) {
-      $user->attachEntityIfNotAttached($entities->random());
+    foreach ($polls as $poll) {
+      $poll->attachEntityIfNotAttached($entities->random());
     }
   }
 }

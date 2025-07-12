@@ -1,83 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import { detachUserFromEntity, getEntityUsers } from '../entities-requests';
-import { User } from 'types/types';
-import { message } from 'antd';
+import { generateProtocol, getEntityPolls } from '../entities-requests';
+import { Poll } from 'types/types';
+import dayjs from 'dayjs';
 
-type UsersTableProps = {
+type PollsTableProps = {
   entityId: number;
 };
 
-const DEFAULT_USERS_PER_PAGE = 10;
+const DEFAULT_POLLS_PER_PAGE = 10;
+const DATE_TIME_FORMAT = 'D MMMM YYYY г., HH:mm';
 
-export default function UsersTable({ entityId }: UsersTableProps) {
-  const [users, setUsers] = useState<User[]>([]);
+export default function PollsTable({ entityId }: PollsTableProps) {
+  const [polls, setPolls] = useState<Poll[]>([]);
   const [query, setQuery] = useState('');
-  const [isDetaching, setIsDetaching] = useState(false);
-  const [usersPerPage, setUsersPerPage] = useState(DEFAULT_USERS_PER_PAGE);
+  const [pollsPerPage, setPollsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const users = await getEntityUsers(entityId);
-      if (Array.isArray(users)) {
-        setUsers(users);
+    const fetchPolls = async () => {
+      const polls = await getEntityPolls(entityId);
+
+      if (Array.isArray(polls)) {
+        setPolls(polls);
       }
     };
-    fetchUsers();
+    fetchPolls();
   }, [entityId]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [query, usersPerPage]);
+  }, [query, pollsPerPage]);
 
-  const filteredUsers = users.filter((user) => {
+  const filteredPolls = polls.filter((poll) => {
     const q = query.toLowerCase();
 
     return (
-      user.name.toLowerCase().includes(q) ||
-      user.email?.toLowerCase().includes(q) ||
-      user.phone.toLowerCase().includes(q) ||
-      user.address.toLowerCase().includes(q)
+      poll.name.toLowerCase().includes(q) ||
+      poll.start?.toLowerCase().includes(q) ||
+      poll.finished?.toLowerCase().includes(q)
     );
   });
 
-  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+  const totalPages = Math.ceil(filteredPolls.length / pollsPerPage);
 
-  const paginatedUsers = filteredUsers.slice(
-    (currentPage - 1) * usersPerPage,
-    currentPage * usersPerPage,
+  const paginatedPolls = filteredPolls.slice(
+    (currentPage - 1) * pollsPerPage,
+    currentPage * pollsPerPage,
   );
-
-  const handleDetach = async (userId: number) => {
-    if (
-      !window.confirm('Вы действительно хотите отвязать этого пользователя?')
-    ) {
-      return;
-    }
-
-    setIsDetaching(true);
-
-    const detachResult = await detachUserFromEntity(entityId, userId);
-    if (!detachResult) {
-      setIsDetaching(false);
-
-      return;
-    }
-
-    if (!detachResult.detached) {
-      message.warning(detachResult.msg);
-      setIsDetaching(false);
-
-      return;
-    }
-
-    message.success(`Сущность отвязана: ${detachResult.id}`);
-
-    setUsers((prevUsers) =>
-      prevUsers.filter((user) => user.id !== detachResult.id),
-    );
-    setIsDetaching(false);
-  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -85,10 +54,14 @@ export default function UsersTable({ entityId }: UsersTableProps) {
 
   useEffect(() => {
     // Reset to first page if filter changes and current page would be out of range
-    if ((currentPage - 1) * usersPerPage >= filteredUsers.length) {
+    if ((currentPage - 1) * DEFAULT_POLLS_PER_PAGE >= filteredPolls.length) {
       setCurrentPage(1);
     }
-  }, [query, filteredUsers.length]);
+  }, [query, filteredPolls.length]);
+
+  const onGenerateProtocolClick = async (pollId: number) => {
+    await generateProtocol(entityId, pollId);
+  };
 
   return (
     <div className="p-4">
@@ -96,7 +69,7 @@ export default function UsersTable({ entityId }: UsersTableProps) {
       <div className="mb-4">
         <input
           type="text"
-          placeholder="Поиск пользователей..."
+          placeholder="Поиск голосований..."
           className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -105,7 +78,7 @@ export default function UsersTable({ entityId }: UsersTableProps) {
 
       {/* Total found */}
       <div className="mb-2 text-sm text-gray-600">
-        Всего найдено: {filteredUsers.length}
+        Всего найдено: {filteredPolls.length}
       </div>
 
       {/* Page Size */}
@@ -116,8 +89,8 @@ export default function UsersTable({ entityId }: UsersTableProps) {
 
         <select
           id="pageSize"
-          value={usersPerPage}
-          onChange={(e) => setUsersPerPage(Number(e.target.value))}
+          value={pollsPerPage}
+          onChange={(e) => setPollsPerPage(Number(e.target.value))}
           className="px-2 py-1 text-sm border border-gray-300 rounded-md"
         >
           {[10, 25, 50].map((size) => (
@@ -135,16 +108,13 @@ export default function UsersTable({ entityId }: UsersTableProps) {
             <thead className="bg-gray-100">
               <tr>
                 <th className="px-4 py-2 text-sm font-semibold text-left text-gray-700">
-                  Имя
+                  Название
                 </th>
                 <th className="px-4 py-2 text-sm font-semibold text-left text-gray-700">
-                  Email
+                  Начало
                 </th>
                 <th className="px-4 py-2 text-sm font-semibold text-left text-gray-700">
-                  Телефон
-                </th>
-                <th className="px-4 py-2 text-sm font-semibold text-left text-gray-700">
-                  Адрес
+                  Конец
                 </th>
                 <th className="px-4 py-2 text-sm font-semibold text-left text-gray-700">
                   Действия
@@ -152,37 +122,54 @@ export default function UsersTable({ entityId }: UsersTableProps) {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-100">
-              {paginatedUsers.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
+              {paginatedPolls.map((poll) => (
+                <tr key={poll.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 text-sm text-gray-800">
-                    {user.name}
+                    {poll.name}
                   </td>
+
                   <td className="px-4 py-3 text-sm text-gray-800">
-                    {user.email}
+                    {poll.start
+                      ? dayjs(poll.start).format(DATE_TIME_FORMAT)
+                      : ''}
                   </td>
+
                   <td className="px-4 py-3 text-sm text-gray-800">
-                    {user.phone}
+                    {poll.finished
+                      ? dayjs(poll.finished).format(DATE_TIME_FORMAT)
+                      : ''}
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-800">
-                    {user.address}
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    <button
-                      onClick={() => handleDetach(user.id)}
-                      className="font-semibold text-red-600 cursor-pointer hover:text-red-800"
-                    >
-                      {isDetaching ? 'Отвязка...' : 'Отвязать'}
-                    </button>
+
+                  <td className="px-4 py-3 text-sm text-center">
+                    <div className="flex items-center justify-center gap-4">
+                      <button
+                        onClick={() => onGenerateProtocolClick(poll.id)}
+                        className="font-semibold text-red-600 cursor-pointer hover:text-red-800"
+                      >
+                        Сгенерировать протокол
+                      </button>
+
+                      {poll.blank_with_answers_doc_url && (
+                        <a
+                          href={poll.blank_with_answers_doc_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                        >
+                          Скачать
+                        </a>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
-              {paginatedUsers.length === 0 && (
+              {paginatedPolls.length === 0 && (
                 <tr>
                   <td
                     colSpan={5}
                     className="px-4 py-4 text-sm text-center text-gray-500"
                   >
-                    Пользователи не найдены
+                    Протоколы не найдены
                   </td>
                 </tr>
               )}
@@ -192,34 +179,51 @@ export default function UsersTable({ entityId }: UsersTableProps) {
 
         {/* Mobile Card View */}
         <div className="space-y-4 md:hidden">
-          {paginatedUsers.map((user) => (
+          {paginatedPolls.map((poll) => (
             <div
-              key={user.id}
+              key={poll.id}
               className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm"
             >
               <p className="text-sm font-semibold text-gray-700">
-                Имя: <span className="font-normal">{user.name}</span>
+                Название: <span className="font-normal">{poll.name}</span>
               </p>
+
               <p className="text-sm font-semibold text-gray-700">
-                Email: <span className="font-normal">{user.email}</span>
+                Начало:{' '}
+                <span className="font-normal">
+                  {poll.start ? dayjs(poll.start).format() : ''}
+                </span>
               </p>
+
               <p className="text-sm font-semibold text-gray-700">
-                Телефон: <span className="font-normal">{user.phone}</span>
+                Конец:{' '}
+                <span className="font-normal">
+                  {poll.finished ? dayjs(poll.finished).format() : ''}
+                </span>
               </p>
-              <p className="text-sm font-semibold text-gray-700">
-                Адрес: <span className="font-normal">{user.address}</span>
-              </p>
+
               <button
-                onClick={() => handleDetach(user.id)}
-                className="mt-4 font-semibold text-red-600 cursor-pointer hover:text-red-800"
+                onClick={() => onGenerateProtocolClick(poll.id)}
+                className="block mt-4 font-semibold text-red-600 cursor-pointer hover:text-red-800"
               >
-                {isDetaching ? 'Отвязка...' : 'Отвязать'}
+                Сгенерировать протокол
               </button>
+
+              {poll.blank_with_answers_doc_url && (
+                <a
+                  href={poll.blank_with_answers_doc_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block mt-2 text-blue-600 hover:underline"
+                >
+                  Скачать
+                </a>
+              )}
             </div>
           ))}
-          {paginatedUsers.length === 0 && (
+          {paginatedPolls.length === 0 && (
             <div className="text-sm text-center text-gray-500">
-              Пользователи не найдены
+              Протоколы не найдены
             </div>
           )}
         </div>

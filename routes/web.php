@@ -181,6 +181,11 @@ Route::group(['middleware' => 'check.company'], function () {
         'detachUserFromEntity',
       ])->name('entites-tree.detach-user-from-entity');
 
+      Route::get('/entities-tree/{entity}/get-polls', [
+        EntityTreeController::class,
+        'getPolls',
+      ])->name('entity-tree.get-polls');
+
     });
 
     Route::get('/children-report', [

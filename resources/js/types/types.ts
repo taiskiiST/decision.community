@@ -36,6 +36,14 @@ export type User = {
   email?: string;
 };
 
+export type Poll = {
+  id: number;
+  name: string;
+  start?: string;
+  finished?: string;
+  blank_with_answers_doc_url?: string;
+};
+
 export type DetachUserResult = {
   entityId: number;
   id: number;

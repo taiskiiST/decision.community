@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Answer;
 use App\Models\Company;
+use App\Models\Entity;
 use App\Models\Item;
 use App\Models\Organizer;
 use App\Models\Permission;
@@ -17,7 +18,6 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-use Ramsey\Uuid\Type\Integer;
 
 class PollsController extends Controller
 {
@@ -244,7 +244,6 @@ class PollsController extends Controller
 
   public function generateBlankWithAnswersWithOutTemplate(
     Poll $poll,
-    Request $request
   ) {
     $phpWord = new \PhpOffice\PhpWord\PhpWord();
     $phpWord->setDefaultFontName('Times New Roman');
@@ -288,7 +287,10 @@ class PollsController extends Controller
       'spaceBefore' => 10,
       'align' => 'right',
     ]);
-    foreach ($poll->peopleThatVote() as $user) {
+
+    $entity = Entity::find(request()->input('entity_id'));
+
+    foreach ($poll->peopleThatVote($entity) as $user) {
       $section->addText(htmlspecialchars($poll->name), '', $parStyle);
       $section->addText(
         'Бланк для голосования для члена ' .

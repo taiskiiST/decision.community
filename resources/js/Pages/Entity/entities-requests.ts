@@ -1,7 +1,7 @@
 import { client } from '../../shared/axios';
 import { message } from 'antd';
 import { RcFile } from 'antd/es/upload';
-import { DetachEntityResult, DetachUserResult, Entity, User } from 'types/types';
+import { DetachEntityResult, DetachUserResult, Entity, Poll, User } from 'types/types';
 
 export const getEntityChildren = async (parentId: number | null) => {
   try {
@@ -118,6 +118,54 @@ export const detachUserFromEntity = async (
     } = response;
 
     return detachInfo;
+  } catch (error) {
+    message.error(`Error occurred: ${error}`, 5);
+
+    return null;
+  }
+};
+
+export const getEntityPolls = async (entityId: number) => {
+  try {
+    const config: { params: { entityId: number } } = { params: { entityId } };
+
+    const response = await client.get<Poll[]>(
+      `/entities-tree/${entityId}/get-polls`,
+      config,
+    );
+
+    const { data: polls } = response;
+    if (!polls) {
+      return [];
+    }
+
+    return polls;
+  } catch (error) {
+    message.error(`Error occurred: ${error}`, 5);
+  }
+};
+
+export const generateProtocol = async (
+  entityId: number,
+  pollId: number,
+) => {
+  try {
+    const formData = new FormData();
+
+    formData.append('entity_id', entityId.toString());
+
+    const response = await client.post(`/polls/${pollId}/generateBlankWithAnswers`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    const { data } = response;
+    if (!data) {
+      return null;
+    }
+
+    return data;
   } catch (error) {
     message.error(`Error occurred: ${error}`, 5);
 

@@ -29,14 +29,24 @@ class Entity extends Model
     $this->companies()->syncWithoutDetaching($company);
   }
 
+  public function users(): BelongsToMany
+  {
+    return $this->belongsToMany(User::class)->withTimestamps();
+  }
+
   public function attachUserIfNotAttached(User $user): void
   {
     $this->users()->syncWithoutDetaching($user);
   }
 
-  public function users(): BelongsToMany
+  public function polls(): BelongsToMany
   {
-    return $this->belongsToMany(User::class)->withTimestamps();
+    return $this->belongsToMany(Poll::class)->withTimestamps();
+  }
+
+  public function attachPollIfNotAttached(Poll $poll): void
+  {
+    $this->users()->syncWithoutDetaching($poll);
   }
 
   public function belongsToCompanyWithId(int $companyId): bool
@@ -105,5 +115,24 @@ class Entity extends Model
     }
 
     return $deletedIds;
+  }
+
+  function getDirectParent()
+  {
+    return Entity::find($this->parent_id);
+  }
+
+  function getAllParents()
+  {
+    $out = collect();
+
+    $entity = $this;
+    while ($entity->parent_id) {
+      $entity = $entity->getDirectParent();
+
+      $out->push($entity);
+    }
+
+    return $out;
   }
 }

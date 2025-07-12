@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Entity;
 
 /**
  * @property mixed id
@@ -34,6 +37,16 @@ class Poll extends Model
   public function company(): BelongsTo
   {
     return $this->belongsTo(Company::class);
+  }
+
+  public function entities(): BelongsToMany
+  {
+    return $this->belongsToMany(Entity::class)->withTimestamps();
+  }
+
+  public function attachEntityIfNotAttached(Entity $entity): void
+  {
+    $this->entities()->syncWithoutDetaching($entity);
   }
 
   public function isPublicMeeting(): bool
@@ -162,15 +175,20 @@ class Poll extends Model
       ->get();
   }
 
-  public function peopleThatVote(): Collection
+  public function peopleThatVote(Entity | null $entity = null): Collection
   {
+
     $questions = $this->questions;
     $questions = $questions->pluck('id')->toArray();
     $usersIdsThatVoted = Vote::whereIn('question_id', $questions)
       ->select('user_id')
+      ->when($entity, function (Builder $query, Entity $entity) {
+        $entityUsers = $entity->users()->get()->pluck('id', 'id');
+        $query->whereIn('user_id', $entityUsers);
+      })
       ->get();
 
-    return User::whereIN('id', $usersIdsThatVoted)->get();
+    return User::whereIN('id', $usersIdsThatVoted->pluck('user_id', 'user_id'))->get();
   }
 
   public function weightPeopleThatVote(int $typeOfRight)

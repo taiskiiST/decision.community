@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ChildrenAndParentsInformation;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\DevController;
@@ -12,6 +11,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PositionsController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\EntityController;
+use App\Http\Controllers\EntityTreeController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -64,18 +64,6 @@ Route::post('/companies/registration', [
 
 Route::group(['middleware' => 'check.company'], function () {
   require __DIR__ . '/auth.php';
-
-  Route::get('/entities', [EntityController::class, 'index'])->name(
-    'entities.index'
-  );
-
-  Route::get('/entities/tree', [EntityController::class, 'tree'])->name(
-    'entities.tree'
-  );
-  
-  Route::get('/entities/create', [EntityController::class, 'create'])->name(
-    'entities.create'
-  );
 
   Route::get('/main', [Controller::class, 'main'])->name('main');
 
@@ -150,6 +138,40 @@ Route::group(['middleware' => 'check.company'], function () {
   ])->name('get.question');
 
   Route::group(['middleware' => ['auth', 'can:access-app']], function () {
+    Route::group(['middleware' => ['check.company']], function () {
+      Route::get('/entities', [EntityController::class, 'index'])->name(
+        'entities.index'
+      );
+
+      Route::get('/entities/tree', [EntityController::class, 'tree'])->name(
+        'entities.tree'
+      );
+
+      Route::get('/entities/create', [EntityController::class, 'create'])->name(
+        'entities.create'
+      );
+
+      Route::put('/entities-tree/{entity}/update-parent', [
+        EntityTreeController::class,
+        'updateEntityParent',
+      ])->name('entity-tree.update-entity-parent');
+
+      Route::get('/entities-tree/{entity}/get-direct-children', [
+        EntityTreeController::class,
+        'getEntityDirectChildren',
+      ])->name('entity-tree.get-entity-direct-children');
+
+      Route::post('/entities-tree/add-entity', [
+        EntityTreeController::class,
+        'addEntity',
+      ])->name('entities-tree.add-entity');
+
+      Route::delete('/entities-tree/{entity}/detach', [
+        EntityTreeController::class,
+        'detachEntity',
+      ])->name('entites-tree.detach-entity');
+    });
+
     Route::get('/children-report', [
       ChildrenAndParentsInformation::class,
       'report',

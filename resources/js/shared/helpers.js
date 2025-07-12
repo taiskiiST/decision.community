@@ -25,3 +25,17 @@ export const toBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = reject;
   });
+
+export function normalizeRussianPhone(input) {
+  const digits = input.replace(/\D/g, '');
+
+  if (digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8'))) {
+    return digits.slice(1); // remove first digit (7 or 8)
+  }
+
+  if (digits.length === 10) {
+    return digits; // already local
+  }
+
+  return null; // invalid format
+}

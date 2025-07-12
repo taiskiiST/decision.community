@@ -74,6 +74,16 @@ class User extends Authenticatable
     return in_array(Permission::SUPER_ADMIN, explode(',', $this->permissions));
   }
 
+
+  /**
+   * @return bool
+   */
+  public function canManageEntities(): bool
+  {
+    return $this->isAdmin() ||
+      in_array(Permission::MANAGE_ENTITIES, explode(',', $this->permissions));
+  }
+
   /**
    * @return bool
    */

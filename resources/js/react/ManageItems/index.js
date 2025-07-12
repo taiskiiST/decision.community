@@ -914,6 +914,7 @@ const App = () => {
   const selectedItem = selectedItemKey
     ? itemsByKeys.get(selectedItemKey)
     : null;
+
   const {
     currentCommitteeMembers,
     currentPresidiumMembers,

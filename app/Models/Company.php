@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use App\Models\Entity;
 
 /**
  * @property mixed $uri
@@ -17,6 +18,11 @@ class Company extends Model
   protected $fillable = ['uri', 'title'];
 
   use HasFactory;
+
+  public function entities(): BelongsToMany
+  {
+    return $this->belongsToMany(Entity::class)->withTimestamps();
+  }
 
   public static function existingURIs(): Collection
   {

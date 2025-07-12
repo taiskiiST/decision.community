@@ -30,6 +30,13 @@ class AppServiceProvider extends ServiceProvider
    */
   public function boot()
   {
+    // Add all routes that use Inertia
+    Blade::if('isInertiaRoute', function () {
+      return in_array(Route::currentRouteName(), ['entities.index', 'entities.tree', 'entities.create']);
+    });
+
+    return;
+
     $allQuestions = [];
     $cnt_files_in_question = [];
     $company = Company::getCompanyBySubDomain();
@@ -58,9 +65,5 @@ class AppServiceProvider extends ServiceProvider
       'cnt_files_in_question' => $cnt_files_in_question,
     ]);
 
-    // Add all routes that use Inertia
-    Blade::if('isInertiaRoute', function () {
-      return in_array(Route::currentRouteName(), ['entities.index', 'entities.tree', 'entities.create']);
-    });
   }
 }

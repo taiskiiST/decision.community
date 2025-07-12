@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Entity;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,15 +16,15 @@ class EntityController extends Controller
    */
   public function index()
   {
-    return Inertia::render('Entity/List', [
-      'entities' => Entity::all(),
+    return Inertia::render('Entity/ListPage', [
+      'entities' => Company::current()->entities()->get()->all(),
     ]);
   }
 
   public function tree()
   {
-    return Inertia::render('Entity/Tree', [
-      'entities' => ['entity1', 'entity2', 'entity3'],
+    return Inertia::render('Entity/TreePage', [
+      'entities' => Company::current()->entities()->firstLevel()->get()->all(),
     ]);
   }
 
@@ -34,7 +35,7 @@ class EntityController extends Controller
    */
   public function create()
   {
-    return Inertia::render('Entity/Create', [
+    return Inertia::render('Entity/CreatePage', [
       'foo' => 'bar'
     ]);
   }

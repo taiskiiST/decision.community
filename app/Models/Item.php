@@ -67,6 +67,7 @@ class Item extends Model
     if (!session('current_company')) {
       return redirect()->route('polls.index');
     }
+
     return $builder
       ->where('parent_id', null)
       ->where('company_id', session('current_company')->id);
@@ -109,6 +110,7 @@ class Item extends Model
     if (!session('current_company')) {
       return redirect()->route('polls.index');
     }
+
     return Item::where('parent_id', $this->id)
       ->where('company_id', session('current_company')->id)
       ->get();
@@ -187,6 +189,7 @@ class Item extends Model
     if (!session('current_company')) {
       return redirect()->route('polls.index');
     }
+
     $query = Item::where('parent_id', $this->id)
       ->where('company_id', session('current_company')->id)
       ->unionAll(

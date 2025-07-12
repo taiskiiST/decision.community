@@ -76,6 +76,7 @@ const AddEntityModal = ({
         <Button key="cancel" onClick={onCancel}>
           Отмена
         </Button>,
+
         <Button
           key="submit"
           type="primary"

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Company;
 use App\Models\Entity;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
@@ -23,13 +22,17 @@ class EntitySeeder extends Seeder
    */
   public function run()
   {
-    $categories = $this->seedFirstLevelCategories();
+    Entity::all()->each(function ($entity) {
+      $entity->deleteRecursivelyWithFiles();
+    });
+
+    $this->seedFirstLevelEntities();
   }
 
   /**
    * @return \Illuminate\Support\Collection
    */
-  protected function seedFirstLevelCategories()
+  protected function seedFirstLevelEntities()
   {
     $out = new Collection();
 
@@ -42,18 +45,14 @@ class EntitySeeder extends Seeder
         Storage::copy($file, $destination);
       }
 
-      $company = Company::first();
-      if (!$company) {
-        return;
-      }
+      $entityName = Str::before($fileName, '_');
 
       $out->push(
         Entity::create([
-          'name' => Str::before($fileName, '_'),
+          'name' => $entityName,
           'thumb' => $fileName,
           'phone' => Str::before(Str::afterLast($fileName, '_'), '.'),
           'parent_id' => null,
-          'company_id' => $company->id
         ])
       );
     }

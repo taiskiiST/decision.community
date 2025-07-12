@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('entities', function (Blueprint $table) {
+        Schema::create('company_entity', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parent_id')->nullable()->references('id')->on('entities');
-            $table->string('name')->unique();
-            $table->string('thumb');
-            $table->string('phone');
+            $table->foreignId('company_id')->references('id')->on('companies');
+            $table->foreignId('entity_id')->references('id')->on('entities');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('entities');
+        Schema::dropIfExists('company_entity');
     }
 };

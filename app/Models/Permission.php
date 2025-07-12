@@ -13,10 +13,11 @@ class Permission
   const ADMIN = 'admin';
   const SUPER_ADMIN = 'super_admin';
   const MANAGE_ITEMS = 'manage-items';
+  const MANAGE_ENTITIES = 'manage-entities';
   const VOTE = 'voter';
   const GOVERNANCE = 'governance';
 
-  const AVAILABLE_PERMISSIONS = [self::ACCESS, self::MANAGE_ITEMS, self::VOTE];
+  const AVAILABLE_PERMISSIONS = [self::ACCESS, self::MANAGE_ITEMS, self::MANAGE_ENTITIES, self::VOTE];
 
   const ALL_PERMISSIONS = [
     self::ACCESS,

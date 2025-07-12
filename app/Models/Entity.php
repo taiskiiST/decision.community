@@ -24,6 +24,16 @@ class Entity extends Model
     return $this->belongsToMany(Company::class)->withTimestamps();
   }
 
+  public function attachCompanyIfNotAttached(Company $company): void
+  {
+    $this->companies()->syncWithoutDetaching($company);
+  }
+
+  public function attachUserIfNotAttached(User $user): void
+  {
+    $this->users()->syncWithoutDetaching($user);
+  }
+
   public function users(): BelongsToMany
   {
     return $this->belongsToMany(User::class)->withTimestamps();
@@ -53,8 +63,9 @@ class Entity extends Model
     return $builder->where('parent_id', null);
   }
 
-  public function getDirectChildrenBelongingToCompany(Company $company): Collection
-  {
+  public function getDirectChildrenBelongingToCompany(
+    Company $company
+  ): Collection {
     return $company->entities()->where('parent_id', $this->id)->get();
   }
 
@@ -74,7 +85,9 @@ class Entity extends Model
 
     if ($children->isNotEmpty()) {
       $children->each(function (Entity $child) use (&$deletedIds) {
-        $deletedIds = array_merge($child->deleteRecursivelyWithFiles($deletedIds));
+        $deletedIds = array_merge(
+          $child->deleteRecursivelyWithFiles($deletedIds)
+        );
       });
     }
 

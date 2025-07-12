@@ -24,6 +24,11 @@ class Company extends Model
     return $this->belongsToMany(Entity::class)->withTimestamps();
   }
 
+  public function attachEntityIfNotAttached(Entity $entity): void
+  {
+    $this->entities()->syncWithoutDetaching($entity);
+  }
+
   public static function existingURIs(): Collection
   {
     return Company::select('uri')->get()->pluck('uri');

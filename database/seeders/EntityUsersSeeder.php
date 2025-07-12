@@ -25,7 +25,7 @@ class EntityUsersSeeder extends Seeder
     $users = User::all();
 
     foreach ($users as $user) {
-      $user->entities()->syncWithoutDetaching($entities->random());
+      $user->attachEntityIfNotAttached($entities->random());
     }
   }
 }

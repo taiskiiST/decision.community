@@ -75,7 +75,6 @@ class User extends Authenticatable
     return in_array(Permission::SUPER_ADMIN, explode(',', $this->permissions));
   }
 
-
   /**
    * @return bool
    */
@@ -213,6 +212,11 @@ class User extends Authenticatable
   public function entities(): BelongsToMany
   {
     return $this->belongsToMany(Entity::class)->withTimestamps();
+  }
+
+  public function attachEntityIfNotAttached(Entity $entity): void
+  {
+    $this->entities()->syncWithoutDetaching($entity);
   }
 
   public function rights()

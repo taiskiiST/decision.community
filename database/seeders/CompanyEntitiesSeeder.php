@@ -24,7 +24,7 @@ class CompanyEntitiesSeeder extends Seeder
     $companies = Company::all();
 
     foreach ($entities as $entity) {
-      $entity->companies()->syncWithoutDetaching($companies->random());
+      $entity->attachCompanyIfNotAttached($companies->random());
     }
   }
 }

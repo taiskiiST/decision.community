@@ -78,6 +78,21 @@ class EntityPolicy
    */
   public function detach(User $user, Entity $entity)
   {
+    // TODO: add real logic
+    return $this->canUserManageEntity($user, $entity);
+  }
+
+  /**
+   * Determine whether the user can detach the user from the model.
+   *
+   * @param  \App\Models\User  $user
+   * @param  \App\Models\Entity  $entity
+   * @param  \App\Models\User $userToDetach
+   * @return \Illuminate\Auth\Access\Response|bool
+   */
+  public function detachUser(User $user, Entity $entity, User $userToDetach)
+  {
+    // TODO: add real logic
     return $this->canUserManageEntity($user, $entity);
   }
 

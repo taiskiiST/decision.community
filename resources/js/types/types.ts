@@ -27,3 +27,18 @@ export type EntitiesMap = Map<number, Entity>;
 export type DetachEntityResult =
   | { id: number; detached: boolean; msg: string }[]
   | null;
+
+export type User = {
+  id: number;
+  name: string;
+  phone: string;
+  address: string;
+  email?: string;
+};
+
+export type DetachUserResult = {
+  entityId: number;
+  id: number;
+  detached: boolean;
+  msg: string;
+} | null;

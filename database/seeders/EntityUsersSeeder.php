@@ -4,14 +4,15 @@ namespace Database\Seeders;
 
 use App\Models\Company;
 use App\Models\Entity;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 /**
- * Class CompanyEntitiesSeeder
+ * Class EntityUsersSeeder
  *
  * @package Database\Seeders
  */
-class CompanyEntitiesSeeder extends Seeder
+class EntityUsersSeeder extends Seeder
 {
   /**
    * Run the database seeds.
@@ -21,10 +22,10 @@ class CompanyEntitiesSeeder extends Seeder
   public function run()
   {
     $entities = Entity::all();
-    $companies = Company::all();
+    $users = User::all();
 
-    foreach ($entities as $entity) {
-      $entity->companies()->syncWithoutDetaching($companies->random());
+    foreach ($users as $user) {
+      $user->entities()->syncWithoutDetaching($entities->random());
     }
   }
 }

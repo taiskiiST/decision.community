@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Entity;
 use App\Models\Company;
+use App\Models\User;
 use App\Services\FileHelper;
 use App\Services\StringHelper;
 use App\Services\ThumbMaker;
@@ -120,6 +121,42 @@ class EntityTreeController extends Controller
     $success = $entity->companies()->detach($currentCompany->id);
     $detachInfo[] = [
       'id' => $entity->id,
+      'detached' => $success,
+      'msg' => $success
+        ? 'Сущность отвязана'
+        : 'Ошибка при попытке отвязать сущность',
+    ];
+
+    return [
+      'detachInfo' => $detachInfo,
+    ];
+  }
+
+  public function getUsers(Entity $entity)
+  {
+    $this->authorize('view', $entity);
+
+    $currentCompany = Company::current();
+    if (!$currentCompany) {
+      return new Collection();;
+    }
+
+    return $entity->users()->get();
+  }
+
+  public function detachUserFromEntity(Entity $entity, User $user)
+  {
+    $currentCompany = Company::current();
+    if (!$currentCompany) {
+      return redirect()->route('polls.index');
+    }
+
+    $this->authorize('detachUser', [$entity, $user]);
+
+    $success = $entity->users()->detach($user);
+    $detachInfo = [
+      'entity_id' => $entity->id,
+      'id' => $user->id,
       'detached' => $success,
       'msg' => $success
         ? 'Сущность отвязана'

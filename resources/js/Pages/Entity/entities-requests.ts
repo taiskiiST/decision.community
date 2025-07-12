@@ -1,7 +1,7 @@
 import { client } from '../../shared/axios';
 import { message } from 'antd';
 import { RcFile } from 'antd/es/upload';
-import { DetachEntityResult, Entity } from 'types/types';
+import { DetachEntityResult, DetachUserResult, Entity, User } from 'types/types';
 
 export const getEntityChildren = async (parentId: number | null) => {
   try {
@@ -24,6 +24,26 @@ export const getEntityChildren = async (parentId: number | null) => {
     }
 
     return entities;
+  } catch (error) {
+    message.error(`Error occurred: ${error}`, 5);
+  }
+};
+
+export const getEntityUsers = async (entityId: number) => {
+  try {
+    const config: { params: { entityId: number } } = { params: { entityId } };
+
+    const response = await client.get<User[]>(
+      `/entities-tree/${entityId}/get-users`,
+      config,
+    );
+
+    const { data: users } = response;
+    if (!users) {
+      return [];
+    }
+
+    return users;
   } catch (error) {
     message.error(`Error occurred: ${error}`, 5);
   }
@@ -68,11 +88,30 @@ export const addEntity = async (
   }
 };
 
-export const detachEntity = async (
+export const detachEntityFromCompany = async (
   entityId: number,
 ): Promise<DetachEntityResult> => {
   try {
     const response = await client.delete(`/entities-tree/${entityId}/detach`);
+
+    const {
+      data: { detachInfo },
+    } = response;
+
+    return detachInfo;
+  } catch (error) {
+    message.error(`Error occurred: ${error}`, 5);
+
+    return null;
+  }
+};
+
+export const detachUserFromEntity = async (
+  entityId: number,
+  userId: number
+): Promise<DetachUserResult> => {
+  try {
+    const response = await client.delete(`/entities-tree/${entityId}/detach-user/${userId}`);
 
     const {
       data: { detachInfo },

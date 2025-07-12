@@ -10,7 +10,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\HttpFoundation\Response as SymphonyResponse;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Entity;
 
 /**
  * Class User
@@ -207,6 +208,11 @@ class User extends Authenticatable
   public function companies()
   {
     return $this->belongsToMany(Company::class);
+  }
+
+  public function entities(): BelongsToMany
+  {
+    return $this->belongsToMany(Entity::class)->withTimestamps();
   }
 
   public function rights()

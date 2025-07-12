@@ -170,6 +170,17 @@ Route::group(['middleware' => 'check.company'], function () {
         EntityTreeController::class,
         'detachEntity',
       ])->name('entites-tree.detach-entity');
+
+      Route::get('/entities-tree/{entity}/get-users', [
+        EntityTreeController::class,
+        'getUsers',
+      ])->name('entity-tree.get-users');
+
+      Route::delete('/entities-tree/{entity}/detach-user/{user}', [
+        EntityTreeController::class,
+        'detachUserFromEntity',
+      ])->name('entites-tree.detach-user-from-entity');
+
     });
 
     Route::get('/children-report', [

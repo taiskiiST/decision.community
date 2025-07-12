@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Entity extends Model
@@ -21,6 +22,11 @@ class Entity extends Model
   public function companies(): BelongsToMany
   {
     return $this->belongsToMany(Company::class)->withTimestamps();
+  }
+
+  public function users(): BelongsToMany
+  {
+    return $this->belongsToMany(User::class)->withTimestamps();
   }
 
   public function belongsToCompanyWithId(int $companyId): bool

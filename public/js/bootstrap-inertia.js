@@ -15884,8 +15884,10 @@ function Tree(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   addEntity: () => (/* binding */ addEntity),
-/* harmony export */   detachEntity: () => (/* binding */ detachEntity),
-/* harmony export */   getEntityChildren: () => (/* binding */ getEntityChildren)
+/* harmony export */   detachEntityFromCompany: () => (/* binding */ detachEntityFromCompany),
+/* harmony export */   detachUserFromEntity: () => (/* binding */ detachUserFromEntity),
+/* harmony export */   getEntityChildren: () => (/* binding */ getEntityChildren),
+/* harmony export */   getEntityUsers: () => (/* binding */ getEntityUsers)
 /* harmony export */ });
 /* harmony import */ var _shared_axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/axios */ "./resources/js/shared/axios.js");
 /* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/message/index.js");
@@ -15936,13 +15938,51 @@ var getEntityChildren = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
-var addEntity = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(file, name, normalizedPhoneNumber, parentId) {
-    var formData, response, categoryFromServer;
+var getEntityUsers = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(entityId) {
+    var config, response, users;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           _context2.prev = 0;
+          config = {
+            params: {
+              entityId: entityId
+            }
+          };
+          _context2.next = 4;
+          return _shared_axios__WEBPACK_IMPORTED_MODULE_0__.client.get("/entities-tree/".concat(entityId, "/get-users"), config);
+        case 4:
+          response = _context2.sent;
+          users = response.data;
+          if (users) {
+            _context2.next = 8;
+            break;
+          }
+          return _context2.abrupt("return", []);
+        case 8:
+          return _context2.abrupt("return", users);
+        case 11:
+          _context2.prev = 11;
+          _context2.t0 = _context2["catch"](0);
+          antd__WEBPACK_IMPORTED_MODULE_1__["default"].error("Error occurred: ".concat(_context2.t0), 5);
+        case 14:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2, null, [[0, 11]]);
+  }));
+  return function getEntityUsers(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+var addEntity = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(file, name, normalizedPhoneNumber, parentId) {
+    var formData, response, categoryFromServer;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.prev = 0;
           formData = new FormData();
           if (file) {
             formData.append('image', file);
@@ -15952,63 +15992,91 @@ var addEntity = /*#__PURE__*/function () {
           if (parentId) {
             formData.append('parentId', parentId ? parentId.toString() : '');
           }
-          _context2.next = 8;
+          _context3.next = 8;
           return _shared_axios__WEBPACK_IMPORTED_MODULE_0__.client.post('/entities-tree/add-entity', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           });
         case 8:
-          response = _context2.sent;
+          response = _context3.sent;
           categoryFromServer = response.data;
           if (categoryFromServer) {
-            _context2.next = 12;
+            _context3.next = 12;
             break;
           }
-          return _context2.abrupt("return", null);
+          return _context3.abrupt("return", null);
         case 12:
-          return _context2.abrupt("return", categoryFromServer);
+          return _context3.abrupt("return", categoryFromServer);
         case 15:
-          _context2.prev = 15;
-          _context2.t0 = _context2["catch"](0);
-          antd__WEBPACK_IMPORTED_MODULE_1__["default"].error("Error occurred: ".concat(_context2.t0), 5);
-          return _context2.abrupt("return", null);
-        case 19:
-        case "end":
-          return _context2.stop();
-      }
-    }, _callee2, null, [[0, 15]]);
-  }));
-  return function addEntity(_x2, _x3, _x4, _x5) {
-    return _ref2.apply(this, arguments);
-  };
-}();
-var detachEntity = /*#__PURE__*/function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(entityId) {
-    var response, detachInfo;
-    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-      while (1) switch (_context3.prev = _context3.next) {
-        case 0:
-          _context3.prev = 0;
-          _context3.next = 3;
-          return _shared_axios__WEBPACK_IMPORTED_MODULE_0__.client["delete"]("/entities-tree/".concat(entityId, "/detach"));
-        case 3:
-          response = _context3.sent;
-          detachInfo = response.data.detachInfo;
-          return _context3.abrupt("return", detachInfo);
-        case 8:
-          _context3.prev = 8;
+          _context3.prev = 15;
           _context3.t0 = _context3["catch"](0);
           antd__WEBPACK_IMPORTED_MODULE_1__["default"].error("Error occurred: ".concat(_context3.t0), 5);
           return _context3.abrupt("return", null);
-        case 12:
+        case 19:
         case "end":
           return _context3.stop();
       }
-    }, _callee3, null, [[0, 8]]);
+    }, _callee3, null, [[0, 15]]);
   }));
-  return function detachEntity(_x6) {
+  return function addEntity(_x3, _x4, _x5, _x6) {
     return _ref3.apply(this, arguments);
+  };
+}();
+var detachEntityFromCompany = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(entityId) {
+    var response, detachInfo;
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          _context4.prev = 0;
+          _context4.next = 3;
+          return _shared_axios__WEBPACK_IMPORTED_MODULE_0__.client["delete"]("/entities-tree/".concat(entityId, "/detach"));
+        case 3:
+          response = _context4.sent;
+          detachInfo = response.data.detachInfo;
+          return _context4.abrupt("return", detachInfo);
+        case 8:
+          _context4.prev = 8;
+          _context4.t0 = _context4["catch"](0);
+          antd__WEBPACK_IMPORTED_MODULE_1__["default"].error("Error occurred: ".concat(_context4.t0), 5);
+          return _context4.abrupt("return", null);
+        case 12:
+        case "end":
+          return _context4.stop();
+      }
+    }, _callee4, null, [[0, 8]]);
+  }));
+  return function detachEntityFromCompany(_x7) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+var detachUserFromEntity = /*#__PURE__*/function () {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(entityId, userId) {
+    var response, detachInfo;
+    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          _context5.prev = 0;
+          _context5.next = 3;
+          return _shared_axios__WEBPACK_IMPORTED_MODULE_0__.client["delete"]("/entities-tree/".concat(entityId, "/detach-user/").concat(userId));
+        case 3:
+          response = _context5.sent;
+          detachInfo = response.data.detachInfo;
+          return _context5.abrupt("return", detachInfo);
+        case 8:
+          _context5.prev = 8;
+          _context5.t0 = _context5["catch"](0);
+          antd__WEBPACK_IMPORTED_MODULE_1__["default"].error("Error occurred: ".concat(_context5.t0), 5);
+          return _context5.abrupt("return", null);
+        case 12:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5, null, [[0, 8]]);
+  }));
+  return function detachUserFromEntity(_x8, _x9) {
+    return _ref5.apply(this, arguments);
   };
 }();
 
@@ -16373,7 +16441,7 @@ var App = function App(_ref) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
             _context3.next = 2;
-            return (0,_entities_requests__WEBPACK_IMPORTED_MODULE_4__.detachEntity)(entityId);
+            return (0,_entities_requests__WEBPACK_IMPORTED_MODULE_4__.detachEntityFromCompany)(entityId);
           case 2:
             detachInfo = _context3.sent;
             if (Array.isArray(detachInfo)) {
@@ -16666,7 +16734,7 @@ var App = function App(_ref) {
         onNewEntityBtnClick: onNewEntityBtnClick,
         onDetachEntityBtnClick: onDetachEntityBtnClick
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+    }), selectedEntityId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
       className: "min-h-full p-1 overflow-hidden md:flex-grow",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
         className: "md:block",
@@ -16826,7 +16894,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ UsersTable)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _entities_requests__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../entities-requests */ "./resources/js/Pages/Entity/entities-requests.ts");
+/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/message/index.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return { value: void 0, done: !0 }; } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable || "" === iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } throw new TypeError(_typeof(iterable) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -16836,31 +16910,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var initialUsers = [{
-  id: 1,
-  name: 'Ivan Petrov',
-  email: 'ivan@example.com',
-  phone: '9884121512',
-  address: 'Moscow, Russia'
-}, {
-  id: 2,
-  name: 'Anna Smirnova',
-  email: 'anna@example.com',
-  phone: '9213345123',
-  address: 'Saint Petersburg, Russia'
-}, {
-  id: 3,
-  name: 'Dmitry Ivanov',
-  email: 'dmitry@example.com',
-  phone: '9167766543',
-  address: 'Novosibirsk, Russia'
-}
-// Add more users as needed
-];
 
+
+var USERS_PER_PAGE = 10;
 function UsersTable(_ref) {
   var entityId = _ref.entityId;
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(initialUsers),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
     users = _useState2[0],
     setUsers = _useState2[1];
@@ -16870,139 +16925,276 @@ function UsersTable(_ref) {
     setQuery = _useState4[1];
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState6 = _slicedToArray(_useState5, 2),
-    isDeleting = _useState6[0],
-    setIsDeleting = _useState6[1];
+    isDetaching = _useState6[0],
+    setIsDetaching = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(10),
+    _useState8 = _slicedToArray(_useState7, 2),
+    usersPerPage = _useState8[0],
+    setUsersPerPage = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1),
+    _useState10 = _slicedToArray(_useState9, 2),
+    currentPage = _useState10[0],
+    setCurrentPage = _useState10[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var fetchUsers = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var users;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return (0,_entities_requests__WEBPACK_IMPORTED_MODULE_1__.getEntityUsers)(entityId);
+            case 2:
+              users = _context.sent;
+              if (Array.isArray(users)) {
+                setUsers(users);
+              }
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }));
+      return function fetchUsers() {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+    fetchUsers();
+  }, [entityId]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    setCurrentPage(1);
+  }, [query, usersPerPage]);
   var filteredUsers = users.filter(function (user) {
+    var _user$email;
     var q = query.toLowerCase();
-    return user.name.toLowerCase().includes(q) || user.email.toLowerCase().includes(q) || user.phone.toLowerCase().includes(q) || user.address.toLowerCase().includes(q);
+    return user.name.toLowerCase().includes(q) || ((_user$email = user.email) === null || _user$email === void 0 ? void 0 : _user$email.toLowerCase().includes(q)) || user.phone.toLowerCase().includes(q) || user.address.toLowerCase().includes(q);
   });
-  var handleDelete = function handleDelete(userId) {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      setIsDeleting(true);
-      setUsers(function (prevUsers) {
-        return prevUsers.filter(function (user) {
-          return user.id !== userId;
-        });
-      });
-      setIsDeleting(false);
-    }
+  var totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+  var paginatedUsers = filteredUsers.slice((currentPage - 1) * usersPerPage, currentPage * usersPerPage);
+  var handleDetach = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(userId) {
+      var detachResult;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            if (window.confirm('Вы действительно хотите отвязать этого пользователя?')) {
+              _context2.next = 2;
+              break;
+            }
+            return _context2.abrupt("return");
+          case 2:
+            setIsDetaching(true);
+            _context2.next = 5;
+            return (0,_entities_requests__WEBPACK_IMPORTED_MODULE_1__.detachUserFromEntity)(entityId, userId);
+          case 5:
+            detachResult = _context2.sent;
+            if (detachResult) {
+              _context2.next = 9;
+              break;
+            }
+            setIsDetaching(false);
+            return _context2.abrupt("return");
+          case 9:
+            if (detachResult.detached) {
+              _context2.next = 13;
+              break;
+            }
+            antd__WEBPACK_IMPORTED_MODULE_3__["default"].warning(detachResult.msg);
+            setIsDetaching(false);
+            return _context2.abrupt("return");
+          case 13:
+            antd__WEBPACK_IMPORTED_MODULE_3__["default"].success("\u0421\u0443\u0449\u043D\u043E\u0441\u0442\u044C \u043E\u0442\u0432\u044F\u0437\u0430\u043D\u0430: ".concat(detachResult.id));
+            setUsers(function (prevUsers) {
+              return prevUsers.filter(function (user) {
+                return user.id !== detachResult.id;
+              });
+            });
+            setIsDetaching(false);
+          case 16:
+          case "end":
+            return _context2.stop();
+        }
+      }, _callee2);
+    }));
+    return function handleDetach(_x2) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+  var handlePageChange = function handlePageChange(page) {
+    setCurrentPage(page);
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    // Reset to first page if filter changes and current page would be out of range
+    if ((currentPage - 1) * USERS_PER_PAGE >= filteredUsers.length) {
+      setCurrentPage(1);
+    }
+  }, [query, filteredUsers.length]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "p-4",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
       className: "mb-4",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
         type: "text",
-        placeholder: "Search users...",
+        placeholder: "\u041F\u043E\u0438\u0441\u043A \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0435\u0439...",
         className: "w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50",
         value: query,
         onChange: function onChange(e) {
           return setQuery(e.target.value);
         }
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "mb-2 text-sm text-gray-600",
+      children: ["\u0412\u0441\u0435\u0433\u043E \u043D\u0430\u0439\u0434\u0435\u043D\u043E: ", filteredUsers.length]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "flex items-center gap-2 mb-4",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+        htmlFor: "pageSize",
+        className: "text-sm text-gray-700",
+        children: "\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u043E\u0432 \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0435:"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("select", {
+        id: "pageSize",
+        value: usersPerPage,
+        onChange: function onChange(e) {
+          return setUsersPerPage(Number(e.target.value));
+        },
+        className: "px-2 py-1 text-sm border border-gray-300 rounded-md",
+        children: [10, 25, 50].map(function (size) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+            value: size,
+            children: size
+          }, size);
+        })
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "overflow-x-auto",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "hidden md:block",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("table", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("table", {
           className: "min-w-full divide-y divide-gray-200 rounded-lg shadow-md",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("thead", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("thead", {
             className: "bg-gray-100",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("tr", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("th", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
                 className: "px-4 py-2 text-sm font-semibold text-left text-gray-700",
-                children: "Name"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("th", {
+                children: "\u0418\u043C\u044F"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
                 className: "px-4 py-2 text-sm font-semibold text-left text-gray-700",
                 children: "Email"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("th", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
                 className: "px-4 py-2 text-sm font-semibold text-left text-gray-700",
-                children: "Phone"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("th", {
+                children: "\u0422\u0435\u043B\u0435\u0444\u043E\u043D"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
                 className: "px-4 py-2 text-sm font-semibold text-left text-gray-700",
-                children: "Address"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("th", {
+                children: "\u0410\u0434\u0440\u0435\u0441"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
                 className: "px-4 py-2 text-sm font-semibold text-left text-gray-700",
-                children: "Actions"
+                children: "\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u044F"
               })]
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("tbody", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tbody", {
             className: "bg-white divide-y divide-gray-100",
-            children: [filteredUsers.map(function (user) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("tr", {
+            children: [paginatedUsers.map(function (user) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
                 className: "hover:bg-gray-50",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
                   className: "px-4 py-3 text-sm text-gray-800",
                   children: user.name
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
                   className: "px-4 py-3 text-sm text-gray-800",
                   children: user.email
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
                   className: "px-4 py-3 text-sm text-gray-800",
                   children: user.phone
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
                   className: "px-4 py-3 text-sm text-gray-800",
                   children: user.address
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
                   className: "px-4 py-3 text-sm",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
                     onClick: function onClick() {
-                      return handleDelete(user.id);
+                      return handleDetach(user.id);
                     },
-                    className: "font-semibold text-red-600 hover:text-red-800",
-                    children: isDeleting ? 'Deleting...' : 'Delete'
+                    className: "font-semibold text-red-600 cursor-pointer hover:text-red-800",
+                    children: isDetaching ? 'Отвязка...' : 'Отвязать'
                   })
                 })]
               }, user.id);
-            }), filteredUsers.length === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("tr", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+            }), paginatedUsers.length === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("tr", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
                 colSpan: 5,
                 className: "px-4 py-4 text-sm text-center text-gray-500",
-                children: "No users found"
+                children: "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438 \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u044B"
               })
             })]
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "space-y-4 md:hidden",
-        children: [filteredUsers.map(function (user) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+        children: [paginatedUsers.map(function (user) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
             className: "p-4 bg-white border border-gray-200 rounded-lg shadow-sm",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("p", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
               className: "text-sm font-semibold text-gray-700",
-              children: ["Name: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+              children: ["\u0418\u043C\u044F: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
                 className: "font-normal",
                 children: user.name
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("p", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
               className: "text-sm font-semibold text-gray-700",
-              children: ["Email: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+              children: ["Email: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
                 className: "font-normal",
                 children: user.email
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("p", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
               className: "text-sm font-semibold text-gray-700",
-              children: ["Phone: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+              children: ["\u0422\u0435\u043B\u0435\u0444\u043E\u043D: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
                 className: "font-normal",
                 children: user.phone
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("p", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
               className: "text-sm font-semibold text-gray-700",
-              children: ["Address: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+              children: ["\u0410\u0434\u0440\u0435\u0441: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
                 className: "font-normal",
                 children: user.address
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
               onClick: function onClick() {
-                return handleDelete(user.id);
+                return handleDetach(user.id);
               },
-              className: "mt-4 font-semibold text-red-600 hover:text-red-800",
-              children: isDeleting ? 'Deleting...' : 'Delete'
+              className: "mt-4 font-semibold text-red-600 cursor-pointer hover:text-red-800",
+              children: isDetaching ? 'Отвязка...' : 'Отвязать'
             })]
           }, user.id);
-        }), filteredUsers.length === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+        }), paginatedUsers.length === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "text-sm text-center text-gray-500",
-          children: "No users found"
+          children: "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438 \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u044B"
+        })]
+      }), totalPages > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "flex justify-center mt-6 space-x-2 text-sm text-gray-700",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+          onClick: function onClick() {
+            return handlePageChange(currentPage - 1);
+          },
+          disabled: currentPage === 1,
+          className: "px-3 py-1 border rounded cursor-pointer disabled:cursor-default disabled:opacity-50",
+          children: "\u041F\u0440\u0435\u0434."
+        }), Array.from({
+          length: totalPages
+        }, function (_, i) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            onClick: function onClick() {
+              return handlePageChange(i + 1);
+            },
+            className: "cursor-pointer rounded border px-3 py-1 ".concat(currentPage === i + 1 ? 'bg-blue-500 text-white' : ''),
+            children: i + 1
+          }, i + 1);
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+          onClick: function onClick() {
+            return handlePageChange(currentPage + 1);
+          },
+          disabled: currentPage === totalPages,
+          className: "px-3 py-1 border rounded cursor-pointer disabled:cursor-default disabled:opacity-50",
+          children: "\u0421\u043B\u0435\u0434."
         })]
       })]
     })]

@@ -939,7 +939,9 @@ class PollsController extends Controller
         'valign' => 'center',
       ])
       ->addText('Подпись');
-    foreach ($poll->peopleThatVote() as $user) {
+
+    $entity = Entity::find(request()->input('entity_id'));
+    foreach ($poll->peopleThatVote($entity) as $user) {
       $wordTable->addRow(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50));
       $cell1 = $wordTable
         ->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50), [

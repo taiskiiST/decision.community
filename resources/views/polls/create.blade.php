@@ -11,26 +11,36 @@
                 <input type="text" name="type_of_poll" value={{$type_of_poll}} class="hidden">
                     <div class="col-span-1">
                         <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900 mt-6 ml-6">Предложить к рассмотрению вопрос</h3>
+                            <h3 class="mt-6 ml-6 text-lg font-medium leading-6 text-gray-900">Предложить к рассмотрению вопрос</h3>
                         </div>
                     </div>
-                    <div class="shadow overflow-hidden sm:rounded-md">
+                    <div class="overflow-hidden shadow sm:rounded-md">
                         <div class="px-4 py-5 bg-white sm:p-6">
                             <div class="grid grid-cols-6 gap-6">
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="poll-name" class="block text-sm font-medium text-gray-700">Введите тему для предлагаемого к рассмотрению вопроса</label>
-                                    <input type="text" name="poll-name" id="poll-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                    <input type="text" name="poll-name" id="poll-name" autocomplete="given-name" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
                             </div>
                         </div>
+
+                        <div class="px-4 py-5 bg-white sm:p-6">
+                            <div class="grid grid-cols-6 gap-6">
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="poll-name" class="block text-sm font-medium text-gray-700">Выберете организацию</label>
+                                    {{ Form::select('entity_id', $userEntities) }}
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="inline-flex flex-row w-full place-content-between">
-                            <div class="px-4 py-3 bg-gray-50  sm:px-6">
-                                <button type="submit" class="justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onclick="addQuestion()">
+                            <div class="px-4 py-3 bg-gray-50 sm:px-6">
+                                <button type="submit" class="justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onclick="addQuestion()">
                                         Создать
                                 </button>
                             </div>
-                            <div class="px-4 py-3 bg-gray-50 sm:px-6 flex-row-reverse ">
-                                <a href="/polls"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
+                            <div class="flex-row-reverse px-4 py-3 bg-gray-50 sm:px-6 ">
+                                <a href="/polls"><button type="button" class="justify-end px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
                                     Отмена
                                 </button></a>
                             </div>

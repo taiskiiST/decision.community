@@ -53,9 +53,13 @@ class PollsController extends Controller
 
   public function create(Request $request)
   {
+    $user = auth()->user();
     $typeOfPoll = TypeOfPoll::find($request->type_of_poll);
 
-    return view('polls.create', ['type_of_poll' => $typeOfPoll->id]);
+    return view('polls.create', [
+      'type_of_poll' => $typeOfPoll->id,
+      'userEntities' => $user->entities->pluck('name', 'id'),
+    ]);
   }
 
   public function delProtocol(Request $request)
@@ -242,9 +246,8 @@ class PollsController extends Controller
     ]);
   }
 
-  public function generateBlankWithAnswersWithOutTemplate(
-    Poll $poll,
-  ) {
+  public function generateBlankWithAnswersWithOutTemplate(Poll $poll)
+  {
     $phpWord = new \PhpOffice\PhpWord\PhpWord();
     $phpWord->setDefaultFontName('Times New Roman');
     $phpWord->setDefaultFontSize(14);
@@ -727,13 +730,14 @@ class PollsController extends Controller
               'valign' => 'center',
             ])
             ->addText(
-              ($potentialWeightVotersNumber !== 0 ?
-              round(
-                ($answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP) /
-                  $potentialWeightVotersNumber) *
-                  100,
-                2
-              ) : '') . '%',
+              ($potentialWeightVotersNumber !== 0
+                ? round(
+                  ($answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP) /
+                    $potentialWeightVotersNumber) *
+                    100,
+                  2
+                )
+                : '') . '%',
               ['bold' => true],
               ['align' => 'center', 'spaceAfter' => 150]
             );
@@ -766,13 +770,14 @@ class PollsController extends Controller
               'valign' => 'center',
             ])
             ->addText(
-              ($potentialWeightVotersNumber !== 0 ?
-              round(
-                ($answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP) /
-                  $potentialWeightVotersNumber) *
-                  100,
-                2
-              ) : '') . '%',
+              ($potentialWeightVotersNumber !== 0
+                ? round(
+                  ($answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP) /
+                    $potentialWeightVotersNumber) *
+                    100,
+                  2
+                )
+                : '') . '%',
               '',
               ['align' => 'center', 'spaceAfter' => 150]
             );
@@ -813,13 +818,14 @@ class PollsController extends Controller
           'valign' => 'center',
         ])
         ->addText(
-          ($potentialWeightVotersNumber !== 0 ?
-          round(
-            ($poll->weightPeopleThatVote(TypeOfRight::UPON_OWNERSHIP) /
-              $potentialWeightVotersNumber) *
-              100,
-            2
-          ) : '' ). '%',
+          ($potentialWeightVotersNumber !== 0
+            ? round(
+              ($poll->weightPeopleThatVote(TypeOfRight::UPON_OWNERSHIP) /
+                $potentialWeightVotersNumber) *
+                100,
+              2
+            )
+            : '') . '%',
           ['bold' => true],
           ['align' => 'center']
         );
@@ -1384,8 +1390,10 @@ class PollsController extends Controller
     if (!session('current_company')) {
       return redirect()->route('polls.index');
     }
+
     $rules['type_of_poll'] = 'required';
     $rules['poll-name'] = 'required';
+    $rules['entity_id'] = 'exists:App\Models\Entity,id';
     $parameters = $this->validate($request, $rules);
 
     $poll = Poll::create([
@@ -1393,6 +1401,8 @@ class PollsController extends Controller
       'type_of_poll' => $parameters['type_of_poll'],
       'company_id' => session('current_company')->id,
     ]);
+
+    $poll->attachEntityIfNotAttached(Entity::find($parameters['entity_id']));
 
     return redirect()->route('poll.questions.create', ['poll' => $poll->id]);
   }

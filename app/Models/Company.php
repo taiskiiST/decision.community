@@ -92,6 +92,7 @@ class Company extends Model
     $users_can_vote = $this->users()
       ->where('permissions', 'LIKE', '%' . Permission::VOTE . '%')
       ->get();
+      
     foreach ($users_can_vote as $user) {
       $rights = $user->rights()->get();
       foreach ($rights as $right) {

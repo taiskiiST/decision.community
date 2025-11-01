@@ -149,9 +149,9 @@ export default function PollsTable({ entityId }: PollsTableProps) {
                         Сгенерировать протокол
                       </button>
 
-                      {poll.blank_with_answers_doc_url && (
+                      {poll.protocol_doc_url && (
                         <a
-                          href={poll.blank_with_answers_doc_url}
+                          href={poll.protocol_doc_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:underline"
@@ -209,9 +209,9 @@ export default function PollsTable({ entityId }: PollsTableProps) {
                 Сгенерировать протокол
               </button>
 
-              {poll.blank_with_answers_doc_url && (
+              {poll.protocol_doc_url && (
                 <a
-                  href={poll.blank_with_answers_doc_url}
+                  href={poll.protocol_doc_url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block mt-2 text-blue-600 hover:underline"

@@ -603,6 +603,10 @@ class PollsController extends Controller
       ['spaceBefore' => 10]
     );
 
+    $potentialWeightVotersNumber = $poll->company->potentialWeightVotersNumber(
+      TypeOfRight::UPON_OWNERSHIP
+    );
+
     $count_question = 1;
     \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
     foreach ($poll->questions()->get() as $question) {
@@ -691,6 +695,7 @@ class PollsController extends Controller
         $wordTable->addRow(
           \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(50)
         );
+
         if (
           $max_voters == $answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP)
         ) {
@@ -722,14 +727,13 @@ class PollsController extends Controller
               'valign' => 'center',
             ])
             ->addText(
+              ($potentialWeightVotersNumber !== 0 ?
               round(
                 ($answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP) /
-                  $poll->company->potentialWeightVotersNumber(
-                    TypeOfRight::UPON_OWNERSHIP
-                  )) *
+                  $potentialWeightVotersNumber) *
                   100,
                 2
-              ) . '%',
+              ) : '') . '%',
               ['bold' => true],
               ['align' => 'center', 'spaceAfter' => 150]
             );
@@ -756,19 +760,19 @@ class PollsController extends Controller
               '',
               ['align' => 'center', 'spaceAfter' => 150]
             );
+
           $cell3 = $wordTable
             ->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), [
               'valign' => 'center',
             ])
             ->addText(
+              ($potentialWeightVotersNumber !== 0 ?
               round(
                 ($answer->countVotesWeight(TypeOfRight::UPON_OWNERSHIP) /
-                  $poll->company->potentialWeightVotersNumber(
-                    TypeOfRight::UPON_OWNERSHIP
-                  )) *
+                  $potentialWeightVotersNumber) *
                   100,
                 2
-              ) . '%',
+              ) : '') . '%',
               '',
               ['align' => 'center', 'spaceAfter' => 150]
             );
@@ -803,19 +807,19 @@ class PollsController extends Controller
           ['bold' => true],
           ['align' => 'center']
         );
+
       $cell3 = $wordTable
         ->addCell(\PhpOffice\PhpWord\Shared\Converter::pixelToTwip(170), [
           'valign' => 'center',
         ])
         ->addText(
+          ($potentialWeightVotersNumber !== 0 ?
           round(
             ($poll->weightPeopleThatVote(TypeOfRight::UPON_OWNERSHIP) /
-              $poll->company->potentialWeightVotersNumber(
-                TypeOfRight::UPON_OWNERSHIP
-              )) *
+              $potentialWeightVotersNumber) *
               100,
             2
-          ) . '%',
+          ) : '' ). '%',
           ['bold' => true],
           ['align' => 'center']
         );
@@ -1038,6 +1042,7 @@ class PollsController extends Controller
     $poll->update([
       'protocol_doc' => 'storage/' . $poll->id . '/ProtocolNew.docx',
     ]);
+
     return redirect()->route('poll.requisites', [
       'poll' => $poll,
     ]);

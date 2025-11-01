@@ -180,8 +180,8 @@ class EntityTreeController extends Controller
     }
 
     return $out->transform(function (Poll $poll) {
-      $poll->blank_with_answers_doc_url = $poll->blank_with_answers_doc
-        ? Storage::url($poll->blank_with_answers_doc)
+      $poll->protocol_doc_url = $poll->protocol_doc
+        ? Storage::url($poll->protocol_doc)
         : '';
 
       return $poll;

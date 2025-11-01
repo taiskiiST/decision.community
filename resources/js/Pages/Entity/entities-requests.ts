@@ -154,7 +154,7 @@ export const generateProtocol = async (
 
     formData.append('entity_id', entityId.toString());
 
-    const response = await client.post(`/polls/${pollId}/generateProtocolWithOutTemplate`, formData, {
+    const response = await client.post(`/polls/${pollId}/generateProtocol`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

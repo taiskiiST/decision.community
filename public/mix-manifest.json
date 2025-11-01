@@ -1,7 +1,7 @@
 {
     "/js/app.js": "/js/app.js?id=5ff63a4a545723bf2beca159fdf931e5",
-    "/js/bootstrap-inertia.js": "/js/bootstrap-inertia.js?id=67a787c8c0f72437c759813de09a9558",
-    "/js/ManageItems.js": "/js/ManageItems.js?id=2ded347b0a0e0e33c00a19d77a4d3c17",
+    "/js/bootstrap-inertia.js": "/js/bootstrap-inertia.js?id=357b57675eec30aa30e59e6c59947407",
+    "/js/ManageItems.js": "/js/ManageItems.js?id=591aff2bd042172bea99af69ec05e71d",
     "/js/AddQuestionsToPoll.js": "/js/AddQuestionsToPoll.js?id=5a69f8698c87fdcd9e8d4f45bf30ce80",
     "/js/AddProtocolToPoll.js": "/js/AddProtocolToPoll.js?id=51fda5673fee78d00ee57bb2962c0c97",
     "/js/ManageUsers.js": "/js/ManageUsers.js?id=792b91a8cde826e599805a62a4990768",
@@ -11,7 +11,7 @@
     "/js/GlobalSearchQuestionsSmallScreen.js": "/js/GlobalSearchQuestionsSmallScreen.js?id=e01ffe2e0d12208cd9d786f8b7cef55a",
     "/js/PreviewTextQuestion.js": "/js/PreviewTextQuestion.js?id=ba79a0d93089fb60221cb3054a2440ab",
     "/js/ViewQuestion.js": "/js/ViewQuestion.js?id=2025051961f2c5b1978bf8c62746db6a",
-    "/js/DisplayQuestionsEditor.js": "/js/DisplayQuestionsEditor.js?id=272ccdae7e9d063d310857fd932426ac",
+    "/js/DisplayQuestionsEditor.js": "/js/DisplayQuestionsEditor.js?id=60e93c8fe2c1b7a7a98423babef17a7c",
     "/js/LandingMainPage.js": "/js/LandingMainPage.js?id=b447dcb10a4426f7eefc232b0f3fc7ef",
     "/js/FormattedTexQuestion.js": "/js/FormattedTexQuestion.js?id=6592c7cfb8342d15e9e23d795f38adda",
     "/js/FormattedTexQuestionMobile.js": "/js/FormattedTexQuestionMobile.js?id=ca5e98936633dce122677e349719aa99",
@@ -22,6 +22,6 @@
     "/js/StartEndPoll.js": "/js/StartEndPoll.js?id=e3635da95d186e5e654073dcbb79a64e",
     "/js/manifest.js": "/js/manifest.js?id=f5ddbb5981dc55a25164f427a3ec5bf1",
     "/css/app.css": "/css/app.css?id=2d50d6464e4391d6b4e07bd88ac5af0c",
-    "/css/tailwind.css": "/css/tailwind.css?id=b99c6ba0e2ee00ed6a12b0391cfc459f",
-    "/js/vendor.js": "/js/vendor.js?id=9888f0756bcc41ff7291da198b2b9eb6"
+    "/css/tailwind.css": "/css/tailwind.css?id=1d7d922a06caa58af221a2681923c9e1",
+    "/js/vendor.js": "/js/vendor.js?id=c3298b97a49db4d28b1d2afc56f05838"
 }

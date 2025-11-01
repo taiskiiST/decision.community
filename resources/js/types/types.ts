@@ -50,3 +50,11 @@ export type DetachUserResult = {
   detached: boolean;
   msg: string;
 } | null;
+
+export type AttachUserResult = {
+  entityId: number;
+  id: number;
+  attached: boolean;
+  msg: string;
+  user: User
+} | null;

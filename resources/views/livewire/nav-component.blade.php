@@ -1,15 +1,15 @@
 <nav class="bg-gradient-to-l from-gray-900 via-blue-900 to-indigo-900">
-    <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="px-4 mx-auto max-w-9xl sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
 {{--                    <a href="{{route('poll.questions.view_public_questions')}}">--}}
-                        <img class="h-10 w-10" src="/images/logo.png" alt="Workflow logo">
+                        <img class="w-10 h-10" src="/images/logo.png" alt="Workflow logo">
 {{--                    </a>--}}
                 </div>
 
                 <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
+                    <div class="flex items-baseline ml-10 space-x-4">
 {{--                        <a href="{{ route('items.index') }}" class="nav-tab {{ in_array($currentRouteName, ['items.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}" >Каталог товаров и услуг ТСН "КП Березка"</a>--}}
 
 {{--                        <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>--}}
@@ -21,6 +21,7 @@
 {{--                        @if (auth()->user()->isAdmin())--}}
 {{--                            <a href="{{ route('users.governance') }}" class="nav-tab {{ $currentRouteName === 'users.governance' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>--}}
 {{--                            <a href="{{ route('users.manage') }}" class="nav-tab {{ $currentRouteName === 'users.manage' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Пользователи</a>--}}
+{{--                            <a href="{{ route('entities.tree') }}" class="nav-tab {{ $currentRouteName === 'entities.tree' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Организации</a>--}}
 {{--                        @endif--}}
 
                         <div id="searchQuestionsFullScreen"></div>
@@ -28,14 +29,14 @@
 
 {{--                        <div class="flex flex-col">--}}
 {{--                            <div class="text-base font-medium leading-none text-white">Долг: 1 000 руб</div>--}}
-{{--                            <div class="text-sm font-medium leading-none text-gray-400 mt-1">Оплатить</div>--}}
+{{--                            <div class="mt-1 text-sm font-medium leading-none text-gray-400">Оплатить</div>--}}
 {{--                        </div>--}}
                     </div>
                 </div>
             </div>
 
 {{--            <div class="hidden md:block">--}}
-{{--                <div class="ml-4 flex items-center md:ml-6">--}}
+{{--                <div class="flex items-center ml-4 md:ml-6">--}}
 
 {{--                    <div class="flex flex-col pl-5">--}}
 {{--                        <form method="POST" action="{{ route('logout') }}">--}}
@@ -53,9 +54,9 @@
 {{--            </div>--}}
             @if (auth()->user()->canVote())
             <div class="hidden md:hidden xl:inline-flex">
-                <div class="items-baseline space-x-4 text-center mt-3">
+                <div class="items-baseline mt-3 space-x-4 text-center">
                     <div class="text-base font-medium leading-none text-white">{{ auth()->user()->name }}</div>
-                    <div class="text-sm font-medium leading-none text-gray-400 mt-1">{{ auth()->user()->address }}, {{ auth()->user()->email }}</div>
+                    <div class="mt-1 text-sm font-medium leading-none text-gray-400">{{ auth()->user()->address }}, {{ auth()->user()->email }}</div>
                 </div>
                 <div>
                     <form method="POST" action="{{route('poll.create',['type_of_poll' => \App\Models\TypeOfPoll::SUGGESTED_POLL])}}">
@@ -63,7 +64,7 @@
                         <a href="#"
                            onclick="event.preventDefault();
                                                             this.closest('form').submit();"
-                           class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                           class="flex items-center justify-center p-2 mt-2 ml-2 text-base font-medium text-center text-white bg-indigo-600 border border-transparent rounded-md w-100 hover:bg-indigo-700">
                             {{ __('Предложить вопрос к рассмотрению') }}
                         </a>
                     </form>
@@ -73,7 +74,7 @@
             @endif
             <div class="hidden md:hidden xl:inline-flex">
                 <div>
-                    <a href="{{route('poll.questions.view_suggested_questions')}}" class="w-100 mt-2 ml-2 flex items-center justify-center p-2 border border-transparent text-base text-center font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                    <a href="{{route('poll.questions.view_suggested_questions')}}" class="flex items-center justify-center p-2 mt-2 ml-2 text-base font-medium text-center text-white bg-indigo-600 border border-transparent rounded-md w-100 hover:bg-indigo-700">
                         Список предложенных вопросов
                     </a>
                 </div>
@@ -83,20 +84,20 @@
 {{--                <div class="text-base font-medium leading-none text-white">{{ auth()->user()->name }}</div>--}}
 {{--            </div>--}}
 
-            <div class="-mr-2 flex  space-x-4">
-                <div class="relative w-60  md:hidden">
+            <div class="flex -mr-2 space-x-4">
+                <div class="relative w-60 md:hidden">
                     <div id="searchQuestionsSmallScreen"></div>
                 </div>
                 <!-- Mobile menu button -->
                 <button
                     onClick="toggleMenu()"
-                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white">
+                    class="inline-flex items-center justify-center p-2 text-gray-400 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white">
                     <!-- Menu open: "hidden", Menu closed: "block" -->
-                    <div class="block h-6 w-6 hamburger"><svg stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                    <div class="block w-6 h-6 hamburger"><svg stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg></div>
                     <!-- Menu open: "block", Menu closed: "hidden" -->
-                    <div class="hidden h-6 w-6 cross"><svg stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                    <div class="hidden w-6 h-6 cross"><svg stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg></div>
                 </button>
@@ -131,7 +132,7 @@
             </a>
         </div>
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <p class="nav-menu-link text-white font-medium">Товары и услуги</p>
+                <p class="font-medium text-white nav-menu-link">Товары и услуги</p>
                 <div class="flex flex-col pl-5">
                     <a href="{{ route('items.index') }}" class="nav-menu-link {{ in_array($currentRouteName, ['items.index']) ? 'nav-menu-link-current' : 'nav-menu-link-not-current'}}">Товары и услуги</a>
                 </div>
@@ -140,7 +141,7 @@
                     <a href="{{ route('items-tree') }}" class="nav-tab {{ $currentRouteName === 'items-tree' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Редактор товаров и услуг</a>
                 </div>
             @endif
-                <p class="nav-menu-link  text-white font-medium">Голосование и документы</p>
+                <p class="font-medium text-white nav-menu-link">Голосование и документы</p>
             <div class="flex flex-col pl-5">
                 <a href="/polls" class="nav-tab {{ in_array($currentRouteName, ['polls.index']) ? 'nav-tab-current' : 'nav-tab-not-current'}}">Голосования</a>
             </div>
@@ -160,12 +161,15 @@
                 </a>
             </div>
             @if (auth()->user()->isAdmin())
-                <p class="nav-menu-link  text-white font-medium">Администрирование</p>
+                <p class="font-medium text-white nav-menu-link">Администрирование</p>
                 <div class="flex flex-col pl-5">
                     <a href="{{ route('users.governance') }}" class="nav-tab {{ $currentRouteName === 'users.governance' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Органы управления и надзора</a>
                 </div>
                 <div class="flex flex-col pl-5">
                     <a href="{{ route('users.manage') }}" class="nav-tab {{ $currentRouteName === 'users.manage' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Пользователи</a>
+                </div>
+                <div class="flex flex-col pl-5">
+                    <a href="{{ route('entities.tree') }}" class="nav-tab {{ $currentRouteName === 'entities.tree' ? 'nav-tab-current' : 'nav-tab-not-current'}}">Организации</a>
                 </div>
             @endif
 

@@ -141,6 +141,29 @@ class EntityTreeController extends Controller
     return $entity->users()->get();
   }
 
+  public function attachUserToEntity(Entity $entity, User $user)
+  {
+    $currentCompany = Company::current();
+    if (!$currentCompany) {
+      return redirect()->route('polls.index');
+    }
+
+    $this->authorize('attachUser', [$entity, $user]);
+
+    $entity->attachUserIfNotAttached($user);
+
+    $attachInfo = [
+      'entity_id' => $entity->id,
+      'user' => $user->toArray(),
+      'attached' => true,
+      'msg' => 'Пользователь успешно добавлен'
+    ];
+
+    return [
+      'attachInfo' => $attachInfo,
+    ];
+  }
+
   public function detachUserFromEntity(Entity $entity, User $user)
   {
     $currentCompany = Company::current();
@@ -156,8 +179,8 @@ class EntityTreeController extends Controller
       'id' => $user->id,
       'detached' => $success,
       'msg' => $success
-        ? 'Сущность отвязана'
-        : 'Ошибка при попытке отвязать сущность',
+        ? 'Пользователь успешно отвязан'
+        : 'Ошибка при попытке отвязать пользователя',
     ];
 
     return [

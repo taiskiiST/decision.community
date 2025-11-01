@@ -6,7 +6,7 @@
         @if ( auth()->user()->isAdmin() )
         <div class="mt-10 sm:mt-0">
                 @if ($errors->any())
-                        <div class="alert alert-danger text-red-600 p-3">
+                        <div class="p-3 text-red-600 alert alert-danger">
                                 <ul>
                                         @foreach ($errors->all() as $error)
                                                 <li>{{ $error }}</li>
@@ -18,8 +18,8 @@
                         @csrf
                         <div class="md:grid md:grid-cols-6 md:gap-6">
                         <div class="mt-5 md:mt-0 md:col-span-2">
-                                <label class="px-4 block text-lg text-black font-semibold mt-6"> @if ($update) Изменить нового пользователя @else Добавление нового пользователя @endif</label>
-                                        <div class="shadow overflow-hidden sm:rounded-md">
+                                <label class="block px-4 mt-6 text-lg font-semibold text-black"> @if ($update) Изменить нового пользователя @else Добавление нового пользователя @endif</label>
+                                        <div class="overflow-hidden shadow sm:rounded-md">
                                                 <div class="px-4 py-5 bg-white sm:p-6">
                                                         <div class="grid grid-cols-3 gap-6">
                                                                 <div class="col-span-3">
@@ -75,7 +75,7 @@
                                                                 @if(auth()->user()->isSuperAdmin())
                                                                 <div class="col-span-3">
                                                                         <label for="company" class="block text-sm font-medium text-gray-700">Площадка принятия решений организации:</label>
-                                                                        <select id="companies" name="companies[]" multiple="multiple" autocomplete="companies" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm h-28" required>
+                                                                        <select id="companies" name="companies[]" multiple="multiple" autocomplete="companies" class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm h-28" required>
                                                                                 @foreach ($companies as $company)
                                                                                         @if ( $update )
                                                                                                 @if ( $update->isHaveCompany($company) )
@@ -97,7 +97,7 @@
 
                                                                 <div class="col-span-3">
                                                                         <label for="permission" class="block text-sm font-medium text-gray-700">Права</label>
-                                                                        <select id="permission" name="permission[]" onchange="CheckGovernance(this)" multiple="multiple" autocomplete="permission" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm h-28" required>
+                                                                        <select id="permission" name="permission[]" onchange="CheckGovernance(this)" multiple="multiple" autocomplete="permission" class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm h-28" required>
                                                                                 @foreach ($permissions as $permission_arr)
                                                                                         @foreach ($permission_arr as $key => $permission)
                                                                                                 @if ( $update )
@@ -117,7 +117,7 @@
                                                                 <div id="hidden_element" class="col-span-3  @if ( $update ) @if ( $update->isHavePermission('governance') )  @else hidden @endif @else hidden @endif ">
                                                                         <label for="position" class="block text-sm font-medium text-gray-700">Должность</label>
 
-                                                                        <select name="position" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                                        <select name="position" class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 
                                                                                 @foreach($positions as $key => $position)
                                                                                         @if ($update)
@@ -135,7 +135,7 @@
 
                                                                 <div class="col-span-3">
                                                                         <label for="password" class="block text-sm font-medium text-gray-700">Пароль</label>
-                                                                        <input type="text" name="password" @if ($update) placeholder="***********" @endif id="password" value="{{ old('password') }}" autocomplete="password" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" @error('password') is-invalid @enderror @if (!$update) required @endif >
+                                                                        <input type="text" name="password" @if ($update) placeholder="***********" @endif id="password" value="{{ old('password') }}" autocomplete="password" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" @error('password') is-invalid @enderror @if (!$update) required @endif >
                                                                         @error('password')
                                                                         <div class="alert alert-danger">{{ $message }}</div>
                                                                         @enderror
@@ -151,12 +151,12 @@
 
                 <div class="inline-flex flex-row w-full place-content-between">
                         <div class="px-4 py-3 sm:px-6">
-                                <button type="submit" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 submit-button">
+                                <button type="submit" class="inline-flex items-center px-4 py-2 mt-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 submit-button">
                                         @if ($update) Изменить нового пользователя @else Добавить нового пользователя @endif
                                 </button>
                         </div>
-                        <div class="px-4 py-7 sm:px-6 flex-row-reverse ">
-                                <a href="/manage/users"><button type="button" class="justify-end py-2 px-4 border border-transparent text-sm font-medium text-white shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
+                        <div class="flex-row-reverse px-4 py-7 sm:px-6 ">
+                                <a href="/manage/users"><button type="button" class="justify-end px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" >
                                                 Назад
                                         </button></a>
                         </div>

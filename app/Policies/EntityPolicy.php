@@ -87,6 +87,20 @@ class EntityPolicy
    *
    * @param  \App\Models\User  $user
    * @param  \App\Models\Entity  $entity
+   * @param  \App\Models\User $userToAttach
+   * @return \Illuminate\Auth\Access\Response|bool
+   */
+  public function attachUser(User $user, Entity $entity, User $userToAttach)
+  {
+    // TODO: add real logic
+    return $this->canUserManageEntity($user, $entity);
+  }
+
+  /**
+   * Determine whether the user can detach the user from the model.
+   *
+   * @param  \App\Models\User  $user
+   * @param  \App\Models\Entity  $entity
    * @param  \App\Models\User $userToDetach
    * @return \Illuminate\Auth\Access\Response|bool
    */

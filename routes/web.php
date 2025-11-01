@@ -176,6 +176,11 @@ Route::group(['middleware' => 'check.company'], function () {
         'getUsers',
       ])->name('entity-tree.get-users');
 
+      Route::post('/entities-tree/{entity}/attach-user/{user}', [
+        EntityTreeController::class,
+        'attachUserToEntity',
+      ])->name('entites-tree.attach-user-to-entity');
+
       Route::delete('/entities-tree/{entity}/detach-user/{user}', [
         EntityTreeController::class,
         'detachUserFromEntity',
@@ -379,6 +384,10 @@ Route::group(['middleware' => 'check.company'], function () {
 
     Route::get('/manage/users', [UsersController::class, 'index'])->name(
       'users.manage'
+    );
+
+    Route::get('/manage/users/all', [UsersController::class, 'getAllUsersJson'])->name(
+      'users.all.json'
     );
 
     Route::get('/manage/add', [

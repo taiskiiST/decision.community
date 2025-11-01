@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { detachUserFromEntity, getEntityUsers } from '../entities-requests';
+import Select, { SingleValue } from 'react-select';
+import {
+  attachUserToEntity,
+  detachUserFromEntity,
+  getEntityUsers,
+} from '../entities-requests';
 import { User } from 'types/types';
 import { message } from 'antd';
+import { getAllUsers } from '../users-requests';
 
 type UsersTableProps = {
   entityId: number;
@@ -13,8 +19,12 @@ export default function UsersTable({ entityId }: UsersTableProps) {
   const [users, setUsers] = useState<User[]>([]);
   const [query, setQuery] = useState('');
   const [isDetaching, setIsDetaching] = useState(false);
+  const [isAttaching, setIsAttaching] = useState(false);
   const [usersPerPage, setUsersPerPage] = useState(DEFAULT_USERS_PER_PAGE);
   const [currentPage, setCurrentPage] = useState(1);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<SingleValue<{value: number, label: string}>>(null);
+  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -25,6 +35,20 @@ export default function UsersTable({ entityId }: UsersTableProps) {
     };
     fetchUsers();
   }, [entityId]);
+
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      setIsLoadingUsers(true);
+      const users = await getAllUsers();
+
+      if (Array.isArray(users)) {
+        setAllUsers(users);
+      }
+
+      setIsLoadingUsers(false);
+    };
+    fetchAllUsers();
+  }, []);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -47,6 +71,44 @@ export default function UsersTable({ entityId }: UsersTableProps) {
     (currentPage - 1) * usersPerPage,
     currentPage * usersPerPage,
   );
+
+  const handleAttach = async (userId: number) => {
+    setIsAttaching(true);
+
+    const attachResult = await attachUserToEntity(entityId, userId);
+    if (!attachResult) {
+      setIsAttaching(false);
+
+      return;
+    }
+
+    if (!attachResult.attached) {
+      message.warning(attachResult.msg);
+      setIsAttaching(false);
+
+      return;
+    }
+
+    const attachedUser = attachResult.user;
+
+    message.success(`Пользователь добавлен: ${attachResult.id}`);
+
+    setUsers((prevUsers) => [...prevUsers, attachedUser]);
+
+    setIsAttaching(false);
+  };
+
+  const handleAttachSelected = async () => {
+    if (!selectedUser) {
+      message.warning('Пожалуйста, выберите пользователя');
+
+      return;
+    }
+
+    await handleAttach(selectedUser.value);
+
+    setSelectedUser(null); // Reset selection after attaching
+  };
 
   const handleDetach = async (userId: number) => {
     if (
@@ -92,6 +154,53 @@ export default function UsersTable({ entityId }: UsersTableProps) {
 
   return (
     <div className="p-4">
+      {/* Attach User Section */}
+      <div className="p-4 mb-6 border rounded-lg bg-gray-50">
+        <h3 className="mb-4 text-lg font-semibold text-gray-800">Добавить пользователя</h3>
+        <div className="flex items-end gap-4">
+          <div className="flex-1">
+            <label className="block mb-2 text-sm font-medium text-gray-700">
+              Выберите пользователя
+            </label>
+
+            <Select
+              value={selectedUser}
+              onChange={setSelectedUser}
+              options={allUsers
+                .filter(user => !users.some(existingUser => existingUser.id === user.id))
+                .map(user => ({
+                  value: user.id,
+                  label: `${user.name} (${user.email || user.phone})`
+                }))}
+              placeholder="Поиск пользователя..."
+              isSearchable
+              isLoading={isLoadingUsers}
+              noOptionsMessage={() => "Пользователи не найдены"}
+              className="react-select-container"
+              classNamePrefix="react-select"
+              styles={{
+                control: (provided) => ({
+                  ...provided,
+                  minHeight: '42px',
+                  borderColor: '#d1d5db',
+                  '&:hover': {
+                    borderColor: '#9ca3af'
+                  }
+                })
+              }}
+            />
+          </div>
+
+          <button
+            onClick={handleAttachSelected}
+            disabled={!selectedUser || isAttaching}
+            className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed h-[42px]"
+          >
+            {isAttaching ? 'Добавление...' : 'Прикрепить пользователя'}
+          </button>
+        </div>
+      </div>
+
       {/* Search Input */}
       <div className="mb-4">
         <input

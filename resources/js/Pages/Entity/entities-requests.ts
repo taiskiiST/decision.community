@@ -1,7 +1,7 @@
 import { client } from '../../shared/axios';
 import { message } from 'antd';
 import { RcFile } from 'antd/es/upload';
-import { DetachEntityResult, DetachUserResult, Entity, Poll, User } from 'types/types';
+import { AttachUserResult, DetachEntityResult, DetachUserResult, Entity, Poll, User } from 'types/types';
 
 export const getEntityChildren = async (parentId: number | null) => {
   try {
@@ -99,6 +99,25 @@ export const detachEntityFromCompany = async (
     } = response;
 
     return detachInfo;
+  } catch (error) {
+    message.error(`Error occurred: ${error}`, 5);
+
+    return null;
+  }
+};
+
+export const attachUserToEntity = async (
+  entityId: number,
+  userId: number
+): Promise<AttachUserResult> => {
+  try {
+    const response = await client.post(`/entities-tree/${entityId}/attach-user/${userId}`);
+
+    const {
+      data: { attachInfo },
+    } = response;
+
+    return attachInfo;
   } catch (error) {
     message.error(`Error occurred: ${error}`, 5);
 
